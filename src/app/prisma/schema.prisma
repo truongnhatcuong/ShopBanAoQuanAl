@@ -1,0 +1,273 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Brand {
+  brand_id    Int       @id @default(autoincrement())
+  brand_name  String    @db.VarChar(100)
+  description String?   @db.Text
+  Products    Product[]
+}
+
+model Category {
+  category_id   Int        @id @default(autoincrement())
+  category_name String     @db.VarChar(100)
+  description   String?    @db.Text
+  parent_id     Int?
+  parent        Category?  @relation("CategoryParent", fields: [parent_id], references: [category_id])
+  subCategories Category[] @relation("CategoryParent")
+  Products      Product[]
+}
+
+model Product {
+  product_id      Int               @id @default(autoincrement())
+  product_name    String            @db.VarChar(100)
+  description     String?           @db.Text
+  price           Decimal           @db.Decimal(10, 2)
+  stock_quantity  Int
+  category_id     Int
+  brand_id        Int
+  created_at      DateTime?         @db.DateTime
+  updated_at      DateTime?         @db.DateTime
+  season_id       Int?
+  rating_id       Int?
+  color           String?           @db.VarChar(50)
+  Category        Category          @relation(fields: [category_id], references: [category_id])
+  Brand           Brand             @relation(fields: [brand_id], references: [brand_id])
+  Season          Season?           @relation(fields: [season_id], references: [season_id])
+  Rating          Rating?           @relation(fields: [rating_id], references: [rating_id])
+  ProductSizes    ProductSize[]
+  OrderItems      OrderItem[]
+  Images          Image[]
+  Wishlists       Wishlist[]
+  Returns         ReturnProduct[]
+  ProductSupplier ProductSupplier[]
+  Review          Review[]
+  CartItem        CartItem[]
+}
+
+model Size {
+  size_id      Int           @id @default(autoincrement())
+  name_size    String        @db.VarChar(20)
+  ProductSizes ProductSize[]
+  OrderItems   OrderItem[]
+}
+
+model ProductSize {
+  product_id     Int
+  size_id        Int
+  stock_quantity Int
+  Product        Product @relation(fields: [product_id], references: [product_id])
+  Size           Size    @relation(fields: [size_id], references: [size_id])
+
+  @@id([product_id, size_id])
+}
+
+model Supplier {
+  supplier_id      Int               @id @default(autoincrement())
+  supplier_name    String            @db.VarChar(255)
+  contact_info     String?           @db.VarChar(255)
+  ProductSuppliers ProductSupplier[]
+}
+
+model ProductSupplier {
+  product_id  Int
+  supplier_id Int
+  supply_date DateTime? @db.Date
+  quantity    Int?
+  Product     Product   @relation(fields: [product_id], references: [product_id])
+  Supplier    Supplier  @relation(fields: [supplier_id], references: [supplier_id])
+
+  @@id([product_id, supplier_id])
+}
+
+model Order {
+  order_id     Int             @id @default(autoincrement())
+  customer_id  Int
+  order_date   DateTime?       @db.DateTime
+  total_amount Decimal         @db.Decimal(10, 2)
+  order_state  String          @db.VarChar(50)
+  created_at   DateTime?       @db.DateTime
+  updated_at   DateTime?       @db.DateTime
+  Customer     Customer        @relation(fields: [customer_id], references: [customer_id])
+  OrderItems   OrderItem[]
+  Payments     Payment[]
+  Shipping     Shipping[]
+  Returns      ReturnProduct[]
+}
+
+model OrderItem {
+  orderitem_id Int       @id @default(autoincrement())
+  order_id     Int
+  product_id   Int
+  quantity     Int
+  price        Decimal   @db.Decimal(10, 2)
+  size_id      Int
+  created_at   DateTime? @db.DateTime
+  updated_at   DateTime? @db.DateTime
+  Order        Order     @relation(fields: [order_id], references: [order_id])
+  Product      Product   @relation(fields: [product_id], references: [product_id])
+  Size         Size      @relation(fields: [size_id], references: [size_id])
+}
+
+model Payment {
+  payment_id     Int       @id @default(autoincrement())
+  order_id       Int
+  payment_method String    @db.VarChar(50)
+  payment_status String    @db.VarChar(50)
+  payment_amount Decimal   @db.Decimal(10, 2)
+  created_at     DateTime? @db.DateTime
+  updated_at     DateTime? @db.DateTime
+  Order          Order     @relation(fields: [order_id], references: [order_id])
+}
+
+model Shipping {
+  shipping_id       Int       @id @default(autoincrement())
+  order_id          Int
+  shipping_method   String    @db.VarChar(50)
+  tracking_number   String?   @db.VarChar(100)
+  shipping_status   String    @db.VarChar(50)
+  shipping_date     DateTime? @db.Date
+  estimated_arrival DateTime? @db.Date
+  created_at        DateTime? @db.DateTime
+  updated_at        DateTime? @db.DateTime
+  Order             Order     @relation(fields: [order_id], references: [order_id])
+}
+
+model ReturnProduct {
+  return_id     Int       @id @default(autoincrement())
+  order_id      Int
+  product_id    Int
+  return_reason String?   @db.VarChar(255)
+  return_date   DateTime? @db.Date
+  return_status String    @db.VarChar(50)
+  return_amount Decimal   @db.Decimal(10, 2)
+  created_at    DateTime? @db.DateTime
+  updated_at    DateTime? @db.DateTime
+  Order         Order     @relation(fields: [order_id], references: [order_id])
+  Product       Product   @relation(fields: [product_id], references: [product_id])
+}
+
+model Rating {
+  rating_id Int       @id @default(autoincrement())
+  rating    Int?
+  Reviews   Review[]
+  Products  Product[]
+}
+
+model Review {
+  review_id       Int       @id @default(autoincrement())
+  product_id      Int
+  customer_id     Int
+  comment_review  String?   @db.Text
+  image_url       String?   @db.Text
+  review_date     DateTime? @db.DateTime
+  seller_response String?   @db.Text
+  rating          Int
+  Product         Product   @relation(fields: [product_id], references: [product_id])
+  Customer        Customer  @relation(fields: [customer_id], references: [customer_id])
+  Rating          Rating    @relation(fields: [rating], references: [rating_id])
+}
+
+model Image {
+  image_id   Int       @id @default(autoincrement())
+  product_id Int
+  image_url  String    @db.VarChar(255)
+  created_at DateTime? @db.DateTime
+  updated_at DateTime? @db.DateTime
+  Product    Product   @relation(fields: [product_id], references: [product_id])
+}
+
+model Wishlist {
+  wishlist_id Int       @id @default(autoincrement())
+  customer_id Int
+  product_id  Int
+  added_at    DateTime? @db.DateTime
+  Customer    Customer  @relation(fields: [customer_id], references: [customer_id])
+  Product     Product   @relation(fields: [product_id], references: [product_id])
+}
+
+model Coupon {
+  coupon_id              Int                     @id @default(autoincrement())
+  coupon_code            String                  @db.VarChar(30)
+  coupon_percentage      Decimal?                @db.Decimal(5, 2)
+  coupon_amount          Decimal?                @db.Decimal(10, 2)
+  usage_limit            Int?
+  start_date             DateTime?               @db.Date
+  end_date               DateTime?               @db.Date
+  created_at             DateTime?               @db.DateTime
+  updated_at             DateTime?               @db.DateTime
+  PromotionNotifications PromotionNotification[]
+}
+
+model PromotionNotification {
+  promotion_notification_id Int          @id @default(autoincrement())
+  notification_id           Int
+  coupon_id                 Int?
+  Coupon                    Coupon?      @relation(fields: [coupon_id], references: [coupon_id])
+  Notifications             Notification @relation(fields: [notification_id], references: [notification_id])
+}
+
+model Notification {
+  notification_id        Int                     @id @default(autoincrement())
+  customer_id            Int
+  notification_type      String                  @db.VarChar(50)
+  message                String                  @db.Text
+  is_read                Boolean?
+  created_at             DateTime?               @db.DateTime
+  Customer               Customer                @relation(fields: [customer_id], references: [customer_id])
+  PromotionNotifications PromotionNotification[]
+}
+
+model Season {
+  season_id   Int       @id @default(autoincrement())
+  season_name String    @db.VarChar(50)
+  description String?   @db.Text
+  Products    Product[]
+}
+
+model Customer {
+  customer_id   Int            @id @default(autoincrement())
+  name          String         @db.VarChar(100)
+  email         String         @unique @db.VarChar(100)
+  phone         String?        @db.VarChar(20)
+  address       String?        @db.VarChar(255)
+  username      String         @unique @db.VarChar(50)
+  password      String         @db.VarChar(255)
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+  Orders        Order[]
+  Wishlists     Wishlist[]
+  Notifications Notification[]
+  Reviews       Review[]
+  Carts         Cart[]
+}
+
+model Cart {
+  cart_id     Int        @id @default(autoincrement())
+  customer_id Int
+  created_at  DateTime?  @db.DateTime
+  updated_at  DateTime?  @db.DateTime
+  Customer    Customer   @relation(fields: [customer_id], references: [customer_id])
+  CartItems   CartItem[]
+}
+
+model CartItem {
+  cartitem_id Int     @id @default(autoincrement())
+  cart_id     Int
+  product_id  Int
+  quantity    Int
+  Product     Product @relation(fields: [product_id], references: [product_id])
+  Cart        Cart    @relation(fields: [cart_id], references: [cart_id])
+}

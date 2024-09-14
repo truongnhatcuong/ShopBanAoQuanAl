@@ -1,21 +1,20 @@
 import prisma from "@/app/prisma/client";
-
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
+  const couponId = Number(params.id);
   try {
-    const getProduct = await prisma.product.findUnique({
+    const getCoupon = await prisma.coupon.findUnique({
       where: {
-        product_id: productId,
+        coupon_id: couponId,
       },
     });
     return NextResponse.json(
-      { product: getProduct, message: "Get product success" },
-      { status: 201 }
+      { getCoupon, message: "success" },
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -26,29 +25,26 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
   const data = await req.json();
+  const couponId = Number(params.id);
   try {
-    const updateProduct = await prisma.product.update({
+    const updateCoupon = await prisma.coupon.update({
       where: {
-        product_id: productId,
+        coupon_id: couponId,
       },
       data: {
-        product_name: data.product_name,
-        description: data.description,
-        price: data.price,
-        stock_quantity: data.stock_quantity,
-        category_id: data.category_id,
-        brand_id: data.brand_id,
-        season_id: data.season_id,
-        rating_id: data.rating_id,
-        color: data.color,
+        coupon_code: data.coupon_code,
+        coupon_percentage: data.coupon_percentage,
+        coupon_amount: data.coupon_amount,
+        usage_limit: data.usage_limit,
+        start_date: data.start_date,
+        end_date: data.end_date,
         updated_at: new Date(),
       },
     });
     return NextResponse.json(
-      { product: updateProduct, message: "Updated product success" },
-      { status: 201 }
+      { updateCoupon, message: "Updated success" },
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -59,15 +55,15 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
+  const couponId = Number(params.id);
   try {
-    const deleteProduct = await prisma.product.delete({
+    const getCoupon = await prisma.coupon.delete({
       where: {
-        product_id: productId,
+        coupon_id: couponId,
       },
     });
     return NextResponse.json(
-      { Delete: deleteProduct, message: "deleted product success" },
+      { getCoupon, message: `Delete ${couponId} success` },
       { status: 201 }
     );
   } catch (error: any) {

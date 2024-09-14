@@ -68,11 +68,7 @@ export async function PUT(
       description: z.string(),
       parent_id: z.number().optional(),
     });
-    const isValid = categoriesSchema.safeParse({
-      category_name: data.category_name,
-      description: data.description,
-      parent_id: data.parent_id,
-    });
+    const isValid = categoriesSchema.safeParse(data);
 
     if (!isValid.success) {
       return NextResponse.json(
@@ -85,9 +81,9 @@ export async function PUT(
         category_id: categoryId,
       },
       data: {
-        category_name: isValid.data.category_name,
-        description: isValid.data.description,
-        parent_id: isValid.data.parent_id,
+        category_name: data.category_name,
+        description: data.description,
+        parent_id: data.parent_id,
       },
     });
     if (updateCategory === null) {

@@ -1,21 +1,23 @@
 import prisma from "@/app/prisma/client";
-
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
+  const notificationId = Number(params.id);
+  if (!notificationId) {
+    return NextResponse.json({ message: " not found id " }, { status: 200 });
+  }
   try {
-    const getProduct = await prisma.product.findUnique({
+    const getNotification = await prisma.notification.findUnique({
       where: {
-        product_id: productId,
+        notification_id: notificationId,
       },
     });
     return NextResponse.json(
-      { product: getProduct, message: "Get product success" },
-      { status: 201 }
+      { getNotification, message: `Get ${notificationId} success` },
+      { status: 500 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -26,28 +28,22 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
   const data = await req.json();
+  const notificationId = Number(params.id);
   try {
-    const updateProduct = await prisma.product.update({
+    const updateNotification = await prisma.notification.update({
       where: {
-        product_id: productId,
+        notification_id: notificationId,
       },
       data: {
-        product_name: data.product_name,
-        description: data.description,
-        price: data.price,
-        stock_quantity: data.stock_quantity,
-        category_id: data.category_id,
-        brand_id: data.brand_id,
-        season_id: data.season_id,
-        rating_id: data.rating_id,
-        color: data.color,
-        updated_at: new Date(),
+        customer_id: data.customer_id,
+        notification_type: data.notification_type,
+        message: data.message,
+        is_read: data.is_read,
       },
     });
     return NextResponse.json(
-      { product: updateProduct, message: "Updated product success" },
+      { updateNotification, message: "Updated Success" },
       { status: 201 }
     );
   } catch (error: any) {
@@ -59,15 +55,15 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
+  const notificationId = Number(params.id);
   try {
-    const deleteProduct = await prisma.product.delete({
+    const DeleteNotification = await prisma.notification.delete({
       where: {
-        product_id: productId,
+        notification_id: notificationId,
       },
     });
     return NextResponse.json(
-      { Delete: deleteProduct, message: "deleted product success" },
+      { DeleteNotification, message: `delete Id : ${notificationId} Success` },
       { status: 201 }
     );
   } catch (error: any) {

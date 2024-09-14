@@ -1,16 +1,15 @@
 import prisma from "@/app/prisma/client";
-
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
+  const supplier_id = Number(params.id);
   try {
-    const getProduct = await prisma.product.findUnique({
+    const getProduct = await prisma.productSupplier.findMany({
       where: {
-        product_id: productId,
+        supplier_id: supplier_id,
       },
     });
     return NextResponse.json(
@@ -24,31 +23,27 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string; productId: string } }
 ) {
-  const productId = Number(params.id);
   const data = await req.json();
+  const SupplierId = Number(params.id);
+  const productId = Number(params.productId);
   try {
-    const updateProduct = await prisma.product.update({
+    const updateProductSupplier = await prisma.productSupplier.update({
       where: {
-        product_id: productId,
+        product_id_supplier_id: {
+          supplier_id: SupplierId,
+          product_id: productId,
+        },
       },
       data: {
-        product_name: data.product_name,
-        description: data.description,
-        price: data.price,
-        stock_quantity: data.stock_quantity,
-        category_id: data.category_id,
-        brand_id: data.brand_id,
-        season_id: data.season_id,
-        rating_id: data.rating_id,
-        color: data.color,
-        updated_at: new Date(),
+        supply_date: data.supply_date,
+        quantity: data.quantity,
       },
     });
     return NextResponse.json(
-      { product: updateProduct, message: "Updated product success" },
-      { status: 201 }
+      { product: updateProductSupplier, message: "updated success" },
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -61,13 +56,13 @@ export async function DELETE(
 ) {
   const productId = Number(params.id);
   try {
-    const deleteProduct = await prisma.product.delete({
+    const getProduct = await prisma.productSupplier.deleteMany({
       where: {
         product_id: productId,
       },
     });
     return NextResponse.json(
-      { Delete: deleteProduct, message: "deleted product success" },
+      { product: getProduct, message: "Get product success" },
       { status: 201 }
     );
   } catch (error: any) {

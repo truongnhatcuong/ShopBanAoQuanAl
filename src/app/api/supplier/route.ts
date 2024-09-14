@@ -2,25 +2,25 @@ import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const brand = await prisma.brand.findMany();
+  const supplier = await prisma.supplier.findMany();
   return NextResponse.json(
-    { brand: brand, message: "Success" },
-    { status: 200 }
+    { supplier, message: "Get supplier success " },
+    { status: 201 }
   );
 }
 
 export async function POST(req: NextRequest) {
+  const data = await req.json();
   try {
-    const data = await req.json();
-    const newBrand = await prisma.brand.create({
+    const newSupplier = await prisma.supplier.create({
       data: {
-        brand_name: data.brand_name,
-        description: data.description,
+        supplier_name: data.supplier_name,
+        contact_info: data.contact_info,
       },
     });
     return NextResponse.json(
-      { brand: newBrand, message: "Success" },
-      { status: 200 }
+      { newSupplier, message: "created success" },
+      { status: 201 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

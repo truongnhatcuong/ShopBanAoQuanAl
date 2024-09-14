@@ -1,9 +1,8 @@
 import prisma from "@/app/prisma/client";
-import { Prisma } from "@prisma/client";
-import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
 
-export async function GET(req: NextApiRequest) {
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(req: NextRequest) {
   const Product = await prisma.product.findMany();
   return NextResponse.json(
     { Product, message: "Get data Success" },
@@ -11,15 +10,14 @@ export async function GET(req: NextApiRequest) {
   );
 }
 
-export async function POST(req: NextApiRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const data = await req.body;
+    const data = await req.json();
     const newProduct = await prisma.product.create({
       data: {
-        product_name: data.name,
+        product_name: data.product_name,
         description: data.description,
         price: data.price,
-        Images: data.images,
         stock_quantity: data.stock_quantity,
         category_id: data.category_id,
         brand_id: data.brand_id,
@@ -27,7 +25,6 @@ export async function POST(req: NextApiRequest) {
         rating_id: data.rating_id,
         color: data.color,
         created_at: new Date(),
-        updated_at: new Date(),
       },
     });
     return NextResponse.json(

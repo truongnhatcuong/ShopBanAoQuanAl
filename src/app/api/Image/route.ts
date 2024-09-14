@@ -2,24 +2,22 @@ import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const brand = await prisma.brand.findMany();
-  return NextResponse.json(
-    { brand: brand, message: "Success" },
-    { status: 200 }
-  );
+  const Image = await prisma.image.findMany();
+  return NextResponse.json({ Image, message: "success" }, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {
+  const data = await req.json();
   try {
-    const data = await req.json();
-    const newBrand = await prisma.brand.create({
+    const newImage = await prisma.image.create({
       data: {
-        brand_name: data.brand_name,
-        description: data.description,
+        product_id: data.product_id,
+        image_url: data.image_url,
+        created_at: new Date(),
       },
     });
     return NextResponse.json(
-      { brand: newBrand, message: "Success" },
+      { newImage, message: "Create success" },
       { status: 200 }
     );
   } catch (error: any) {

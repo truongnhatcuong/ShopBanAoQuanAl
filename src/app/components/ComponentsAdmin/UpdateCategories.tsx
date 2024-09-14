@@ -1,19 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import Modal from "react-modal";
-
+import useSWR, { mutate } from "swr";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSWRConfig } from "swr";
 
 interface Icategories {
   category_id: number;
   category_name: string;
   description: string;
 }
-
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const UpdateCategories = ({
   category,
   closeHandle,
@@ -21,10 +20,11 @@ const UpdateCategories = ({
   category: Icategories;
   closeHandle(): void;
 }) => {
+  const { data, error, mutate } = useSWR("/api/categories", fetcher);
   const [category_name, setName] = useState<string>(category.category_name);
   const [description, setDescription] = useState<string>(category.description);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
-  const { mutate } = useSWRConfig();
+
   async function handleUpdate(e: any) {
     e.preventDefault();
 
@@ -58,7 +58,7 @@ const UpdateCategories = ({
       const MySwal = withReactContent(Swal);
       MySwal.fire({
         title: "Thông báo!",
-        text: "Cập nhật danh mục thành công", // Changed from "sản phẩm" to "danh mục"
+        text: "Cập nhật danh mục thành công",
         icon: "success",
         confirmButtonText: "OK",
       });
@@ -70,7 +70,7 @@ const UpdateCategories = ({
       const MySwal = withReactContent(Swal);
       MySwal.fire({
         title: "Lỗi!",
-        text: errorData.error || "Có lỗi xảy ra khi cập nhật danh mục", // Changed from "sản phẩm" to "danh mục"
+        text: errorData.error || "Có lỗi xảy ra khi cập nhật danh mục",
         icon: "error",
         confirmButtonText: "OK",
       });

@@ -2,24 +2,26 @@ import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const brand = await prisma.brand.findMany();
+  const notification = await prisma.notification.findMany();
   return NextResponse.json(
-    { brand: brand, message: "Success" },
+    { notification, message: "Get data Success" },
     { status: 200 }
   );
 }
-
 export async function POST(req: NextRequest) {
+  const data = await req.json();
   try {
-    const data = await req.json();
-    const newBrand = await prisma.brand.create({
+    const newNotification = await prisma.notification.create({
       data: {
-        brand_name: data.brand_name,
-        description: data.description,
+        customer_id: data.customer_id,
+        notification_type: data.notification_type,
+        message: data.message,
+        is_read: data.is_read,
+        created_at: new Date(),
       },
     });
     return NextResponse.json(
-      { brand: newBrand, message: "Success" },
+      { newNotification, message: "created Success" },
       { status: 200 }
     );
   } catch (error: any) {

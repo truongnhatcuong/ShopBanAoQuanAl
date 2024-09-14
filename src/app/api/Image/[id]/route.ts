@@ -1,5 +1,4 @@
 import prisma from "@/app/prisma/client";
-
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -8,20 +7,19 @@ export async function GET(
 ) {
   const productId = Number(params.id);
   try {
-    const getProduct = await prisma.product.findUnique({
+    const getImage = await prisma.image.findMany({
       where: {
         product_id: productId,
       },
     });
     return NextResponse.json(
-      { product: getProduct, message: "Get product success" },
-      { status: 201 }
+      { getImage, message: "Get success" },
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -29,26 +27,18 @@ export async function PUT(
   const productId = Number(params.id);
   const data = await req.json();
   try {
-    const updateProduct = await prisma.product.update({
+    const updateImage = await prisma.image.updateMany({
       where: {
         product_id: productId,
       },
       data: {
-        product_name: data.product_name,
-        description: data.description,
-        price: data.price,
-        stock_quantity: data.stock_quantity,
-        category_id: data.category_id,
-        brand_id: data.brand_id,
-        season_id: data.season_id,
-        rating_id: data.rating_id,
-        color: data.color,
+        image_url: data.image_url,
         updated_at: new Date(),
       },
     });
     return NextResponse.json(
-      { product: updateProduct, message: "Updated product success" },
-      { status: 201 }
+      { updateImage, message: "Updated success" },
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -61,14 +51,14 @@ export async function DELETE(
 ) {
   const productId = Number(params.id);
   try {
-    const deleteProduct = await prisma.product.delete({
+    const DeleteImage = await prisma.image.deleteMany({
       where: {
         product_id: productId,
       },
     });
     return NextResponse.json(
-      { Delete: deleteProduct, message: "deleted product success" },
-      { status: 201 }
+      { DeleteImage, message: "deleted success" },
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

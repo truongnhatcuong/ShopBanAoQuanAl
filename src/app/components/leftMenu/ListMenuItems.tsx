@@ -5,6 +5,8 @@ import MenuItems from "./MenuItem";
 import { TbCategory } from "react-icons/tb";
 import { MdOutlineCategory } from "react-icons/md";
 import { FaTruck } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
+import { FaCloudSun } from "react-icons/fa";
 
 const MenuItem = [
   // {
@@ -16,13 +18,13 @@ const MenuItem = [
   {
     id: 2,
     icon: <TbCategory />,
-    title: "category  ",
+    title: " management",
     link: "/admin",
     submenu: [
       {
         id: 1,
         icon: <MdOutlineCategory />,
-        title: " management",
+        title: " category",
         link: "/admin/danhmuc/categories",
       },
       {
@@ -36,6 +38,18 @@ const MenuItem = [
         icon: <FaTruck />,
         title: "Supplier",
         link: "/admin/danhmuc/suppliers",
+      },
+      {
+        id: 4,
+        icon: <FaLinkedin />,
+        title: "Brand",
+        link: "/admin/danhmuc/brand",
+      },
+      {
+        id: 5,
+        icon: <FaCloudSun />,
+        title: "Season",
+        link: "/admin/danhmuc/season",
       },
     ],
   },

@@ -18,7 +18,7 @@ const SubmenuItems = (props: IProps) => {
     <div className="flex items-center cursor-pointer hover:bg-gray-700 rounded-md transition-colors duration-200">
       <Link
         href={props.menuItem.link}
-        className="flex items-center w-full p-2 text-2xl text-gray-300 hover:text-white"
+        className="flex items-center w-full p-2 text-xl text-gray-300 hover:text-white"
       >
         <span className="mr-2">{props.menuItem.icon}</span>
         <span>{props.menuItem.title}</span>

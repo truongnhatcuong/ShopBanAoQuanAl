@@ -20,7 +20,7 @@ const MenuItems = (props: IProps) => {
       <ul className="flex flex-col cursor-pointer p-2 rounded-lg ">
         <Link
           href={props.menuItem.link}
-          className="flex items-center mt-2 text-4xl font-bold text-white hover:text-gray-300 transition-colors duration-200 ml-4 "
+          className="flex items-center mt-2 text-2xl font-bold text-white hover:text-gray-300 transition-colors duration-200 ml-4 "
         >
           <span className="mr-3">{props.menuItem.icon}</span>
           <span>{props.menuItem.title}</span>

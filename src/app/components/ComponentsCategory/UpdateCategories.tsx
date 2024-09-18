@@ -113,9 +113,9 @@ const UpdateCategories = ({
         </div>
         <button
           type="submit"
-          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700"
+          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700"
         >
-          Cập nhật
+          Update
         </button>
         <button
           type="button"

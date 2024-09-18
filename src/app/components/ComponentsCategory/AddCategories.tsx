@@ -11,9 +11,9 @@ const AddCategories = (props: { closeHandle: () => void }) => {
   const { data, error, mutate } = useSWR("/api/categories", fetcher);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
+  const [showAddModal, setShowAddModal] = useState(true);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const response = await fetch(`/api/categories`, {
@@ -36,8 +36,8 @@ const AddCategories = (props: { closeHandle: () => void }) => {
         icon: "success",
         confirmButtonText: "OK",
       });
-      props.closeHandle(); // thêm SP xong  thêm phương thức đóng trang post
-      setModalIsOpen(false);
+      props.closeHandle();
+      setShowAddModal(false);
       setTimeout(() => {
         window.location.reload();
       }, 1000);
@@ -46,7 +46,7 @@ const AddCategories = (props: { closeHandle: () => void }) => {
 
   return (
     <Modal
-      isOpen={modalIsOpen}
+      isOpen={showAddModal}
       onRequestClose={props.closeHandle}
       contentLabel="Thêm sản phẩm mới"
       className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5"

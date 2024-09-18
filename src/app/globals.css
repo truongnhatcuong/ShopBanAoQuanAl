@@ -16,6 +16,17 @@
   }
 }
 
+.pagination-container {
+  position: fixed;
+  bottom: 0; /* Hoặc top: 0 nếu bạn muốn nó ở phía trên cùng */
+  left: 50%;
+  transform: translateX(-50%); /* Giúp căn giữa theo chiều ngang */
+  z-index: 1000; /* Đảm bảo nó ở trên cùng của các phần tử khác */
+  background-color: white; /* Tùy chọn: để làm cho nó nổi bật hơn */
+  padding: 1rem; /* Tùy chọn: thêm khoảng cách cho phần tử */
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;

@@ -1,11 +1,53 @@
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+
 export async function GET(request: NextRequest) {
-  const categories = await prisma.category.findMany();
+  const searchParams = request.nextUrl.searchParams;
+  const keyword: string = searchParams?.get("keyword") || "";
+  const limit: number = Number(searchParams?.get("limit") || 4);
+  const page: number = Number(searchParams?.get("page") || 1);
+  let sortOrder: any = searchParams?.get("sortOrder") || "asc";
+
+  if (sortOrder !== "asc" && sortOrder !== "desc") {
+    sortOrder == "asc";
+  }
+  const totalRecords: number = await prisma.category.count({
+    where: {
+      category_name: {
+        contains: keyword,
+      },
+    },
+  });
+  const totalPages = Math.ceil(totalRecords / limit);
+  const totalSkipRecords = (page - 1) * limit;
+  const categories = await prisma.category.findMany({
+    skip: totalSkipRecords,
+    take: limit,
+    where: {
+      category_name: {
+        contains: keyword,
+      },
+    },
+    orderBy: {
+      category_name: sortOrder,
+    },
+  });
 
   //lấy tất cả dữ liệu của user
-  return NextResponse.json({ categories, message: "Success" }, { status: 200 });
+  return NextResponse.json(
+    {
+      categories,
+      pagination: {
+        totalRecords,
+        totalPages,
+        currentPage: page,
+        limit,
+      },
+      message: "Success",
+    },
+    { status: 200 }
+  );
 }
 
 export async function POST(request: NextRequest) {

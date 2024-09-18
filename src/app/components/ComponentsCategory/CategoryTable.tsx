@@ -24,7 +24,7 @@ const CategoryTable = ({
   };
 
   return (
-    <div className="overflow-x-auto mt-10">
+    <div className="overflow-x-auto ">
       <table className="table">
         {/* head */}
         <thead>
@@ -48,7 +48,7 @@ const CategoryTable = ({
                 />
 
                 <button
-                  className="bg-yellow-500 hover:bg-yellow-700 rounded-md p-3 text-white font-medium"
+                  className="bg-blue-500 hover:bg-blue-700 rounded-md p-3 text-white font-medium"
                   onClick={() => openEditModal(category)}
                 >
                   Update

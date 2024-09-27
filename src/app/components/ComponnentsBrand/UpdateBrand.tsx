@@ -13,9 +13,11 @@ interface IBrand {
 const UpdateBrand = ({
   Brand,
   closeHandle,
+  reloadData,
 }: {
   Brand: IBrand;
   closeHandle: () => void;
+  reloadData: () => void;
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
   const [brand_name, setBrand_name] = useState(Brand.brand_name);
@@ -42,9 +44,7 @@ const UpdateBrand = ({
         icon: "success",
         confirmButtonText: "OK",
       });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      reloadData();
     } else {
       const MySwal = withReactContent(Swal);
       MySwal.fire({

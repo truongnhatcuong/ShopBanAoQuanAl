@@ -46,7 +46,7 @@ const DeleteSeason = ({ season_id, DeleteHandler }: IdeleteSeason) => {
   return (
     <div>
       <button
-        className="btn bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+        className=" bg-red-500 hover:bg-red-600 text-white  p-1 rounded-md"
         onClick={DeleteSeason}
       >
         Delete

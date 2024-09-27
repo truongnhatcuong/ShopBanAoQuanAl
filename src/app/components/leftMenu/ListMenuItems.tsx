@@ -1,12 +1,13 @@
 import React from "react";
 import { AiOutlineProduct } from "react-icons/ai";
-import { RiHome4Line } from "react-icons/ri";
 import MenuItems from "./MenuItem";
 import { TbCategory } from "react-icons/tb";
 import { MdOutlineCategory } from "react-icons/md";
 import { FaTruck } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { FaCloudSun } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
+import { FaRegImages } from "react-icons/fa6";
 
 const MenuItem = [
   // {
@@ -16,7 +17,7 @@ const MenuItem = [
   //   link: "/admin",
   // },
   {
-    id: 2,
+    id: 1,
     icon: <TbCategory />,
     title: " management",
     link: "/admin",
@@ -31,7 +32,7 @@ const MenuItem = [
         id: 2,
         icon: <AiOutlineProduct />,
         title: "Product",
-        link: "/admin/danhmuc/products",
+        link: "/admin/danhmuc/product",
       },
       {
         id: 3,
@@ -50,6 +51,18 @@ const MenuItem = [
         icon: <FaCloudSun />,
         title: "Season",
         link: "/admin/danhmuc/season",
+      },
+      {
+        id: 6,
+        icon: <FaStar />,
+        title: "Rate",
+        link: "/admin/danhmuc/rate",
+      },
+      {
+        id: 7,
+        icon: <FaRegImages />,
+        title: "Image",
+        link: "/admin/danhmuc/Image",
       },
     ],
   },

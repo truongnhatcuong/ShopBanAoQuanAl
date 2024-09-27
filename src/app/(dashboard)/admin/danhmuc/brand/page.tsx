@@ -1,5 +1,4 @@
 "use client";
-
 import AddBrand from "@/app/components/ComponnentsBrand/AddBrand";
 import TableBrand from "@/app/components/ComponnentsBrand/TableBrand";
 import UpdateBrand from "@/app/components/ComponnentsBrand/UpdateBrand";
@@ -14,32 +13,39 @@ interface IBrand {
 // eslint-disable-next-line @next/next/no-async-client-component
 const Page = () => {
   const [brand, setBrand] = useState<IBrand[]>([]);
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [showAdd, setShowAdd] = useState<boolean>(false);
+  const [showUpdate, setShowUpdate] = useState<boolean>(false);
   const [selectBrand, setSelectBrand] = useState<IBrand | null>(null);
+
+  const ApiBrand = async () => {
+    const reponse = await fetch(`/api/brand`);
+    const data = await reponse.json();
+    setBrand(data.brand || []);
+  };
   useEffect(() => {
-    const ApiBrand = async () => {
-      const reponse = await fetch(`/api/brand`);
-      const data = await reponse.json();
-      setBrand(data.brand || []);
-    };
     ApiBrand();
   }, []);
 
   const OpenModal = (brand: IBrand) => {
     setSelectBrand(brand);
-    setModalIsOpen(true);
+    setShowUpdate(true);
   };
 
   return (
     <div>
-      <div className="flex justify-end mr-6 my-5">
+      <div className="flex justify-end mr-6 ">
         <button
-          className="btn btn-success text-white font-medium "
-          onClick={() => setModalIsOpen(true)}
+          className="bg-green-500 p-2 rounded-lg text-sm font-bold text-white hover:bg-green-700"
+          onClick={() => setShowAdd(true)}
         >
           ADD BRAND
         </button>
-        {modalIsOpen && <AddBrand closeHandle={() => setModalIsOpen(false)} />}
+        {showAdd && (
+          <AddBrand
+            closeHandle={() => setShowAdd(false)}
+            reloadData={ApiBrand}
+          />
+        )}
       </div>
       <div>
         <TableBrand
@@ -47,10 +53,11 @@ const Page = () => {
           setBrand={setBrand}
           openEditModal={OpenModal}
         />
-        {modalIsOpen && selectBrand && (
+        {showUpdate && selectBrand && (
           <UpdateBrand
             Brand={selectBrand}
-            closeHandle={() => setModalIsOpen(false)}
+            closeHandle={() => setShowUpdate(false)}
+            reloadData={ApiBrand}
           />
         )}
       </div>

@@ -44,3 +44,23 @@ export async function PUT(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const supplierId = Number(params.id);
+  try {
+    const getSupplier = await prisma.supplier.delete({
+      where: {
+        supplier_id: supplierId,
+      },
+    });
+    return NextResponse.json(
+      { getSupplier, message: `deleted ${supplierId} success` },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

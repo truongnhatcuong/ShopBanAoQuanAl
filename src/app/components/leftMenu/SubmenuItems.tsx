@@ -1,8 +1,10 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 interface IProps {
   menuItem: IMenu;
+  isSelected: boolean; // Trạng thái để xác định submenu có được chọn không
+  onClick: () => void;
 }
 
 interface IMenu {
@@ -15,12 +17,19 @@ interface IMenu {
 
 const SubmenuItems = (props: IProps) => {
   return (
-    <div className="flex items-center cursor-pointer hover:bg-gray-700 rounded-md transition-colors duration-200">
+    <div
+      onClick={props.onClick}
+      className={`ml-3 flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full   ${
+        props.isSelected ? "bg-blue-400 p-1" : "hover:bg-gray-600 p-1 "
+      }`}
+    >
       <Link
         href={props.menuItem.link}
-        className="flex items-center w-full p-2 text-xl text-gray-300 hover:text-white"
+        className={`flex items-center w-full p-1 transition-colors duration-200 ${
+          props.isSelected ? "text-black  font-bold" : "text-white  font-medium"
+        }`}
       >
-        <span className="mr-2">{props.menuItem.icon}</span>
+        <span className="mr-1">{props.menuItem.icon}</span>
         <span>{props.menuItem.title}</span>
       </Link>
     </div>

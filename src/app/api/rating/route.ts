@@ -7,10 +7,11 @@ export async function GET() {
 }
 export async function POST(req: NextRequest) {
   const data = await req.json();
+  const ratingValue = parseInt(data.rating);
   try {
     const createRating = await prisma.rating.create({
       data: {
-        rating: data,
+        rating: ratingValue,
       },
     });
     return NextResponse.json(

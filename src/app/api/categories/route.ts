@@ -5,7 +5,7 @@ import { z } from "zod";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const keyword: string = searchParams?.get("keyword") || "";
-  const limit: number = Number(searchParams?.get("limit") || 4);
+  const limit: number = Number(searchParams?.get("limit") || 0);
   const page: number = Number(searchParams?.get("page") || 1);
   let sortOrder: any = searchParams?.get("sortOrder") || "asc";
 
@@ -19,11 +19,10 @@ export async function GET(request: NextRequest) {
       },
     },
   });
-  const totalPages = Math.ceil(totalRecords / limit);
+  const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
   const totalSkipRecords = (page - 1) * limit;
   const categories = await prisma.category.findMany({
-    skip: totalSkipRecords,
-    take: limit,
+    ...(limit > 0 && { skip: totalSkipRecords, take: limit }),
     where: {
       category_name: {
         contains: keyword,

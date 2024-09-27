@@ -183,7 +183,7 @@ model Review {
 model Image {
   image_id   Int       @id @default(autoincrement())
   product_id Int
-  image_url  String    @db.VarChar(255)
+  image_url  String    @db.Text
   created_at DateTime? @db.DateTime
   updated_at DateTime? @db.DateTime
   Product    Product   @relation(fields: [product_id], references: [product_id])
@@ -270,4 +270,8 @@ model CartItem {
   quantity    Int
   Product     Product @relation(fields: [product_id], references: [product_id])
   Cart        Cart    @relation(fields: [cart_id], references: [cart_id])
+}
+
+model Back {
+  wishlist_id Int @id @default(autoincrement())
 }

@@ -25,30 +25,30 @@ const CategoryTable = ({
 
   return (
     <div className="overflow-x-auto ">
-      <table className="table">
+      <table className="table text-sm">
         {/* head */}
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Descripton</th>
-            <th>Action</th>
+            <th className="px-2 py-1 w-20">ID</th>
+            <th className="px-2 py-1 w-40">Name</th>
+            <th className="px-2 py-1 w-60">Description</th>
+            <th className="px-2 py-1 w-40">Action</th>
           </tr>
         </thead>
         <tbody>
           {categories.map((category) => (
-            <tr key={category.category_id}>
-              <td>{category.category_id}</td>
-              <td>{category.category_name}</td>
-              <td>{category.description}</td>
-              <td className="space-x-5">
+            <tr key={category.category_id} className="">
+              <td className="px-2 py-1 ">{category.category_id}</td>
+              <td className="px-2 py-1">{category.category_name}</td>
+              <td className="px-2 py-1">{category.description}</td>
+              <td className="px-2 py-1 space-x-2">
                 <DeleteCategories
                   deleteCategories={handleDelete}
                   category_id={category.category_id}
                 />
 
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 rounded-md p-3 text-white font-medium"
+                  className="bg-blue-500 hover:bg-blue-700 rounded-md p-1  text-white font-medium"
                   onClick={() => openEditModal(category)}
                 >
                   Update

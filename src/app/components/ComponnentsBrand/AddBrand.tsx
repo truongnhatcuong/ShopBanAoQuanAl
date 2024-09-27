@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-const AddBrand = (props: { closeHandle: () => void }) => {
+const AddBrand = (props: {
+  closeHandle: () => void;
+  reloadData: () => void;
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
   const [brand_name, setBrand_name] = useState("");
   const [description, setDescription] = useState<string>("");
@@ -29,9 +32,7 @@ const AddBrand = (props: { closeHandle: () => void }) => {
         icon: "success",
         confirmButtonText: "OK",
       });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      props.reloadData();
     } else {
       const MySwal = withReactContent(Swal);
       MySwal.fire({

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import SubmenuItems from "./SubmenuItems";
 
@@ -15,30 +15,32 @@ interface IMenu {
 }
 
 const MenuItems = (props: IProps) => {
+  const [selectedSubmenu, setSelectedSubmenu] = useState<number | null>(null);
+
+  const handlerSelect = (id: number) => setSelectedSubmenu(id);
   return (
-    <div>
-      <ul className="flex flex-col cursor-pointer p-2 rounded-lg ">
-        <Link
-          href={props.menuItem.link}
-          className="flex items-center mt-2 text-2xl font-bold text-white hover:text-gray-300 transition-colors duration-200 ml-4 "
-        >
-          <span className="mr-3">{props.menuItem.icon}</span>
-          <span>{props.menuItem.title}</span>
-        </Link>
-        {props.menuItem.submenu
-          ? props.menuItem.submenu.map((item) => (
-              <li
-                key={item.id}
-                className="mt-3 hover:bg-gray-700 rounded-md transition-colors duration-200"
-              >
-                <div className="p-3">
-                  <SubmenuItems menuItem={item} />
-                </div>
-              </li>
-            ))
-          : null}
-      </ul>
-    </div>
+    <ul className="flex flex-col cursor-pointer ">
+      <Link
+        href={props.menuItem.link}
+        className="flex items-center  justify-center rounded-md transition-colors duration-200 mr-6 font-bold "
+      >
+        <span className="mr-2">{props.menuItem.icon}</span>
+        <span className="">{props.menuItem.title}</span>
+      </Link>
+      {props.menuItem.submenu
+        ? props.menuItem.submenu.map((item) => (
+            <li key={item.id}>
+              <div className="p-0.5 text-xs">
+                <SubmenuItems
+                  menuItem={item}
+                  isSelected={selectedSubmenu === item.id}
+                  onClick={() => handlerSelect(item.id)}
+                />
+              </div>
+            </li>
+          ))
+        : null}
+    </ul>
   );
 };
 

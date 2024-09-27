@@ -45,7 +45,7 @@ const DeleteBrand = ({ brand_id, DeleteHandler }: IDelete) => {
   return (
     <div>
       <button
-        className="bg-red-500 p-2 rounded-lg hover:bg-red-600 text-white font-bold"
+        className="bg-red-500 p-1 rounded-lg hover:bg-red-600 text-white font-bold"
         onClick={DeleteHander}
       >
         DELETE

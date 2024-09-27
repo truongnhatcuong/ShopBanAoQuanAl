@@ -19,28 +19,28 @@ const TableBrand = ({ brandlocal, setBrand, openEditModal }: IBranProps) => {
 
   return (
     <div className="overflow-x-auto">
-      <table className="table">
+      <table className="table ">
         <thead>
           <tr>
-            <th>id</th>
-            <th>Name Brand</th>
-            <th className="text-center">DescripTion</th>
+            <th className="px-2 py-1 w-10">id</th>
+            <th className="px-2 py-1 w-20">Name Brand</th>
+            <th className="px-2 py-1 w-85 text-center">DescripTion</th>
             <th className="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
           {brandlocal.map((item) => (
             <tr key={item.brand_id}>
-              <td>{item.brand_id}</td>
-              <td>{item.brand_name}</td>
-              <td>{item.description}</td>
-              <td className="space-x-3 flex ">
+              <td className="px-2 py-1">{item.brand_id}</td>
+              <td className="px-2 py-1">{item.brand_name}</td>
+              <td className="px-2 py-1">{item.description}</td>
+              <td className="px-2 py-1 space-x-2 flex">
                 <DeleteBrand
                   DeleteHandler={HanlerDelete}
                   brand_id={item.brand_id}
                 />
                 <button
-                  className="bg-blue-500 p-2 rounded-lg hover:bg-blue-600 text-white font-bold"
+                  className="bg-blue-500 p-1 rounded-lg hover:bg-blue-600 text-white font-bold"
                   onClick={() => openEditModal(item)}
                 >
                   Update

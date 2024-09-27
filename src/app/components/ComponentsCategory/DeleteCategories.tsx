@@ -44,7 +44,7 @@ const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
 
   return (
     <button
-      className="bg-red-500 hover:bg-red-700 rounded-md p-3 text-white font-medium cursor-pointer"
+      className="bg-red-500 hover:bg-red-700 rounded-md p-1 text-white font-medium cursor-pointer"
       onClick={handleDelete}
     >
       Delete

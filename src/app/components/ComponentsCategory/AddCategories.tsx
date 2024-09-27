@@ -1,14 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import Modal from "react-modal";
-import useSWR, { mutate } from "swr";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-const AddCategories = (props: { closeHandle: () => void }) => {
-  const { data, error, mutate } = useSWR("/api/categories", fetcher);
+const AddCategories = (props: {
+  closeHandle: () => void;
+  reloadData: () => void;
+}) => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [showAddModal, setShowAddModal] = useState(true);
@@ -26,8 +25,8 @@ const AddCategories = (props: { closeHandle: () => void }) => {
       console.log(data);
       setName("");
       setDescription("");
-
-      mutate("/api/categories");
+      props.closeHandle();
+      props.reloadData();
 
       const MySwal = withReactContent(Swal);
       MySwal.fire({
@@ -49,7 +48,7 @@ const AddCategories = (props: { closeHandle: () => void }) => {
       isOpen={showAddModal}
       onRequestClose={props.closeHandle}
       contentLabel="Thêm sản phẩm mới"
-      className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5"
+      className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5 "
       overlayClassName="fixed inset-0 bg-var(--bs-gray-500) bg-opacity-var(--bs-gray-500) "
     >
       <h2 className="text-xl font-bold">Thêm sản phẩm mới</h2>

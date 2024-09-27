@@ -11,13 +11,13 @@ export default function AdminLayout({
   return (
     <div className={`${inter.className} h-screen flex`}>
       {/* Left menu with 3D effect */}
-      <div className="w-[20%] bg-gray-900 text-white shadow-lg h-s">
+      <div className="w-[16%] bg-gray-900 text-white shadow-lg ">
         <LeftMenu />
       </div>
       {/* TopBar and Content */}
-      <div className="flex flex-col w-[80%] ">
+      <div className="flex flex-col w-[84%] ">
         <TopBar />
-        <main className="flex-grow bg-white">{children}</main>
+        <div className="flex-grow bg-white">{children}</div>
       </div>
     </div>
   );

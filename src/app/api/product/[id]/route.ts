@@ -28,6 +28,11 @@ export async function PUT(
 ) {
   const productId = Number(params.id);
   const data = await req.json();
+  const price = parseFloat(data.price);
+
+  if (isNaN(productId)) {
+    return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
+  }
   try {
     const updateProduct = await prisma.product.update({
       where: {
@@ -36,13 +41,13 @@ export async function PUT(
       data: {
         product_name: data.product_name,
         description: data.description,
-        price: data.price,
+        price: price,
         stock_quantity: data.stock_quantity,
-        category_id: data.category_id,
-        brand_id: data.brand_id,
-        season_id: data.season_id,
-        rating_id: data.rating_id,
         color: data.color,
+        category_id: data.category_id || null,
+        brand_id: data.brand_id || null,
+        season_id: data.season_id || null,
+
         updated_at: new Date(),
       },
     });

@@ -12,44 +12,49 @@ interface Iseason {
 
 const Page = () => {
   const [season, setSeason] = useState<Iseason[]>([]);
-  const [showmodal, setShowmodal] = useState<boolean>(false);
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [selectseason, setSelectseason] = useState<Iseason | null>(null);
+
+  const ApiSeason = async () => {
+    const req = await fetch(`/api/season`);
+    const data = await req.json();
+    setSeason(data.season || []);
+    console.log(data);
+  };
+
   useEffect(() => {
-    const ApiSeason = async () => {
-      const req = await fetch(`/api/season`);
-      const data = await req.json();
-      setSeason(data.season || []);
-      console.log(data);
-    };
     ApiSeason();
   }, []);
 
   const closeIsOpen = (season: Iseason) => {
     setSelectseason(season);
-    setShowmodal(true);
+    setShowUpdateModal(true);
   };
 
   return (
     <div>
-      <div className="flex justify-end my-6 mr-7">
+      <div className="flex justify-end  mr-7">
         <button
-          className="btn btn-success text-white font-medium"
-          onClick={() => setShowmodal(true)}
+          className="bg-green-500 p-2 rounded-lg text-sm font-bold text-white hover:bg-green-700"
+          onClick={() => setShowAddModal(true)}
         >
           Add season
         </button>
-        {showmodal && <Addseason closeHandle={() => setShowmodal(false)} />}
+        {showAddModal && (
+          <Addseason
+            closeHandle={() => setShowAddModal(false)}
+            reloadData={ApiSeason}
+          />
+        )}
       </div>
       <div>
-        <TableCardSeason
-          season={season}
-          closeHandle={closeIsOpen}
-          setSeason={setSeason}
-        />
-        {showmodal && selectseason && (
+        <TableCardSeason season={season} closeHandle={closeIsOpen} />
+        {showUpdateModal && selectseason && (
           <UpdateSeason
-            closeHandle={() => setShowmodal(false)}
+            closeHandle={() => setShowUpdateModal(false)}
             season={selectseason}
+            reloadData={ApiSeason}
           />
         )}
       </div>

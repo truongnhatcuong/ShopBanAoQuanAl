@@ -12,9 +12,10 @@ interface Iseason {
 interface ISeasonProps {
   season: Iseason;
   closeHandle: () => void;
+  reloadData: () => void;
 }
 
-const UpdateSeason = ({ season, closeHandle }: ISeasonProps) => {
+const UpdateSeason = ({ season, closeHandle, reloadData }: ISeasonProps) => {
   const [season_name, setSeason_name] = useState<string>(season.season_name);
   const [description, setDescription] = useState<string>(season.description);
   const [modalIsOpen, setmodalIsOpen] = useState(true);
@@ -32,6 +33,7 @@ const UpdateSeason = ({ season, closeHandle }: ISeasonProps) => {
       setSeason_name("");
       setDescription("");
       closeHandle();
+
       setmodalIsOpen(() => false);
       const MySwal = withReactContent(Swal);
       MySwal.fire({
@@ -40,9 +42,7 @@ const UpdateSeason = ({ season, closeHandle }: ISeasonProps) => {
         icon: "success",
         confirmButtonText: "OK",
       });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      reloadData();
     } else {
       const MySwal = withReactContent(Swal);
       MySwal.fire({

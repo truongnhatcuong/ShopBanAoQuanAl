@@ -2,14 +2,14 @@ import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
-  const getReturn = await prisma.return.findMany();
+  const getReturn = await prisma.returnProduct.findMany();
   return NextResponse.json({ getReturn, message: "success" }, { status: 201 });
 }
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
   try {
-    const createReturn = await prisma.return.create({
+    const createReturn = await prisma.returnProduct.create({
       data: {
         order_id: data.order_id,
         product_id: data.product_id,

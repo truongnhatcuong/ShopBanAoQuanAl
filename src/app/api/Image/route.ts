@@ -1,26 +1,69 @@
-import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { writeFile } from "fs/promises";
+import path from "path";
+import prisma from "@/app/prisma/client"; // Path to your Prisma client
+import fs from "fs";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+const uploadsDir = path.join(process.cwd(), "public/Image");
 
 export async function GET(req: NextRequest) {
-  const Image = await prisma.image.findMany();
-  return NextResponse.json({ Image, message: "success" }, { status: 200 });
+  const images = await prisma.image.findMany();
+  return NextResponse.json({ images, message: "success" }, { status: 200 });
 }
 
-export async function POST(req: NextRequest) {
-  const data = await req.json();
-  try {
-    const newImage = await prisma.image.create({
-      data: {
-        product_id: data.product_id,
-        image_url: data.image_url,
-        created_at: new Date(),
-      },
-    });
+export const POST = async (req: NextRequest) => {
+  const formData = await req.formData();
+  const productId = formData.get("product_id");
+
+  // Kiểm tra xem ID sản phẩm có được cung cấp không
+  if (!productId) {
+    return NextResponse.json({ error: "Cần có ID sản phẩm." }, { status: 400 });
+  }
+
+  const imageFiles = formData.getAll("images[]"); // Lấy tất cả hình ảnh
+
+  // Kiểm tra xem có hình ảnh nào được tải lên không
+  if (imageFiles.length === 0) {
     return NextResponse.json(
-      { newImage, message: "Create success" },
+      { error: "not found image update." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    for (const file of imageFiles) {
+      const buffer = Buffer.from(await (file as Blob).arrayBuffer());
+      const filename = (file as File).name.replaceAll(" ", "_");
+      const filePath = path.join(uploadsDir, filename);
+
+      await writeFile(filePath, new Uint8Array(buffer));
+
+      // Lưu từng hình ảnh vào cơ sở dữ liệu
+      await prisma.image.create({
+        data: {
+          product_id: Number(productId), // Đảm bảo product_id là số
+          image_url: `/Image/${filename}`,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      });
+    }
+
+    return NextResponse.json(
+      { message: "Create Image Success" },
       { status: 200 }
     );
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Đã xảy ra lỗi khi tải lên tệp." },
+      { status: 500 }
+    );
   }
-}
+};

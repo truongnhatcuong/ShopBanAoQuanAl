@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-const Addseason = (props: { closeHandle: () => void }) => {
+const Addseason = (props: {
+  closeHandle: () => void;
+  reloadData: () => void;
+}) => {
   const [season_name, setSeason_name] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [modalIsOpen, setmodalIsOpen] = useState(true);
@@ -21,6 +24,7 @@ const Addseason = (props: { closeHandle: () => void }) => {
       setDescription("");
       props.closeHandle();
       setmodalIsOpen(false);
+
       const MySwal = withReactContent(Swal);
       MySwal.fire({
         title: "Thông báo!",
@@ -28,9 +32,8 @@ const Addseason = (props: { closeHandle: () => void }) => {
         icon: "success",
         confirmButtonText: "OK",
       });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      props.reloadData();
+      // eslint-disable-next-line react-hooks/rules-of-hooks
     }
   }
   return (
@@ -78,7 +81,7 @@ const Addseason = (props: { closeHandle: () => void }) => {
             type="submit"
             className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700"
           >
-            Lưu
+            Thêm
           </button>
           <button
             type="button"

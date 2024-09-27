@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Modal from "react-modal";
-import useSWR, { mutate } from "swr";
+
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { toast } from "react-toastify";
@@ -12,15 +12,16 @@ interface Icategories {
   category_name: string;
   description: string;
 }
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const UpdateCategories = ({
   category,
   closeHandle,
+  reloadData,
 }: {
   category: Icategories;
-  closeHandle(): void;
+  closeHandle: () => void;
+  reloadData: () => void;
 }) => {
-  const { data, error, mutate } = useSWR("/api/categories", fetcher);
   const [category_name, setName] = useState<string>(category.category_name);
   const [description, setDescription] = useState<string>(category.description);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
@@ -53,8 +54,6 @@ const UpdateCategories = ({
       console.log(updatedData);
       console.log("Mutate called");
 
-      mutate("/api/categories", { revalidate: true });
-
       const MySwal = withReactContent(Swal);
       MySwal.fire({
         title: "Thông báo!",
@@ -62,6 +61,7 @@ const UpdateCategories = ({
         icon: "success",
         confirmButtonText: "OK",
       });
+      reloadData();
       closeHandle();
     } else {
       const errorData = await response.json();

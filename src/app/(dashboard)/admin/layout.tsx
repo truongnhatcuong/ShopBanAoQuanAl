@@ -9,15 +9,15 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${inter.className} h-screen flex`}>
+    <div className={`${inter.className} h-screen flex overflow-hidden`}>
       {/* Left menu with 3D effect */}
-      <div className="w-[16%] bg-gray-900 text-white shadow-lg ">
+      <div className="w-[16%] bg-gray-900 text-white shadow-lg overflow-y-auto">
         <LeftMenu />
       </div>
       {/* TopBar and Content */}
-      <div className="flex flex-col w-[84%] ">
+      <div className="flex flex-col w-[84%] overflow-hidden">
         <TopBar />
-        <div className="flex-grow bg-white">{children}</div>
+        <div className="flex-grow bg-white overflow-y-auto">{children}</div>
       </div>
     </div>
   );

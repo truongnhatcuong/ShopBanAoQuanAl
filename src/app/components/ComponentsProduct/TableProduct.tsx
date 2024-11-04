@@ -1,10 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
-
 import DeleteProduct from "./DeleteProduct";
 import UpdateImage from "../componentsImageProduct/UpdateImage";
 import DeleteImage from "../componentsImageProduct/DeleteImage";
-
+import { FaPen } from "react-icons/fa";
 interface IProduct {
   product_id: number;
   product_name: string;
@@ -92,12 +91,12 @@ const TableProduct = ({ product, closeHandle }: ITableProduct) => {
           <thead>
             <tr>
               <th>Show Images</th>
-              <th>ID</th>
-              <th>Name Product</th>
+
+              <th className="text-center">Product Name</th>
               <th className="text-center">Description</th>
-              <th>Price</th>
+              <th className="text-center">Price</th>
               <th className="text-center">Quantity</th>
-              <th>Color</th>
+              <th className="text-center">Color</th>
               <th className="text-center">Action</th>
             </tr>
           </thead>
@@ -114,13 +113,23 @@ const TableProduct = ({ product, closeHandle }: ITableProduct) => {
                         {showImages === item.product_id ? "◄ " : "►"}
                       </button>
                     </td>
-                    <th>{item.product_id}</th>
+
                     <td>{item.product_name}</td>
-                    <td>{item.description}</td>
+                    <td className="max-w-xs">
+                      <div className="h-12 overflow-hidden text-ellipsis line-clamp-3">
+                        {item.description}
+                      </div>
+                    </td>
                     <td>{item.price}</td>
                     <td>{item.stock_quantity}</td>
                     <td>{item.color}</td>
-                    <td className="space-x-3 flex">
+                    <td className="space-x-3 flex justify-center">
+                      <button
+                        className="text-blue-500 p-1 rounded-md hover:text-blue-600  text-2xl"
+                        onClick={() => closeHandle(item)}
+                      >
+                        <FaPen />
+                      </button>
                       <DeleteProduct
                         DeleteHandle={(product_id) =>
                           setProductList((prev) =>
@@ -131,12 +140,6 @@ const TableProduct = ({ product, closeHandle }: ITableProduct) => {
                         }
                         product_id={item.product_id}
                       />
-                      <button
-                        className="bg-blue-500 p-1 rounded-md hover:bg-blue-600 text-white font-medium"
-                        onClick={() => closeHandle(item)}
-                      >
-                        UPDATE
-                      </button>
                     </td>
                   </tr>
 

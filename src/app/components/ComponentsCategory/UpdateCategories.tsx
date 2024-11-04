@@ -24,7 +24,7 @@ const UpdateCategories = ({
 }) => {
   const [category_name, setName] = useState<string>(category.category_name);
   const [description, setDescription] = useState<string>(category.description);
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function handleUpdate(e: any) {
     e.preventDefault();
@@ -42,13 +42,13 @@ const UpdateCategories = ({
       });
       return; // Add this return statement to prevent further execution
     }
-
+    setLoading(true);
     const response = await fetch(`/api/categories/${category.category_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ category_name, description }),
     });
-
+    setLoading(false);
     if (response.ok) {
       const updatedData = await response.json();
       console.log(updatedData);
@@ -79,18 +79,14 @@ const UpdateCategories = ({
 
   return (
     <Modal
-      isOpen={modalIsOpen}
+      isOpen={true}
+      ariaHideApp={false}
       onRequestClose={closeHandle}
       contentLabel="Cập nhật danh mục" // Changed from "sản phẩm" to "danh mục"
       className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5"
-      overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-50"
+      overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-70"
     >
       <h2 className="text-xl font-bold mb-4">Cập nhật danh mục</h2>
-      <div className="mb-4">
-        <p>
-          <strong>ID:</strong> {category.category_id}
-        </p>
-      </div>
       <form className="mt-4" onSubmit={handleUpdate}>
         <div className="mb-4">
           <label className="block text-gray-700">Name</label>
@@ -111,19 +107,22 @@ const UpdateCategories = ({
             required
           />
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700"
-        >
-          Update
-        </button>
-        <button
-          type="button"
-          className="bg-red-500 text-white py-2 px-4 rounded-md ml-2 hover:bg-red-700"
-          onClick={closeHandle}
-        >
-          Hủy
-        </button>
+        <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            className="bg-red-500 text-white py-2 px-10 rounded-md ml-2 hover:bg-red-700"
+            onClick={closeHandle}
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-10 rounded-md hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? "đang Lưu..." : "Lưu"}
+          </button>
+        </div>
       </form>
     </Modal>
   );

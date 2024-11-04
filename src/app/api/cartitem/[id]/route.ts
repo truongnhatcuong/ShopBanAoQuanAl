@@ -1,7 +1,10 @@
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const cartItemId = Number(params.id);
   try {
     const getcartitem = await prisma.cartItem.findUnique({
@@ -44,7 +47,10 @@ export async function PUT(
   }
 }
 
-export async function DELETE({ params }: { params: { id: string } }) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const cartItemId = Number(params.id);
   try {
     const deletedCartitem = await prisma.cartItem.delete({

@@ -35,10 +35,10 @@ const Page = () => {
     <div>
       <div className="flex justify-end mr-6 ">
         <button
-          className="bg-green-500 p-2 rounded-lg text-sm font-bold text-white hover:bg-green-700"
+          className="bg-blue-500 px-6 py-3 rounded-sm  font-bold text-white hover:bg-blue-700"
           onClick={() => setShowAdd(true)}
         >
-          ADD BRAND
+          Thêm Thương Hiệu
         </button>
         {showAdd && (
           <AddBrand

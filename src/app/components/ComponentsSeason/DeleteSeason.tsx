@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { IoTrashBinOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -46,10 +47,10 @@ const DeleteSeason = ({ season_id, DeleteHandler }: IdeleteSeason) => {
   return (
     <div>
       <button
-        className=" bg-red-500 hover:bg-red-600 text-white  p-1 rounded-md"
+        className=" text-red-500 hover:text-red-600 text-2xl"
         onClick={DeleteSeason}
       >
-        Delete
+        <IoTrashBinOutline />
       </button>
     </div>
   );

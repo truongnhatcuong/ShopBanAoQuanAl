@@ -38,14 +38,14 @@ const Page = () => {
     <div>
       <div className="flex justify-end mr-5 mb-6">
         <button
-          className="bg-green-500 p-2 rounded-lg text-sm font-bold text-white hover:bg-green-700"
+          className="bg-blue-500 px-6 py-3 rounded-md font-bold text-white hover:bg-blue-700"
           onClick={() => setshowadd(true)}
         >
-          Add season
+          Thêm Sản Phẩm
         </button>
         {showadd && (
           <Addproduct
-            closeHanle={() => setshowadd(false)}
+            closeHandle={() => setshowadd(false)}
             reloadData={ApiProduct}
           />
         )}

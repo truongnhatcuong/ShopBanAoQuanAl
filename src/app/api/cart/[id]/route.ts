@@ -1,7 +1,10 @@
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const cardId = Number(params.id);
   try {
     const getCard = await prisma.cart.findUnique({
@@ -42,7 +45,10 @@ export async function PUT(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-export async function DELETE({ params }: { params: { id: string } }) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const cardId = Number(params.id);
   try {
     const deleteCart = await prisma.cart.delete({

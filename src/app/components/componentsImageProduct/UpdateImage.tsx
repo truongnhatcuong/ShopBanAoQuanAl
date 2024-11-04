@@ -88,6 +88,7 @@ const UpdateImage = ({ image, closeHandle, reloadData }: IUpdate) => {
     <Modal
       isOpen={true}
       onRequestClose={closeHandle}
+      ariaHideApp={false}
       contentLabel="Cập Nhật Hình Ảnh"
       className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5 max-h-screen overflow-y-auto"
       overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-50"
@@ -134,7 +135,7 @@ const UpdateImage = ({ image, closeHandle, reloadData }: IUpdate) => {
 
         <button
           type="submit"
-          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700"
+          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700"
         >
           Cập Nhật
         </button>

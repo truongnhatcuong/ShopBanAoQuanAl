@@ -1,6 +1,6 @@
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-
+import bcrypt from "bcryptjs";
 export async function GET({ params }: { params: { id: string } }) {
   const customerId = Number(params.id);
   try {
@@ -23,6 +23,8 @@ export async function PUT(
 ) {
   const data = await req.json();
   const customerId = Number(params.id);
+  const hashPassword = await bcrypt.hash(data.password, 10);
+
   try {
     const updateCustomer = await prisma.customer.update({
       where: {
@@ -34,7 +36,7 @@ export async function PUT(
         phone: data.phone,
         address: data.address,
         username: data.username,
-        password: data.password,
+        password: hashPassword,
         updated_at: new Date(),
       },
     });
@@ -47,7 +49,10 @@ export async function PUT(
   }
 }
 
-export async function DELETE({ params }: { params: { id: string } }) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const customerId = Number(params.id);
   try {
     const deleteCustomer = await prisma.customer.delete({

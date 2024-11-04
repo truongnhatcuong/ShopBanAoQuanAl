@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
@@ -20,7 +21,7 @@ interface ISeason {
 }
 
 const AddProduct = (props: {
-  closeHanle: () => void;
+  closeHandle: () => void;
   reloadData: () => void;
 }) => {
   const [product_name, setProductName] = useState("");
@@ -35,7 +36,7 @@ const AddProduct = (props: {
   const [brands, setBrands] = useState<IBrand[]>([]);
   const [seasons, setSeasons] = useState<ISeason[]>([]);
   const [images, setImages] = useState<File[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   // Fetch categories, brands, and seasons from the backend
   const fetchOptions = async () => {
     const categoryRes = await fetch("/api/categories");
@@ -71,7 +72,7 @@ const AddProduct = (props: {
 
   const AddProductHandle = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setLoading(true);
     const req = await fetch("/api/product", {
       method: "POST",
       headers: {
@@ -97,7 +98,7 @@ const AddProduct = (props: {
       await AddImageHandle(newProductId);
 
       // Close modal and reload data
-      props.closeHanle();
+      props.closeHandle();
       props.reloadData();
 
       const MySwal = withReactContent(Swal);
@@ -172,15 +173,73 @@ const AddProduct = (props: {
   return (
     <Modal
       isOpen={true}
-      onRequestClose={props.closeHanle}
+      ariaHideApp={false}
+      onRequestClose={props.closeHandle}
       contentLabel="Thêm Sản Phẩm"
       className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5 overflow-y-auto max-h-screen"
-      overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-50"
+      overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-70"
     >
       <h2 className="text-xl font-bold">Thêm Sản Phẩm Mới</h2>
       <form className="mt-3" onSubmit={AddProductHandle}>
+        {/* Danh Mục, Thương Hiệu và Mùa */}
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div>
+            <label className="block text-gray-700">Danh Mục</label>
+            <select
+              value={category_id ?? ""}
+              onChange={(e) => setCategoryId(Number(e.target.value))}
+              className="p-2 rounded-lg border-solid border-2 w-full"
+              required
+            >
+              <option value="" disabled>
+                Chọn danh mục
+              </option>
+              {categories.map((category) => (
+                <option key={category.category_id} value={category.category_id}>
+                  {category.category_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-gray-700">Thương Hiệu</label>
+            <select
+              value={brand_id ?? ""}
+              onChange={(e) => setBrandId(Number(e.target.value))}
+              className="p-2 rounded-lg border-solid border-2 w-full"
+              required
+            >
+              <option value="" disabled>
+                Chọn thương hiệu
+              </option>
+              {brands.map((brand) => (
+                <option key={brand.brand_id} value={brand.brand_id}>
+                  {brand.brand_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-gray-700">Mùa</label>
+            <select
+              value={season_id ?? ""}
+              onChange={(e) => setSeasonId(Number(e.target.value))}
+              className="p-2 rounded-lg border-solid border-2 w-full"
+              required
+            >
+              <option value="" disabled>
+                Chọn mùa
+              </option>
+              {seasons.map((season) => (
+                <option key={season.season_id} value={season.season_id}>
+                  {season.season_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         {/* Tên Sản Phẩm */}
-        <div className="mb-4">
+        <div>
           <label className="block text-gray-700">Tên Sản Phẩm</label>
           <input
             type="text"
@@ -191,105 +250,38 @@ const AddProduct = (props: {
           />
         </div>
 
-        {/* Mô Tả */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Mô Tả</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="p-2 rounded-lg border-solid border-2 w-full"
-            required
-          />
-        </div>
-
-        {/* Giá */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Giá</label>
-          <input
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-            className="p-2 rounded-lg border-solid border-2 w-full"
-            required
-          />
-        </div>
-
-        {/* Số Lượng Tồn Kho */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Số Lượng Tồn Kho</label>
-          <input
-            type="text"
-            value={stock_quantity}
-            onChange={(e) => setStockQuantity(Number(e.target.value))}
-            className="p-2 rounded-lg border-solid border-2 w-full"
-            required
-          />
-        </div>
-
-        {/* Màu */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Màu</label>
-          <input
-            type="text"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            className="p-2 rounded-lg border-solid border-2 w-full"
-            required
-          />
-        </div>
-
-        {/* Danh Mục */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Danh Mục</label>
-          <select
-            value={category_id ?? ""}
-            onChange={(e) => setCategoryId(Number(e.target.value))}
-            className="p-2 rounded-lg border-solid border-2 w-full"
-            required
-          >
-            <option value="">Chọn danh mục</option>
-            {categories.map((category) => (
-              <option key={category.category_id} value={category.category_id}>
-                {category.category_name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Thương Hiệu */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Thương Hiệu</label>
-          <select
-            value={brand_id ?? ""}
-            onChange={(e) => setBrandId(Number(e.target.value))}
-            className="p-2 rounded-lg border-solid border-2 w-full"
-            required
-          >
-            <option value="">Chọn thương hiệu</option>
-            {brands.map((brand) => (
-              <option key={brand.brand_id} value={brand.brand_id}>
-                {brand.brand_name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Mùa */}
-        <div className="mb-4">
-          <label className="block text-gray-700">Mùa</label>
-          <select
-            value={season_id ?? ""}
-            onChange={(e) => setSeasonId(Number(e.target.value))}
-            className="p-2 rounded-lg border-solid border-2 w-full"
-            required
-          >
-            <option value="">Chọn mùa</option>
-            {seasons.map((season) => (
-              <option key={season.season_id} value={season.season_id}>
-                {season.season_name}
-              </option>
-            ))}
-          </select>
+        {/*  Giá và Số Lượng Tồn Kho */}
+        <div className="grid grid-cols-3 gap-4 mb-4 mt-7">
+          <div>
+            <label className="block text-gray-700">Giá</label>
+            <input
+              type="text"
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              className="p-2 rounded-lg border-solid border-2 w-full"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Số Lượng Tồn Kho</label>
+            <input
+              type="text"
+              value={stock_quantity}
+              onChange={(e) => setStockQuantity(Number(e.target.value))}
+              className="p-2 rounded-lg border-solid border-2 w-full"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700  ">Màu Sắc</label>
+            <input
+              type="text"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className="p-2 rounded-lg border-solid border-2 w-full"
+              required
+            />
+          </div>
         </div>
 
         {/* Tải Lên Hình Ảnh */}
@@ -322,19 +314,33 @@ const AddProduct = (props: {
           </div>
         </div>
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg"
-          >
-            Thêm Sản Phẩm
-          </button>
+        {/* Mô Tả */}
+        <div className="mb-4">
+          <label className="block text-gray-700">Mô Tả</label>
+          <textarea
+            rows={5}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="p-2 rounded-lg border-solid border-2 w-full"
+            required
+          />
+        </div>
+
+        {/* Nút Thêm Sản Phẩm và Hủy */}
+        <div className="flex justify-end space-x-5">
           <button
             type="button"
-            onClick={props.closeHanle}
-            className="bg-gray-500 text-white py-2 px-4 rounded-lg ml-2"
+            onClick={props.closeHandle}
+            className="bg-gray-500 text-white py-2 px-8 rounded-lg ml-2"
           >
             Hủy
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-8 rounded-lg"
+            disabled={loading}
+          >
+            {loading ? "đang lưu ..." : "Lưu"}
           </button>
         </div>
       </form>

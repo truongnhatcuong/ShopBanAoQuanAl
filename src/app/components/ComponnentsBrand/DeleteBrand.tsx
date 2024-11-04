@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { IoTrashBinOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 interface IDelete {
@@ -45,10 +45,10 @@ const DeleteBrand = ({ brand_id, DeleteHandler }: IDelete) => {
   return (
     <div>
       <button
-        className="bg-red-500 p-1 rounded-lg hover:bg-red-600 text-white font-bold"
+        className="text-red-500  hover:text-red-600 "
         onClick={DeleteHander}
       >
-        DELETE
+        <IoTrashBinOutline />
       </button>
     </div>
   );

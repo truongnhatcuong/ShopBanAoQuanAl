@@ -8,10 +8,11 @@ const Addseason = (props: {
 }) => {
   const [season_name, setSeason_name] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [modalIsOpen, setmodalIsOpen] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   async function AddSeasonHanler(e: any) {
     e.preventDefault();
+    setLoading(true);
     const req = await fetch(`/api/season`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -23,7 +24,7 @@ const Addseason = (props: {
       setSeason_name("");
       setDescription("");
       props.closeHandle();
-      setmodalIsOpen(false);
+      setLoading(false);
 
       const MySwal = withReactContent(Swal);
       MySwal.fire({
@@ -33,29 +34,20 @@ const Addseason = (props: {
         confirmButtonText: "OK",
       });
       props.reloadData();
-      // eslint-disable-next-line react-hooks/rules-of-hooks
     }
   }
   return (
     <div>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={true}
+        ariaHideApp={false}
         onRequestClose={props.closeHandle}
         contentLabel="Thêm Thương Hiệu"
         className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5"
-        overlayClassName="fixed inset-0 bg-var(--bs-gray-500) bg-opacity-var(--bs-gray-500) "
+        overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-70"
       >
         <h2 className="text-xl font-bold">Thêm Mùa Mới</h2>
         <form className="mt-4" onSubmit={AddSeasonHanler}>
-          <div className="mb-4">
-            <label className="block text-gray-700">ID</label>
-            <input
-              type="text"
-              value={"ID Sẽ Được Tạo Tự Động"}
-              className="p-2 rounded-lg border-solid border-2 w-full bg-gray-100"
-              readOnly
-            />
-          </div>
           <div className="mb-4">
             <label className="block text-gray-700">Name Season</label>
             <input
@@ -72,24 +64,28 @@ const Addseason = (props: {
             <textarea
               value={description}
               placeholder=" mô tả Mùa ..."
+              rows={5}
               onChange={(e) => setDescription(e.target.value)}
               className="p-2 rounded-lg border-solid border-2 w-full"
               required
             />
           </div>
-          <button
-            type="submit"
-            className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700"
-          >
-            Thêm
-          </button>
-          <button
-            type="button"
-            className="bg-red-500 text-white py-2 px-4 rounded-md ml-2 hover:bg-red-700"
-            onClick={props.closeHandle}
-          >
-            Hủy
-          </button>
+          <div className="flex justify-end space-x-5">
+            <button
+              type="button"
+              className="bg-red-500 text-white py-2 px-8 rounded-md ml-2 hover:bg-red-700"
+              onClick={props.closeHandle}
+            >
+              Hủy
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-8 rounded-md hover:bg-blue-700"
+              disabled={loading}
+            >
+              {loading ? "đang lưu ..." : "Lưu"}
+            </button>
+          </div>
         </form>
       </Modal>
     </div>

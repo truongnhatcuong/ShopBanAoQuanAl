@@ -2,13 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
 import prisma from "@/app/prisma/client"; // Path to your Prisma client
-import fs from "fs";
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 const uploadsDir = path.join(process.cwd(), "public/Image");
 

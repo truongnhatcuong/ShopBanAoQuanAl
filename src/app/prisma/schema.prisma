@@ -46,7 +46,7 @@ model Product {
   Category        Category          @relation(fields: [category_id], references: [category_id])
   Brand           Brand             @relation(fields: [brand_id], references: [brand_id])
   Season          Season?           @relation(fields: [season_id], references: [season_id])
-  Rating          Rating?           @relation(fields: [rating_id], references: [rating_id])
+ 
   ProductSizes    ProductSize[]
   OrderItems      OrderItem[]
   Images          Image[]
@@ -103,7 +103,6 @@ model Order {
   Customer     Customer        @relation(fields: [customer_id], references: [customer_id])
   OrderItems   OrderItem[]
   Payments     Payment[]
-  Shipping     Shipping[]
   Returns      ReturnProduct[]
 }
 
@@ -132,18 +131,6 @@ model Payment {
   Order          Order     @relation(fields: [order_id], references: [order_id])
 }
 
-model Shipping {
-  shipping_id       Int       @id @default(autoincrement())
-  order_id          Int
-  shipping_method   String    @db.VarChar(50)
-  tracking_number   String?   @db.VarChar(100)
-  shipping_status   String    @db.VarChar(50)
-  shipping_date     DateTime? @db.Date
-  estimated_arrival DateTime? @db.Date
-  created_at        DateTime? @db.DateTime
-  updated_at        DateTime? @db.DateTime
-  Order             Order     @relation(fields: [order_id], references: [order_id])
-}
 
 model ReturnProduct {
   return_id     Int       @id @default(autoincrement())
@@ -163,7 +150,6 @@ model Rating {
   rating_id Int       @id @default(autoincrement())
   rating    Int?
   Reviews   Review[]
-  Products  Product[]
 }
 
 model Review {
@@ -272,6 +258,3 @@ model CartItem {
   Cart        Cart    @relation(fields: [cart_id], references: [cart_id])
 }
 
-model Back {
-  wishlist_id Int @id @default(autoincrement())
-}

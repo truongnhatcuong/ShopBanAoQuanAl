@@ -36,10 +36,10 @@ const Page = () => {
     <div>
       <div className="flex justify-end  mr-7">
         <button
-          className="bg-green-500 p-2 rounded-lg text-sm font-bold text-white hover:bg-green-700"
+          className="bg-blue-500 py-2.5 px-7 rounded-md  font-bold text-white hover:bg-blue-700"
           onClick={() => setShowAddModal(true)}
         >
-          Add season
+          Thêm Mùa
         </button>
         {showAddModal && (
           <Addseason

@@ -18,19 +18,22 @@ const MenuItems = (props: IProps) => {
   const [selectedSubmenu, setSelectedSubmenu] = useState<number | null>(null);
 
   const handlerSelect = (id: number) => setSelectedSubmenu(id);
+
   return (
-    <ul className="flex flex-col cursor-pointer ">
-      <Link
-        href={props.menuItem.link}
-        className="flex items-center  justify-center rounded-md transition-colors duration-200 mr-6 font-bold "
-      >
-        <span className="mr-2">{props.menuItem.icon}</span>
-        <span className="">{props.menuItem.title}</span>
-      </Link>
-      {props.menuItem.submenu
-        ? props.menuItem.submenu.map((item) => (
+    <ul className="flex flex-col cursor-pointer">
+      <li className="flex items-center justify-between rounded-md transition-colors duration-200 mr-6 font-bold">
+        <Link href={props.menuItem.link} className="flex items-center w-full">
+          <span className="mr-2 ml-3">{props.menuItem.icon}</span>
+          <span className="">{props.menuItem.title}</span>
+        </Link>
+      </li>
+
+      {/* Hiển thị submenu nếu tồn tại */}
+      {props.menuItem.submenu && (
+        <ul className="pl-6">
+          {props.menuItem.submenu.map((item) => (
             <li key={item.id}>
-              <div className="p-0.5 text-xs">
+              <div className="p-0.5 text-sm">
                 <SubmenuItems
                   menuItem={item}
                   isSelected={selectedSubmenu === item.id}
@@ -38,8 +41,9 @@ const MenuItems = (props: IProps) => {
                 />
               </div>
             </li>
-          ))
-        : null}
+          ))}
+        </ul>
+      )}
     </ul>
   );
 };

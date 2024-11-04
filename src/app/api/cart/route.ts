@@ -1,7 +1,7 @@
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const getAllCart = await prisma.cart.findMany();
   return NextResponse.json({ getAllCart, message: "success" }, { status: 201 });
 }

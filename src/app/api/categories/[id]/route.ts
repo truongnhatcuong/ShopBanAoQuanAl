@@ -56,9 +56,10 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const { id } = await params;
   try {
     const data = await req.json();
-    const categoryId = Number(params.id);
+    const categoryId = Number(id);
 
     const categoriesSchema = z.object({
       category_name: z
@@ -89,7 +90,7 @@ export async function PUT(
     if (updateCategory === null) {
       return NextResponse.json(
         { error: `not found ID: ${params.id}` },
-        { status: 200 }
+        { status: 404 }
       );
     }
     return NextResponse.json(

@@ -54,10 +54,10 @@ const Page = () => {
     <div className="ml-5">
       <div className="flex justify-end mr-7 mt-2">
         <button
-          className="bg-green-500 p-2 rounded-lg text-sm font-bold text-white hover:bg-green-700"
+          className="bg-blue-500 py-3 px-6 rounded-md font-bold text-white hover:bg-blue-700"
           onClick={() => setShowAddModal(true)}
         >
-          Add Category
+          Thêm Danh Mục
         </button>
         {showAddModal && (
           <AddCategories

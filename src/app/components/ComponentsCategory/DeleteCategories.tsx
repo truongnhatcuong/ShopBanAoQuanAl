@@ -1,5 +1,5 @@
-import { METHODS } from "http";
 import React, { useState } from "react";
+import { IoTrashBinOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -10,44 +10,53 @@ interface IDelete {
 }
 
 const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
+  const MySwal = withReactContent(Swal);
   const [show, setShow] = useState(false);
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc chắn muốn xóa danh mục này không?"
-    );
-    if (!confirmDelete) {
-      return;
-    }
+    const result = await MySwal.fire({
+      title: "Are you sure?",
+      text: "Bạn có chắc chắn muốn xóa này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-    try {
-      const response = await fetch(`/api/categories/${category_id}`, {
-        method: "DELETE",
-      });
-      await response.json();
-      deleteCategories(category_id);
-      const MySwal = withReactContent(Swal);
-      MySwal.fire({
-        title: "Thông báo!",
-        text: "Xóa sản Phẩm Thành Công",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-      setShow(false);
-    } catch (error) {
-      toast.error("error deleting category", {
-        position: "top-right",
-        autoClose: 5000,
-      });
-      return;
+    if (result.isConfirmed) {
+      try {
+        const res = await fetch(`/api/categories/${category_id}`, {
+          method: "DELETE",
+        });
+
+        if (res.ok) {
+          await res.json();
+          deleteCategories(category_id);
+
+          MySwal.fire({
+            title: "Thông báo!",
+            text: "Xóa sản Phẩm Thành Công",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          setShow(false);
+        }
+      } catch (error) {
+        toast.error("error deleting category", {
+          position: "top-right",
+          autoClose: 5000,
+        });
+        return;
+      }
     }
   };
 
   return (
     <button
-      className="bg-red-500 hover:bg-red-700 rounded-md p-1 text-white font-medium cursor-pointer"
+      className="text-red-500 hover:text-red-700 text-2xl"
       onClick={handleDelete}
     >
-      Delete
+      <IoTrashBinOutline />
     </button>
   );
 };

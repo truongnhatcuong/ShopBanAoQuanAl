@@ -136,20 +136,21 @@ const AddImage = ({
             ))}
           </div>
         </div>
-
-        <button
-          type="submit"
-          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700"
-        >
-          Thêm
-        </button>
-        <button
-          type="button"
-          className="bg-red-500 text-white py-2 px-4 rounded-md ml-2 hover:bg-red-700"
-          onClick={closeHandle}
-        >
-          Hủy
-        </button>
+        <div className="flex justify-end space-x-5">
+          <button
+            type="button"
+            className="bg-red-500 text-white py-2 px-6 rounded-md  hover:bg-red-700"
+            onClick={closeHandle}
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-700"
+          >
+            Thêm
+          </button>
+        </div>
       </form>
     </Modal>
   );

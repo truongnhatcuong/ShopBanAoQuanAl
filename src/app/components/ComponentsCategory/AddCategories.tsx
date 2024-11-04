@@ -46,22 +46,14 @@ const AddCategories = (props: {
   return (
     <Modal
       isOpen={showAddModal}
+      ariaHideApp={false}
       onRequestClose={props.closeHandle}
       contentLabel="Thêm sản phẩm mới"
       className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5 "
-      overlayClassName="fixed inset-0 bg-var(--bs-gray-500) bg-opacity-var(--bs-gray-500) "
+      overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-70"
     >
       <h2 className="text-xl font-bold">Thêm sản phẩm mới</h2>
       <form className="mt-4" onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700">ID</label>
-          <input
-            type="text"
-            value={"ID Sẽ Được Tạo Tự Động"}
-            className="p-2 rounded-lg border-solid border-2 w-full bg-gray-100"
-            readOnly
-          />
-        </div>
         <div className="mb-4">
           <label className="block text-gray-700">Name</label>
           <input
@@ -83,19 +75,21 @@ const AddCategories = (props: {
             required
           />
         </div>
-        <button
-          type="submit"
-          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700"
-        >
-          Lưu
-        </button>
-        <button
-          type="button"
-          className="bg-red-500 text-white py-2 px-4 rounded-md ml-2 hover:bg-red-700"
-          onClick={props.closeHandle}
-        >
-          Hủy
-        </button>
+        <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            className="bg-red-500 text-white py-2 px-10 rounded-md ml-2 hover:bg-red-700"
+            onClick={props.closeHandle}
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-10 rounded-md hover:bg-blue-700"
+          >
+            Lưu
+          </button>
+        </div>
       </form>
     </Modal>
   );

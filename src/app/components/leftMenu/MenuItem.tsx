@@ -16,21 +16,26 @@ interface IMenu {
 
 const MenuItems = (props: IProps) => {
   const [selectedSubmenu, setSelectedSubmenu] = useState<number | null>(null);
-
-  const handlerSelect = (id: number) => setSelectedSubmenu(id);
+  const [isSubmenuVisible, setIsSubmenuVisible] = useState<boolean>(false);
+  const handlerSelect = (id: number) => {
+    setSelectedSubmenu(id);
+  };
 
   return (
     <ul className="flex flex-col cursor-pointer">
       <li className="flex items-center justify-between rounded-md transition-colors duration-200 mr-6 font-bold">
-        <Link href={props.menuItem.link} className="flex items-center w-full">
-          <span className="mr-2 ml-3">{props.menuItem.icon}</span>
-          <span className="">{props.menuItem.title}</span>
+        <Link
+          href={props.menuItem.link}
+          className="flex items-center w-full"
+          onClick={() => setIsSubmenuVisible(!isSubmenuVisible)}
+        >
+          <span className="mr-3 ml-2 mt-7">{props.menuItem.icon}</span>
+          <span className="ml-1 mt-7">{props.menuItem.title}</span>
         </Link>
       </li>
 
-      {/* Hiển thị submenu nếu tồn tại */}
-      {props.menuItem.submenu && (
-        <ul className="pl-6">
+      {isSubmenuVisible && props.menuItem.submenu && (
+        <ul className="pl-6 ">
           {props.menuItem.submenu.map((item) => (
             <li key={item.id}>
               <div className="p-0.5 text-sm">

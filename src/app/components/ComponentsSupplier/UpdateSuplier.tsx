@@ -63,28 +63,20 @@ const UpdateSuplier = ({
   return (
     <div>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={true}
+        ariaHideApp={false}
         onRequestClose={closeHandle}
         contentLabel="Thêm Thương Hiệu"
         className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5"
-        overlayClassName="fixed inset-0 bg-var(--bs-gray-500) bg-opacity-var(--bs-gray-500) "
+        overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-70"
       >
-        <h2 className="text-xl font-bold">Thay Đổi Mùa</h2>
+        <h2 className="text-xl font-bold">Thay Đổi Thông Tin</h2>
         <form className="mt-4" onSubmit={UpdateHandler}>
           <div className="mb-4">
-            <label className="block text-gray-700">ID</label>
+            <label className="block text-gray-700">Tên Nhà Cung Cấp</label>
             <input
               type="text"
-              value={supplier.supplier_id}
-              className="p-2 rounded-lg border-solid border-2 w-full bg-gray-100"
-              readOnly
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
-            <input
-              type="text"
-              placeholder=" nhập tên Mùa ..."
+              placeholder=" Nhập Tên Nhà Cung Cấp ..."
               value={supplier_name}
               onChange={(e) => setSupplier_name(e.target.value)}
               className="p-2 rounded-lg border-solid border-2 w-full"
@@ -92,28 +84,32 @@ const UpdateSuplier = ({
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Description</label>
-            <textarea
+            <label className="block text-gray-700">Liên Hệ</label>
+            <input
+              type="number"
               value={contact_info}
-              placeholder=" mô tả Mùa ..."
+              placeholder="Nhập Số Điện Thoại ..."
               onChange={(e) => setContact_info(e.target.value)}
               className="p-2 rounded-lg border-solid border-2 w-full"
               required
             />
           </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-800"
-          >
-            Update
-          </button>
-          <button
-            type="button"
-            className="bg-red-500 text-white py-2 px-4 rounded-md ml-2 hover:bg-red-700"
-            onClick={closeHandle}
-          >
-            Hủy
-          </button>
+          <div className="flex justify-end space-x-5">
+            {" "}
+            <button
+              type="button"
+              className="bg-red-500 text-white py-2 px-7 rounded-md  hover:bg-red-700"
+              onClick={closeHandle}
+            >
+              Hủy
+            </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-7 rounded-md hover:bg-blue-800"
+            >
+              sửa
+            </button>
+          </div>
         </form>
       </Modal>
     </div>

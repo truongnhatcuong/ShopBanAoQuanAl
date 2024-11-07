@@ -30,12 +30,12 @@ const Supplier = () => {
   };
   return (
     <div>
-      <div className="flex justify-end mr-7 ">
+      <div className="flex justify-end mr-7 mb-4 ">
         <button
-          className="bg-green-500 p-2 rounded-lg text-sm font-bold text-white hover:bg-green-700"
+          className="bg-blue-500 py-3 px-6 rounded-md  font-bold text-white hover:bg-blue-700"
           onClick={() => setShowAllmodal(true)}
         >
-          Add Supplier
+          Thêm Nhà Cung Cấp
         </button>
         {showAddmodal && (
           <AddSupplier

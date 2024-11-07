@@ -30,7 +30,7 @@ const SubmenuItems = (props: IProps) => {
         }`}
       >
         <span className="mr-1">{props.menuItem.icon}</span>
-        <span>{props.menuItem.title}</span>
+        <span className="">{props.menuItem.title}</span>
       </Link>
     </div>
   );

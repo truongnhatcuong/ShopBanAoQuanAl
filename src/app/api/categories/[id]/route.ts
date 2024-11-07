@@ -6,18 +6,30 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const { id } = await params;
   try {
-    const categoryId = Number(params.id);
+    const categoryId = Number(id);
     // TODO: Implement logic to fetch and return category details
 
     const category = await prisma.category.findUnique({
       where: {
         category_id: categoryId,
       },
+      include: {
+        Products: true,
+      },
     });
+
+    if (!category) {
+      return NextResponse.json(
+        { error: `Category with ID ${id} not found` },
+        { status: 404 }
+      );
+    }
+
     if (category == null) {
       return NextResponse.json(
-        { error: `not found ID: ${params.id}` },
+        { error: `not found ID: ${id}` },
         { status: 200 }
       );
     } else {
@@ -32,8 +44,9 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const { id } = await params;
   try {
-    const categoryId = params.id;
+    const categoryId = Number(id);
     // TODO: Implement logic to delete category
     const deleteCategory = await prisma.category.delete({
       where: {
@@ -42,7 +55,7 @@ export async function DELETE(
     });
     if (deleteCategory === null) {
       return NextResponse.json(
-        { error: `not found ID: ${params.id}` },
+        { error: `not found ID: ${id}` },
         { status: 200 }
       );
     }

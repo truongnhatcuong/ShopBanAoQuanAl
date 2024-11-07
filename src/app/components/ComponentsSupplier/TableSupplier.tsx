@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeleteSupplier from "./DeleteSupplier";
-
+import { FaPen } from "react-icons/fa";
 interface ISupplier {
   supplier_id: number;
   supplier_name: string;
@@ -26,30 +26,38 @@ const TableSupplier = ({ supplier, closeHandle }: ISupplierProps) => {
     <div className="overflow-x-auto">
       <table className="table table-zebra text-sm">
         {/* head */}
-        <thead>
+        <thead className="bg-gray-50">
           <tr>
-            <th className="px-2 py-1 w-20">ID</th>
-            <th className="px-2 py-1 w-60">Name Supplier</th>
-            <th className="px-2 py-1 w-40">contacts</th>
-            <th className="px-2 py-1 w-40">Actions</th>
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Supplier Name
+            </th>
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Contacts
+            </th>
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {supplierList.map((item) => (
             <tr key={item.supplier_id}>
-              <th className="px-2 py-1">{item.supplier_id}</th>
-              <td className="px-2 py-1">{item.supplier_name}</td>
-              <td className="px-2 py-1">{item.contact_info}</td>
-              <td className="px-2 py-1 space-x-2 flex">
+              <td className="px-4 py-2 whitespace-nowrap">
+                {item.supplier_name}
+              </td>
+              <td className="px-4 py-2 whitespace-nowrap">
+                {item.contact_info}
+              </td>
+              <td className="px-4 py-2 whitespace-nowrap flex space-x-2">
                 <DeleteSupplier
                   supplier_id={item.supplier_id}
                   DeleteHandler={DeleteHandle}
                 />
                 <button
-                  className="bg-blue-500 p-1 rounded-md hover:bg-blue-600 text-white font-medium"
+                  className="text-blue-500 p-1 rounded-md hover:text-blue-600  text-xl"
                   onClick={() => closeHandle(item)}
                 >
-                  UPDATE
+                  <FaPen />
                 </button>
               </td>
             </tr>

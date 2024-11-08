@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import HeadePager from "./components/HeadePager";
+import HeadePager from "./components/HeaderPager";
 import FooterPage from "./components/FooterPage";
+import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-screen flex flex-col">
+    <div className=" flex flex-col bg-white ">
       <HeadePager />
-      <div className="flex-grow flex">{children}</div>
+      <div className="h-screen flex-grow flex w-full  flex-col ">
+        {children}
+      </div>
       <FooterPage />
+      <Footer />
     </div>
   );
 }

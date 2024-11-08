@@ -7,7 +7,7 @@ import { IoSearchSharp, IoCart } from "react-icons/io5";
 
 const HeadePager = () => {
   return (
-    <div className="flex justify-around bg-white shadow-md ">
+    <div className="flex justify-around bg-white shadow-lg mt-5 mb-3">
       <div>
         <Link href={"/"}>
           {" "}

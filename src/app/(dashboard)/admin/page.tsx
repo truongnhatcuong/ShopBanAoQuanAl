@@ -10,7 +10,6 @@ const AdminPage = () => {
       <div className="flex-1 p-6 bg-gray-100">
         {/* Page Title */}
         <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-
         {/* Main Content Area */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           {selectedPage === "Dashboard" && (

@@ -15,11 +15,16 @@ const MenuHeader: IMenuProps[] = [
   },
   {
     id: 2,
+    title: "Sản Phẩm",
+    link: "/product",
+  },
+  {
+    id: 3,
     title: "Giới Thiệu",
     link: "/about",
   },
   {
-    id: 3,
+    id: 4,
     title: "Bộ Sưu Tầm",
     link: "/superSet",
   },

@@ -1,17 +1,20 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextRequest } from "next/server";
+import prisma from "@/app/prisma/client";
+import { verifyAuth } from "./middleware/auth";
+import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse, NextFetchEvent } from "next/server";
 
-const IsProtectedRoute = createRouteMatcher(["/admin(.*)", "/api(.*)"]);
+export async function middleware(req: NextRequest, event: NextFetchEvent) {
+  const clerkResult = await clerkMiddleware(req, event);
 
-export default clerkMiddleware(async (auth, req: NextRequest) => {
-  if (IsProtectedRoute(req)) await auth.protect();
-});
+  if (!clerkResult) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+  return verifyAuth(req);
+}
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
+    "/product/:path*", // Áp dụng middleware cho route có /product
+    "/admin/:path*", // Các route cần bảo vệ khác
   ],
 };

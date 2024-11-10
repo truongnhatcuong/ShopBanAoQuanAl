@@ -233,6 +233,8 @@ model Customer {
   password      String         @db.VarChar(255)
   created_at    DateTime       @default(now())
   updated_at    DateTime       @updatedAt
+  token         String         @db.VarChar(255)
+
   Orders        Order[]
   Wishlists     Wishlist[]
   Notifications Notification[]

@@ -30,6 +30,7 @@ CREATE TABLE `Product` (
     `updated_at` DATETIME NULL,
     `season_id` INTEGER NULL,
     `rating_id` INTEGER NULL,
+    `color` VARCHAR(50) NULL,
 
     PRIMARY KEY (`product_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -111,22 +112,7 @@ CREATE TABLE `Payment` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Shipping` (
-    `shipping_id` INTEGER NOT NULL AUTO_INCREMENT,
-    `order_id` INTEGER NOT NULL,
-    `shipping_method` VARCHAR(50) NOT NULL,
-    `tracking_number` VARCHAR(100) NULL,
-    `shipping_status` VARCHAR(50) NOT NULL,
-    `shipping_date` DATE NULL,
-    `estimated_arrival` DATE NULL,
-    `created_at` DATETIME NULL,
-    `updated_at` DATETIME NULL,
-
-    PRIMARY KEY (`shipping_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Return` (
+CREATE TABLE `ReturnProduct` (
     `return_id` INTEGER NOT NULL AUTO_INCREMENT,
     `order_id` INTEGER NOT NULL,
     `product_id` INTEGER NOT NULL,
@@ -166,7 +152,7 @@ CREATE TABLE `Review` (
 CREATE TABLE `Image` (
     `image_id` INTEGER NOT NULL AUTO_INCREMENT,
     `product_id` INTEGER NOT NULL,
-    `image_url` VARCHAR(255) NOT NULL,
+    `image_url` TEXT NOT NULL,
     `created_at` DATETIME NULL,
     `updated_at` DATETIME NULL,
 
@@ -235,9 +221,42 @@ CREATE TABLE `Customer` (
     `email` VARCHAR(100) NOT NULL,
     `phone` VARCHAR(20) NULL,
     `address` VARCHAR(255) NULL,
+    `username` VARCHAR(50) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+    `token` VARCHAR(255) NOT NULL,
+    `roleId` INTEGER NOT NULL,
 
     UNIQUE INDEX `Customer_email_key`(`email`),
+    UNIQUE INDEX `Customer_username_key`(`username`),
     PRIMARY KEY (`customer_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Role` (
+    `role_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `role_name` VARCHAR(50) NOT NULL,
+
+    UNIQUE INDEX `Role_role_name_key`(`role_name`),
+    PRIMARY KEY (`role_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Permission` (
+    `permission_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `permission` VARCHAR(50) NOT NULL,
+
+    UNIQUE INDEX `Permission_permission_key`(`permission`),
+    PRIMARY KEY (`permission_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `RolePermission` (
+    `roleId` INTEGER NOT NULL,
+    `permissionId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`roleId`, `permissionId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -273,9 +292,6 @@ ALTER TABLE `Product` ADD CONSTRAINT `Product_brand_id_fkey` FOREIGN KEY (`brand
 ALTER TABLE `Product` ADD CONSTRAINT `Product_season_id_fkey` FOREIGN KEY (`season_id`) REFERENCES `Season`(`season_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Product` ADD CONSTRAINT `Product_rating_id_fkey` FOREIGN KEY (`rating_id`) REFERENCES `Rating`(`rating_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `ProductSize` ADD CONSTRAINT `ProductSize_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -303,13 +319,10 @@ ALTER TABLE `OrderItem` ADD CONSTRAINT `OrderItem_size_id_fkey` FOREIGN KEY (`si
 ALTER TABLE `Payment` ADD CONSTRAINT `Payment_order_id_fkey` FOREIGN KEY (`order_id`) REFERENCES `Order`(`order_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Shipping` ADD CONSTRAINT `Shipping_order_id_fkey` FOREIGN KEY (`order_id`) REFERENCES `Order`(`order_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ReturnProduct` ADD CONSTRAINT `ReturnProduct_order_id_fkey` FOREIGN KEY (`order_id`) REFERENCES `Order`(`order_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Return` ADD CONSTRAINT `Return_order_id_fkey` FOREIGN KEY (`order_id`) REFERENCES `Order`(`order_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Return` ADD CONSTRAINT `Return_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ReturnProduct` ADD CONSTRAINT `ReturnProduct_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Review` ADD CONSTRAINT `Review_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -337,6 +350,15 @@ ALTER TABLE `PromotionNotification` ADD CONSTRAINT `PromotionNotification_notifi
 
 -- AddForeignKey
 ALTER TABLE `Notification` ADD CONSTRAINT `Notification_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `Customer`(`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Customer` ADD CONSTRAINT `Customer_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`role_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `RolePermission` ADD CONSTRAINT `RolePermission_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`role_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `RolePermission` ADD CONSTRAINT `RolePermission_permissionId_fkey` FOREIGN KEY (`permissionId`) REFERENCES `Permission`(`permission_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Cart` ADD CONSTRAINT `Cart_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `Customer`(`customer_id`) ON DELETE RESTRICT ON UPDATE CASCADE;

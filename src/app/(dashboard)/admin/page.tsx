@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
-
+import { cookies } from "next/headers";
 const AdminPage = () => {
+  // o day get token ra
   const [selectedPage, setSelectedPage] = useState("Dashboard");
-
+  // a chet nham
   return (
     <div className="flex h-screen">
       {/* Content Wrapper */}

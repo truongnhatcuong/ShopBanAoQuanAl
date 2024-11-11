@@ -2,11 +2,15 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function POST(req: NextRequest) {
   if (!JWT_SECRET) {
-    return NextResponse.json({ message: "sai token" }, { status: 404 });
+    return NextResponse.json(
+      { message: "JWT_SECRET is not defined" },
+      { status: 500 }
+    );
   }
   const { username, password } = await req.json();
   try {

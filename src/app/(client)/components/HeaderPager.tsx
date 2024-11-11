@@ -7,16 +7,11 @@ import { FaUser } from "react-icons/fa";
 import { IoSearchSharp, IoCart } from "react-icons/io5";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { FiUser } from "react-icons/fi";
-import Cookies from "js-cookie";
+import cookie from "cookie";
 export default function HeadePager() {
   const { user, isLoaded } = useUser();
   const [username, setUsername] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  const TokenCookies = Cookies.get("token");
-  const UserCookies = Cookies.get("username");
-  console.log(UserCookies);
-  //  setUsername(UserCookies);
 
   return (
     <div className="flex justify-around bg-white shadow-lg mt-5 mb-3">

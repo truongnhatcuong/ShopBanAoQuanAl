@@ -234,7 +234,8 @@ model Customer {
   created_at    DateTime       @default(now())
   updated_at    DateTime       @updatedAt
   token         String         @db.VarChar(255)
-
+  roleId        Int
+  role          Role     @relation(fields: [roleId], references: [role_id])
   Orders        Order[]
   Wishlists     Wishlist[]
   Notifications Notification[]
@@ -242,6 +243,27 @@ model Customer {
   Carts         Cart[]
 }
 
+model Role {
+  role_id       Int       @id @default(autoincrement())
+  role_name     String    @unique @db.VarChar(50) // Tên vai trò (admin, user)
+  customers     Customer[]
+  permissions   RolePermission[]
+}
+
+model Permission {
+  permission_id Int       @id @default(autoincrement())
+  permission    String    @unique @db.VarChar(50) // Tên quyền (create, read, etc.)
+  roles         RolePermission[]
+}
+
+model RolePermission {
+  roleId        Int
+  permissionId  Int
+  role          Role       @relation(fields: [roleId], references: [role_id])
+  permission    Permission @relation(fields: [permissionId], references: [permission_id])
+
+  @@id([roleId, permissionId]) // Tạo khóa chính cho mối quan hệ nhiều-nhiều
+}
 model Cart {
   cart_id     Int        @id @default(autoincrement())
   customer_id Int

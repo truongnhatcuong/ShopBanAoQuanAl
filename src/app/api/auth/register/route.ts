@@ -30,13 +30,14 @@ export async function POST(req: NextRequest) {
         username: data.username,
         password: hashPassword,
         token: accessToken,
+        roleId: 1,
       },
     });
     return NextResponse.json(
-      { accessToken: newCustomer.token, message: "dang ki thanh cong" },
+      { accessToken: accessToken, message: "dang ki thanh cong" },
       { status: 201 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error }, { status: 501 });
+    return NextResponse.json({ error: error.message }, { status: 501 });
   }
 }

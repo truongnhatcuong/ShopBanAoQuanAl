@@ -10,7 +10,8 @@ interface IImage {
 const MangImage: IImage[] = [
   {
     id: 1,
-    image: "https://intphcm.com/data/upload/banner-thoi-trang-nam.jpg",
+    image:
+      "https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474102PNW/banner-thoi-trang-dang-cap-hien-dai_113856116.png",
   },
   {
     id: 2,
@@ -34,13 +35,13 @@ const Header = () => {
   };
 
   return (
-    // eslint-disable-next-line react/jsx-no-comment-textnodes
-    <div className="relative flex justify-center">
-      <div className="w-full">
+    <div className="relative flex justify-center h-[300px]">
+      {" "}
+      <div className="w-full h-full object-cover">
         <img
           src={MangImage[count].image}
           alt="anh"
-          className="w-full h-auto  object-cover max-w-screen "
+          className="w-full h-auto  object-cover "
         />
       </div>
       <div className="absolute top-1/2 left-0 transform -translate-y-1/2">

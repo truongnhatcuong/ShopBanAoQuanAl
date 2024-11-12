@@ -25,6 +25,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!user.password) {
+      return NextResponse.json(
+        { message: "Mật khẩu không chính xác" },
+        { status: 400 }
+      );
+    }
+
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -44,7 +51,11 @@ export async function POST(req: NextRequest) {
     });
 
     const response = NextResponse.json(
-      { message: "Đăng nhập thành công" },
+      {
+        username: username,
+        token: accessToken,
+        message: "Đăng nhập thành công",
+      },
       { status: 200 }
     );
 
@@ -52,14 +63,6 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60,
-      path: "/",
-      sameSite: "strict",
-    });
-
-    response.cookies.set("username", user.username, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60, // Tương tự như accessToken
       path: "/",
       sameSite: "strict",
     });

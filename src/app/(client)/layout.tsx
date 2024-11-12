@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import HeadePager from "./components/HeaderPager";
 import FooterPage from "./components/FooterPage";
 import Footer from "./components/Footer";
-import { ClerkProvider } from "@clerk/nextjs";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

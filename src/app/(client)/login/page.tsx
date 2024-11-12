@@ -3,16 +3,14 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaFacebookF } from "react-icons/fa";
 import { IoLogoGoogle } from "react-icons/io";
-import { SignInButton, UserButton } from "@clerk/nextjs";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const router = useRouter();
+
   const MySwal = withReactContent(Swal);
 
   function setCookie(name: string, value: string, days: number) {
@@ -36,7 +34,7 @@ const Page = () => {
       setUsername("");
       setPassword("");
       setCookie("token", data.accessToken, 1);
-      setCookie("username", data.username, 1);
+      window.localStorage.setItem("token", data.token);
       MySwal.fire({
         position: "center",
         icon: "success",
@@ -44,10 +42,7 @@ const Page = () => {
         showConfirmButton: false,
         timer: 3000,
       });
-      router.push("/");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      window.location.href = "/";
     } else {
       const dataError = await res.json();
       setErrorMessage(
@@ -132,9 +127,7 @@ const Page = () => {
               className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white  py-3 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               <span className="mr-4">
-                <SignInButton>
-                  <IoLogoGoogle />
-                </SignInButton>
+                <IoLogoGoogle />
               </span>
               <span> Đăng nhập bằng tài khoản google</span>
             </Link>

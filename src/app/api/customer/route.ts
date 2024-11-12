@@ -1,3 +1,4 @@
+import { Role } from "./../../../../node_modules/.prisma/client/index.d";
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
@@ -9,37 +10,19 @@ export async function GET() {
   );
 }
 export async function POST(req: NextRequest) {
-  const data = await req.json();
-  const hashPassword = await bcrypt.hash(data.password, 10);
+  const { name, email, phone, address, RoleId, username, password } =
+    await req.json();
+
   try {
     //kiểm tra tồn tại username
 
-    const existUsername = await prisma.customer.findFirst({
-      where: {
-        OR: [
-          {
-            username: data.username,
-          },
-        ],
-      },
-    });
-
-    if (existUsername) {
-      return NextResponse.json(
-        { error: "tài khoản đã tồn tại" },
-        { status: 404 }
-      );
-    }
-
     const createCustomer = await prisma.customer.create({
       data: {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
-        username: data.username,
-        password: hashPassword,
-        created_at: new Date(),
+        name,
+        email,
+        address,
+        phone,
+        roleId: 1,
       },
     });
     return NextResponse.json(

@@ -10,7 +10,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${inter.className} h-screen flex overflow-hidden`}>
+    <div className={`${inter.className} h-screen flex overflow-hidden `}>
       {/* Left menu with 3D effect */}
       <div className="w-[16%] bg-gray-900 text-white shadow-lg overflow-y-auto sm:w-[25%] md:w-[16%] lg:w-[16%] xl:w-[16%]">
         <LeftMenu />

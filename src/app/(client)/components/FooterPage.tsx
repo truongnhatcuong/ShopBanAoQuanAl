@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const FooterPage = () => {
   return (
-    <div className="flex flex-wrap bg-gray-200 p-2 ">
+    <div className="flex flex-wrap bg-gray-200 p-2 mt-24 sm:mt-16 md:mt-20">
       <div className="w-full md:w-1/4 sm:w-1/4 p-2">
         <div className=" flex flex-col items-center">
           <div className="icon">

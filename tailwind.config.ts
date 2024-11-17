@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       rotate: {
-        "360": "360deg", // Thêm rotate-360
+        "360": "360deg",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -3,7 +3,12 @@ import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const Product = await prisma.product.findMany();
+  const Product = await prisma.product.findMany({
+    include: {
+      Images: true,
+    },
+  });
+  console.log(Product);
   return NextResponse.json(
     { Product, message: "Get data Success" },
     { status: 200 }

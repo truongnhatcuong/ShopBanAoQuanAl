@@ -16,7 +16,11 @@ export async function GET(
         category_id: categoryId,
       },
       include: {
-        Products: true,
+        Products: {
+          include: {
+            Images: true,
+          },
+        },
       },
     });
 
@@ -30,10 +34,13 @@ export async function GET(
     if (category == null) {
       return NextResponse.json(
         { error: `not found ID: ${id}` },
-        { status: 200 }
+        { status: 500 }
       );
     } else {
-      return NextResponse.json({ category: category }, { status: 200 });
+      return NextResponse.json(
+        { category, message: "thành công" },
+        { status: 200 }
+      );
     }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

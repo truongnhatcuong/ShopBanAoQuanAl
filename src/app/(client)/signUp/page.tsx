@@ -62,7 +62,7 @@ const Page = () => {
     }
   }
   return (
-    <div className="flex  items-center justify-center mb-20 h-screen">
+    <div className="flex  items-center justify-center mb-20 h-auto min-h-screen pt-20">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
         {/*  */}
 
@@ -131,7 +131,7 @@ const Page = () => {
             <div>
               <button
                 type="submit"
-                className="w-full px-3 py-3 focus:outline-none focus:ring-2 focus:ring-gray-800 bg-black text-white font-bold hover:bg-slate-900 rounded"
+                className="w-full mb-4 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-gray-800 bg-black text-white font-bold hover:bg-slate-900 rounded"
               >
                 {" "}
                 Đăng Kí

@@ -23,17 +23,12 @@ const MenuHeader: IMenuProps[] = [
     title: "Giới Thiệu",
     link: "/about",
   },
-  {
-    id: 4,
-    title: "Bộ Sưu Tầm",
-    link: "/superSet",
-  },
 ];
 
 const ListItem = () => {
   return (
     <>
-      <ul className="flex space-x-9">
+      <ul className="flex space-x-9 md:space-x-5 lg:space-x-11 ">
         {MenuHeader.map((item) => (
           <li key={item.id}>
             <MenuItemPage {...item} />

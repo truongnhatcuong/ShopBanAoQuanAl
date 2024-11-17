@@ -1,123 +1,150 @@
 "use client";
-import { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 const ChangePasswordForm = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [currentPassword, setCurrenPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState(""); // Trường nhập lại mật khẩu mới
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorChange, setErrorChange] = useState("");
+  const MySwal = withReactContent(Swal);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  //thực hiện đổi mật khẩu
+  async function changePasswordHandle(e: React.FormEvent) {
+    e.preventDefault();
 
-    if (newPassword !== confirmNewPassword) {
-      setErrorMessage("Mật khẩu mới và xác nhận mật khẩu không khớp.");
+    if (newPassword !== confirmPassword) {
+      setErrorChange("Mật khẩu mới và xác nhận mật khẩu không khớp");
+
       return;
     }
-
-    const token = localStorage.getItem("token"); // Lấy token từ localStorage hoặc cookie
-
+    const token = window.localStorage.getItem("token");
     if (!token) {
-      setErrorMessage("Bạn cần đăng nhập để thay đổi mật khẩu");
+      setErrorChange("Token không hợp lệ hoặc đã hết hạn");
       return;
     }
 
     try {
-      const response = await fetch("/api/auth/change-password", {
+      const res = await fetch("/api/auth/change-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Gửi token trong header Authorization
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ currentPassword, newPassword }),
       });
+      const data = await res.json();
+      if (res.ok) {
+        await MySwal.fire({
+          title: <strong>Đổi Mật Khẩu Thành Công!</strong>,
+          html: "Mật khẩu mới của bạn đã được thay đổi thành công.",
+          icon: "success",
+          showConfirmButton: true,
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3085d6",
+          timer: 2500,
+          timerProgressBar: true,
+        });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setSuccessMessage("Mật khẩu đã được thay đổi thành công");
-        setCurrentPassword("");
+        setCurrenPassword("");
         setNewPassword("");
-        setConfirmNewPassword(""); // Reset lại trường xác nhận mật khẩu
+        setConfirmPassword("");
       } else {
-        setErrorMessage(data.message || "Có lỗi xảy ra");
+        setErrorChange(data.message || "Có lỗi xảy ra");
       }
     } catch (error) {
-      setErrorMessage("Đã có lỗi xảy ra. Vui lòng thử lại sau.");
+      setErrorChange("Đã có lỗi xảy ra. Vui lòng thử lại sau.");
     }
-  };
+  }
+  useEffect(() => {
+    if (errorChange) {
+      const timer = setTimeout(() => {
+        setErrorChange(""); // Ẩn lỗi sau 3 giây
+      }, 2500); // 3 giây
+
+      return () => clearTimeout(timer); // Dọn dẹp khi component unmount hoặc errorChange thay đổi
+    }
+  }, [errorChange]);
 
   return (
-    <div className="max-w-md mx-auto p-4 border border-gray-300 rounded-md shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Đổi mật khẩu</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label
-            className="block mb-1 text-sm font-medium"
-            htmlFor="currentPassword"
-          >
-            Mật khẩu hiện tại
+    <div className="max-w-3xl mx-auto border border-gray-300 p-4 rounded-md shadow-lg my-4">
+      <h3 className="text-center text-black text-xl font-semibold my-4">
+        Đổi Mật Khẩu
+      </h3>
+      <div className="bg-blue-100 p-4 rounded-md shadow-lg mb-6">
+        <p className="text-sm text-green-950 font-medium mb-2">
+          <strong>Quy tắc đặt mật khẩu:</strong>
+        </p>
+        <ul className="list-disc pl-5 space-y-2">
+          <li className="text-sm text-green-950 flex items-start space-x-2">
+            <span className="text-green-700">✔</span>
+            <span>Có từ 8 ký tự trở lên.</span>
+          </li>
+          <li className="text-sm text-green-950 flex items-start space-x-2">
+            <span className="text-green-700">✔</span>
+            <span>
+              Có ít nhất 1 ký tự viết hoa, 1 ký tự viết thường, 1 chữ số.
+            </span>
+          </li>
+          <li className="text-sm text-green-950 flex items-start space-x-2">
+            <span className="text-green-700">✔</span>
+            <span>Mật khẩu không được giống tên đăng nhập.</span>
+          </li>
+        </ul>
+      </div>
+      <form onSubmit={changePasswordHandle}>
+        <div className="mb-4 flex items-center gap-x-4">
+          <label htmlFor="" className="block text-sm font-medium w-1/3">
+            Mật khẩu cũ:<span className="text-red-600">*</span>
           </label>
           <input
             type="password"
-            id="currentPassword"
+            required
+            placeholder="Nhập mật khẩu hiện tại"
             value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            onChange={(e) => setCurrenPassword(e.target.value)}
+            className="w-1/2 px-3 py-2 border border-gray-400 rounded-md"
           />
         </div>
-
-        <div className="mb-4">
-          <label
-            className="block mb-1 text-sm font-medium"
-            htmlFor="newPassword"
-          >
-            Mật khẩu mới
+        <div className="mb-4 flex items-center gap-x-4">
+          <label htmlFor="" className="block text-sm font-medium w-1/3">
+            Mật khẩu mới:<span className="text-red-600">*</span>
           </label>
           <input
             type="password"
-            id="newPassword"
+            required
             value={newPassword}
+            placeholder="Nhập mật khẩu mới"
             onChange={(e) => setNewPassword(e.target.value)}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            className="w-1/2 px-3 py-2 border border-gray-400 rounded-md"
           />
         </div>
-
-        <div className="mb-4">
-          <label
-            className="block mb-1 text-sm font-medium"
-            htmlFor="confirmNewPassword"
-          >
-            Nhập lại mật khẩu mới
+        <div className="mb-4 flex items-center gap-x-4">
+          <label htmlFor="" className="block text-sm font-medium w-1/3">
+            Xác nhận mật khẩu mới:<span className="text-red-600">*</span>
           </label>
           <input
             type="password"
-            id="confirmNewPassword"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            placeholder="Nhập lại mật khẩu"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-1/2 px-3 py-2 border border-gray-400 rounded-md"
           />
         </div>
-
-        <div className="mb-4">
-          {errorMessage && (
-            <div className="text-red-600 text-sm">{errorMessage}</div>
-          )}
-          {successMessage && (
-            <div className="text-green-600 text-sm">{successMessage}</div>
-          )}
+        {/* hiển thị error */}
+        <div className="text-red-600 text-sm mb-1 text-center">
+          {errorChange && <p>{errorChange}</p>}
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-        >
-          Đổi mật khẩu
-        </button>
+        <div className="mb-4 flex items-center gap-x-4">
+          <div className="w-1/3"></div>
+          <button
+            type="submit"
+            className="w-1/4 px-3 py-2  bg-green-600 text-white font-extrabold text-xl rounded hover:bg-green-700"
+          >
+            Đổi mật khẩu
+          </button>
+        </div>
       </form>
     </div>
   );

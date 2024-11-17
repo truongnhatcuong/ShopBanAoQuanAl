@@ -5,12 +5,12 @@ import { FaFacebookF } from "react-icons/fa";
 import { IoLogoGoogle } from "react-icons/io";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-
+import { useRouter } from "next/navigation";
 const Page = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-
+  const router = useRouter();
   const MySwal = withReactContent(Swal);
 
   function setCookie(name: string, value: string, days: number) {
@@ -31,18 +31,22 @@ const Page = () => {
     });
     if (res.ok) {
       const data = await res.json();
-      setUsername("");
-      setPassword("");
-      setCookie("token", data.accessToken, 1);
+      setCookie("token", data.accessToken, 2);
       window.localStorage.setItem("token", data.token);
       MySwal.fire({
-        position: "center",
+        title: "<strong>Thành Công</strong>",
+        html: "Bạn đã đăng nhập thành công. Chúc bạn một ngày tuyệt vời!",
         icon: "success",
-        title: "Đăng Nhập thành công !",
-        showConfirmButton: false,
-        timer: 3000,
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#3085d6",
+        timer: 2500,
+        timerProgressBar: true,
       });
-      window.location.href = "/";
+      router.push("/");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1500);
     } else {
       const dataError = await res.json();
       setErrorMessage(
@@ -51,6 +55,15 @@ const Page = () => {
       );
     }
   }
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage(""); // Ẩn lỗi sau 3 giây
+      }, 2500); // 3 giây
+
+      return () => clearTimeout(timer); // Dọn dẹp khi component unmount hoặc errorChange thay đổi
+    }
+  }, [errorMessage]);
   return (
     <div className="flex justify-center items-center h-screen mb-16">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">

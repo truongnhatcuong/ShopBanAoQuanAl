@@ -16,8 +16,15 @@
   }
 }
 
-
-
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px; /* Kích thước của nút kéo */
+  height: 12px; /* Chiều cao của nút kéo */
+  background: #333; /* Màu của nút kéo */
+  border-radius: 50%; /* Bo tròn nút kéo */
+  cursor: pointer;
+}
 
 @layer base {
   :root {
@@ -83,5 +90,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-

@@ -1,15 +1,16 @@
-import React from "react";
+import { getCookie } from "cookies-next";
 import Header from "./components/Header";
+import cookie from "cookie";
 
-const page = () => {
+const Page = () => {
   return (
     <div className="">
       <div>
         <Header />
       </div>
-      <div></div>
+      <div>{}</div>
     </div>
   );
 };
 
-export default page;
+export default Page;

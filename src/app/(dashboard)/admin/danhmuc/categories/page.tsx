@@ -4,7 +4,7 @@ import AddCategories from "@/app/components/ComponentsCategory/AddCategories";
 import CategoryTable from "@/app/components/ComponentsCategory/CategoryTable";
 import UpdateCategories from "@/app/components/ComponentsCategory/UpdateCategories";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Pagination from "@/app/components/componentsFunction/Pagination";
 
 interface Icategories {
@@ -13,7 +13,7 @@ interface Icategories {
   description: string;
 }
 
-const Page = () => {
+const PageContent = () => {
   const searchParams = useSearchParams();
   //
   const [totalPages, setTotalPages] = useState(1);
@@ -93,5 +93,11 @@ const Page = () => {
     </div>
   );
 };
+
+const Page = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <PageContent />
+  </Suspense>
+);
 
 export default Page;

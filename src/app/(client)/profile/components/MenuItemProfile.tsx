@@ -11,7 +11,7 @@ const MenuItemProfile = (props: { link: string; title: string }) => {
         <p
           className={`${
             pathname === props.link ? " text-red-500 " : ""
-          } font-bold text-lg`}
+          } font-semibold text-lg`}
         >
           {props.title}
         </p>

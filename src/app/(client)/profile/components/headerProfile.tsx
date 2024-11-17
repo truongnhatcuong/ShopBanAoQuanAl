@@ -8,7 +8,7 @@ const listProfile = [
   },
   {
     link: "/profile/edit",
-    title: "Chỉnh Sửa",
+    title: "Sửa Thông Tin",
   },
   {
     link: "/profile/change",

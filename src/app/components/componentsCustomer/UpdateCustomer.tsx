@@ -22,15 +22,13 @@ const UpdateCustomer = (props: ICustomer) => {
   const [email, setEmail] = useState<string>(props.email);
   const [phone, setPhone] = useState<number | string>(props.phone);
   const [address, setAddress] = useState<string>(props.address);
-  const [username, setUsername] = useState<string>(props.username);
-  const [password, setPassword] = useState<string>(props.password);
 
   async function UpdateCustomerHandle(e: React.FormEvent) {
     e.preventDefault();
     const res = await fetch(`/api/customer/${props.customer_id}`, {
       method: "PUT",
       headers: { "content-Type": "aplication/json" },
-      body: JSON.stringify({ name, email, phone, address, username, password }),
+      body: JSON.stringify({ name, email, phone, address }),
     });
 
     if (res.ok) {
@@ -128,32 +126,7 @@ const UpdateCustomer = (props: ICustomer) => {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Tên Đăng Nhập
-                </label>
-                <input
-                  type="text"
-                  placeholder="Nhập tên đăng nhập..."
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="p-3 rounded-lg border border-gray-300 w-full focus:outline-none focus:border-blue-400"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Mật Khẩu
-                </label>
-                <input
-                  type="password"
-                  placeholder="Nhập mật khẩu..."
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="p-3 rounded-lg border border-gray-300 w-full focus:outline-none focus:border-blue-400"
-                  required
-                />
-              </div>
+
               <div className="flex justify-end mt-6 space-x-4">
                 <button
                   type="button"

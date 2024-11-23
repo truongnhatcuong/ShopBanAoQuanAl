@@ -18,6 +18,7 @@ interface ICategory {
 export default function HeadePager() {
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
+  const [roleId, setRoleId] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -34,34 +35,23 @@ export default function HeadePager() {
     const data = await res.json();
     setCategories(data.categories);
   }
-  //
+
+  async function fetchUserInfo() {
+    const res = await fetch("/api/auth/getUsername", {
+      method: "GET",
+    });
+
+    const data = await res.json();
+    setUsername(data.accessToken?.name); // Lấy username từ dữ liệu trả về
+    setRoleId(data.accessToken?.roleId);
+
+    setIsLoggedIn(true);
+  }
+
   useEffect(() => {
-    // Tìm token trong localStorage
-    const token = window.localStorage.getItem("token");
-
-    if (token) {
-      // Xử lý token và lấy thông tin người dùng
-      const decoded = decodeToken(token); // Giải mã token nếu là JWT
-      setUsername(decoded.username); // Giả sử token chứa thông tin username
-      setIsLoggedIn(true);
-    }
-    ApiCategories();
+    fetchUserInfo(); // Gọi API lấy thông tin người dùng
+    ApiCategories(); // Gọi API lấy danh mục
   }, []);
-  const decodeToken = (token: string) => {
-    // Giải mã token JWT để lấy thông tin người dùng
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-
-    return JSON.parse(jsonPayload);
-  };
 
   const handleMouseEnter2 = () => {
     if (hoverTimeout) clearTimeout(hoverTimeout);
@@ -76,14 +66,8 @@ export default function HeadePager() {
   return (
     <div className="flex justify-around bg-white shadow-lg mt-5 p-1.5">
       <div className="mt-2">
-        <Link href={"/"}>
-          <Image
-            src={"/Image/logo.png"}
-            alt="Logo"
-            width={200}
-            height={50}
-            className=""
-          />
+        <Link href={"/"} className="hiden md:block">
+          <Image src={"/Image/logo.png"} alt="Logo" width={200} height={50} />
         </Link>
       </div>
       <div className="mt-7 hidden md:flex flex-grow justify-center  space-x-6 md:text-xs lg:text-xl md:space-x-1 lg:space-x-10">
@@ -94,7 +78,7 @@ export default function HeadePager() {
           onMouseLeave={() => setIsHover(false)}
         >
           <div className="text-black font-semibold cursor-pointer md:text-xs lg:text-xl md:ml-3 lg:ml-0 ">
-            Bộ Sưu Tập
+            Danh Mục
           </div>
           {isHover && (
             <div className="absolute mt-3 right-10 w-48 p-2 bg-slate-50 shadow-lg rounded-md  z-10 transition-opacity duration-200 transform translate-x-1/2 ">
@@ -131,8 +115,8 @@ export default function HeadePager() {
               onMouseEnter={handleMouseEnter2}
               onMouseLeave={handleMouseLeave2}
             >
-              <FiUser className="text-gray-500 " />
-              <span className="text-gray-600 ">{username}</span>
+              <FiUser className="text-gray-600 text-3xl sm:text-xl " />
+              <span className="text-gray-800 hidden md:block ">{username}</span>
               {/* Hiển thị khi hover */}
               {isHover2 && (
                 <div className="absolute top-full mt-2.5 right-12 w-44 p-2 bg-slate-50 shadow-lg rounded-lg z-10 opacity-100 transition-opacity duration-200 transform translate-x-1/2  ">
@@ -144,13 +128,13 @@ export default function HeadePager() {
                       <AiOutlineUser className="mr-1 text-gray-900" />
                       Xem Thông Tin
                     </button>
-                    {username === "Admin" && (
+                    {roleId === 3 && (
                       <button
                         className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center"
                         onClick={() => router.push("/admin")}
                       >
                         <RiAdminLine className="mr-1 text-gray-900" />
-                        Quản Lý Admin
+                        Trang Quản Lý
                       </button>
                     )}
                     <button

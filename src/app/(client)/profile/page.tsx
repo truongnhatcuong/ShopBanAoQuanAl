@@ -63,51 +63,50 @@ const Profile = () => {
   }
 
   return (
-    <div className="container mx-auto my-8 border border-gray-900 rounded-lg shadow-lg">
-      <div className="w-full bg-slate-400 py-4 rounded-t-lg">
+    <div className="container mx-auto my-8 border border-gray-900  shadow-lg max-w-6xl w-full h-[500px] rounded-xl bg-stone-100 opacity-90">
+      <div className="w-full bg-black py-4 rounded-t-lg">
         <h2 className="text-center text-2xl text-white font-semibold">
           Thông Tin Khách Hàng
         </h2>
       </div>
-      <div className="bg-white shadow-md rounded-b-lg p-6">
+      <div className="  rounded-b-lg p-6 mt-12 ">
         {user && (
-          <ul
-            id="userInfo"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <li className="pb-2">
-              <label className="font-medium text-gray-700 block">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+            <li className="py-5 px-3">
+              <label className="font-medium text-gray-950 block text-2xl">
                 Tên đăng nhập:
               </label>
-              <span className="text-gray-500">{user.username}</span>
+              <span className="text-black text-xl pt-2">{user.username}</span>
             </li>
-            <li className="pb-2">
-              <label className="font-medium text-gray-700 block">
+            <li className="py-5 px-3">
+              <label className="font-medium text-gray-950 block text-2xl">
                 Địa Chỉ:
               </label>
-              <span className="text-gray-500">{user.address}</span>
+              <span className="text-black text-xl pt-2">{user.address}</span>
             </li>
-            <li className="pb-2">
-              <label className="font-medium text-gray-700 block">
+            <li className="py-5 px-3">
+              <label className="font-medium text-gray-950 block text-2xl">
                 Tên đầy đủ:
               </label>
-              <span className="text-gray-500">{user.name}</span>
+              <span className="text-black text-xl pt-2">{user.name}</span>
             </li>
-            <li className="pb-2">
-              <label className="font-medium text-gray-700 block">
+            <li className="py-5 px-3">
+              <label className="font-medium text-gray-950 block text-2xl">
                 Số điện thoại:
               </label>
-              <span className="text-gray-500">{user.phone}</span>
+              <span className="text-black text-xl pt-2">{user.phone}</span>
             </li>
-            <li className="pb-2">
-              <label className="font-medium text-gray-700 block">Email:</label>
-              <span className="text-gray-500">{user.email}</span>
+            <li className="py-5 px-3">
+              <label className="font-medium text-gray-950 block text-2xl">
+                Email:
+              </label>
+              <span className="text-black text-xl pt-2">{user.email}</span>
             </li>
-            <li className="pb-2">
-              <label className="font-medium text-gray-700 block">
+            <li className="py-5 px-7">
+              <label className="font-medium text-gray-950 block text-2xl">
                 Giới tính:
               </label>
-              <span className="text-gray-500">Nam</span>
+              <span className="text-black text-xl pt-2">Nam</span>
             </li>
           </ul>
         )}

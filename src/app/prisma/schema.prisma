@@ -55,6 +55,10 @@ model Product {
   ProductSupplier ProductSupplier[]
   Review          Review[]
   CartItem        CartItem[]
+
+  Promotion Promotion[]
+
+  ProductPromotion ProductPromotion[]
 }
 
 model Size {
@@ -183,6 +187,28 @@ model Wishlist {
   Customer    Customer  @relation(fields: [customer_id], references: [customer_id])
   Product     Product   @relation(fields: [product_id], references: [product_id])
 }
+
+model Promotion {
+   promotion_id Int      @id @default(autoincrement())
+   product_id   Int
+    Product  Product  @relation(fields: [product_id],references: [product_id])
+    discount Int
+    start_date DateTime
+    end_date   DateTime
+
+   ProductPromotions ProductPromotion[]
+}
+
+
+ model ProductPromotion{
+    productPromotion_id Int @id @default(autoincrement())
+      product_id   Int
+       promotion_id Int 
+       Promotion  Promotion @relation(fields: [promotion_id],references: [promotion_id])
+    Product  Product  @relation(fields: [product_id],references: [product_id])
+
+}
+
 
 model Coupon {
   coupon_id              Int                     @id @default(autoincrement())

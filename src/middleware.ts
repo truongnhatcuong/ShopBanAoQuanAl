@@ -74,8 +74,6 @@ export async function middleware(req: NextRequest) {
   try {
     const decoded = await decrypt(token);
 
-    // Kiểm tra quyền cho `/api/categories`
-
     const res = await fetch("http://localhost:3000/api/auth/user", {
       method: "POST",
       body: JSON.stringify({ username: decoded.username }),
@@ -90,8 +88,11 @@ export async function middleware(req: NextRequest) {
     }
 
     const data = await res.json();
-    if (data.accessToken?.roleId !== 3) {
-      return NextResponse.redirect(new URL("/", req.url));
+    if (data.accessToken) {
+      if (data.accessToken.roleId !== 3) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+      console.log("data ", data.accessToken);
     }
 
     return NextResponse.next();

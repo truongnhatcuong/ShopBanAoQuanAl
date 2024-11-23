@@ -25,9 +25,7 @@ const PageCustomer = () => {
   }, []);
   return (
     <div>
-      <div>
-        <AddCustomer reloadData={ApiCustomer} />
-      </div>
+      <div>{/* <AddCustomer reloadData={ApiCustomer} /> */}</div>
       <div>
         <TableCustomer customer={customer} reloadData={ApiCustomer} />
       </div>

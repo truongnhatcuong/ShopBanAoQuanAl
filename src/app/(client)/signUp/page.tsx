@@ -66,13 +66,13 @@ const Page = () => {
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
         {/*  */}
 
-        <div className="flex flex-col justify-center items-center w-1/2 bg-gray-950 text-white p-10">
+        <div className="sm:flex sm:flex-col hidden justify-center items-center sm:w-1/2 bg-gray-950 text-white p-10">
           <h2 className="text-4xl font-semibold">ĐĂNG KÍ</h2>
           <p className="text-center mt-4 text-sm opacity-80">
             Đăng kí tài khoản tại đây !
           </p>
         </div>
-        <div className="w-1/2 p-8">
+        <div className="sm:w-1/2 w-full p-8">
           <form className="space-y-6" onSubmit={registerApi}>
             <div>
               <input

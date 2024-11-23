@@ -13,9 +13,14 @@ export async function GET(
       where: {
         product_id: Number(productId),
       },
+      include: {
+        Category: true,
+        Images: true,
+        ProductSizes: true,
+      },
     });
     return NextResponse.json(
-      { product: getProduct, message: "Get product success" },
+      { getProduct, message: "Get product success" },
       { status: 201 }
     );
   } catch (error: any) {

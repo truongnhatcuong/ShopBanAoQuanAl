@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("username", username);
     const data = await prisma.customer.findUnique({
       where: {
         username: username,

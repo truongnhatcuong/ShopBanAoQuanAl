@@ -5,19 +5,12 @@ import { FaFacebookF } from "react-icons/fa";
 import { IoLogoGoogle } from "react-icons/io";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useRouter } from "next/navigation";
+
 const Page = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const router = useRouter();
   const MySwal = withReactContent(Swal);
-
-  function setCookie(name: string, value: string, days: number) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000); // Cộng thêm ngày hết hạn
-    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;secure;SameSite=strict`;
-  }
 
   async function loginApi(e: React.FormEvent) {
     e.preventDefault();
@@ -31,7 +24,6 @@ const Page = () => {
     });
     if (res.ok) {
       const data = await res.json();
-      setCookie("token", data.accessToken, 2);
       window.localStorage.setItem("token", data.token);
       MySwal.fire({
         title: "<strong>Thành Công</strong>",
@@ -43,7 +35,7 @@ const Page = () => {
         timer: 2500,
         timerProgressBar: true,
       });
-      router.push("/");
+
       setTimeout(() => {
         window.location.href = "/";
       }, 1500);
@@ -67,14 +59,14 @@ const Page = () => {
   return (
     <div className="flex justify-center items-center h-screen mb-16">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="flex flex-col w-1/2 justify-center p-10 bg-gray-950 text-white items-center">
+        <div className="w-full sm:w-1/2 justify-center p-10 bg-gray-950 text-white items-center hidden sm:flex sm:flex-col  ">
           <h2 className="text-4xl  font-semibold">ĐĂNG NHẬP </h2>
           <p className="text-center mt-4 text-sm opacity-80">
             Tham gia để nhận các ưu đãi đặc biệt và trải nghiệm tốt nhất.
           </p>
         </div>
 
-        <div className="w-1/2 p-8">
+        <div className="sm:w-1/2 w-full p-8">
           <form className="space-y-6" onSubmit={loginApi}>
             {" "}
             <div className="">

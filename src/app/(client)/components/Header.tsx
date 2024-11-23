@@ -68,7 +68,7 @@ const Header = () => {
       </div>
       <div id="slide3" className="carousel-item relative w-full">
         <img
-          src="https://pos.nvncdn.com/556e88-134541/bn/20230320_zk1SfSVA.png"
+          src="https://pos.nvncdn.com/556e88-134541/bn/20221017_x7JisGPgEVYcRKKANWuNTn1x.png"
           className="w-full"
         />
         <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">

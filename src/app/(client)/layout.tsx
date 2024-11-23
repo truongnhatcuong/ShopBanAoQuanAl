@@ -16,14 +16,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="mx-0 sm:mx-5">
       <HeadePager />
-      <main className="flex-grow w-full max-w-full mx-auto  mb-[100px]">
-        {children}
-      </main>
-      <div className="flex-grow">
-        <FooterPage />
-      </div>
+      <main className="">{children}</main>
+
+      <FooterPage />
+
       <Footer />
     </div>
   );

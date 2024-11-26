@@ -93,7 +93,7 @@ const TableProduct = ({ product, closeHandle }: ITableProduct) => {
               <th>Show Images</th>
 
               <th className="text-center">Product Name</th>
-              <th className="text-center">Description</th>
+
               <th className="text-center">Price</th>
               <th className="text-center">Quantity</th>
               <th className="text-center">Color</th>
@@ -115,11 +115,6 @@ const TableProduct = ({ product, closeHandle }: ITableProduct) => {
                     </td>
 
                     <td>{item.product_name}</td>
-                    <td className="max-w-xs">
-                      <div className="h-12 overflow-hidden text-ellipsis line-clamp-3">
-                        {item.description}
-                      </div>
-                    </td>
                     <td>{item.price}</td>
                     <td>{item.stock_quantity}</td>
                     <td>{item.color}</td>

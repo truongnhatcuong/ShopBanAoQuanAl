@@ -20,7 +20,9 @@ const DeleteImage = ({ image, DeleteImageAction }: IDelete) => {
       return;
     }
     /////
-    const res = await fetch(`/api/Image/${image.image_id}`);
+    const res = await fetch(`/api/Image/${image.image_id}`, {
+      method: "DELETE",
+    });
     /////
     if (res.ok) {
       const data = await res.json();

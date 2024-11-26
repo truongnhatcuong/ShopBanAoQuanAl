@@ -15,7 +15,7 @@ const MenuHeader: IMenuProps[] = [
   },
   {
     id: 2,
-    title: "Sản Phẩm",
+    title: "Bộ siêu tập",
     link: "/product",
   },
   {
@@ -28,7 +28,7 @@ const MenuHeader: IMenuProps[] = [
 const ListItem = () => {
   return (
     <>
-      <ul className="flex space-x-9 md:space-x-5 lg:space-x-11 ">
+      <ul className="flex gap-12 ">
         {MenuHeader.map((item) => (
           <li key={item.id}>
             <MenuItemPage {...item} />

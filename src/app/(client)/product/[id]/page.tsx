@@ -29,6 +29,8 @@ const Page = () => {
 
   console.log("api trả về :", productDetail);
 
+  //  api cart
+
   return (
     <div>
       <div className="">

@@ -12,6 +12,7 @@ const IGNORE_PATHS = [
   "api/product",
   "/api/auth/register",
   "/api/auth/login",
+  "/api/cart",
 ];
 
 async function decrypt(token: string): Promise<any> {
@@ -92,7 +93,6 @@ export async function middleware(req: NextRequest) {
       if (data.accessToken.roleId !== 3) {
         return NextResponse.redirect(new URL("/", req.url));
       }
-      console.log("data ", data.accessToken);
     }
 
     return NextResponse.next();
@@ -110,6 +110,7 @@ export const config = {
     "/cart/:path*",
     "/signUp",
     "/admin/:path*",
+
     // "/api/:path*",
   ],
 };

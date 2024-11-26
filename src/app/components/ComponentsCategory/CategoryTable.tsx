@@ -47,9 +47,9 @@ const CategoryTable = ({
                 <tr key={category.category_id} className="">
                   <td className="px-2 py-1">{category.category_name}</td>
                   <td className="px-2 py-1">{category.description}</td>
-                  <td className="px-2 py-1 space-x-4 ">
+                  <td className="px-2 py-1 flex gap-2  sm:space-x-4 ">
                     <button
-                      className="text-blue-500  hover:text-blue-700 text-xl "
+                      className="text-blue-500  hover:text-blue-700 text-xl  "
                       onClick={() => openEditModal(category)}
                     >
                       <FaPen />

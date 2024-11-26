@@ -2,7 +2,7 @@ import React from "react";
 
 const SelectForm = () => {
   return (
-    <div className="mt-8 mr-12">
+    <div className=" mr-12">
       <select className="border-b-2 border-black p-3 rounded-none text-sm outline-none">
         <option value="" className="text-xs ">
           Tùy Chọn

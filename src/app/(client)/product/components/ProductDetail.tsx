@@ -1,5 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import { assets } from "@/app/assets/frontend_assets/assets";
+import React, { useState } from "react";
+import AddToCart from "../../cart/components/Addcart";
 
 interface IProduct {
   product_id: number;
@@ -20,62 +23,68 @@ const ProductDetail = ({ productDetail }: IProps) => {
   if (!productDetail) {
     return <p>Loading...</p>;
   }
+  const [selectImage, setSelectImage] = useState<string>(
+    productDetail.Images[0].image_url
+  );
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex flex-col lg:flex-row gap-6 pb-6 mb-6">
-        {/* Hình ảnh sản phẩm */}
-        <div className="w-full lg:w-2/3 flex justify-end">
-          <img
-            src={productDetail.Images[0].image_url} // Lấy hình ảnh đầu tiên trong danh sách
-            alt={productDetail.product_name}
-            className="w-[650px] h-[600px] object-cover"
-          />
+    <div className="border-t-2 pt-10 transition-opacity ease-in duration-500">
+      {/* product data */}
+      <div className="flex flex-col sm:flex-row gap-12 sm:gap-12">
+        {/* product images */}
+        <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
+          <div className="flex sm:flex-col overflow-x-auto sm:overflow-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
+            {productDetail.Images.map((item, index) => (
+              <img
+                src={item.image_url}
+                alt=""
+                key={index}
+                className={`w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 ${
+                  selectImage === item.image_url ? "border border-gray-900" : ""
+                }`}
+                onClick={() => setSelectImage(item.image_url)}
+              />
+            ))}
+          </div>
+          <div className="w-full sm:w-[80%]">
+            <img
+              src={selectImage || productDetail.Images[0].image_url}
+              alt=""
+              key={selectImage}
+              className="w-full h-auto rounded-lg transition-opacity duration-300 ease-in-out"
+            />
+          </div>
         </div>
-
-        {/* Chi tiết sản phẩm */}
-        <div className="w-full lg:w-1/3 space-y-4 mt-3 ">
-          <h2 className="text-2xl font-semibold text-gray-800 uppercase">
+        {/* thong tin product */}
+        <div className="flex-1">
+          <h1 className="font-medium text-2xl mt-2 uppercase">
             {productDetail.product_name}
-          </h2>
-          <p className="text-xs text-gray-700 uppercase mb-1 font-semibold">
-            Mã Sản Phẩm: {productDetail.product_id}
-          </p>
-          <p className="text-xs text-gray-700 uppercase mb-1 font-semibold">
-            Danh mục:{" "}
-            <span className="font-semibold">
-              {productDetail.Category.category_name}
+          </h1>
+          <div className="flex items-center gap-1 mt-2 ">
+            <img src={assets.star_icon.src} alt="" className="w-3" />
+            <img src={assets.star_icon.src} alt="" className="w-3" />
+            <img src={assets.star_icon.src} alt="" className="w-3" />
+            <img src={assets.star_icon.src} alt="" className="w-3" />
+            <img src={assets.star_icon.src} alt="" className="w-3" />
+            <p className="pl-2 text-base">({productDetail.stock_quantity})</p>
+          </div>
+          <p className="text-xl mt-2 font-medium">
+            <span>
+              {parseInt(productDetail.price)
+                .toLocaleString("vi-VN")
+                .replace(/\./g, ",")}
             </span>
+            đ
           </p>
-          <div className="border-y-[1px] border-dotted border-slate-400 py-6">
-            <p className="font-medium text-xl">
-              <span>
-                {parseInt(productDetail.price)
-                  .toLocaleString("vi-VN")
-                  .replace(/\./g, ",")}
-              </span>
-              <span className="border-b-2 border-black ">đ</span>
-            </p>
-          </div>
-          <div className="border-b-[1px] border-dotted border-slate-400 py-3 ">
-            <p className="text-sm text-gray-700">
-              Màu sắc:{" "}
-              <span className="font-semibold">{productDetail.color}</span>
-            </p>
-            <br />
-            <p className="text-lg text-gray-700 font-semibold ">
-              Tồn kho:{" "}
-              <span>
-                {productDetail.stock_quantity > 0
-                  ? `${productDetail.stock_quantity} sản phẩm`
-                  : "Hết hàng"}
-              </span>
-            </p>
-          </div>
-          <div className="mt-4 max-w-full overflow-hidden">
-            <h3 className="text-lg font-semibold mb-2">Mô Tả Sản Phẩm:</h3>
-            <p className="max-h-[400px] overflow-auto text-gray-700">
-              {productDetail.description}
-            </p>
+          <p className="mt-5 text-gray-500 text-sm md:w-4/5">
+            {productDetail.description}
+          </p>
+          {/* Thêm nút để thêm vào giỏ hàng */}
+          <AddToCart product={productDetail} />
+          <hr className="mt-8 sm:w-4/5 " />
+          <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
+            <p>100% chính hãng</p>
+            <p>thanh toán và kiểm tra hàng khi nhận </p>
+            <p> chính sách đổi trả dễ dàng trong vòng 7 ngày</p>
           </div>
         </div>
       </div>

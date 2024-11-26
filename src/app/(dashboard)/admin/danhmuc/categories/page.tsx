@@ -54,7 +54,7 @@ const PageContent = () => {
     <div className="ml-5">
       <div className="flex justify-end mr-7 mt-2">
         <button
-          className="bg-blue-500 py-3 px-6 rounded-md font-bold text-white hover:bg-blue-700"
+          className="bg-blue-500 sm:py-3 sm:px-6 p-1 rounded-md font-bold text-white hover:bg-blue-700 mb-5 sm:mt-0"
           onClick={() => setShowAddModal(true)}
         >
           Thêm Danh Mục

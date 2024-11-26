@@ -36,7 +36,7 @@ const ProductSeller = () => {
           khách hàng mua nhiều mặt hàng hơn.
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ">
         {product.map((item) => (
           <ProductItem {...item} key={item.product_id} />
         ))}

@@ -7,7 +7,10 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
+  const { id } = await params;
+
+  const productId = Number(id);
+
   try {
     const images = await prisma.image.findMany({
       where: {

@@ -10,6 +10,7 @@ import { LiaPowerOffSolid } from "react-icons/lia";
 import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { RiAdminLine } from "react-icons/ri";
+import { HiMenu, HiOutlineShoppingBag } from "react-icons/hi";
 interface ICategory {
   category_id: number;
   category_name: string;
@@ -18,12 +19,13 @@ interface ICategory {
 export default function HeadePager() {
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
+  const [countCart, setCountCart] = useState(0);
   const [roleId, setRoleId] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [isHover, setIsHover] = useState<boolean>(false);
-  const [isHover2, setIsHover2] = useState<boolean>(false);
-  let hoverTimeout: NodeJS.Timeout | null = null;
+
+  const [visible, setVisible] = useState<boolean>(false);
+
   function RemoveLcstore() {
     router.push("/logout");
     window.localStorage.removeItem("token");
@@ -36,15 +38,24 @@ export default function HeadePager() {
     setCategories(data.categories);
   }
 
+  async function ApiCount() {
+    const res = await fetch("/api/cart");
+    const data = await res.json();
+    const totalQuantity =
+      data?.cart?.items.reduce(
+        (total: number, item: any) => total + item.quantity,
+        0
+      ) || 0;
+    setCountCart(totalQuantity);
+  }
+
   async function fetchUserInfo() {
     const res = await fetch("/api/auth/getUsername", {
       method: "GET",
     });
-
     const data = await res.json();
     setUsername(data.accessToken?.name); // Lấy username từ dữ liệu trả về
     setRoleId(data.accessToken?.roleId);
-
     setIsLoggedIn(true);
   }
 
@@ -53,47 +64,37 @@ export default function HeadePager() {
     ApiCategories(); // Gọi API lấy danh mục
   }, []);
 
-  const handleMouseEnter2 = () => {
-    if (hoverTimeout) clearTimeout(hoverTimeout);
-    setIsHover2(true);
-  };
+  useEffect(() => {
+    ApiCount();
+  }, []);
 
-  const handleMouseLeave2 = () => {
-    hoverTimeout = setTimeout(() => {
-      setIsHover2(false);
-    }, 200); // Delay thời gian 200ms
-  };
   return (
-    <div className="flex justify-around bg-white shadow-lg mt-5 p-1.5">
+    <div className="flex justify-around bg-white items-center font-medium p-3 sm:p-0 ">
       <div className="mt-2">
         <Link href={"/"} className="hiden md:block">
           <Image src={"/Image/logo.png"} alt="Logo" width={200} height={50} />
         </Link>
       </div>
-      <div className="mt-7 hidden md:flex flex-grow justify-center  space-x-6 md:text-xs lg:text-xl md:space-x-1 lg:space-x-10">
+      <div className=" mr-5 hidden  sm:flex gap-5 uppercase">
         <ListItem />
-        <div
-          className="relative inline-block"
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
-        >
-          <div className="text-black font-semibold cursor-pointer md:text-xs lg:text-xl md:ml-3 lg:ml-0 ">
-            Danh Mục
+        <div className="group relative z-10">
+          <div className="ml-5 hidden sm:flex gap-5 uppercase cursor-pointer ">
+            DANH MỤC
           </div>
-          {isHover && (
-            <div className="absolute mt-3 right-10 w-48 p-2 bg-slate-50 shadow-lg rounded-md  z-10 transition-opacity duration-200 transform translate-x-1/2 ">
+          <div className="group-hover:block hidden absolute dropdown-menu  pt-4 -right-14">
+            <div className="flex flex-col gap-2 w-48  bg-slate-50 text-gray-500 rounded-md">
               {categories.map((item) => (
                 <Link
                   href={`/product?category_id=${item.category_id}`}
                   key={item.category_id}
                 >
-                  <p className="block px-4 py-2 text-gray-700 hover:border-b-2 hover:border-teal-600 transition-all max-w-full">
+                  <p className="block px-2 py-1 my-1.5 text-gray-700 hover:border-b-2 hover:border-teal-600 transition-all text-center">
                     {item.category_name}
                   </p>
                 </Link>
               ))}
             </div>
-          )}
+          </div>
         </div>
       </div>
 
@@ -110,77 +111,85 @@ export default function HeadePager() {
         </div>
         <div>
           {isLoggedIn && username ? (
-            <div
-              className="relative flex items-center space-x-1  cursor-pointer"
-              onMouseEnter={handleMouseEnter2}
-              onMouseLeave={handleMouseLeave2}
-            >
-              <FiUser className="text-gray-600 text-3xl sm:text-xl " />
+            <div className="group relative flex z-10 ">
+              <FiUser className="text-gray-600 text-2xl sm:text-xl" />
               <span className="text-gray-800 hidden md:block ">{username}</span>
               {/* Hiển thị khi hover */}
-              {isHover2 && (
-                <div className="absolute top-full mt-2.5 right-12 w-44 p-2 bg-slate-50 shadow-lg rounded-lg z-10 opacity-100 transition-opacity duration-200 transform translate-x-1/2  ">
-                  <div className="flex flex-col space-y-3 mt-2 ">
+
+              <div className="group-hover:block hidden absolute dropdown-menu pt-10 -right-14 ">
+                <div className="flex flex-col gap-2 w-48 py-3 px-5 bg-slate-50 text-gray-500 rounded-md ">
+                  <button
+                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center  "
+                    onClick={() => router.push("/profile")}
+                  >
+                    <AiOutlineUser className="mr-1 text-gray-900" />
+                    Xem Thông Tin
+                  </button>
+                  {roleId === 3 && (
                     <button
-                      className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center  "
-                      onClick={() => router.push("/profile")}
+                      className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center"
+                      onClick={() => router.push("/admin")}
                     >
-                      <AiOutlineUser className="mr-1 text-gray-900" />
-                      Xem Thông Tin
+                      <RiAdminLine className="mr-1 text-gray-900" />
+                      Trang Quản Lý
                     </button>
-                    {roleId === 3 && (
-                      <button
-                        className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center"
-                        onClick={() => router.push("/admin")}
-                      >
-                        <RiAdminLine className="mr-1 text-gray-900" />
-                        Trang Quản Lý
-                      </button>
-                    )}
-                    <button
-                      className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-8"
-                      onClick={RemoveLcstore}
-                    >
-                      <LiaPowerOffSolid className="mr-1 text-gray-900 " />
-                      Đăng Xuất
-                    </button>
-                  </div>
+                  )}
+                  <button
+                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-8"
+                    onClick={RemoveLcstore}
+                  >
+                    <LiaPowerOffSolid className="mr-1 text-gray-900 " />
+                    Đăng Xuất
+                  </button>
                 </div>
-              )}
+              </div>
             </div>
           ) : (
-            <div
-              className="relative"
-              onMouseEnter={handleMouseEnter2}
-              onMouseLeave={handleMouseLeave2}
-            >
+            <div className="relative group z-10">
               <FaUser className="text-gray-700 hover:text-blue-500 cursor-pointer text-xl border border-black rounded-full w-6 h-6 p-0.5 " />
 
               {/* Hiển thị đăng ký/đăng nhập khi hover */}
-              {isHover2 && (
-                <div className="absolute top-full mt-4 -right-12 w-36  p-2 bg-slate-50 shadow-lg rounded-lg z-10 transition-opacity duration-200  ">
-                  <div className="flex flex-col space-y-2 ">
-                    <Link href="/login">
-                      <button className="text-sm text-gray-600 hover:border-b-2 hover:border-gray-700 ml-4 ">
-                        Đăng Nhập
-                      </button>
-                    </Link>
-                    <Link href="/signUp">
-                      <button className="text-sm text-gray-600 hover:border-b-2 hover:border-gray-700  ml-4 ">
-                        Đăng Ký
-                      </button>
-                    </Link>
-                  </div>
+
+              <div className="group-hover:block hidden absolute dropdown-menu  pt-4 -right-12">
+                <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-50 text-gray-500 rounded-md">
+                  <Link href="/login">
+                    <button className="text-sm text-gray-600 hover:border-b-2 hover:border-gray-700 ml-4 ">
+                      Đăng Nhập
+                    </button>
+                  </Link>
+                  <Link href="/signUp">
+                    <button className="text-sm text-gray-600 hover:border-b-2 hover:border-gray-700  ml-4 ">
+                      Đăng Ký
+                    </button>
+                  </Link>
                 </div>
-              )}
+              </div>
             </div>
           )}
         </div>
-        <div>
+
+        <div className="relative">
+          {" "}
           <Link href={"/cart"}>
-            <IoCart className="text-gray-700 hover:text-blue-500 cursor-pointer text-2xl" />
+            <HiOutlineShoppingBag className="text-3xl cursor-pointer mr-5 " />
           </Link>
+          <p className="absolute right-[-4px] bottom-[-5px] w-[17px] text-center leading-4 bg-black text-white rounded-full aspect-square text-[10px] mr-5 ">
+            {countCart}
+          </p>
         </div>
+
+        <div>
+          <HiMenu
+            className="text-2xl cursor-pointer sm:hidden ml-5"
+            onClick={() => setVisible(true)}
+          />
+        </div>
+        {/* thanh menu ở giao diện màn hình nhỏ */}
+        <div
+          className={`absolute top-0 right-0 text-gray-500 gap-4 overflow-hidden bg-white transition-all ${
+            visible ? "w-full" : "w-0 "
+          }`}
+        ></div>
       </div>
     </div>
   );

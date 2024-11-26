@@ -1,3 +1,4 @@
+import { Customer } from "@prisma/client";
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,6 +15,9 @@ export async function POST(req: NextRequest) {
         cart_id: data.cart_id,
         product_id: data.product_id,
         quantity: data.quantity,
+      },
+      include: {
+        Cart: true,
       },
     });
     return NextResponse.json(

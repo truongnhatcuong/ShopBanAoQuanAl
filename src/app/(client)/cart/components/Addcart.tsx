@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+"use client";
+import { ShopConText } from "@/app/context/Context";
+import React, { useContext, useEffect, useState } from "react";
+
 interface IProduct {
   product_id: number;
   stock_quantity: number;
@@ -12,32 +13,8 @@ interface IProps {
 }
 
 const AddToCart = ({ product }: IProps) => {
-  const MySwal = withReactContent(Swal);
+  const { handleAddToCart } = useContext(ShopConText)!;
   const [quantity, setQuantity] = useState(1);
-
-  const handleAddToCart = async () => {
-    // Gửi request API thêm vào giỏ hàng
-    const response = await fetch("/api/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        product_id: product.product_id,
-        quantity,
-      }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      MySwal.fire({
-        position: "center",
-        icon: "success",
-        title: "đã thêm vào giỏ hàng",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  };
 
   return (
     <div>
@@ -47,12 +24,13 @@ const AddToCart = ({ product }: IProps) => {
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
           min="1"
-          max={product.stock_quantity}
+          max={product?.stock_quantity}
           className="w-16 p-2 border border-gray-300"
         />
+        <span>{} Có Sản phẩm</span>
         <button
-          onClick={handleAddToCart}
           className="bg-black text-white px-8 py-3 text-sm active:bg-slate-700"
+          onClick={() => handleAddToCart(product.product_id, quantity)}
         >
           Thêm vào giỏ
         </button>

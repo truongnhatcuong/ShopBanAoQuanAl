@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ListItem from "./ListItem";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,15 +11,17 @@ import { AiOutlineUser } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { RiAdminLine } from "react-icons/ri";
 import { HiMenu, HiOutlineShoppingBag } from "react-icons/hi";
+import { ShopConText } from "@/app/context/Context";
 interface ICategory {
   category_id: number;
   category_name: string;
 }
 
 export default function HeadePager() {
+  const { countCart, handleQuantityCart } = useContext(ShopConText)!;
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
-  const [countCart, setCountCart] = useState(0);
+
   const [roleId, setRoleId] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -38,17 +40,6 @@ export default function HeadePager() {
     setCategories(data.categories);
   }
 
-  async function ApiCount() {
-    const res = await fetch("/api/cart");
-    const data = await res.json();
-    const totalQuantity =
-      data?.cart?.items.reduce(
-        (total: number, item: any) => total + item.quantity,
-        0
-      ) || 0;
-    setCountCart(totalQuantity);
-  }
-
   async function fetchUserInfo() {
     const res = await fetch("/api/auth/getUsername", {
       method: "GET",
@@ -65,8 +56,8 @@ export default function HeadePager() {
   }, []);
 
   useEffect(() => {
-    ApiCount();
-  }, []);
+    handleQuantityCart();
+  }, [handleQuantityCart]);
 
   return (
     <div className="flex justify-around bg-white items-center font-medium p-3 sm:p-0 ">

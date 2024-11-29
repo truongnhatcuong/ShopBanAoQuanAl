@@ -14,7 +14,7 @@ export async function PUT(
     // Xử lý formData để lấy file
     const formData = await req.formData();
     const product_id = formData.get("product_id");
-    const file = formData.get("file") as File; // Lấy file từ form data
+    const file = formData.get("files") as File; // Lấy file từ form data
 
     // Kiểm tra xem ảnh có tồn tại trong cơ sở dữ liệu không
     const image = await prisma.image.findUnique({

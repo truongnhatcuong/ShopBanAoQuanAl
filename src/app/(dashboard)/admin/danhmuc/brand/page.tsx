@@ -1,7 +1,7 @@
 "use client";
-import AddBrand from "@/app/components/ComponnentsBrand/AddBrand";
-import TableBrand from "@/app/components/ComponnentsBrand/TableBrand";
-import UpdateBrand from "@/app/components/ComponnentsBrand/UpdateBrand";
+import AddBrand from "@/app/(dashboard)/admin/danhmuc/brand/ComponnentsBrand/AddBrand";
+import TableBrand from "@/app/(dashboard)/admin/danhmuc/brand/ComponnentsBrand/TableBrand";
+import UpdateBrand from "@/app/(dashboard)/admin/danhmuc/brand/ComponnentsBrand/UpdateBrand";
 import { useEffect, useState } from "react";
 
 interface IBrand {

@@ -15,10 +15,13 @@ export default function AdminLayout({
       <div className="w-[16%] bg-gray-900 text-white shadow-lg overflow-y-auto hidden sm:block sm:w-[25%] md:w-[16%] lg:w-[16%] ">
         <LeftMenu />
       </div>
+      <div className="w-2 bg-slate-200"></div>
       {/* TopBar and Content */}
       <div className="flex flex-col w-[84%] overflow-hidden">
         <TopBar />
-        <div className="flex-grow bg-white overflow-y-auto">{children}</div>
+        <div className="flex-grow bg-white overflow-y-auto mx-3">
+          {children}
+        </div>
       </div>
     </div>
   );

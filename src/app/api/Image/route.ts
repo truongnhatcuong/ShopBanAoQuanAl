@@ -5,11 +5,6 @@ import prisma from "@/app/prisma/client"; // Path to your Prisma client
 
 const uploadsDir = path.join(process.cwd(), "public/Image");
 
-export async function GET(req: NextRequest) {
-  const images = await prisma.image.findMany();
-  return NextResponse.json({ images, message: "success" }, { status: 200 });
-}
-
 export const POST = async (req: NextRequest) => {
   const formData = await req.formData();
   const productId = formData.get("product_id");

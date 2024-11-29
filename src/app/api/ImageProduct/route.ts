@@ -2,10 +2,15 @@ import cloudinary from "@/app/config/cloudinaty";
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET(req: NextRequest) {
+  const images = await prisma.image.findMany();
+  return NextResponse.json({ images, message: "success" }, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const files = formData.getAll("file") as File[];
+    const files = formData.getAll("files") as File[];
     const productId = formData.get("product_id");
 
     if (!files.length || !productId) {
@@ -24,7 +29,6 @@ export async function POST(req: NextRequest) {
         `data:${file.type};base64,${fileBase64}`,
         { folder: "Upload" }
       );
-      console.log("Upload result: ", uploadResult);
 
       return {
         image_url: uploadResult.secure_url,

@@ -1,8 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { assets } from "@/app/assets/frontend_assets/assets";
 import React, { useState } from "react";
 import AddToCart from "../../cart/components/Addcart";
+
+interface Size {
+  stock_quantity: number;
+  Size: {
+    size_id: number;
+    name_size: string;
+  };
+}
 
 interface IProduct {
   product_id: number;
@@ -13,6 +22,7 @@ interface IProduct {
   color: string;
   Category: { category_name: string };
   Images: { image_url: string }[];
+  ProductSizes: Size[];
 }
 
 interface IProps {
@@ -23,8 +33,9 @@ const ProductDetail = ({ productDetail }: IProps) => {
   if (!productDetail) {
     return <p>Loading...</p>;
   }
-  const [selectImage, setSelectImage] = useState<string>(
-    productDetail.Images[0].image_url
+  const [size, setSize] = useState("");
+  const [selectImage, setSelectImage] = useState<string | null>(
+    productDetail.Images[0]?.image_url || null
   );
   return (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500">
@@ -47,7 +58,7 @@ const ProductDetail = ({ productDetail }: IProps) => {
           </div>
           <div className="w-full sm:w-[80%]">
             <img
-              src={selectImage || productDetail.Images[0].image_url}
+              src={selectImage || productDetail.Images[0]?.image_url}
               alt=""
               key={selectImage}
               className="w-full h-auto rounded-lg transition-opacity duration-300 ease-in-out"
@@ -78,6 +89,23 @@ const ProductDetail = ({ productDetail }: IProps) => {
           <p className="mt-5 text-gray-500 text-sm md:w-4/5">
             {productDetail.description}
           </p>
+          <div className="flex flex-col gap-4 my-8">
+            <p>Chọn Size</p>
+            <div className="flex gap-7">
+              {productDetail?.ProductSizes.map((item) => (
+                <div
+                  onClick={() => setSize(item.Size.name_size)}
+                  key={item.Size.size_id}
+                  title={`Số Lượng size  ${item.stock_quantity} `}
+                  className={`border py-2 px-3.5  bg-slate-100 cursor-pointer ${
+                    item.Size.name_size === size ? " border border-black" : ""
+                  }`}
+                >
+                  {item.Size.name_size}
+                </div>
+              ))}
+            </div>
+          </div>
           {/* Thêm nút để thêm vào giỏ hàng */}
           <AddToCart product={productDetail} />
           <hr className="mt-8 sm:w-4/5 " />

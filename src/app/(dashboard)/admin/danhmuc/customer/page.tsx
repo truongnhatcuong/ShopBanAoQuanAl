@@ -1,6 +1,6 @@
 "use client";
-import AddCustomer from "@/app/components/componentsCustomer/AddCustomer";
-import TableCustomer from "@/app/components/componentsCustomer/TableCustomer";
+import AddCustomer from "@/app/(dashboard)/admin/danhmuc/customer/componentsCustomer/AddCustomer";
+import TableCustomer from "@/app/(dashboard)/admin/danhmuc/customer/componentsCustomer/TableCustomer";
 import React, { useEffect, useState } from "react";
 
 interface ICustomer {

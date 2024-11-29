@@ -16,7 +16,17 @@ export async function GET(
       include: {
         Category: true,
         Images: true,
-        ProductSizes: true,
+        ProductSizes: {
+          select: {
+            stock_quantity: true,
+            Size: {
+              select: {
+                size_id: true,
+                name_size: true, // Nếu cần tên kích thước
+              },
+            },
+          },
+        },
       },
     });
     return NextResponse.json(
@@ -32,46 +42,85 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const productId = Number(params.id);
-  const data = await req.json();
-  const price = parseFloat(data.price);
+  const { id } = await params;
+  const productId = Number(id);
 
+  const {
+    product_name,
+    description,
+    price,
+    stock_quantity,
+    color,
+    category_id,
+    brand_id,
+    season_id,
+    sizes,
+  } = await req.json();
+
+  if (
+    !product_name ||
+    !price ||
+    !category_id ||
+    !brand_id ||
+    !season_id ||
+    !sizes
+  ) {
+    return NextResponse.json(
+      { message: "vui lòng nhập giá trị" },
+      { status: 404 }
+    );
+  }
   if (isNaN(productId)) {
     return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
   }
-  try {
-    const updateProduct = await prisma.product.update({
-      where: {
-        product_id: productId,
-      },
-      data: {
-        product_name: data.product_name,
-        description: data.description,
-        price: price,
-        stock_quantity: data.stock_quantity,
-        color: data.color,
-        category_id: data.category_id || null,
-        brand_id: data.brand_id || null,
-        season_id: data.season_id || null,
 
-        updated_at: new Date(),
+  try {
+    const totalStockQuantity = sizes?.reduce(
+      (total: number, item: any) => total + item.stock_quantity,
+      0
+    );
+
+    const updateProduct = await prisma.product.update({
+      where: { product_id: productId },
+      data: {
+        product_name,
+        description,
+        price,
+        color,
+        stock_quantity: totalStockQuantity,
+        category_id,
+        season_id,
+        brand_id,
+        ProductSizes: {
+          deleteMany: {},
+          create: sizes?.map(
+            (size: { size_id: number; stock_quantity: number }) => ({
+              size_id: size.size_id,
+              stock_quantity: size.stock_quantity,
+            })
+          ),
+        },
       },
     });
+
     return NextResponse.json(
-      { product: updateProduct, message: "Updated product success" },
-      { status: 201 }
+      {
+        updateProduct,
+        message: "Cập nhật sản phẩm thành công",
+      },
+      { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 501 });
   }
 }
-
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const productId = Number(params.id);
   try {
+    //xóa sản phẩm
     const deleteProduct = await prisma.product.delete({
       where: {
         product_id: productId,

@@ -49,8 +49,8 @@ model Product {
  
   ProductSizes    ProductSize[]
   OrderItems      OrderItem[]
-  Images          Image[]
-  Wishlists       Wishlist[]
+  Images          Image[]           
+  Wishlists       Wishlist[]        
   Returns         ReturnProduct[]
   ProductSupplier ProductSupplier[]
   Review          Review[]
@@ -72,7 +72,7 @@ model ProductSize {
   product_id     Int
   size_id        Int
   stock_quantity Int
-  Product        Product @relation(fields: [product_id], references: [product_id])
+  Product        Product @relation(fields: [product_id], references: [product_id],onDelete: Cascade)
   Size           Size    @relation(fields: [size_id], references: [size_id])
 
   @@id([product_id, size_id])
@@ -176,7 +176,7 @@ model Image {
   image_url  String    @db.Text
   created_at DateTime? @db.DateTime
   updated_at DateTime? @db.DateTime
-  Product    Product   @relation(fields: [product_id], references: [product_id])
+  Product    Product   @relation(fields: [product_id], references: [product_id],onDelete: Cascade)
 }
 
 model Wishlist {

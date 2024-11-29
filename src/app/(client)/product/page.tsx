@@ -11,6 +11,8 @@ const PageProduct = () => {
 
   const [product, setProduct] = useState<any[]>([]);
 
+  console.log(product);
+
   // Hàm gọi API
   useEffect(() => {
     async function fetchProducts() {
@@ -27,7 +29,7 @@ const PageProduct = () => {
             setProduct([]);
           }
         } else {
-          setProduct(data.Product || []);
+          setProduct(data || []);
         }
       } catch (error) {
         console.error("Lỗi khi gọi API:", error);

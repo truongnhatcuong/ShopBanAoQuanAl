@@ -24,7 +24,7 @@ const ProductCard = ({ ProductValue }: ProductListProps) => {
           <Link key={item.product_id} href={`/product/${item.product_id}`}>
             <div className="relative w-60  overflow-hidden transform transition-transform duration-300 hover:scale-105  ">
               <img
-                src={item.Images[0].image_url}
+                src={item.Images[0]?.image_url}
                 alt={item.product_name}
                 className="w-full h-60 object-fill transition ease-in-out"
               />

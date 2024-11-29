@@ -1,7 +1,7 @@
 "use client";
-import Addseason from "@/app/components/ComponentsSeason/Addseason";
-import TableCardSeason from "@/app/components/ComponentsSeason/TableCardSeason";
-import UpdateSeason from "@/app/components/ComponentsSeason/UpdateSeason";
+import Addseason from "@/app/(dashboard)/admin/danhmuc/season/ComponentsSeason/Addseason";
+import TableCardSeason from "@/app/(dashboard)/admin/danhmuc/season/ComponentsSeason/TableCardSeason";
+import UpdateSeason from "@/app/(dashboard)/admin/danhmuc/season/ComponentsSeason/UpdateSeason";
 import React, { useEffect, useState } from "react";
 
 interface Iseason {

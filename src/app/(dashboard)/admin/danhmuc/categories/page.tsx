@@ -1,8 +1,8 @@
 "use client";
 import "react-toastify/dist/ReactToastify.css";
-import AddCategories from "@/app/components/ComponentsCategory/AddCategories";
-import CategoryTable from "@/app/components/ComponentsCategory/CategoryTable";
-import UpdateCategories from "@/app/components/ComponentsCategory/UpdateCategories";
+import AddCategories from "@/app/(dashboard)/admin/danhmuc/categories/ComponentsCategory/AddCategories";
+import CategoryTable from "@/app/(dashboard)/admin/danhmuc/categories/ComponentsCategory/CategoryTable";
+import UpdateCategories from "@/app/(dashboard)/admin/danhmuc/categories/ComponentsCategory/UpdateCategories";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, Suspense } from "react";
 import Pagination from "@/app/components/componentsFunction/Pagination";

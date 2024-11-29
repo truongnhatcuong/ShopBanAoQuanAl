@@ -5,9 +5,7 @@ import React from "react";
 interface IProduct {
   product_id: number;
   product_name: string;
-
   price: string;
-
   Images: { image_url: string | any }[];
 }
 
@@ -20,7 +18,7 @@ const ProductItem = ({ product_id, Images, price, product_name }: IProduct) => {
       >
         <div className="overflow-hidden mt-8">
           <img
-            src={Images[0].image_url}
+            src={Images[0]?.image_url || null}
             alt=""
             className="hover:scale-110 transition ease-in-out w-52 h-56 "
           />

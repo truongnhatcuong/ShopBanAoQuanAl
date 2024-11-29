@@ -3,6 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ProductDetail from "../components/ProductDetail";
 
+interface Size {
+  stock_quantity: number;
+  Size: {
+    size_id: number;
+    name_size: string;
+  };
+}
+
 interface IProduct {
   product_id: number;
   product_name: string;
@@ -12,6 +20,7 @@ interface IProduct {
   color: string;
   Category: { category_name: string };
   Images: { image_url: string }[];
+  ProductSizes: Size[];
 }
 
 const Page = () => {

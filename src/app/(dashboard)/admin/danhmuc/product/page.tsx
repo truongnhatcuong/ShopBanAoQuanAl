@@ -1,67 +1,53 @@
 "use client";
-import Addproduct from "@/app/components/ComponentsProduct/Addproduct";
-import TableProduct from "@/app/components/ComponentsProduct/TableProduct";
-import UpdateProduct from "@/app/components/ComponentsProduct/UpdateProduct";
 import React, { useEffect, useState } from "react";
+import TableProduct from "./components/TableProduct";
+import AddProduct from "./components/Addproduct";
 
-interface IProduct {
+interface Product {
   product_id: number;
   product_name: string;
-  description: string;
   price: number;
   stock_quantity: number;
-  category_id: number;
-  brand_id: number;
-  season_id: number;
   color: string;
+
+  description: string; // Thêm thuộc tính này
+  category_id: number; // Thêm thuộc tính này
+  brand_id: number; // Thêm thuộc tính này
+  season_id: number; // Thêm thuộc tính này
+  sizes: any[];
+  ProductSizes: {
+    size_id: number;
+    stock_quantity: number;
+    Size?: {
+      size_id: number;
+      name_size: string;
+    };
+  }[];
+  Images: {
+    image_id: number;
+    image_url: string;
+  }[];
 }
-const Page = () => {
-  const [product, setProduct] = useState<IProduct[]>([]);
-  const [showadd, setshowadd] = useState(false);
-  const [showUpdate, setShowupdate] = useState(false);
-  const [selectProduct, setSelectProduct] = useState<IProduct | null>(null);
-  async function ApiProduct() {
-    const req = await fetch(`/api/product`, { cache: "no-cache" });
-    const data = await req.json();
-    setProduct(data.Product);
-  }
-  useEffect(() => {
-    ApiProduct();
-  }, []);
 
-  const closeHanle = (product: IProduct) => {
-    setSelectProduct(product);
-    setShowupdate(true);
+const PageProduct = () => {
+  const [product, setProduct] = useState<Product[] | []>([]);
+
+  const fetchApiProduct = async () => {
+    const res = await fetch("/api/product");
+    const data = await res.json();
+    setProduct(data);
   };
-
+  useEffect(() => {
+    fetchApiProduct();
+  }, []);
   return (
     <div>
-      <div className="flex justify-end mr-5 mb-6">
-        <button
-          className="bg-blue-500 px-6 py-3 rounded-md font-bold text-white hover:bg-blue-700"
-          onClick={() => setshowadd(true)}
-        >
-          Thêm Sản Phẩm
-        </button>
-        {showadd && (
-          <Addproduct
-            closeHandle={() => setshowadd(false)}
-            reloadData={ApiProduct}
-          />
-        )}
+      <div className="flex justify-end mb-3 mr-7">
+        <AddProduct reloadData={fetchApiProduct} />
       </div>
-      <div>
-        <TableProduct product={product} closeHandle={closeHanle} />
-      </div>
-      {showUpdate && selectProduct && (
-        <UpdateProduct
-          closeHandle={() => setShowupdate(false)}
-          product={selectProduct}
-          reloadData={ApiProduct}
-        />
-      )}
+      <TableProduct productData={product} reloadData={fetchApiProduct} />
     </div>
   );
 };
 
-export default Page;
+export default PageProduct;

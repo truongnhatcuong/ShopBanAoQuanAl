@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Title from "./Title";
-import ProductCard from "../product/components/ProductCard";
-import ProductDetail from "../product/components/ProductDetail";
+
 import ProductItem from "./ProductItem";
 
 interface IProduct {
@@ -19,7 +18,7 @@ const ProductSeller = () => {
     const res = await fetch("/api/product");
     if (res.ok) {
       const data = await res.json();
-      setProduct(data.Product);
+      setProduct(data);
     }
   }
   useEffect(() => {
@@ -37,7 +36,7 @@ const ProductSeller = () => {
         </p>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ">
-        {product.map((item) => (
+        {product.slice(0, 5).map((item) => (
           <ProductItem {...item} key={item.product_id} />
         ))}
       </div>

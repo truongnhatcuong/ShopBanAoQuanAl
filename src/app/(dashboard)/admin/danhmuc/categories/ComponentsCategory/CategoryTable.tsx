@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DeleteCategories from "./DeleteCategories";
-import { FaPen } from "react-icons/fa";
+
 interface Icategories {
   category_id: number;
   category_name: string;
@@ -27,11 +27,11 @@ const CategoryTable = ({
     <div className="overflow-x-auto ">
       <table className="table text-sm">
         {/* head */}
-        <thead>
+        <thead className="">
           <tr>
-            <th className="px-2 py-1 w-40">Name</th>
-            <th className="px-2 py-1 w-60">Description</th>
-            <th className="px-2 py-1 w-40">Action</th>
+            <th className="p-2 w-40 bg-slate-600 text-white">Name</th>
+            <th className="p-2 w-60 bg-slate-600 text-white">Description</th>
+            <th className="p-2 w-40 bg-slate-600 text-white">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -45,14 +45,14 @@ const CategoryTable = ({
             <>
               {categories.map((category) => (
                 <tr key={category.category_id} className="">
-                  <td className="px-2 py-1">{category.category_name}</td>
-                  <td className="px-2 py-1">{category.description}</td>
-                  <td className="px-2 py-1 flex gap-2  sm:space-x-4 ">
+                  <td className="p-2">{category.category_name}</td>
+                  <td className="p-2">{category.description}</td>
+                  <td className="p-2 flex gap-5 ">
                     <button
-                      className="text-blue-500  hover:text-blue-700 text-xl  "
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                       onClick={() => openEditModal(category)}
                     >
-                      <FaPen />
+                      Cập Nhật
                     </button>
                     <DeleteCategories
                       deleteCategories={handleDelete}

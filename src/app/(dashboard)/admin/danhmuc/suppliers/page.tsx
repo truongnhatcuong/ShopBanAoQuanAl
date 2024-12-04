@@ -1,7 +1,7 @@
 "use client";
-import AddSupplier from "@/app/components/ComponentsSupplier/AddSupplier";
-import TableSupplier from "@/app/components/ComponentsSupplier/TableSupplier";
-import UpdateSuplier from "@/app/components/ComponentsSupplier/UpdateSuplier";
+import AddSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/AddSupplier";
+import TableSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/TableSupplier";
+import UpdateSuplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/UpdateSuplier";
 import React, { useEffect, useState } from "react";
 
 interface ISupplier {

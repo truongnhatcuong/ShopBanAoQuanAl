@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TableProduct from "./components/TableProduct";
 import AddProduct from "./components/Addproduct";
+import { ShopConText } from "@/app/context/Context";
 
 interface Product {
   product_id: number;
@@ -30,15 +31,19 @@ interface Product {
 }
 
 const PageProduct = () => {
+  const { ApiImage } = useContext(ShopConText)!;
   const [product, setProduct] = useState<Product[] | []>([]);
 
   const fetchApiProduct = async () => {
     const res = await fetch("/api/product");
     const data = await res.json();
-    setProduct(data);
+    await ApiImage();
+    setProduct(data.product);
   };
+
   useEffect(() => {
     fetchApiProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>

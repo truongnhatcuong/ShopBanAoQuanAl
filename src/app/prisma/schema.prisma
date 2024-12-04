@@ -66,6 +66,8 @@ model Size {
   name_size    String        @db.VarChar(20)
   ProductSizes ProductSize[]
   OrderItems   OrderItem[]
+
+  CartItem CartItem[]
 }
 
 model ProductSize {
@@ -302,8 +304,10 @@ model Cart {
 model CartItem {
   cartitem_id Int     @id @default(autoincrement())
   cart_id     Int
+  size_id     Int  
   product_id  Int
   quantity    Int
+    Size        Size    @relation(fields: [size_id], references: [size_id], onDelete: Cascade)
   Product     Product @relation(fields: [product_id], references: [product_id])
   Cart        Cart    @relation(fields: [cart_id], references: [cart_id])
 }

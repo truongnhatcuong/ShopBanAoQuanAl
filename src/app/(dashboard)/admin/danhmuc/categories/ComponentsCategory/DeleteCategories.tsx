@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { IoTrashBinOutline } from "react-icons/io5";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -41,10 +39,12 @@ const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
           });
           setShow(false);
         }
-      } catch (error) {
-        toast.error("error deleting category", {
-          position: "top-right",
-          autoClose: 5000,
+      } catch (error: any) {
+        MySwal.fire({
+          title: "Thông báo!",
+          text: error.message,
+          icon: "success",
+          confirmButtonText: "OK",
         });
         return;
       }
@@ -53,10 +53,10 @@ const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
 
   return (
     <button
-      className="text-red-500 hover:text-red-700 text-2xl"
+      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
       onClick={handleDelete}
     >
-      <IoTrashBinOutline />
+      Xóa
     </button>
   );
 };

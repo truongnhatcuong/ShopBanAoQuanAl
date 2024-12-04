@@ -2,10 +2,39 @@ import prisma from "@/app/prisma/client";
 
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  // Lấy tham số tìm kiếm, phân trang và sắp xếp
+  const search: string = searchParams?.get("search") || "";
+  const limit: number = Number(searchParams?.get("limit") || 0);
+  const page: number = Number(searchParams?.get("page") || 1);
+  let sortOrder: any = searchParams?.get("sortOrder") || "asc";
+  if (sortOrder !== "asc" && sortOrder !== "desc") {
+    sortOrder = "asc";
+  }
+
+  const totalRecords: number = await prisma.product.count({
+    where: {
+      product_name: {
+        contains: search,
+      },
+    },
+  });
+  const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
+  const totalSkipRecords = (page - 1) * limit;
+
   try {
     // Lấy danh sách sản phẩm kèm thông tin liên quan
-    const products = await prisma.product.findMany({
+    const product = await prisma.product.findMany({
+      ...(limit > 0 && { skip: totalSkipRecords, take: limit }), // Phân trang
+      where: {
+        product_name: {
+          contains: search, // Lọc sản phẩm theo tên
+        },
+      },
+      orderBy: {
+        product_name: sortOrder, // Sắp xếp theo tên sản phẩm
+      },
       include: {
         ProductSizes: {
           select: {
@@ -43,7 +72,19 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(products, { status: 200 });
+    return NextResponse.json(
+      {
+        product,
+        pagination: {
+          totalRecords,
+          totalPages,
+          currentPage: page,
+          limit,
+        },
+        message: "Success",
+      },
+      { status: 200 }
+    );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

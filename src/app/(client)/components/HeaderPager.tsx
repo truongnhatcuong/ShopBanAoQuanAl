@@ -25,7 +25,7 @@ export default function HeadePager() {
   const [roleId, setRoleId] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
-
+  const [search, setSearch] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
 
   function RemoveLcstore() {
@@ -59,6 +59,18 @@ export default function HeadePager() {
     handleQuantityCart();
   }, [handleQuantityCart]);
 
+  // tìm kiếm sản phẩm
+  const handleSearchSubmit = () => {
+    if (search.trim() !== "") {
+      router.push(`/product?search=${search}`);
+    }
+  };
+  //enter
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      router.push(`/product?search=${search}`);
+    }
+  };
   return (
     <div className="flex justify-around bg-white items-center font-medium p-3 sm:p-0 ">
       <div className="mt-2">
@@ -92,13 +104,19 @@ export default function HeadePager() {
       {/* phần khác */}
       <div className="flex items-center space-x-5 mr-1">
         {/* Search Input */}
-        <div className="relative flex items-center border rounded-md p-2 md:px-1 md:py-2 lg:p-2 ml-3 ">
+        <div className="relative flex items-center border rounded-full p-2 pl-4 ">
           <input
             type="text"
             placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="outline-none px-2"
+            onKeyDown={handleKeyPress}
           />
-          <IoSearchSharp className="text-gray-500 ml-2 lg:text-xl md:text-base " />
+          <IoSearchSharp
+            className="text-gray-500 ml-2 text-xl sm:text-2xl hover:text-gray-400"
+            onClick={handleSearchSubmit}
+          />
         </div>
         <div>
           {isLoggedIn && username ? (
@@ -106,7 +124,6 @@ export default function HeadePager() {
               <FiUser className="text-gray-600 text-2xl sm:text-xl" />
               <span className="text-gray-800 hidden md:block ">{username}</span>
               {/* Hiển thị khi hover */}
-
               <div className="group-hover:block hidden absolute dropdown-menu pt-10 -right-14 ">
                 <div className="flex flex-col gap-2 w-48 py-3 px-5 bg-slate-50 text-gray-500 rounded-md ">
                   <button

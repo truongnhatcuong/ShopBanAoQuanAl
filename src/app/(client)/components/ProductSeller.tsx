@@ -8,7 +8,7 @@ interface IProduct {
   product_id: number;
   product_name: string;
   description: string;
-  price: string;
+  price: number;
 
   Images: { image_url: string }[];
 }
@@ -18,7 +18,7 @@ const ProductSeller = () => {
     const res = await fetch("/api/product");
     if (res.ok) {
       const data = await res.json();
-      setProduct(data);
+      setProduct(data.product);
     }
   }
   useEffect(() => {
@@ -35,7 +35,7 @@ const ProductSeller = () => {
           khách hàng mua nhiều mặt hàng hơn.
         </p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ">
         {product.slice(0, 5).map((item) => (
           <ProductItem {...item} key={item.product_id} />
         ))}

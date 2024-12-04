@@ -6,6 +6,7 @@ const JWT_SECRET: string = process.env.JWT_SECRET || "";
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
+
   if (!token) {
     return NextResponse.json(
       { message: "token không có sẵn" },
@@ -14,7 +15,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    //mã hóa
+    // Mã hóa token
     const decoded: any = jwt.verify(token, JWT_SECRET);
     const username = decoded.username;
 
@@ -41,7 +42,6 @@ export async function GET(req: NextRequest) {
         CartItems: {
           include: {
             Product: {
-              // Bao gồm thông tin sản phẩm trong giỏ hàng
               select: {
                 product_name: true,
                 price: true,
@@ -49,6 +49,11 @@ export async function GET(req: NextRequest) {
                   take: 1,
                   select: { image_url: true }, // Lấy một hình ảnh của sản phẩm
                 },
+              },
+            },
+            Size: {
+              select: {
+                name_size: true, // Lấy tên kích thước từ bảng Size
               },
             },
           },
@@ -64,6 +69,7 @@ export async function GET(req: NextRequest) {
             cartitem_id: item.cartitem_id,
             product_id: item.product_id,
             quantity: item.quantity,
+            selectedSize: item.Size?.name_size, // Cung cấp selectedSize từ bảng Size
             product: item.Product,
             image_url: item.Product.Images[0]?.image_url, // Lấy URL hình ảnh
           })),
@@ -80,7 +86,7 @@ export async function GET(req: NextRequest) {
 // tạo giỏ hàng
 export async function POST(req: NextRequest) {
   // Lấy dữ liệu từ body request (product_id và quantity)
-  const { product_id, quantity } = await req.json();
+  const { product_id, quantity, size_id } = await req.json();
   // Lấy token từ cookies
   const token = req.cookies.get("token")?.value;
   if (!token) {
@@ -123,11 +129,23 @@ export async function POST(req: NextRequest) {
         },
       });
     }
+    // Kiểm tra sản phẩm và kích thước tồn kho
+    const productSize = await prisma.productSize.findUnique({
+      where: { product_id_size_id: { product_id, size_id } },
+    });
+    if (!productSize || productSize.stock_quantity < quantity) {
+      return NextResponse.json(
+        { message: "Số lượng yêu cầu vượt quá tồn kho." },
+        { status: 400 }
+      );
+    }
+
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const exsitCartIteam = await prisma.cartItem.findFirst({
       where: {
         cart_id: cart.cart_id,
         product_id: product_id,
+        size_id: size_id,
       },
     });
     // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
@@ -147,6 +165,7 @@ export async function POST(req: NextRequest) {
       data: {
         cart_id: cart.cart_id,
         product_id: product_id,
+        size_id: size_id,
         quantity: quantity,
       },
     });

@@ -6,13 +6,20 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useEffect,
   useState,
 } from "react";
 
 interface IContext {
-  cart: string;
+  cart: any;
   setCart: Dispatch<SetStateAction<string>>;
-  handleAddToCart: (product_id: number, quantity: number) => Promise<void>;
+  totalPrice: number;
+  handleAddToCart: (
+    product_id: number,
+    quantity: number,
+    size_id: number
+  ) => Promise<void>;
+  handleDeleteCartItem: (cartItemId: number) => Promise<void>;
   countCart: any;
   handleQuantityCart: () => Promise<void>;
   ApiImage: () => Promise<void>;
@@ -23,9 +30,15 @@ interface ShopContextProvider {
 export const ShopConText = createContext<IContext | undefined>(undefined);
 const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const MySwal = withReactContent(Swal);
-  const [cart, setCart] = useState<string>("");
+  const [cart, setCart] = useState<any>({ items: [] });
   const [countCart, setCountCart] = useState(0);
-  const handleAddToCart = async (product_id: number, quantity: number) => {
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const handleAddToCart = async (
+    product_id: number,
+    quantity: number,
+    size_id: number
+  ) => {
     try {
       const response = await fetch("/api/cart", {
         method: "POST",
@@ -35,11 +48,13 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
         body: JSON.stringify({
           product_id,
           quantity,
+          size_id,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
+
         await handleQuantityCart();
         MySwal.fire({
           position: "center",
@@ -70,17 +85,40 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const handleQuantityCart = async () => {
     const res = await fetch("/api/cart");
     const data = await res.json();
+    // đếm số lượng sản phẩm thêm vào giỏ hàng
     const totalQuantity =
-      data?.cart?.items.reduce(
+      data?.cart?.items?.reduce(
         (total: number, item: any) => total + item.quantity,
         0
       ) || 0;
     setCountCart(totalQuantity);
+    // tổng giá trị sản phẩm
+    const totalAmount =
+      data?.cart?.items?.reduce((total: number, item: any) => {
+        return total + parseFloat(item.product.price) * item.quantity;
+      }, 0) || 0;
+
+    setTotalPrice(totalAmount);
+  };
+  const handleDeleteCartItem = async (cartItemId: number) => {
+    const res = await fetch(`/api/cart/${cartItemId}`, { method: "DELETE" });
+    if (res.ok) {
+      const data = await res.json();
+      await handleQuantityCart();
+    } else {
+      const error = await res.json();
+      MySwal.fire({
+        position: "center",
+        icon: "error",
+        title: "Lỗi",
+        text: error.message || "Không thể thêm vào giỏ hàng.",
+      });
+    }
   };
 
   const ApiImage = async () => {
     const res = await fetch("/api/ImageProduct");
-    const data = await res.json();
+    await res.json();
   };
 
   // khai báo value
@@ -91,6 +129,8 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     countCart,
     handleQuantityCart,
     ApiImage,
+    totalPrice,
+    handleDeleteCartItem,
   };
   return <ShopConText.Provider value={value}>{children}</ShopConText.Provider>;
 };

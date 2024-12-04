@@ -4,6 +4,7 @@
 import { assets } from "@/app/assets/frontend_assets/assets";
 import React, { useState } from "react";
 import AddToCart from "../../cart/components/Addcart";
+import RelatedProduct from "../../components/RelatedProduct";
 
 interface Size {
   stock_quantity: number;
@@ -23,6 +24,7 @@ interface IProduct {
   Category: { category_name: string };
   Images: { image_url: string }[];
   ProductSizes: Size[];
+  sizes: { size_id: number; name_size: string; stock_quantity: number }[];
 }
 
 interface IProps {
@@ -33,10 +35,18 @@ const ProductDetail = ({ productDetail }: IProps) => {
   if (!productDetail) {
     return <p>Loading...</p>;
   }
+  console.log("Category Name:", productDetail.Category.category_name);
+
   const [size, setSize] = useState("");
+  const [sizeId, setSizeId] = useState<number | null>(null);
+
   const [selectImage, setSelectImage] = useState<string | null>(
     productDetail.Images[0]?.image_url || null
   );
+  const handleSizeSelect = (selectedSize: string, size_id: number) => {
+    setSize(selectedSize);
+    setSizeId(size_id); // Lưu lại size_id khi chọn một kích thước
+  };
   return (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500">
       {/* product data */}
@@ -49,7 +59,7 @@ const ProductDetail = ({ productDetail }: IProps) => {
                 src={item.image_url}
                 alt=""
                 key={index}
-                className={`w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer rounded-lg transition-transform duration-200 ease-in-out hover:scale-105 ${
+                className={`w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer rounded-lg transition-transform duration-200 ease-in-out hover:scale-110 ${
                   selectImage === item.image_url ? "border border-gray-900" : ""
                 }`}
                 onClick={() => setSelectImage(item.image_url)}
@@ -61,7 +71,7 @@ const ProductDetail = ({ productDetail }: IProps) => {
               src={selectImage || productDetail.Images[0]?.image_url}
               alt=""
               key={selectImage}
-              className="w-full h-auto rounded-lg transition-opacity duration-300 ease-in-out"
+              className="w-full h-auto rounded-lg transition-transform duration-300 ease-in-out "
             />
           </div>
         </div>
@@ -94,7 +104,9 @@ const ProductDetail = ({ productDetail }: IProps) => {
             <div className="flex gap-7">
               {productDetail?.ProductSizes.map((item) => (
                 <div
-                  onClick={() => setSize(item.Size.name_size)}
+                  onClick={() =>
+                    handleSizeSelect(item.Size.name_size, item.Size.size_id)
+                  }
                   key={item.Size.size_id}
                   title={`Số Lượng size  ${item.stock_quantity} `}
                   className={`border py-2 px-3.5  bg-slate-100 cursor-pointer ${
@@ -107,14 +119,26 @@ const ProductDetail = ({ productDetail }: IProps) => {
             </div>
           </div>
           {/* Thêm nút để thêm vào giỏ hàng */}
-          <AddToCart product={productDetail} />
+          <AddToCart
+            product={productDetail}
+            selectedSizeId={sizeId}
+            stockQuantity={
+              productDetail?.ProductSizes.find(
+                (item) => item.Size.size_id === sizeId
+              )?.stock_quantity || 0
+            }
+          />
           <hr className="mt-8 sm:w-4/5 " />
           <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
-            <p>100% chính hãng</p>
-            <p>thanh toán và kiểm tra hàng khi nhận </p>
-            <p> chính sách đổi trả dễ dàng trong vòng 7 ngày</p>
+            <p>Sản phẩm sale không hỗ trợ đổi - trả.</p>
+            <p>Sản phẩm nguyên giá được đổi trong 3 ngày.</p>
+            <p>Sản phẩm còn đủ tem mác, chưa qua sử dụng.</p>
+            <p> Sản phẩm được đổi 1 lần duy nhất, không hỗ trợ trả.</p>
           </div>
         </div>
+      </div>
+      <div>
+        <RelatedProduct category_name={productDetail.Category.category_name} />
       </div>
     </div>
   );

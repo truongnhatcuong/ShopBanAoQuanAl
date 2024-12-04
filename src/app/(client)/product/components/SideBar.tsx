@@ -9,10 +9,11 @@ interface ICategory {
 
 interface ISideBarProps {
   onCategoryChange: (categoryId: number | null) => void; // Thay đổi kiểu categoryId là number hoặc null
+  onPriceChange: (price: number) => void;
 }
 
-const SideBar = ({ onCategoryChange }: ISideBarProps) => {
-  const [count, setCount] = useState<number>(0);
+const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
+  const [price, setPrice] = useState<number>(0);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null); // Chỉ lưu một category_id
   const [isOpen, setIsOpen] = useState(true);
@@ -37,6 +38,11 @@ const SideBar = ({ onCategoryChange }: ISideBarProps) => {
     }
   }, [searchParams]);
 
+  // input range
+  const handleChangPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPrice(Number(e.target.value));
+    onPriceChange(Number(e.target.value));
+  };
   const handleCategoryChange = (categoryId: number) => {
     const newSelect = selectedCategory === categoryId ? null : categoryId;
     setSelectedCategory(newSelect);
@@ -45,19 +51,24 @@ const SideBar = ({ onCategoryChange }: ISideBarProps) => {
   };
 
   return (
-    <div>
+    <div className="flex sm:block sm:gap-0 gap-4">
       <div className="ml-4 ">
         <h2 className="text-xl font-bold mt-6">Giá</h2>
         <div className="text-black t-8">
           <input
             type="range"
             min={0}
+            step={50000}
             max={1000000}
             className="accent-black h-1.5 w-44 range-input"
-            value={count}
-            onChange={(e: any) => setCount(Number(e.target.value))}
+            value={price}
+            onChange={handleChangPrice}
           />
-          <p className="text-xs">{count.toLocaleString()}đ - 1,000,000đ</p>
+          <p className="text-sm mt-1">
+            {price === 0
+              ? " tất cả sản phẩm"
+              : ` ${price.toLocaleString()}đ - 1,000,000đ`}
+          </p>
         </div>
       </div>
       <div className="ml-4">

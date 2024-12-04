@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     const accessToken = jwt.sign({ username: data.username }, JWT_SECRET, {
       expiresIn: "1h",
     });
-    const newCustomer = await prisma.customer.create({
+    await prisma.customer.create({
       data: {
         name: data.name,
         email: data.email,

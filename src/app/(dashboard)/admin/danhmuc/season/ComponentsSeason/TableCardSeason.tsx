@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeleteSeason from "./DeleteSeason";
-import { FaPen } from "react-icons/fa";
+
 interface Iseason {
   season_id: number;
   season_name: string;
@@ -35,16 +35,18 @@ const TableCardSeason = ({ season, closeHandle }: ISeasonProps) => {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200 ">
           {seasonList.map((item) => (
             <tr key={item.season_id}>
-              <td className="px-4 py-2 whitespace-nowrap">
-                {item.season_name}
-              </td>
-              <td className="px-4 py-2 whitespace-nowrap">
-                {item.description}
-              </td>
-              <td className="px-4 py-2 whitespace-nowrap flex space-x-4">
+              <td className="p2">{item.season_name}</td>
+              <td className="p2">{item.description}</td>
+              <td className="p2 flex space-x-4">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => closeHandle(item)}
+                >
+                  Cập Nhật
+                </button>
                 <DeleteSeason
                   DeleteHandler={(season_id: number) => {
                     setSeasonList(
@@ -53,12 +55,6 @@ const TableCardSeason = ({ season, closeHandle }: ISeasonProps) => {
                   }}
                   season_id={item.season_id}
                 />
-                <button
-                  className="text-blue-500  hover:text-blue-600  text-xl mb-1"
-                  onClick={() => closeHandle(item)}
-                >
-                  <FaPen />
-                </button>
               </td>
             </tr>
           ))}

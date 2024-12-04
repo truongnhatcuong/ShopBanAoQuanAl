@@ -10,6 +10,9 @@ import withReactContent from "sweetalert2-react-content";
 import AddImage from "./componentsImageProduct/AddImage";
 import { FaPlus } from "react-icons/fa";
 import { ShopConText } from "@/app/context/Context";
+import SelectCategories from "./componentChild/SelectCategories";
+import SelectBrand from "./componentChild/SelectBrand";
+import SelectSeaSon from "./componentChild/SelectSeason";
 
 interface IProduct {
   product_id: number;
@@ -58,6 +61,7 @@ interface ISize {
 
 const UpdateProduct = (props: IProduct) => {
   const { ApiImage } = useContext(ShopConText)!;
+
   const MySwal = withReactContent(Swal);
   const [category, setCategory] = useState<ICategory[]>([]);
   const [brand, setBrand] = useState<IBrand[]>([]);
@@ -108,29 +112,32 @@ const UpdateProduct = (props: IProduct) => {
   };
 
   useEffect(() => {
-    const fetchOptions = async () => {
-      if (!category.length && !brand.length && !season.length && !size.length) {
-        const categoryRes = await fetch("/api/categories");
-        const brandRes = await fetch("/api/brand");
-        const seasonRes = await fetch("/api/season");
-        const sizeRes = await fetch("/api/size");
-
-        // phản hồi
-        const categoriesData = await categoryRes.json();
-        const brandData = await brandRes.json();
-        const seasonData = await seasonRes.json();
-        const sizeData = await sizeRes.json();
-
-        // gán dữ liệu
-        setCategory(categoriesData.categories);
-        setBrand(brandData.brand);
-        setSeason(seasonData.season);
-        setSize(sizeData.size);
-      }
+    const fetchCategories = async () => {
+      const categoryRes = await fetch("/api/categories");
+      const categoriesData = await categoryRes.json();
+      setCategory(categoriesData.categories);
     };
 
-    fetchOptions();
-  }, [brand.length, category.length, season.length, size.length]);
+    const fetchBrands = async () => {
+      const brandRes = await fetch("/api/brand");
+      const brandData = await brandRes.json();
+      setBrand(brandData.brand);
+    };
+    const fetchSeasons = async () => {
+      const seasonRes = await fetch("/api/season");
+      const seasonData = await seasonRes.json();
+      setSeason(seasonData.season);
+    };
+    const fetchSizes = async () => {
+      const sizeRes = await fetch("/api/size");
+      const sizeData = await sizeRes.json();
+      setSize(sizeData.size);
+    };
+    fetchCategories();
+    fetchBrands();
+    fetchSeasons();
+    fetchSizes();
+  }, []);
 
   // Cập nhật thông tin sản phẩm
   async function UpdateProduct(e: React.FormEvent) {
@@ -156,6 +163,7 @@ const UpdateProduct = (props: IProduct) => {
     if (res.ok) {
       MySwal.fire("Thành công", "Cập nhật sản phẩm thành công!", "success");
       props.reloadData();
+      await ApiImage();
       setShowUpdate(false);
     } else {
       const errorData = await res.json();
@@ -186,66 +194,21 @@ const UpdateProduct = (props: IProduct) => {
           <form onSubmit={UpdateProduct}>
             {/* Danh Mục, Thương Hiệu, Mùa - trên cùng một hàng */}
             <div className="mb-4 flex space-x-5 justify-between">
-              <div className="w-1/4">
-                <label className="block text-sm font-semibold">
-                  DANH MỤC
-                  <select
-                    value={category_id || ""}
-                    onChange={(e) => setCategoryId(Number(e.target.value))}
-                    className="w-full border border-gray-300 rounded-md p-2"
-                    required
-                  >
-                    <option value={""} disabled>
-                      Chọn danh mục
-                    </option>
-                    {category.map((item) => (
-                      <option value={item.category_id} key={item.category_id}>
-                        {item.category_name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div className="w-1/4">
-                <label className="block text-sm font-semibold">
-                  THƯƠNG HIỆU
-                  <select
-                    value={brand_id || ""}
-                    onChange={(e) => setBrandId(Number(e.target.value))}
-                    className="w-full border border-gray-300 rounded-md p-2"
-                    required
-                  >
-                    <option value={""} disabled>
-                      Chọn Thương Hiệu
-                    </option>
-                    {brand.map((item) => (
-                      <option value={item.brand_id} key={item.brand_id}>
-                        {item.brand_name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div className="w-1/4">
-                <label className="block text-sm font-semibold">
-                  Mùa
-                  <select
-                    value={season_id || ""}
-                    onChange={(e) => setSeasonId(Number(e.target.value))}
-                    className="w-full border border-gray-300 rounded-md p-2"
-                    required
-                  >
-                    <option value={""} disabled>
-                      Chọn Mùa
-                    </option>
-                    {season.map((item) => (
-                      <option value={item.season_id} key={item.season_id}>
-                        {item.season_name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+              <SelectCategories
+                categories={category}
+                category_id={category_id}
+                onCategoryChange={setCategoryId}
+              />
+              <SelectBrand
+                brand={brand}
+                brand_id={brand_id}
+                onChangeBrand={setBrandId}
+              />
+              <SelectSeaSon
+                onchangeSeason={setSeasonId}
+                season={season}
+                season_id={season_id}
+              />
             </div>
             {/* Tên Sản Phẩm */}
             <div className="mb-4">

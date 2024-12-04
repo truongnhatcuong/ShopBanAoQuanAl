@@ -1,10 +1,8 @@
 import Link from "next/link";
 import React, { useState } from "react";
-
+import { usePathname } from "next/navigation";
 interface IProps {
   menuItem: IMenu;
-  isSelected: boolean; // Trạng thái để xác định submenu có được chọn không
-  onClick: () => void;
 }
 
 interface IMenu {
@@ -16,21 +14,24 @@ interface IMenu {
 }
 
 const SubmenuItems = (props: IProps) => {
+  const pathname = usePathname();
   return (
     <div
-      onClick={props.onClick}
-      className={`ml-3 flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full   ${
-        props.isSelected ? "bg-blue-400 p-1" : "hover:bg-gray-600 p-1 "
+      className={` flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full  
       }`}
     >
       <Link
         href={props.menuItem.link}
-        className={`flex items-center w-full p-1 transition-colors duration-200 ${
-          props.isSelected ? "text-black  font-bold" : "text-white  font-medium"
+        className={`flex items-center w-full  transition-colors duration-200 space-y-4 ${
+          pathname === props.menuItem.link
+            ? "bg-blue-600 text-white rounded-md pb-2 pl-1 font-semibold  "
+            : "pl-1"
         }`}
       >
-        <span className="mr-1">{props.menuItem.icon}</span>
-        <span className="">{props.menuItem.title}</span>
+        <span className="mr-2 mt-3.5 ml-6">{props.menuItem.icon}</span>
+        <span className="uppercase font-semibold text-sm family ">
+          {props.menuItem.title}
+        </span>
       </Link>
     </div>
   );

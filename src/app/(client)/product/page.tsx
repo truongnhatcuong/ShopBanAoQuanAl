@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import { useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
@@ -94,9 +95,7 @@ const PageProduct = () => {
     if (sortOption === "price_asc") {
       sortProduct = sortProduct.sort((a: any, b: any) => a.price - b.price);
     } else if (sortOption === "price_desc") {
-      sortProduct = sortProduct
-        .sort((a: any, b: any) => a.price - b.price)
-        .reverse();
+      sortProduct = sortProduct.sort((a, b) => a.price - b.price).reverse();
     } else if (sortOption === "new") {
       sortProduct = sortProduct.reverse();
     } else if (sortOption === "a-z") {
@@ -117,17 +116,30 @@ const PageProduct = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t w-full  ">
       {/* Sidebar */}
-      <div className="sm:w-1/6 bg-slate-100 flex sm:flex-row flex-col w-full ">
+      <div className="sm:w-1/6 bg-slate-100 flex sm:flex-row flex-col w-full  ">
         <FilterSidebar
           onCategoryChange={(categoryId) => console.log(categoryId)} // Cập nhật khi thay đổi danh mục
           onPriceChange={(price) => setMaxPrice(price)}
         />
       </div>
+
       {/* Giữa các phần: sidebar và nội dung */}
       <div className="flex-1 w-5/6">
         {/* Select Form bên trái */}
         <div className="flex  text-base sm:text-2xl mb-4 justify-end ">
           <SelectForm onSortChange={handleSortChange} />
+        </div>{" "}
+        <div className="mb-5">
+          {" "}
+          {searchQuery !== "" && (
+            <p className="text-sm text-gray-500 ">
+              Liên quan đến: "
+              <span className="text-base uppercase text-red-500 font-semibold">
+                {searchQuery}
+              </span>
+              "
+            </p>
+          )}
         </div>
         <Title title1="Tất Cả" title2="Bộ Siêu Tập" />
         {/* Content area */}

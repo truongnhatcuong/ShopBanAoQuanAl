@@ -82,16 +82,16 @@ export default function HeadePager() {
         <ListItem />
         <div className="group relative z-10">
           <div className="ml-5 hidden sm:flex gap-5 uppercase cursor-pointer ">
-            DANH MỤC
+            <p> DANH MỤC</p>
           </div>
           <div className="group-hover:block hidden absolute dropdown-menu  pt-4 -right-14">
-            <div className="flex flex-col gap-2 w-48  bg-slate-50 text-gray-500 rounded-md">
+            <div className="flex flex-col gap-2 w-48  bg-gray-100  rounded-md">
               {categories.map((item) => (
                 <Link
                   href={`/product?category_id=${item.category_id}`}
                   key={item.category_id}
                 >
-                  <p className="block px-2 py-1 my-1.5 text-gray-700 hover:border-b-2 hover:border-teal-600 transition-all text-center">
+                  <p className="block px-2 py-1 my-1.5 text-gray-800 hover:bg-white hover:text-red-600 transition-all text-center text-base">
                     {item.category_name}
                   </p>
                 </Link>
@@ -189,13 +189,13 @@ export default function HeadePager() {
         <div>
           <HiMenu
             className="text-2xl cursor-pointer sm:hidden ml-5"
-            onClick={() => setVisible(true)}
+            onClick={() => setVisible(!visible)}
           />
         </div>
         {/* thanh menu ở giao diện màn hình nhỏ */}
         <div
           className={`absolute top-0 right-0 text-gray-500 gap-4 overflow-hidden bg-white transition-all ${
-            visible ? "w-full" : "w-0 "
+            visible ? "w-full h-full" : "w-0 "
           }`}
         ></div>
       </div>

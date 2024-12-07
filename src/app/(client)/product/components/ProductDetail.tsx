@@ -33,7 +33,11 @@ interface IProps {
 
 const ProductDetail = ({ productDetail }: IProps) => {
   if (!productDetail) {
-    return <p>Loading...</p>;
+    return (
+      <p className="text-center">
+        <span className="loading loading-dots loading-lg"></span>
+      </p>
+    );
   }
   console.log("Category Name:", productDetail.Category.category_name);
 

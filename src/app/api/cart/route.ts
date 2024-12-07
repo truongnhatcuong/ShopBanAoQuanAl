@@ -43,6 +43,12 @@ export async function GET(req: NextRequest) {
           include: {
             Product: {
               select: {
+                ProductSizes: {
+                  select: {
+                    size_id: true,
+                    stock_quantity: true,
+                  },
+                },
                 product_name: true,
                 price: true,
                 Images: {
@@ -51,9 +57,11 @@ export async function GET(req: NextRequest) {
                 },
               },
             },
+
             Size: {
               select: {
-                name_size: true, // Lấy tên kích thước từ bảng Size
+                name_size: true,
+                // Lấy tên kích thước từ bảng Size
               },
             },
           },

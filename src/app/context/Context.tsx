@@ -23,6 +23,7 @@ interface IContext {
   countCart: any;
   handleQuantityCart: () => Promise<void>;
   ApiImage: () => Promise<void>;
+  handleUpdateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
 }
 interface ShopContextProvider {
   children: ReactNode;
@@ -116,6 +117,31 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     }
   };
 
+  // updateCart
+  const handleUpdateCartItem = async (cartItemId: number, quantity: number) => {
+    const res = await fetch(`/api/cart/${cartItemId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cartItemId,
+        quantity,
+      }),
+    });
+    if (res.ok) {
+      await handleQuantityCart();
+    } else {
+      const error = await res.json();
+      MySwal.fire({
+        position: "center",
+        icon: "error",
+        title: "Lỗi",
+        text: error.message || "Không thể update  giỏ hàng.",
+      });
+    }
+  };
+
   const ApiImage = async () => {
     const res = await fetch("/api/ImageProduct");
     await res.json();
@@ -131,6 +157,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     ApiImage,
     totalPrice,
     handleDeleteCartItem,
+    handleUpdateCartItem,
   };
   return <ShopConText.Provider value={value}>{children}</ShopConText.Provider>;
 };

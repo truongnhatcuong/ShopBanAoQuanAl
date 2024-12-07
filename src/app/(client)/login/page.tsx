@@ -102,15 +102,23 @@ const Page = () => {
             </div>
           </form>
           <div className="flex justify-between  mt-4">
-            <Link href={"/"} className="text-blue-500 hover:text-blue-700">
-              Quên Mật Khẩu?
-            </Link>
-            <Link
-              href={"/signUp"}
-              className="text-blue-500 hover:text-blue-700"
-            >
-              Đăng Kí
-            </Link>
+            <p>
+              <span className="text-sm mr-1">chưa có tài khoản?</span>
+              <Link
+                href={"/signUp"}
+                className="text-blue-500 hover:text-blue-700 text-sm"
+              >
+                đăng kí
+              </Link>
+            </p>
+            <p>
+              <Link
+                href={"/"}
+                className="text-blue-500 hover:text-blue-700 text-sm"
+              >
+                Quên Mật Khẩu?
+              </Link>
+            </p>
           </div>
           <div className="relative flex items-center mb-3">
             <div className="border border-gray-400 flex-grow"></div>

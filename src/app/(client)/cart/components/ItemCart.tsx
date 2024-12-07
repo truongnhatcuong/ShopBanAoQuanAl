@@ -22,7 +22,8 @@ interface CartItemListProps {
 }
 
 const ItemCart = ({ items }: CartItemListProps) => {
-  const { handleDeleteCartItem } = useContext(ShopConText)!;
+  const { handleDeleteCartItem, handleUpdateCartItem } =
+    useContext(ShopConText)!;
   const [cartItems, setCartItems] = useState<CartItem[]>(items);
   useEffect(() => {
     setCartItems(items);
@@ -31,6 +32,15 @@ const ItemCart = ({ items }: CartItemListProps) => {
     handleDeleteCartItem(cartItemId);
     setCartItems((prevItems) =>
       prevItems.filter((item) => item.cartitem_id !== cartItemId)
+    );
+  };
+
+  const updateCartItemQuantity = (cartItemId: number, quantity: number) => {
+    handleUpdateCartItem(cartItemId, quantity);
+    setCartItems((prevItem) =>
+      prevItem.map((item) =>
+        item.cartitem_id === cartItemId ? { ...item, quantity } : item
+      )
     );
   };
 
@@ -83,6 +93,12 @@ const ItemCart = ({ items }: CartItemListProps) => {
                 type="number"
                 min={1}
                 defaultValue={item.quantity}
+                onChange={(e) =>
+                  updateCartItemQuantity(
+                    item.cartitem_id,
+                    Number(e.target.value)
+                  )
+                }
               />
               <p className="text-sm font-semibold">
                 {productTotal.toLocaleString("vi-VN").replace(/\./g, ",")} đ

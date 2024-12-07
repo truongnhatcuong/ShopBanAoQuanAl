@@ -20,9 +20,7 @@ const RelatedProduct = ({ category_name }: { category_name: string }) => {
     const data = await res.json();
 
     const filterCategory = data.product.filter(
-      (item: any) =>
-        item.Category.category_name.trim().toLowerCase() ===
-        category_name.trim().toLowerCase()
+      (item: any) => item.Category.category_name === category_name
     );
     setRelate(filterCategory.slice(0, 5));
   };

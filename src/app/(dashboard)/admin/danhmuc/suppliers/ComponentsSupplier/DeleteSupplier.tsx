@@ -44,10 +44,10 @@ const DeleteSupplier = ({ supplier_id, DeleteHandler }: IDeleteSupplier) => {
   return (
     <div>
       <button
-        className="text-red-500 p-1 rounded-md text:bg-red-600  text-2xl"
+        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
         onClick={DeleteHandle}
       >
-        <IoTrashBinOutline />
+        Xóa
       </button>
     </div>
   );

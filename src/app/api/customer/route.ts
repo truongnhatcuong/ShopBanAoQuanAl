@@ -1,7 +1,6 @@
-import { Role } from "./../../../../node_modules/.prisma/client/index.d";
 import prisma from "@/app/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+
 export async function GET() {
   const getCustomer = await prisma.customer.findMany();
   return NextResponse.json(

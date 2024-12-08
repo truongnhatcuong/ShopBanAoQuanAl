@@ -24,16 +24,35 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const supplierId = Number(params.id);
-  const data = await req.json();
+  const { id } = await params;
+  const supplierId = Number(id);
+  const { supplier_name, contact_info, product_id, quantity, supply_date } =
+    await req.json();
   try {
     const updateSupplier = await prisma.supplier.update({
       where: {
         supplier_id: supplierId,
       },
       data: {
-        supplier_name: data.supplier_name,
-        contact_info: data.contact_info,
+        supplier_name,
+        contact_info,
+        ProductSuppliers: {
+          update: {
+            where: {
+              product_id_supplier_id: {
+                supplier_id: supplierId,
+                product_id,
+              },
+            },
+            data: {
+              quantity: Number(quantity),
+              supply_date: new Date(supply_date),
+            },
+          },
+        },
+      },
+      include: {
+        ProductSuppliers: true,
       },
     });
     return NextResponse.json(

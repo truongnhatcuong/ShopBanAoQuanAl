@@ -5,6 +5,7 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useRouter } from "next/navigation";
+
 const Page = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -55,7 +56,7 @@ const Page = () => {
       MySwal.fire({
         position: "center",
         icon: "error",
-        title: "Đăng kí không thành công",
+        title: dataError.message || "",
         showConfirmButton: false,
         timer: 3000,
       });

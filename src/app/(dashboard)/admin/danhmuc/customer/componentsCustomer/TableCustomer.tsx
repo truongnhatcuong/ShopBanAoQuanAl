@@ -1,6 +1,5 @@
 import React from "react";
 
-import UpdateCustomer from "./UpdateCustomer";
 import DeleteCustomer from "./DeleteCustomer";
 
 interface ICustomer {
@@ -12,45 +11,54 @@ interface ICustomer {
   username: string;
   password: string;
 }
+
 interface ITableCustomer {
   customer: ICustomer[];
   reloadData: () => void;
 }
+
 const TableCustomer = (props: ITableCustomer) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table table-zebra">
+    <div className="overflow-x-auto shadow-lg rounded-lg">
+      <table className="min-w-full table-auto text-sm text-left text-gray-500">
         {/* head */}
-        <thead>
+        <thead className="bg-gray-800 text-white">
           <tr>
-            <th></th>
-            <th>Name</th>
-            <th>email</th>
-            <th>phone</th>
-            <th>address</th>
-            <th>AcTion</th>
-            <th></th>
+            <th className="p-4">ID</th>
+            <th className="p-4">Tên khách hàng</th>
+            <th className="p-4 ">Email</th>
+            <th className="p-4">Số điện thoại</th>
+            <th className="p-4">Địa chỉ</th>
+            <th className="p-4">Hành động</th>
           </tr>
         </thead>
         <tbody>
-          {/* row 1 */}
-          {props.customer.map((item) => (
-            <tr key={item.customer_id}>
-              <th>{item.customer_id}</th>
-              <td>{item.name}</td>
-              <td>{item.email}</td>
-              <td>{item.phone}</td>
-              <td>{item.address}</td>
-              <td className="flex space-x-4 text-2xl hover:cursor-pointer">
-                <UpdateCustomer {...item} reloadData={props.reloadData} />
-                {/* xoá  */}
-                <DeleteCustomer
-                  customer_id={item.customer_id}
-                  reloadData={props.reloadData}
-                />
+          {props.customer.length === 0 ? (
+            <tr>
+              <td colSpan={7} className="text-center py-4 text-gray-600">
+                Chưa có khách hàng
               </td>
             </tr>
-          ))}
+          ) : (
+            props.customer.map((item) => (
+              <tr
+                key={item.customer_id}
+                className="border-b hover:bg-gray-100 transition-colors"
+              >
+                <td className="p-4">{item.customer_id}</td>
+                <td className="p-4">{item.name}</td>
+                <td className="p-4">{item.email}</td>
+                <td className="p-4">{item.phone}</td>
+                <td className="p-4">{item.address}</td>
+                <td className="p-4 flex  gap-4 ">
+                  <DeleteCustomer
+                    customer_id={item.customer_id}
+                    reloadData={props.reloadData}
+                  />
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

@@ -143,7 +143,9 @@ export async function POST(req: NextRequest) {
     });
     if (!productSize || productSize.stock_quantity < quantity) {
       return NextResponse.json(
-        { message: "Số lượng yêu cầu vượt quá tồn kho." },
+        {
+          message: `Số Lượng trong kho chỉ còn ${productSize?.stock_quantity} sản phẩm`,
+        },
         { status: 400 }
       );
     }

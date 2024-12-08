@@ -1,5 +1,5 @@
 import React from "react";
-import { IoTrashBinOutline } from "react-icons/io5";
+
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 interface IDelete {
@@ -51,8 +51,11 @@ const DeleteCustomer = (props: IDelete) => {
   }
 
   return (
-    <div className="text-red-500" onClick={DeleteHandle}>
-      <IoTrashBinOutline />
+    <div
+      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      onClick={DeleteHandle}
+    >
+      Xóa
     </div>
   );
 };

@@ -34,14 +34,15 @@ interface ITable {
 
 const TableProduct = (props: ITable) => {
   const [showAllImages, setShowAllImages] = useState<number | null>(null);
+
   const toggleShowAllImages = (id: number) => {
     setShowAllImages(showAllImages === id ? null : id);
   };
 
   return (
-    <table className="w-full table-auto ">
+    <table className="w-full table-auto bg-white shadow-md rounded-lg ">
       <thead>
-        <tr className="bg-gray-200 text-start ">
+        <tr className="bg-black text-white text-left border-b border-gray-300">
           <th className="px-4 py-2">Tên sản phẩm</th>
           <th className="px-4 py-2">Giá</th>
           <th className="px-4 py-2">Tổng số lượng</th>
@@ -53,9 +54,12 @@ const TableProduct = (props: ITable) => {
       </thead>
       <tbody>
         {props.productData.map((product, index) => (
-          <tr key={product.product_id} className="border-b">
+          <tr
+            key={product.product_id}
+            className="border-b border-gray-200 hover:bg-gray-50 transition-colors duration-300"
+          >
             <td className="px-4 py-2">{product.product_name}</td>
-            <td className="px-4 py-2">
+            <td className="px-4 py-2 text-lg font-semibold text-gray-800">
               {Number(product.price)
                 .toLocaleString("vi-VN")
                 .replace(/\./g, ",")}
@@ -64,11 +68,11 @@ const TableProduct = (props: ITable) => {
             <td className="px-4 py-2 text-center">{product.stock_quantity}</td>
             <td className="px-4 py-2 text-center">{product.color}</td>
             <td className="px-4 py-2">
-              <ul className="flex space-x-2   justify-center">
+              <ul className="flex space-x-2 justify-center">
                 {product.ProductSizes.map((size, sizeIndex) => (
-                  <li key={sizeIndex} className="mb-1 ">
+                  <li key={sizeIndex} className="mb-1">
                     <span
-                      className="border border-gray-500 p-1 hover:bg-slate-300 cursor-pointer"
+                      className="border border-gray-500 p-1 hover:bg-gray-300 rounded-md cursor-pointer"
                       title={`Số Lượng: ${size.stock_quantity}`}
                     >
                       {size.Size?.name_size}
@@ -82,11 +86,11 @@ const TableProduct = (props: ITable) => {
                 <img
                   src={product.Images[0]?.image_url}
                   alt={`Hình ảnh sản phẩm ${index}`}
-                  className="w-20 h-20 object-cover"
+                  className="w-20 h-20 object-cover rounded-md shadow-sm"
                 />
                 {product.Images.length > 1 && (
                   <button
-                    className="ml-2 text-black hover:text-gray-600 focus:outline-none "
+                    className="ml-2 text-black hover:text-gray-600 focus:outline-none"
                     onClick={() => toggleShowAllImages(product.product_id)}
                   >
                     {showAllImages === product.product_id ? "▲" : "▼"}
@@ -94,29 +98,27 @@ const TableProduct = (props: ITable) => {
                 )}
               </div>
               {showAllImages === product.product_id && (
-                <div className="absolute z-10 bg-white shadow-lg rounded-lg p-4 mt-2 cursor-pointer">
+                <div className="absolute z-10  bg-white  mt-2 cursor-pointer w-full">
                   <div className="flex space-x-2 justify-center">
                     {product.Images.map((image, imageIndex) => (
                       <img
                         key={imageIndex}
                         src={image.image_url}
                         alt={`Hình ảnh sản phẩm ${index}-${imageIndex}`}
-                        className="w-20 h-20 object-cover border border-gray-700"
+                        className="w-20 h-20 object-cover border border-gray-700 rounded-md shadow-sm"
                       />
                     ))}
                   </div>
                 </div>
               )}
             </td>
-            <td className="px-4 py-2">
+            <td className="px-4 py-2 text-center">
               <div className="flex space-x-2 justify-center">
                 <DeleteProduct
                   product_id={product.product_id}
                   reloadData={props.reloadData}
                 />
-                {showAllImages ? (
-                  !showAllImages
-                ) : (
+                {!showAllImages && (
                   <UpdateProduct {...product} reloadData={props.reloadData} />
                 )}
               </div>

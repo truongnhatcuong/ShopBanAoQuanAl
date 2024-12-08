@@ -1,19 +1,24 @@
 "use client";
 import AddSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/AddSupplier";
 import TableSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/TableSupplier";
-import UpdateSuplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/UpdateSuplier";
-import React, { useEffect, useState } from "react";
 
+import React, { useEffect, useState } from "react";
 interface ISupplier {
   supplier_id: number;
+
   supplier_name: string;
   contact_info: string;
+  ProductSuppliers: {
+    quantity: number;
+    supply_date: string;
+    Product: {
+      product_id: number;
+      product_name: string;
+    };
+  }[];
 }
-
 const Supplier = () => {
   const [supplier, setSupplier] = useState<ISupplier[]>([]);
-  const [modalIsOpen, setmodalIsOpen] = useState<boolean>(false);
-  const [selectSupplier, setSelectSupplier] = useState<ISupplier | null>(null);
   const [showAddmodal, setShowAllmodal] = useState<boolean>(false);
   async function apiSupplier() {
     const req = await fetch(`/api/supplier`);
@@ -24,10 +29,8 @@ const Supplier = () => {
     apiSupplier();
   }, []);
 
-  const closeHandler = (supplier: ISupplier) => {
-    setSelectSupplier(supplier);
-    setmodalIsOpen(true);
-  };
+  console.log(":", supplier);
+
   return (
     <div>
       <div className="flex justify-end mr-7 mb-4 ">
@@ -45,14 +48,7 @@ const Supplier = () => {
         )}
       </div>
       <div>
-        <TableSupplier supplier={supplier} closeHandle={closeHandler} />
-        {modalIsOpen && selectSupplier && (
-          <UpdateSuplier
-            closeHandle={() => setmodalIsOpen(false)}
-            supplier={selectSupplier}
-            reloadData={apiSupplier}
-          />
-        )}
+        <TableSupplier supplier={supplier} reloadData={apiSupplier} />
       </div>
     </div>
   );

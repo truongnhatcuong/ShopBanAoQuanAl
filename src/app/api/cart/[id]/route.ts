@@ -1,4 +1,4 @@
-import prisma from "@/app/prisma/client";
+import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "";

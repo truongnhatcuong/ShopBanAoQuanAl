@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import prisma from "@/app/prisma/client";
+import prisma from "@/prisma/client";
 
 export async function GET(req: NextRequest) {
   const data = await prisma.customer.findMany();

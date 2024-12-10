@@ -113,7 +113,7 @@ const TableProduct = (props: ITable) => {
               )}
             </td>
             <td className="px-4 py-2 text-center">
-              <div className="flex space-x-2 justify-center">
+              <div className="flex space-x-4 ">
                 <DeleteProduct
                   product_id={product.product_id}
                   reloadData={props.reloadData}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { IoTrashBinOutline } from "react-icons/io5";
+import { AiOutlineDelete } from "react-icons/ai";
 interface IDeleteSupplier {
   supplier_id: number;
   DeleteHandler: (supplier_id: number) => void;
@@ -44,10 +45,10 @@ const DeleteSupplier = ({ supplier_id, DeleteHandler }: IDeleteSupplier) => {
   return (
     <div>
       <button
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        className="p-2 text-white bg-red-500 hover:bg-red-600 rounded text-xl "
         onClick={DeleteHandle}
       >
-        Xóa
+        <AiOutlineDelete />
       </button>
     </div>
   );

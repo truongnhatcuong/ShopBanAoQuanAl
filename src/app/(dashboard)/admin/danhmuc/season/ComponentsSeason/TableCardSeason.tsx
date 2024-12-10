@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeleteSeason from "./DeleteSeason";
+import { FaRegEdit } from "react-icons/fa";
 
 interface Iseason {
   season_id: number;
@@ -50,7 +51,7 @@ const TableCardSeason = ({ season, closeHandle }: ISeasonProps) => {
                 <td className="px-6 py-4 text-sm text-gray-600">
                   {item.description}
                 </td>
-                <td className="px-6 py-4 flex space-x-2 justify-center">
+                <td className="px-4 py-2 flex space-x-4 justify-center">
                   <DeleteSeason
                     DeleteHandler={(season_id: number) => {
                       setSeasonList(
@@ -62,10 +63,10 @@ const TableCardSeason = ({ season, closeHandle }: ISeasonProps) => {
                     season_id={item.season_id}
                   />
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow"
+                    className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
                     onClick={() => closeHandle(item)}
                   >
-                    Cập Nhật
+                    <FaRegEdit />
                   </button>
                 </td>
               </tr>

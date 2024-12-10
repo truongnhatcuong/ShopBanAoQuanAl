@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import DeleteBrand from "./DeleteBrand";
+import { FaRegEdit } from "react-icons/fa";
 
 interface IBrand {
   brand_id: number;
@@ -50,16 +51,16 @@ const TableBrand = ({ brandlocal, setBrand, openEditModal }: IBranProps) => {
                 <td className="px-6 py-4 text-sm text-gray-600 text-center">
                   {item.description}
                 </td>
-                <td className="px-6 py-4 text-sm flex justify-center space-x-2">
+                <td className="px-4 py-2 text-sm flex justify-center space-x-4">
                   <DeleteBrand
                     DeleteHandler={HandlerDelete}
                     brand_id={item.brand_id}
                   />
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow"
+                    className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
                     onClick={() => openEditModal(item)}
                   >
-                    Cập Nhật
+                    <FaRegEdit />
                   </button>
                 </td>
               </tr>

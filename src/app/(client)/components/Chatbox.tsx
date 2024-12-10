@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { MessageCircleQuestion, X } from "lucide-react";
+import { MessageCircleQuestion } from "lucide-react";
 
 // Previous interfaces remain the same
 interface CozeConfig {
@@ -75,7 +75,7 @@ const CozeChat: React.FC = () => {
   // Render notification component
   const AiAdvisoryNotification = () => {
     // Do not render if on admin dashboard
-    if (isAdminDashboard || !showNotification || isLoginPage || isRegisterPage)
+    if (isAdminDashboard || isLoginPage || isRegisterPage || !showNotification)
       return null;
 
     return (

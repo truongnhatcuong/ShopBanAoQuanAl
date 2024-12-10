@@ -10,6 +10,7 @@ import withReactContent from "sweetalert2-react-content";
 import SelectCategories from "./componentChild/SelectCategories";
 import SelectBrand from "./componentChild/SelectBrand";
 import SelectSeaSon from "./componentChild/SelectSeason";
+import { FiPlus } from "react-icons/fi";
 
 interface ICategory {
   category_id: number;
@@ -181,9 +182,9 @@ const AddProduct = (props: { reloadData: () => void }) => {
     <div>
       <button
         onClick={() => setShowAdd(true)}
-        className="bg-blue-500 px-6 py-3 rounded-md font-bold text-white hover:bg-blue-700 "
+        className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
       >
-        Thêm Sản Phẩm
+        <FiPlus /> <span>Thêm mới</span>
       </button>
 
       {showAdd && (

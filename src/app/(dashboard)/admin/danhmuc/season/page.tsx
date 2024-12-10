@@ -3,6 +3,7 @@ import Addseason from "@/app/(dashboard)/admin/danhmuc/season/ComponentsSeason/A
 import TableCardSeason from "@/app/(dashboard)/admin/danhmuc/season/ComponentsSeason/TableCardSeason";
 import UpdateSeason from "@/app/(dashboard)/admin/danhmuc/season/ComponentsSeason/UpdateSeason";
 import React, { useEffect, useState } from "react";
+import { FiPlus } from "react-icons/fi";
 
 interface Iseason {
   season_id: number;
@@ -36,10 +37,10 @@ const Page = () => {
     <div>
       <div className="flex justify-end  mr-7">
         <button
-          className="bg-blue-500 py-2.5 px-7 rounded-md  font-bold text-white hover:bg-blue-700"
+          className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
           onClick={() => setShowAddModal(true)}
         >
-          Thêm Mùa
+          <FiPlus /> <span>Thêm mới</span>
         </button>
         {showAddModal && (
           <Addseason

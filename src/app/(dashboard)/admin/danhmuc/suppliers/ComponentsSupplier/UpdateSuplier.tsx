@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -86,10 +87,10 @@ const UpdateSupplier = ({ supplier, reloadData }: IUpdateSupplier) => {
   return (
     <>
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
         onClick={() => setIsOpen(true)}
       >
-        Cập nhật
+        <FaRegEdit />
       </button>
 
       {isOpen && (

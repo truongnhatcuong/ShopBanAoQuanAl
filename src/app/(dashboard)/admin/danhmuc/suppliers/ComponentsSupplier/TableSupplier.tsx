@@ -71,7 +71,7 @@ const TableSupplier = ({ supplier, reloadData }: ISupplierProps) => {
                 </td>
                 <td className="px-4 py-2">{ps.Product.product_name}</td>
 
-                <td className="px-4 py-2 flex space-x-2">
+                <td className="px-3 py-2 flex space-x-4">
                   <DeleteSupplier
                     supplier_id={supplier.supplier_id}
                     DeleteHandler={DeleteHandle}

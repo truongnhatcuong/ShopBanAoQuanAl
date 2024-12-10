@@ -22,7 +22,7 @@ const TableCustomer = (props: ITableCustomer) => {
     <div className="overflow-x-auto shadow-lg rounded-lg">
       <table className="min-w-full table-auto text-sm text-left text-gray-500">
         {/* head */}
-        <thead className="bg-gray-800 text-white">
+        <thead className="bg-gray-950 text-white">
           <tr>
             <th className="p-4">ID</th>
             <th className="p-4">Tên khách hàng</th>
@@ -50,7 +50,7 @@ const TableCustomer = (props: ITableCustomer) => {
                 <td className="p-4">{item.email}</td>
                 <td className="p-4">{item.phone}</td>
                 <td className="p-4">{item.address}</td>
-                <td className="p-4 flex  gap-4 ">
+                <td className="p-2  flex justify-center pr-[50px]">
                   <DeleteCustomer
                     customer_id={item.customer_id}
                     reloadData={props.reloadData}

@@ -25,8 +25,8 @@ const ProductSeller = () => {
     ProductSeller();
   }, []);
   return (
-    <div className="my-16 ">
-      <div className="text-center text-2xl">
+    <div className="my-16  block1">
+      <div className="text-center text-2xl text">
         <Title title1="Sản Phẩm" title2="Khuyến Mãi" />
         <p className="text-xs mx-16 sm:text-sm md:text-base hidden sm:block">
           Hiện nay, khuyến mại đồng giá các sản phẩm đang được các chủ shop áp

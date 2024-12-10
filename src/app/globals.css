@@ -67,3 +67,58 @@
 .family {
   font-family: Outfit;
 }
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    clip-path: inset(100% 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes appear1 {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.block {
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+.block1 {
+  animation: appear1 0.6s linear forwards;
+  animation-timeline: view(); /* Đảm bảo trình duyệt hỗ trợ */
+  animation-range: entry 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px); /* Đẩy hình ảnh xuống dưới */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Đưa về vị trí ban đầu */
+  }
+}
+
+.text {
+  display: inline-block; /* Đảm bảo animation áp dụng đúng */
+  animation: slideUp 0.8s ease-out forwards;
+  opacity: 0; /* Đảm bảo text ẩn trước khi animation chạy */
+}
+
+.image {
+  animation: slideUp 0.8s ease-out forwards;
+}

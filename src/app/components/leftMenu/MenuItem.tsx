@@ -25,8 +25,8 @@ const MenuItems = (props: IProps) => {
           className="flex items-center w-full"
           onClick={() => setIsSubmenuVisible(!isSubmenuVisible)}
         >
-          <span className="mr-3 ml-2 mt-7">{props.menuItem.icon}</span>
-          <span className="ml-1 mt-7 text-lg family">
+          <span className="mr-3 ml-2 mt-4 ">{props.menuItem.icon}</span>
+          <span className="ml-1 mt-4 pb-1.5 text-lg family">
             {props.menuItem.title}
           </span>
         </Link>

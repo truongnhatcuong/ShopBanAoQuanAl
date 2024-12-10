@@ -8,16 +8,19 @@ const page = () => {
     <div>
       {/* Phần tiêu đề */}
 
-      <div className="text-2xl text-center pt-8 border-t uppercase my-4">
-        <Title title1="phần" title2="giới thiệu" />
+      <div className="text-2xl text-center pt-8 border-t uppercase my-4 ">
+        <div className="text">
+          {" "}
+          <Title title1="phần" title2="giới thiệu" />
+        </div>
       </div>
       <div className="my-10 flex flex-col sm:flex-row gap-16">
         <img
           src={assets.about_img.src}
           alt=""
-          className="w-full md:max-w-[450px]"
+          className="w-full md:max-w-[450px] image"
         />
-        <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600">
+        <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600 image">
           <p>
             OdinClub là một thương hiệu thời trang hàng đầu, cam kết cung cấp
             những sản phẩm thời trang chất lượng cao với thiết kế hiện đại và
@@ -39,10 +42,10 @@ const page = () => {
           </p>
         </div>
       </div>
-      <div className="text-4xl py-4">
+      <div className="text-4xl py-4 text">
         <Title title1="Tại Sao" title2="Chọn Chúng Tôi" />
       </div>
-      <div className="flex flex-col md:flex-row text-sm mb-20">
+      <div className="flex flex-col md:flex-row text-sm mb-20 block1">
         <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
           <b>Chất Lượng</b>
           <p>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DeleteCategories from "./DeleteCategories";
+import { FaRegEdit } from "react-icons/fa";
 
 interface Icategories {
   category_id: number;
@@ -28,7 +29,7 @@ const CategoryTable = ({
     <div className="overflow-x-auto shadow-lg rounded-lg">
       <table className="table-auto w-full text-sm text-left text-gray-500">
         {/* head */}
-        <thead className="bg-gray-700 text-white">
+        <thead className="bg-black text-white">
           <tr>
             <th className="p-4 text-center">Tên danh mục</th>
             <th className="p-4 ">Mô tả</th>
@@ -56,10 +57,10 @@ const CategoryTable = ({
                     category_id={category.category_id}
                   />
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-all"
+                    className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
                     onClick={() => openEditModal(category)}
                   >
-                    Cập Nhật
+                    <FaRegEdit />
                   </button>
                 </td>
               </tr>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -53,10 +54,10 @@ const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
 
   return (
     <button
-      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      className="p-2 text-white bg-red-500 hover:bg-red-600 rounded text-xl "
       onClick={handleDelete}
     >
-      Xóa
+      <AiOutlineDelete />
     </button>
   );
 };

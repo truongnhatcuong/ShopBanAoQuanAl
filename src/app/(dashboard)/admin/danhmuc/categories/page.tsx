@@ -6,6 +6,7 @@ import UpdateCategories from "@/app/(dashboard)/admin/danhmuc/categories/Compone
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, Suspense } from "react";
 import Pagination from "@/app/components/componentsFunction/Pagination";
+import { FiPlus } from "react-icons/fi";
 
 interface Icategories {
   category_id: number;
@@ -52,12 +53,15 @@ const PageContent = () => {
 
   return (
     <div className="ml-5">
-      <div className="flex justify-end mr-7 mt-2">
+      <div
+        className="flex justify-end mr-7 
+      mb-5"
+      >
         <button
-          className="bg-blue-500 sm:py-3 sm:px-6 p-1 rounded-md font-bold text-white hover:bg-blue-700 mb-5 sm:mt-0"
+          className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
           onClick={() => setShowAddModal(true)}
         >
-          Thêm Danh Mục
+          <FiPlus /> <span>Thêm mới</span>
         </button>
         {showAddModal && (
           <AddCategories

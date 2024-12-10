@@ -2,6 +2,7 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import React from "react";
+import { AiOutlineDelete } from "react-icons/ai";
 interface IDelete {
   product_id: number;
   reloadData: () => void;
@@ -47,10 +48,10 @@ const DeleteProduct = ({ product_id, reloadData }: IDelete) => {
   return (
     <div>
       <button
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        className="p-2 text-white bg-red-500 hover:bg-red-600 rounded text-xl "
         onClick={hanlerDeleteProduct}
       >
-        Xóa
+        <AiOutlineDelete />
       </button>
     </div>
   );

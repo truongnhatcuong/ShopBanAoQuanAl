@@ -91,7 +91,7 @@ export default function HeadePager() {
                   href={`/product?category_id=${item.category_id}`}
                   key={item.category_id}
                 >
-                  <p className="block px-2 py-1 my-1.5 text-gray-800 hover:bg-white hover:text-red-600 transition-all text-center text-base">
+                  <p className="block px-2 py-1 my-0.5 text-gray-800 hover:bg-white hover:text-red-600 transition-all text-center text-base">
                     {item.category_name}
                   </p>
                 </Link>
@@ -135,7 +135,7 @@ export default function HeadePager() {
                   </button>
                   {roleId === 3 && (
                     <button
-                      className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center"
+                      className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-1"
                       onClick={() => router.push("/admin")}
                     >
                       <RiAdminLine className="mr-1 text-gray-900" />
@@ -143,7 +143,7 @@ export default function HeadePager() {
                     </button>
                   )}
                   <button
-                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-8"
+                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-7"
                     onClick={RemoveLcstore}
                   >
                     <LiaPowerOffSolid className="mr-1 text-gray-900 " />

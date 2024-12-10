@@ -3,6 +3,7 @@ import AddBrand from "@/app/(dashboard)/admin/danhmuc/brand/ComponnentsBrand/Add
 import TableBrand from "@/app/(dashboard)/admin/danhmuc/brand/ComponnentsBrand/TableBrand";
 import UpdateBrand from "@/app/(dashboard)/admin/danhmuc/brand/ComponnentsBrand/UpdateBrand";
 import { useEffect, useState } from "react";
+import { FiPlus } from "react-icons/fi";
 
 interface IBrand {
   brand_id: number;
@@ -35,10 +36,10 @@ const Page = () => {
     <div>
       <div className="flex justify-end mr-6 ">
         <button
-          className="bg-blue-500 px-6 py-3 rounded-sm  font-bold text-white hover:bg-blue-700"
+          className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
           onClick={() => setShowAdd(true)}
         >
-          Thêm Thương Hiệu
+          <FiPlus /> <span>Thêm mới</span>
         </button>
         {showAdd && (
           <AddBrand

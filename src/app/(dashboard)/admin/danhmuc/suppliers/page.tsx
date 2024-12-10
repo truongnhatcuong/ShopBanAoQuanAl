@@ -1,7 +1,7 @@
 "use client";
 import AddSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/AddSupplier";
 import TableSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/TableSupplier";
-
+import { FiPlus } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 interface ISupplier {
   supplier_id: number;
@@ -35,10 +35,11 @@ const Supplier = () => {
     <div>
       <div className="flex justify-end mr-7 mb-4 ">
         <button
-          className="bg-blue-500 py-3 px-6 rounded-md  font-bold text-white hover:bg-blue-700"
+          className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
           onClick={() => setShowAllmodal(true)}
         >
-          Thêm Nhà Cung Cấp
+          <FiPlus />
+          <span>Thêm mới</span>
         </button>
         {showAddmodal && (
           <AddSupplier

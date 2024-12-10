@@ -8,7 +8,7 @@ import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import AddImage from "./componentsImageProduct/AddImage";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaRegEdit } from "react-icons/fa";
 import { ShopConText } from "@/app/context/Context";
 import SelectCategories from "./componentChild/SelectCategories";
 import SelectBrand from "./componentChild/SelectBrand";
@@ -174,10 +174,10 @@ const UpdateProduct = (props: IProduct) => {
   return (
     <div>
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
         onClick={() => setShowUpdate(true)}
       >
-        Cập nhật
+        <FaRegEdit />
       </button>
       {showUpdate && (
         <Modal

@@ -59,6 +59,7 @@ const UpdateBrand = ({
     <div>
       <Modal
         isOpen={modalIsOpen}
+        ariaHideApp={false}
         onRequestClose={closeHandle}
         contentLabel="Thêm Thương Hiệu"
         className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5"

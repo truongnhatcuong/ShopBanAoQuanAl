@@ -7,7 +7,11 @@ const TopBar = () => {
   return (
     <div className="navbar bg-base-100 ">
       <div className="flex-1">
-        <Image src={"/Image/logo.png"} alt="Logo" width={100} height={50} />
+        <Link href="/admin">
+          <button className="px-2 py-1 text-black prata-regular  text-2xl">
+            Dashboard
+          </button>
+        </Link>
       </div>
       <div className="flex-none gap-2">
         {/* <div className="form-control">

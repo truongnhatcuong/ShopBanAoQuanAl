@@ -141,7 +141,9 @@ const PageProduct = () => {
             </p>
           )}
         </div>
-        <Title title1="Tất Cả" title2="Bộ Siêu Tập" />
+        <div className="text">
+          <Title title1="Tất Cả" title2="Bộ Siêu Tập" />
+        </div>
         {/* Content area */}
         <div className="grid   grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 gap-y-6">
           {sortedProduct.length > 0 ? (

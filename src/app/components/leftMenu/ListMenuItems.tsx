@@ -131,6 +131,12 @@ const MenuItem = [
       {
         id: 1,
         icon: <RiCoupon3Fill />,
+        title: "Promotion",
+        link: "/admin/danhmuc/promotion",
+      },
+      {
+        id: 2,
+        icon: <RiCoupon3Fill />,
         title: "Coupon",
         link: "/admin/danhmuc/coupon",
       },

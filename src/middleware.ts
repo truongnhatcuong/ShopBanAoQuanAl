@@ -90,7 +90,7 @@ export async function middleware(req: NextRequest) {
 
     const data = await res.json();
     if (data.accessToken) {
-      if (data.accessToken.roleId !== 3) {
+      if (data.accessToken.roleId !== 3 && data.accessToken.roleId !== 2) {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }

@@ -33,7 +33,7 @@ const RelatedProduct = ({ category_name }: { category_name: string }) => {
 
   return (
     <div>
-      <div className="text-2xl text-center">
+      <div className="text-2xl text-center mt-7 mb-3">
         <Title title1="Sản Phẩm" title2="Liên Quan" />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-6 ">

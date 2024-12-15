@@ -1,39 +1,47 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { FaCircle } from "react-icons/fa";
-import { usePathname } from "next/navigation";
 
 const Brand = () => {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(true);
-
-  // Kiểm tra nếu đường dẫn là "/admin" hoặc các trang con của nó
-  const isAdminPage = pathname.startsWith("/admin");
-  const isAdminPage1 = pathname.startsWith("/(dashboard)/admin");
+  const [username, setUsername] = useState<string | null>(null);
+  const [roleId, setRoleId] = useState<number | null>(null);
+  async function fetchUserInfo() {
+    const res = await fetch("/api/auth/getUsername", {
+      method: "GET",
+    });
+    const data = await res.json();
+    setUsername(data.accessToken?.name); // Lấy username từ dữ liệu trả về
+    setRoleId(data.accessToken?.roleId);
+  }
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
   return (
     <div>
-      <div className="flex gap-3 mt-3">
+      <div className="flex gap-2 mt-3 justify-center">
         <div>
           <Image
-            src={"/Image/admin.jpg"}
+            src={`${
+              roleId === 3 ? "/Image/admin.jpg" : "/Image/anhdaidien.jpg"
+            }`}
             alt="Logo"
             width={100}
-            height={50}
-            className="rounded-full w-10"
+            height={40}
+            className="rounded-full w-8  "
           />
         </div>
         <div>
-          <p className="text-sm">Trương Nhật Cường</p>
-          <p className="flex items-center gap-1 text-sm">
+          <p className="text-base  mb-0.5">{username}</p>
+          <p className="flex items-center gap-1 text-sm font-medium">
             <FaCircle className="text-green-700 text-xs" />
             online
           </p>
         </div>
       </div>
-      <div className="border-gray-300 border-b-2 mt-2"></div>
+      <div className="border-gray-300 border-b-2 mt-2 w-[235px]"></div>
     </div>
   );
 };

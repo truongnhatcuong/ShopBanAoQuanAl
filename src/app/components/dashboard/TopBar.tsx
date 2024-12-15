@@ -1,11 +1,40 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+"use client";
+import { assets } from "@/app/assets/frontend_assets/assets";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 
-const TopBar = () => {
+const TopBar = ({
+  onToggleMenu,
+  isLeftMenuVisible,
+}: {
+  onToggleMenu: () => void;
+  isLeftMenuVisible: boolean;
+}) => {
+  const [roleId, setRoleId] = useState<number | null>(null);
+  async function fetchUserInfo() {
+    const res = await fetch("/api/auth/getUsername", {
+      method: "GET",
+    });
+    const data = await res.json();
+
+    setRoleId(data.accessToken?.roleId);
+  }
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
   return (
     <div className="navbar bg-base-100 ">
+      <div onClick={onToggleMenu} className="mr-3">
+        {isLeftMenuVisible ? (
+          <AiOutlineMenuFold className="text-3xl text-gray-700 cursor-pointer" />
+        ) : (
+          <AiOutlineMenuUnfold className="text-3xl text-gray-700 cursor-pointer" />
+        )}
+      </div>
       <div className="flex-1">
         <Link href="/admin">
           <button className="px-2 py-1 text-black prata-regular  text-2xl">
@@ -29,7 +58,9 @@ const TopBar = () => {
           >
             <div className="w-10 rounded-full ">
               <Image
-                src={"/Image/admin.jpg"}
+                src={`${
+                  roleId === 3 ? "/Image/admin.jpg" : "/Image/anhdaidien.jpg"
+                }`}
                 alt="Logo"
                 width={100}
                 height={50}

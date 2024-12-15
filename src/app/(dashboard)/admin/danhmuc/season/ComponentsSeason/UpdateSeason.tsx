@@ -58,6 +58,7 @@ const UpdateSeason = ({ season, closeHandle, reloadData }: ISeasonProps) => {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeHandle}
+        ariaHideApp={false}
         contentLabel="Thêm Thương Hiệu"
         className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5"
         overlayClassName="fixed inset-0 bg-var(--bs-gray-500) bg-opacity-var(--bs-gray-500) "

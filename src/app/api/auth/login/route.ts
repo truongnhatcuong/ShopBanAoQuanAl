@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     const user = await prisma.customer.findUnique({
       where: { username },
+      include: { role: { include: { permissions: true } } },
     });
 
     if (!user) {

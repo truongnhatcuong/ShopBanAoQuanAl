@@ -122,3 +122,8 @@
 .image {
   animation: slideUp 0.8s ease-out forwards;
 }
+
+.scrollbar-custom {
+  scrollbar-width: thin; /* Firefox: thanh cuộn mỏng */
+  scrollbar-color: #fefefe black; /* Firefox: màu thanh cuộn và nền */
+}

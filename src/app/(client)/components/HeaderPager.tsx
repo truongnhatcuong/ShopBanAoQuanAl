@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { RiAdminLine } from "react-icons/ri";
 import { HiMenu, HiOutlineShoppingBag } from "react-icons/hi";
 import { ShopConText } from "@/app/context/Context";
+import { useTheme } from "next-themes";
+import DarkModeSwitch from "./DarkModeSwitch";
 interface ICategory {
   category_id: number;
   category_name: string;
@@ -72,18 +74,20 @@ export default function HeadePager() {
     }
   };
   return (
-    <div className="flex justify-around bg-white items-center font-medium p-3 sm:p-0 ">
-      <div className="mt-2">
+    <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-3 sm:p-0 ">
+      <div className="">
         <Link href={"/"} className="hiden md:block">
           <Image src={"/Image/logo.png"} alt="Logo" width={200} height={50} />
         </Link>
       </div>
       <div className=" mr-5 hidden  sm:flex gap-5 uppercase">
         <ListItem />
+
         <div className="group relative z-10">
           <div className="ml-5 hidden sm:flex gap-5 uppercase cursor-pointer ">
             <p> DANH MỤC</p>
           </div>
+
           <div className="group-hover:block hidden absolute dropdown-menu  pt-4 -right-14">
             <div className="flex flex-col gap-2 w-48  bg-gray-100  rounded-md">
               {categories.map((item) => (
@@ -104,7 +108,7 @@ export default function HeadePager() {
       {/* phần khác */}
       <div className="flex items-center space-x-5 mr-1">
         {/* Search Input */}
-        <div className="relative flex items-center border rounded-full p-2 pl-4 ">
+        <div className="relative flex items-center border rounded-full p-2 pl-4 dark:text-white  ">
           <input
             type="text"
             placeholder="Search..."
@@ -114,17 +118,17 @@ export default function HeadePager() {
             onKeyDown={handleKeyPress}
           />
           <IoSearchSharp
-            className="text-gray-500 ml-2 text-xl sm:text-2xl hover:text-gray-400"
+            className=" ml-2 text-xl sm:text-2xl hover:text-gray-400"
             onClick={handleSearchSubmit}
           />
         </div>
         <div>
           {isLoggedIn && username ? (
             <div className="group relative flex z-10 ">
-              <FiUser className="text-gray-600 text-2xl sm:text-xl" />
-              <span className="text-gray-800 hidden md:block ">{username}</span>
+              <FiUser className=" text-2xl sm:text-xl" />
+              <span className=" hidden md:block ">{username}</span>
               {/* Hiển thị khi hover */}
-              <div className="group-hover:block hidden absolute dropdown-menu pt-10 -right-14 ">
+              <div className="group-hover:block hidden absolute dropdown-menu pt-10 -right-8 ">
                 <div className="flex flex-col gap-2 w-48 py-3 px-5 bg-slate-50 text-gray-500 rounded-md ">
                   <button
                     className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center  "
@@ -133,7 +137,7 @@ export default function HeadePager() {
                     <AiOutlineUser className="mr-1 text-gray-900" />
                     Xem Thông Tin
                   </button>
-                  {roleId === 3 && (
+                  {(roleId === 3 || roleId === 2) && (
                     <button
                       className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-1"
                       onClick={() => router.push("/admin")}
@@ -154,7 +158,7 @@ export default function HeadePager() {
             </div>
           ) : (
             <div className="relative group z-10">
-              <FaUser className="text-gray-700 hover:text-blue-500 cursor-pointer text-xl border border-black rounded-full w-6 h-6 p-0.5 " />
+              <FaUser className=" hover:text-blue-500 cursor-pointer text-xl border border-black dark:border-white rounded-full w-6 h-6 p-0.5 " />
 
               {/* Hiển thị đăng ký/đăng nhập khi hover */}
 
@@ -181,16 +185,13 @@ export default function HeadePager() {
           <Link href={"/cart"}>
             <HiOutlineShoppingBag className="text-3xl cursor-pointer mr-5 " />
           </Link>
-          <p className="absolute right-[-4px] bottom-[-5px] w-[17px] text-center leading-4 bg-black text-white rounded-full aspect-square text-[10px] mr-5 ">
+          <p className="absolute right-[-4px] bottom-[-5px] w-[17px] text-center leading-4 bg-black text-white dark:text-black dark:bg-white rounded-full aspect-square text-[10px] mr-5 ">
             {countCart}
           </p>
         </div>
 
         <div>
-          <HiMenu
-            className="text-2xl cursor-pointer sm:hidden ml-5"
-            onClick={() => setVisible(!visible)}
-          />
+          <DarkModeSwitch />
         </div>
         {/* thanh menu ở giao diện màn hình nhỏ */}
         <div

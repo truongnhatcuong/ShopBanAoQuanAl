@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import HeadePager from "./components/HeaderPager";
 import FooterPage from "./components/FooterPage";
 import Footer from "./components/Footer";
-
+import { ThemeProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,12 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="mx-0 sm:mx-5">
-      {/* HeaderPager bọc toàn bộ ứng dụng */}
-      <HeadePager />
-      <main>{children}</main>
-      <FooterPage />
-      <Footer />
-    </div>
+    <ThemeProvider>
+      <div className="">
+        {/* HeaderPager bọc toàn bộ ứng dụng */}
+        <HeadePager />
+        <main>{children}</main>
+        <FooterPage />
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }

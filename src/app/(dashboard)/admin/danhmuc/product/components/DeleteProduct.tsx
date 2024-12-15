@@ -35,16 +35,17 @@ const DeleteProduct = ({ product_id, reloadData }: IDelete) => {
           confirmButtonText: "OK",
         });
       } else {
-        await res.json();
+        const error = await res.json();
         MySwal.fire({
           title: "Thông báo!",
-          text: "Xóa sản phẩm không thành công",
+          text: error.message || "Lỗi Khi Xóa Sản Phẩm",
           icon: "error",
           confirmButtonText: "OK",
         });
       }
     }
   }
+
   return (
     <div>
       <button

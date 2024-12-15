@@ -142,20 +142,6 @@ const MenuItem = [
       },
     ],
   },
-  {
-    id: 6,
-    icon: <BiBell />,
-    title: "Quản Lý Thông Báo",
-    link: "#",
-    submenu: [
-      {
-        id: 1,
-        icon: <BiBell />,
-        title: "Notification",
-        link: "/admin/danhmuc/notification",
-      },
-    ],
-  },
 ];
 
 const ListMenu = () => {
@@ -163,7 +149,7 @@ const ListMenu = () => {
     <div>
       <ul>
         {MenuItem.map((menu) => (
-          <li key={menu.id}>
+          <li key={menu.id} className="mb-3 ">
             <MenuItems menuItem={menu} key={menu.id} />
           </li>
         ))}

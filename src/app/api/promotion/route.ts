@@ -1,3 +1,4 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -33,7 +34,7 @@ export async function GET(req: NextRequest) {
       const originalPrice = currentPrice / (1 - promotion.discount / 100);
       return {
         product_id: productPromotion.Product.product_id,
-        name: productPromotion.Product.product_name,
+        product_name: productPromotion.Product.product_name,
         current_price: currentPrice.toFixed(0),
         original_price: originalPrice.toFixed(0),
         images: productPromotion.Product.Images.map((image) => ({
@@ -50,6 +51,22 @@ export async function GET(req: NextRequest) {
   );
 }
 export async function POST(req: NextRequest) {
+  // lấy token
+  const token = req.cookies.get("token")?.value;
+  const user = await authenticateToken(token);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  // nếu có permisson === general chỉ có admin đc truy cập
+  const permisionAdmin = user.role.permissions.some(
+    (admin) => admin.permission.permission === "general"
+  );
+  if (!permisionAdmin) {
+    return NextResponse.json(
+      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
+      { status: 401 }
+    );
+  }
   const { discount, start_date, end_date, product_id } = await req.json();
 
   try {
@@ -121,7 +138,7 @@ export async function POST(req: NextRequest) {
     });
     // kiểm tra khuyến mãi đã kết thúc hay chưa
     const currentDate = new Date();
-    if (currentDate > new Date(end_date)) {
+    if (currentDate > endDate) {
       await prisma.product.update({
         where: {
           product_id: product_id,

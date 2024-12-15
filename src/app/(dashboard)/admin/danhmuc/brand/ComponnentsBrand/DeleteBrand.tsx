@@ -10,34 +10,47 @@ interface IDelete {
 }
 const DeleteBrand = ({ brand_id, DeleteHandler }: IDelete) => {
   const [show, setShow] = useState(false);
+  const MySwal = withReactContent(Swal);
   const DeleteHander = async () => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc chắn muốn xóa danh mục này không?"
-    );
-    if (!confirmDelete) {
-      return;
-    }
+    const result = await MySwal.fire({
+      title: "Are you sure?",
+      text: "Bạn có chắc chắn muốn xóa này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
     try {
-      const reponse = await fetch(`/api/brand/${brand_id}`, {
-        method: "DELETE",
-      });
-      const data = await reponse.json();
-      console.log("deleted success :", data);
-      DeleteHandler(brand_id);
-      const MySwal = withReactContent(Swal);
-      MySwal.fire({
-        title: "Thông báo!",
-        text: "Xóa Brand Thành Công",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-      setShow(false);
+      if (result.isConfirmed) {
+        const reponse = await fetch(`/api/brand/${brand_id}`, {
+          method: "DELETE",
+        });
+        if (reponse.ok) {
+          const data = await reponse.json();
+          DeleteHandler(brand_id);
+
+          MySwal.fire({
+            title: "Thông báo!",
+            text: "Xóa Thương Hiệu Thành Công",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          setShow(false);
+        } else {
+          const error = await reponse.json();
+          MySwal.fire({
+            title: "Thông báo!",
+            text: error.message || "Xóa Thương Hiệu Thất Bại",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      }
     } catch (error: any) {
-      console.log(error);
-      const MySwal = withReactContent(Swal);
       MySwal.fire({
         title: "Thông báo!",
-        text: "Lỗi Khi Xóa Brand",
+        text: error.message,
         icon: "error",
         confirmButtonText: "OK",
       });

@@ -7,7 +7,7 @@ interface IPromotion {
   start_date: string;
   end_date: string;
   products: {
-    name: string;
+    product_name: string;
   }[];
 }
 
@@ -42,7 +42,7 @@ const TablePromotion = (props: IProp) => {
                 <td className="py-2 px-4 border">
                   {new Date(item.end_date).toLocaleDateString("vi-VN")}
                 </td>
-                <td className="py-2 px-4 border">{item1.name}</td>
+                <td className="py-2 px-4 border">{item1.product_name}</td>
                 <td className="py-2 px-4 border text-center space-x-5 ">
                   <button className="p-2 text-white bg-red-500 hover:bg-red-600 rounded text-xl ">
                     <AiOutlineDelete />

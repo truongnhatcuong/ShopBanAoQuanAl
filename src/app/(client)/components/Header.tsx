@@ -1,45 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { GrNext, GrPrevious } from "react-icons/gr";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Notification from "./Notification";
 
-// interface IImage {
-//   id: number;
-//   image: string;
-// }
-// const MangImage: IImage[] = [
-//   {
-//     id: 1,
-//     image:
-//       "https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474102PNW/banner-thoi-trang-dang-cap-hien-dai_113856116.png",
-//   },
-//   {
-//     id: 2,
-//     image: "https://intphcm.com/data/upload/banner-thoi-trang-nam-dep.jpg",
-//   },
-//   {
-//     id: 3,
-//     image: "https://intphcm.com/data/upload/banner-thoi-trang-bi-an.jpg",
-//   },
-// ];
-
 const Header = () => {
-  //   let [count, setCount] = useState<number>(0);
-  //   function NextImage() {
-  //     setCount((nextCount) => (nextCount + 1) % MangImage.length);
-  //   }
-  //   const previousImage = () => {
-  //     setCount(
-  //       (prevCount) => (prevCount - 1 + MangImage.length) % MangImage.length
-  //     );
-  //   };
-
   return (
     <>
       <Notification />
+
       <div className="carousel w-full ">
         <div id="slide1" className="carousel-item relative w-full">
           <img

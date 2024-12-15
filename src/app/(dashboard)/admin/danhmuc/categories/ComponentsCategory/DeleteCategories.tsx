@@ -31,14 +31,21 @@ const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
         if (res.ok) {
           await res.json();
           deleteCategories(category_id);
-
           MySwal.fire({
             title: "Thông báo!",
-            text: "Xóa sản Phẩm Thành Công",
+            text: "Xóa Danh Mục Thành Công",
             icon: "success",
             confirmButtonText: "OK",
           });
           setShow(false);
+        } else {
+          const error = await res.json();
+          MySwal.fire({
+            title: "Thông báo!",
+            text: error.message || "Xóa Danh Mục Thất Bại",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         }
       } catch (error: any) {
         MySwal.fire({

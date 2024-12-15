@@ -1,6 +1,7 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { authenticateToken } from "@/lib/auth";
 export async function GET({ params }: { params: { id: string } }) {
   const customerId = Number(params.id);
   try {
@@ -21,9 +22,25 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // lấy token người dùng
+  const token = req.cookies.get("token")?.value;
+  // xác thực người dùng
+  const user = await authenticateToken(token);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  //cấp quyền
+  const permisionAdmin = user.role.permissions.some(
+    (admin) => admin.permission.permission === "general"
+  );
+  if (!permisionAdmin) {
+    return NextResponse.json(
+      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
+      { status: 401 }
+    );
+  }
   const data = await req.json();
   const customerId = Number(params.id);
-  const hashPassword = await bcrypt.hash(data.password, 10);
 
   try {
     const updateCustomer = await prisma.customer.update({
@@ -34,10 +51,7 @@ export async function PUT(
         name: data.name,
         email: data.email,
         phone: data.phone,
-        address: data.address,
-        username: data.username,
-        password: hashPassword,
-        updated_at: new Date(),
+        roleId: data.roleId,
       },
     });
     return NextResponse.json(
@@ -54,6 +68,24 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const customerId = Number(params.id);
+  // lấy token phía cookies
+  const token = req.cookies.get("token")?.value;
+  // xác thực
+  const user = await authenticateToken(token);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  // nếu có permisson === delete thì có thể xóa
+  const hasDeletePermission = user.role.permissions.some(
+    (perm) => perm.permission.permission === "delete"
+  );
+
+  if (!hasDeletePermission) {
+    return NextResponse.json(
+      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
+      { status: 403 }
+    );
+  }
   try {
     const deleteCustomer = await prisma.customer.delete({
       where: {

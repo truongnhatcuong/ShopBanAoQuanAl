@@ -11,6 +11,7 @@ import SelectCategories from "./componentChild/SelectCategories";
 import SelectBrand from "./componentChild/SelectBrand";
 import SelectSeaSon from "./componentChild/SelectSeason";
 import { FiPlus } from "react-icons/fi";
+import { FaPlus } from "react-icons/fa";
 
 interface ICategory {
   category_id: number;
@@ -37,7 +38,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
   const [season, setSeason] = useState<ISeason[] | []>([]);
   const [size, setSize] = useState<ISize[] | []>([]);
   //hook thêm sản phẩm
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState<boolean>(false);
   const [product_name, setproduct_name] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -99,6 +100,10 @@ const AddProduct = (props: { reloadData: () => void }) => {
       setImages(filesArray);
     }
   };
+  const closeHandle = () => {
+    setShowAdd(false);
+    setImages([]);
+  };
 
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,6 +146,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
       props.reloadData();
       setShowAdd(false);
       const MySwal = withReactContent(Swal);
+
       MySwal.fire({
         title: "Thông báo!",
         text: "Thêm sản phẩm thành công",
@@ -154,11 +160,13 @@ const AddProduct = (props: { reloadData: () => void }) => {
         formData.append("files", image); // Thay đổi từ "file" thành "files"
       });
       formData.append("product_id", newdata);
-      const ImageRes = await fetch("/api/ImageProduct", {
+      const imageRes = await fetch("/api/ImageProduct", {
         method: "POST",
         body: formData,
       });
-      if (!ImageRes.ok) {
+      if (imageRes.ok) {
+        props.reloadData();
+      } else {
         MySwal.fire({
           title: "Thông báo!",
           text: "Lỗi khi thêm ảnh sản phẩm",
@@ -268,14 +276,17 @@ const AddProduct = (props: { reloadData: () => void }) => {
               </div>
             </div>
             {/* kích thước và số lượng */}
-            <div className="mb-4 ">
-              <label className="block text-sm font-semibold uppercase">
-                Kích Thước và Số Lượng
-              </label>
+            <label className="block text-sm font-semibold uppercase">
+              Kích Thước và Số Lượng
+            </label>
+            <div className="mb-4 flex flex-wrap gap-4">
               {sizeInput.map((item, index) => (
-                <div key={index} className="flex items-center mb-2">
+                <div
+                  key={index}
+                  className="flex items-center gap-2 border border-gray-200 rounded-md p-2"
+                >
                   <select
-                    className="w-1/3 border border-gray-400 rounded-md p-2 mr-2"
+                    className="w-25 border border-gray-400 rounded-md p-2"
                     value={item.size_id}
                     onChange={(e) =>
                       handleSizeChange(index, "size_id", Number(e.target.value))
@@ -294,7 +305,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
                   </select>
                   <input
                     type="number"
-                    className="w-1/3 border border-gray-300 rounded-md p-2 mr-2"
+                    className="w-20 border border-gray-300 rounded-md p-2"
                     placeholder="Số lượng"
                     value={item.stock_quantity || ""}
                     onChange={(e) =>
@@ -316,14 +327,17 @@ const AddProduct = (props: { reloadData: () => void }) => {
                   )}
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={handleAddSize}
-                className="bg-green-500 text-white p-2 rounded-md"
-              >
-                Thêm Kích Thước
-              </button>
+              {sizeInput.length < 4 && (
+                <button
+                  type="button"
+                  onClick={handleAddSize}
+                  className=" text-2xl mt-2 "
+                >
+                  <FaPlus />
+                </button>
+              )}
             </div>
+
             {/* Mô Tả */}
             <div className="mb-4">
               <label
@@ -340,26 +354,43 @@ const AddProduct = (props: { reloadData: () => void }) => {
                 className="w-full border border-gray-300 rounded-md p-2"
               />
             </div>
-            <div className="mb-4">
-              <label
-                htmlFor="productImage"
-                className="block text-sm font-semibold"
-              >
-                Ảnh Sản Phẩm
+            <div className="my-3">
+              <label htmlFor="productImage">
+                <p className="mb-2 "> Ảnh Sản Phẩm</p>
+                <div className="flex gap-6">
+                  {images && images.length > 0 ? (
+                    images.map((item, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={URL.createObjectURL(item)}
+                          alt={`Image ${index}`}
+                          className="w-25 h-20"
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <img
+                      src={"/Image/upload_area.png"}
+                      alt=""
+                      className="w-32 h-29 object-contain "
+                    />
+                  )}
+                </div>
+                <input
+                  id="productImage"
+                  type="file"
+                  multiple
+                  className="file-input file-input-bordered file-input-lg w-full max-w-xs hidden "
+                  onChange={handleSubmitImage}
+                />
               </label>
-              <input
-                type="file"
-                multiple
-                className="file-input file-input-bordered file-input-lg w-full max-w-xs"
-                onChange={handleSubmitImage}
-              />
             </div>
 
             <div className="flex justify-end space-x-12">
               <button
                 type="button"
                 className="bg-red-500 text-white px-6 py-3 rounded-md font-semibold hover:bg-red-700"
-                onClick={() => setShowAdd(false)}
+                onClick={closeHandle}
               >
                 Hủy
               </button>

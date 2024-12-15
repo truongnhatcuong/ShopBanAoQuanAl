@@ -20,7 +20,7 @@ const page = () => {
           alt=""
           className="w-full md:max-w-[450px] image"
         />
-        <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600 image">
+        <div className="flex flex-col justify-center gap-6 md:w-2/4  image">
           <p>
             OdinClub là một thương hiệu thời trang hàng đầu, cam kết cung cấp
             những sản phẩm thời trang chất lượng cao với thiết kế hiện đại và
@@ -35,7 +35,7 @@ const page = () => {
             Chúng tôi hướng tới việc trở thành lựa chọn hàng đầu cho những ai
             yêu thích thời trang và muốn thể hiện phong cách cá nhân của mình.
           </p>
-          <b className="text-gray-800 font-medium">OUR Mission</b>
+          <b className="text-3xl font-medium">OUR Mission</b>
           <p className="lowercase">
             Production technology and breakthrough in street fashion business in
             Vietnam

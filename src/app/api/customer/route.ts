@@ -9,8 +9,7 @@ export async function GET() {
   );
 }
 export async function POST(req: NextRequest) {
-  const { name, email, phone, address, RoleId, username, password } =
-    await req.json();
+  const { name, email, phone, address } = await req.json();
 
   try {
     //kiểm tra tồn tại username

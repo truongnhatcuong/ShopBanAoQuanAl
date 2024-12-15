@@ -41,8 +41,8 @@ const TableProduct = (props: ITable) => {
 
   return (
     <table className="w-full table-auto bg-white shadow-md rounded-lg ">
-      <thead>
-        <tr className="bg-black text-white text-left border-b border-gray-300">
+      <thead className="p-5">
+        <tr className="bg-black text-white text-left border-b border-gray-300 ">
           <th className="px-4 py-2">Tên sản phẩm</th>
           <th className="px-4 py-2">Giá</th>
           <th className="px-4 py-2">Tổng số lượng</th>

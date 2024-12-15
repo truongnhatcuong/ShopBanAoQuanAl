@@ -3,13 +3,13 @@ import React from "react";
 const Footer = () => {
   return (
     <footer>
-      <div className="flex flex-col sm:flex-row justify-between py-10 mx-5 block1">
+      <div className="flex flex-col sm:flex-row justify-between py-10 mx-5 block1 text-black dark:text-white dark:bg-black">
         {/* footer 1 */}
         <div className="w-full md:w-1/3 mb-6 flex flex-col image">
           <h1 className="text-xl font-bold mb-4 text-center md:text-left">
             VỀ CHÚNG TÔI
           </h1>
-          <p className="text-sm leading-relaxed text-gray-900 flex-grow">
+          <p className="text-sm leading-relaxed  flex-grow">
             ODIN CLUB luôn lựa chọn những loại vải cao cấp nhất cho các sản phẩm
             của mình.
             <br />
@@ -28,11 +28,9 @@ const Footer = () => {
             </h1>
           </div>
           <div className="text-center">
-            <p className="text-sm text-gray-900">CSKH: 0983.985.989</p>
-            <p className="text-sm text-gray-900">Mua hàng: 0983.985.989</p>
-            <p className="text-sm text-gray-900 mb-4">
-              Email: info.odinclub@gmail.com
-            </p>
+            <p className="text-sm ">CSKH: 0983.985.989</p>
+            <p className="text-sm ">Mua hàng: 0983.985.989</p>
+            <p className="text-sm  mb-4">Email: info.odinclub@gmail.com</p>
           </div>
           <div className="flex justify-center">
             <button className="py-2 px-16 bg-red-800 hover:bg-red-950 rounded text-white">
@@ -57,7 +55,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-2 border-black image">
+      <div className="border-t-2 border-black image dark:border-white">
         <p className="text-center my-3">
           Thiết Kế WebSite Bởi{" "}
           <span className="text-xl">©𝙏𝙧𝙪̛𝙤̛𝙣𝙜 𝙉𝙝𝙖̣̂𝙩 𝘾𝙪̛𝙤̛̀𝙣𝙜</span>

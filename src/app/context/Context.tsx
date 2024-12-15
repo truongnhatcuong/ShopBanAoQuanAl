@@ -1,14 +1,15 @@
 "use client";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+
 import {
   createContext,
   Dispatch,
   ReactNode,
   SetStateAction,
-  useEffect,
   useState,
 } from "react";
+import { ThemeProvider } from "next-themes";
 
 interface IContext {
   cart: any;
@@ -22,7 +23,7 @@ interface IContext {
   handleDeleteCartItem: (cartItemId: number) => Promise<void>;
   countCart: any;
   handleQuantityCart: () => Promise<void>;
-  ApiImage: () => Promise<void>;
+
   handleUpdateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
 }
 interface ShopContextProvider {
@@ -142,11 +143,6 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     }
   };
 
-  const ApiImage = async () => {
-    const res = await fetch("/api/ImageProduct");
-    await res.json();
-  };
-
   // khai báo value
   const value = {
     cart,
@@ -154,12 +150,19 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     handleAddToCart,
     countCart,
     handleQuantityCart,
-    ApiImage,
     totalPrice,
     handleDeleteCartItem,
     handleUpdateCartItem,
   };
-  return <ShopConText.Provider value={value}>{children}</ShopConText.Provider>;
+  return (
+    <ThemeProvider defaultTheme="system" attribute="class">
+      <ShopConText.Provider value={value}>
+        <div className="text-black dark:text-white dark:bg-black min-h-screen transition-colors duration-300">
+          {children}
+        </div>
+      </ShopConText.Provider>
+    </ThemeProvider>
+  );
 };
 
 export default ShopContextProvider;

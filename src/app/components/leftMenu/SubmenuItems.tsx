@@ -17,19 +17,20 @@ const SubmenuItems = (props: IProps) => {
   const pathname = usePathname();
   return (
     <div
-      className={` flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full  
+      className={` flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full p-0.5
+     
       }`}
     >
       <Link
         href={props.menuItem.link}
-        className={`flex items-center w-full  transition-colors duration-200 space-y-4 ${
+        className={`flex items-center w-full  transition-colors duration-200 space-y-3 pl-2 pb-0.5  ${
           pathname === props.menuItem.link
-            ? "bg-blue-600 text-white rounded-md pb-2 pl-1 font-semibold  "
-            : "pl-1"
+            ? "text-red-600  rounded-md  font-semibold  "
+            : ""
         }`}
       >
         <span className="mr-2 mt-3.5 ml-6">{props.menuItem.icon}</span>
-        <span className="uppercase font-semibold text-sm family ">
+        <span className="uppercase  text-sm font-bold  ">
           {props.menuItem.title}
         </span>
       </Link>

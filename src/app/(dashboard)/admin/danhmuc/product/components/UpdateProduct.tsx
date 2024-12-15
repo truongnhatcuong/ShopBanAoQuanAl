@@ -60,8 +60,6 @@ interface ISize {
 }
 
 const UpdateProduct = (props: IProduct) => {
-  const { ApiImage } = useContext(ShopConText)!;
-
   const MySwal = withReactContent(Swal);
   const [category, setCategory] = useState<ICategory[]>([]);
   const [brand, setBrand] = useState<IBrand[]>([]);
@@ -163,7 +161,7 @@ const UpdateProduct = (props: IProduct) => {
     if (res.ok) {
       MySwal.fire("Thành công", "Cập nhật sản phẩm thành công!", "success");
       props.reloadData();
-      await ApiImage();
+
       setShowUpdate(false);
     } else {
       const errorData = await res.json();
@@ -253,14 +251,17 @@ const UpdateProduct = (props: IProduct) => {
               </div>
             </div>
             {/* Kích thước và số lượng */}
-            <div className="mb-4 ">
-              <label className="block text-sm font-semibold uppercase mb-1">
-                Vui lòng Nhập Lại Kích Thước
-              </label>
+            <label className="block text-sm font-semibold uppercase mb-1">
+              Vui lòng Nhập Lại Kích Thước
+            </label>
+            <div className="mb-4 flex flex-wrap gap-4">
               {sizeInput.map((item, index) => (
-                <div key={index} className="flex items-center mb-2">
+                <div
+                  key={index}
+                  className="flex items-center mb-2 gap-2 border border-gray-200 rounded-md p-2"
+                >
                   <select
-                    className="w-1/4 border border-gray-400 rounded-md p-2 mr-2 max-w-xs truncate"
+                    className="w-25 border border-gray-400 rounded-md p-2"
                     value={item.size_id}
                     onChange={(e) =>
                       handleSizeChange(index, "size_id", Number(e.target.value))
@@ -297,13 +298,15 @@ const UpdateProduct = (props: IProduct) => {
                   )}
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={handleAddSize}
-                className=" text-2xl mt-2 "
-              >
-                <FaPlus />
-              </button>
+              {sizeInput.length < 4 && (
+                <button
+                  type="button"
+                  onClick={handleAddSize}
+                  className=" text-2xl mt-2 "
+                >
+                  <FaPlus />
+                </button>
+              )}
             </div>
             {/* Mô Tả */}
             <div className="mb-4">
@@ -342,11 +345,14 @@ const UpdateProduct = (props: IProduct) => {
               </div>
               {/* thêm hình ảnh */}
               <div>
-                <AddImage reloadData={ApiImage} product_id={props.product_id} />
+                <AddImage
+                  reloadData={props.reloadData}
+                  product_id={props.product_id}
+                />
               </div>
             </div>
 
-            <div className="flex justify-end space-x-12">
+            <div className="flex justify-end space-x-10 mt-5">
               <button
                 type="button"
                 className="bg-red-500 text-white px-6 py-3 rounded-md font-semibold hover:bg-red-700"

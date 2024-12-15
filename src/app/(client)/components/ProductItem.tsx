@@ -11,10 +11,10 @@ interface IProduct {
 
 const ProductItem = ({ product_id, Images, price, product_name }: IProduct) => {
   return (
-    <div title={`sản phẩm ${product_name} `}>
+    <div title={`sản phẩm ${product_name} `} className="">
       <Link
         href={`/product/${product_id}`}
-        className="text-gray-700 cursor-pointer "
+        className="text-gray-800 dark:text-white cursor-pointer "
       >
         <div className="overflow-hidden mt-5">
           <img

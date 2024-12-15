@@ -1,3 +1,4 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -53,6 +54,24 @@ export async function DELETE(
 ) {
   const { id } = await params;
   try {
+    // lấy token phía cookies
+    const token = req.cookies.get("token")?.value;
+    // xác thực
+    const user = await authenticateToken(token);
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    // nếu có permisson === delete thì có thể xóa
+    const hasDeletePermission = user.role.permissions.some(
+      (perm) => perm.permission.permission === "delete"
+    );
+
+    if (!hasDeletePermission) {
+      return NextResponse.json(
+        { message: "Bạn Không Có quyền truy Cập thông Tin Này " },
+        { status: 404 }
+      );
+    }
     const categoryId = Number(id);
     // TODO: Implement logic to delete category
     const deleteCategory = await prisma.category.delete({

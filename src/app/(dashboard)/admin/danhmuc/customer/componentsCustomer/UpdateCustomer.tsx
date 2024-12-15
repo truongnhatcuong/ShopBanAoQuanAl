@@ -1,34 +1,37 @@
 "use client";
-import { FaPen } from "react-icons/fa";
+import { FaUserShield } from "react-icons/fa";
 import React, { useState } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Title from "@/app/(client)/components/Title";
 interface ICustomer {
   customer_id: number;
   name: string;
   email: string;
   phone: number;
-  address: string;
-  username: string;
-  password: string;
+  roleId: number;
+}
+
+interface Iprop {
+  props: ICustomer;
   reloadData: () => void;
 }
 
-const UpdateCustomer = (props: ICustomer) => {
+const UpdateCustomer = (props: Iprop) => {
   const MySwal = withReactContent(Swal);
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState<string>(props.name);
-  const [email, setEmail] = useState<string>(props.email);
-  const [phone, setPhone] = useState<number | string>(props.phone);
-  const [address, setAddress] = useState<string>(props.address);
+  const [name, setName] = useState<string>(props.props.email);
+  const [email, setEmail] = useState<string>(props.props.email);
+  const [phone, setPhone] = useState<number | string>(props.props.phone);
+  const [roleId, setRoleId] = useState<number>(props.props.roleId);
 
   async function UpdateCustomerHandle(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch(`/api/customer/${props.customer_id}`, {
+    const res = await fetch(`/api/customer/${props.props.customer_id}`, {
       method: "PUT",
       headers: { "content-Type": "aplication/json" },
-      body: JSON.stringify({ name, email, phone, address }),
+      body: JSON.stringify({ name, email, phone, roleId }),
     });
 
     if (res.ok) {
@@ -49,16 +52,20 @@ const UpdateCustomer = (props: ICustomer) => {
       MySwal.fire({
         position: "center",
         icon: "error",
-        title: Error || "Lỗi Khi Thêm Khách Hàng",
+        title: "bạn không có quyền thay đổi ",
         showConfirmButton: false,
         timer: 1500,
       });
     }
   }
+
   return (
     <div>
-      <div className="text-blue-500 " onClick={() => setIsOpen(true)}>
-        <FaPen />
+      <div
+        className="p-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded text-xl"
+        onClick={() => setIsOpen(true)}
+      >
+        <FaUserShield />
       </div>
       <div>
         {isOpen && (
@@ -71,7 +78,7 @@ const UpdateCustomer = (props: ICustomer) => {
             overlayClassName="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-md"
           >
             <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-              Thay Đổi Thông Tin Khách Hàng
+              <Title title1="Phân Quyền" title2="Người Dùng" />
             </h2>
             <form className="space-y-4" onSubmit={UpdateCustomerHandle}>
               <div>
@@ -84,7 +91,7 @@ const UpdateCustomer = (props: ICustomer) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="p-3 rounded-lg border border-gray-300 w-full focus:outline-none focus:border-blue-400"
-                  required
+                  disabled
                 />
               </div>
               <div>
@@ -93,11 +100,11 @@ const UpdateCustomer = (props: ICustomer) => {
                 </label>
                 <input
                   type="email"
-                  placeholder="Nhập email khách hàng..."
+                  placeholder="nhập địa chỉ email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="p-3 rounded-lg border border-gray-300 w-full focus:outline-none focus:border-blue-400"
-                  required
+                  disabled
                 />
               </div>
               <div>
@@ -110,18 +117,19 @@ const UpdateCustomer = (props: ICustomer) => {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="p-3 rounded-lg border border-gray-300 w-full focus:outline-none focus:border-blue-400"
-                  required
+                  disabled
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Địa Chỉ
+                  Khách hàng : 1 | Nhân Viên : 2 | Quản trị Viên : 3{" "}
                 </label>
                 <input
                   type="text"
-                  placeholder="Nhập địa chỉ..."
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="phân quyền cho người dùng"
+                  value={roleId}
+                  max={3}
+                  onChange={(e) => setRoleId(Number(e.target.value))}
                   className="p-3 rounded-lg border border-gray-300 w-full focus:outline-none focus:border-blue-400"
                   required
                 />

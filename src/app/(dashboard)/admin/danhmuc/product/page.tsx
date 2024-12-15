@@ -31,9 +31,12 @@ interface Product {
 }
 
 const PageProduct = () => {
-  const { ApiImage } = useContext(ShopConText)!;
-  const [product, setProduct] = useState<Product[] | []>([]);
+  const ApiImage = async () => {
+    const res = await fetch("/api/ImageProduct");
+    await res.json();
+  };
 
+  const [product, setProduct] = useState<Product[] | []>([]);
   const fetchApiProduct = async () => {
     const res = await fetch("/api/product");
     const data = await res.json();

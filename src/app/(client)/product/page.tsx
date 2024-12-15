@@ -116,7 +116,7 @@ const PageProduct = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t w-full  ">
       {/* Sidebar */}
-      <div className="sm:w-1/6 bg-slate-100 flex sm:flex-row flex-col w-full  ">
+      <div className="sm:w-1/6 flex sm:flex-row flex-col w-full h-[800px]  bg-slate-100 text-black dark:text-black dark:bg-white  ">
         <FilterSidebar
           onCategoryChange={(categoryId) => console.log(categoryId)} // Cập nhật khi thay đổi danh mục
           onPriceChange={(price) => setMaxPrice(price)}
@@ -142,7 +142,7 @@ const PageProduct = () => {
           )}
         </div>
         <div className="text">
-          <Title title1="Tất Cả" title2="Bộ Siêu Tập" />
+          <Title title1="Tất Cả" title2="Bộ Sưu Tập" />
         </div>
         {/* Content area */}
         <div className="grid   grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 gap-y-6">

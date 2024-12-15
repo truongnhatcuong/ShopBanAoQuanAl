@@ -1,24 +1,25 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Title from "./Title";
+import ProductItemSeller from "./ProductItemSeller";
 
-import ProductItem from "./ProductItem";
-
-interface IProduct {
-  product_id: number;
-  product_name: string;
-  description: string;
-  price: number;
-
-  Images: { image_url: string }[];
+interface IPromotion {
+  discount: number;
+  products: {
+    product_id: number;
+    product_name: string;
+    current_price: number;
+    original_price: number;
+    images: { image_url: string }[];
+  }[];
 }
 const ProductSeller = () => {
-  const [product, setProduct] = useState<IProduct[]>([]);
+  const [promotion, setPromotion] = useState<IPromotion[]>([]);
   async function ProductSeller() {
-    const res = await fetch("/api/product");
+    const res = await fetch("/api/promotion");
     if (res.ok) {
       const data = await res.json();
-      setProduct(data.product);
+      setPromotion(data.promotions);
     }
   }
   useEffect(() => {
@@ -36,8 +37,8 @@ const ProductSeller = () => {
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ">
-        {product.slice(0, 5).map((item) => (
-          <ProductItem {...item} key={item.product_id} />
+        {promotion.slice(0, 5).map((item, index) => (
+          <ProductItemSeller props={item} key={index} />
         ))}
       </div>
     </div>

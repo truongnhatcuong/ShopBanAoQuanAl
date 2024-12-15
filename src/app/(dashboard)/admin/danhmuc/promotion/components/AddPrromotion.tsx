@@ -53,11 +53,10 @@ const AddPrromotion = (props: { reloadData: () => void }) => {
         });
       } else {
         const error = await res.json();
-        console.log(error);
 
         MySwal.fire({
           title: "Thông báo!",
-          text: error.message,
+          text: error.message || "bạn không có quyền truy cập",
           icon: "error",
           confirmButtonText: "OK",
         });

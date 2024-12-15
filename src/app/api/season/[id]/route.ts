@@ -1,3 +1,4 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
@@ -51,6 +52,22 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const token = req.cookies.get("token")?.value;
+  const user = await authenticateToken(token);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const hasDeletePermission = user.role.permissions.some(
+    (perm) => perm.permission.permission === "delete"
+  );
+
+  if (!hasDeletePermission) {
+    return NextResponse.json(
+      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
+      { status: 403 }
+    );
+  }
   const seasonId = Number(params.id);
   try {
     const deleteSeason = await prisma.season.delete({

@@ -15,7 +15,7 @@ const MenuHeader: IMenuProps[] = [
   },
   {
     id: 2,
-    title: "Bộ siêu tập",
+    title: "Bộ Sưu tập",
     link: "/product",
   },
   {

@@ -21,7 +21,7 @@ interface Iprop {
 const UpdateCustomer = (props: Iprop) => {
   const MySwal = withReactContent(Swal);
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState<string>(props.props.email);
+  const [name, setName] = useState<string>(props.props.name);
   const [email, setEmail] = useState<string>(props.props.email);
   const [phone, setPhone] = useState<number | string>(props.props.phone);
   const [roleId, setRoleId] = useState<number>(props.props.roleId);
@@ -124,15 +124,17 @@ const UpdateCustomer = (props: Iprop) => {
                 <label className="block text-sm font-medium text-gray-600 mb-1">
                   Khách hàng : 1 | Nhân Viên : 2 | Quản trị Viên : 3{" "}
                 </label>
-                <input
-                  type="text"
-                  placeholder="phân quyền cho người dùng"
+                <select
                   value={roleId}
-                  max={3}
-                  onChange={(e) => setRoleId(Number(e.target.value))}
                   className="p-3 rounded-lg border border-gray-300 w-full focus:outline-none focus:border-blue-400"
-                  required
-                />
+                  onChange={(e) => setRoleId(Number(e.target.value))}
+                >
+                  <option value="1"> Khách hàng</option>
+                  <option value="2">Nhân Viên</option>
+                  {/* <option value="3" disabled>
+                    Quản trị Viên
+                  </option> */}
+                </select>
               </div>
 
               <div className="flex justify-end mt-6 space-x-4">

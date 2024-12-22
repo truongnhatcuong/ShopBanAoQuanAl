@@ -7,7 +7,7 @@ interface IMenuProps {
   link: string;
 }
 
-const MenuHeader: IMenuProps[] = [
+export const MenuHeader: IMenuProps[] = [
   {
     id: 1,
     title: "Trang Chủ",

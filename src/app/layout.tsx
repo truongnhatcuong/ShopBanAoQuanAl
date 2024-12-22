@@ -18,7 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className}>
-        <ShopContextProvider>{children}</ShopContextProvider>
+        {/* <ShopContextProvider> */}
+        {children}
+
+        {/* </ShopContextProvider> */}
       </body>
     </html>
   );

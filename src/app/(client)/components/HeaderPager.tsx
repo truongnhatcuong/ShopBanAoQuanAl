@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import ListItem from "./ListItem";
+import ListItem, { MenuHeader } from "./ListItem";
 import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
@@ -8,11 +8,12 @@ import { IoSearchSharp, IoCart } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { LiaPowerOffSolid } from "react-icons/lia";
 import { AiOutlineUser } from "react-icons/ai";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { RiAdminLine } from "react-icons/ri";
 import { HiMenu, HiOutlineShoppingBag } from "react-icons/hi";
 import { ShopConText } from "@/app/context/Context";
-import { useTheme } from "next-themes";
+import { IoChevronBackOutline } from "react-icons/io5";
+
 import DarkModeSwitch from "./DarkModeSwitch";
 interface ICategory {
   category_id: number;
@@ -22,6 +23,7 @@ interface ICategory {
 export default function HeadePager() {
   const { countCart, handleQuantityCart } = useContext(ShopConText)!;
   const router = useRouter();
+  const pathname = usePathname();
   const [username, setUsername] = useState<string | null>(null);
 
   const [roleId, setRoleId] = useState<number | null>(null);
@@ -74,10 +76,16 @@ export default function HeadePager() {
     }
   };
   return (
-    <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-3 sm:p-0 ">
-      <div className="">
-        <Link href={"/"} className="hiden md:block">
-          <Image src={"/Image/logo.png"} alt="Logo" width={200} height={50} />
+    <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-3 ">
+      <div className="dark:bg-transparent">
+        <Link href={"/"} className="hiden md:block ">
+          <Image
+            src={"/Image/logo.png"}
+            alt="Logo"
+            width={200}
+            height={50}
+            className="dark:filter dark:invert w-[90px] h-[50px] object-cover md:w-[200px] md:h-[50px] "
+          />
         </Link>
       </div>
       <div className=" mr-5 hidden  sm:flex gap-5 uppercase">
@@ -108,7 +116,7 @@ export default function HeadePager() {
       {/* phần khác */}
       <div className="flex items-center space-x-5 mr-1">
         {/* Search Input */}
-        <div className="relative flex items-center border rounded-full p-2 pl-4 dark:text-white  ">
+        <div className="relative md:flex items-center border rounded-full p-2 pl-4 dark:text-white  hidden ">
           <input
             type="text"
             placeholder="Search..."
@@ -121,6 +129,10 @@ export default function HeadePager() {
             className=" ml-2 text-xl sm:text-2xl hover:text-gray-400"
             onClick={handleSearchSubmit}
           />
+        </div>
+        <div className="mt-1">
+          {" "}
+          <DarkModeSwitch />
         </div>
         <div>
           {isLoggedIn && username ? (
@@ -180,7 +192,7 @@ export default function HeadePager() {
           )}
         </div>
 
-        <div className="relative">
+        <div className="relative ">
           {" "}
           <Link href={"/cart"}>
             <HiOutlineShoppingBag className="text-3xl cursor-pointer mr-5 " />
@@ -189,16 +201,57 @@ export default function HeadePager() {
             {countCart}
           </p>
         </div>
-
-        <div>
-          <DarkModeSwitch />
+        <div
+          className="block md:hidden text-3xl absolute right-0 m-4"
+          onClick={() => setVisible(true)}
+        >
+          <HiMenu className="text-end " />
         </div>
+
         {/* thanh menu ở giao diện màn hình nhỏ */}
         <div
-          className={`absolute top-0 right-0 text-gray-500 gap-4 overflow-hidden bg-white transition-all ${
+          className={`absolute top-0 right-0 text-gray-500 gap-4 overflow-hidden z-50 bg-white transition-all ${
             visible ? "w-full h-full" : "w-0 "
           }`}
-        ></div>
+        >
+          <div className="mt-5 flex  items-center ">
+            <IoChevronBackOutline className="text-4xl" />
+            <span onClick={() => setVisible(false)}> Back</span>
+          </div>
+          <div className="flex flex-col justify-center w-full text-center my-7">
+            {MenuHeader.map((item, index) => (
+              <div
+                key={index}
+                className={`border border-b-gray-300 p-3 ${
+                  pathname === item.link ? "bg-black text-white" : ""
+                } `}
+              >
+                <Link href={item.link} onClick={() => setVisible(false)}>
+                  {item.title}
+                </Link>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-4 bg-gray-100 rounded-lg shadow-lg p-4">
+            <div className=" mt-7 text-center text-2xl font-semibold text-black uppercase">
+              danh mục sản phẩm
+            </div>
+            <div className="flex flex-col divide-y divide-gray-300">
+              {categories.map((item) => (
+                <Link
+                  href={`/product?category_id=${item.category_id}`}
+                  key={item.category_id}
+                  onClick={() => setVisible(false)}
+                  className="block px-4 py-3 text-gray-600 hover:bg-gray-200 hover:text-red-500 rounded-lg transition-all"
+                >
+                  <p className="text-base font-medium text-center">
+                    {item.category_name}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

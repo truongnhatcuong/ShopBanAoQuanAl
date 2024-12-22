@@ -52,7 +52,6 @@ const Page = () => {
       router.push("/login");
     } else {
       const dataError = await res.json();
-      console.log(dataError);
       MySwal.fire({
         position: "center",
         icon: "error",
@@ -66,8 +65,7 @@ const Page = () => {
     <div className="flex  items-center justify-center mb-20 h-auto min-h-screen pt-20">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
         {/*  */}
-
-        <div className="sm:flex sm:flex-col hidden justify-center items-center sm:w-1/2 bg-gray-950 text-white p-10">
+        <div className="sm:flex sm:flex-col hidden justify-center items-center sm:w-1/2 bg-gray-950 dark:bg-white text-white dark:text-black p-10">
           <h2 className="text-4xl font-semibold">ĐĂNG KÍ</h2>
           <p className="text-center mt-4 text-sm opacity-80">
             Đăng kí tài khoản tại đây !
@@ -139,7 +137,7 @@ const Page = () => {
               </button>
             </div>
             <Link href={"/"}>
-              <div className="flex items-center mt-6 text-sm ml-3">
+              <div className="flex items-center mt-6 text-sm ml-3 dark:text-black">
                 <GrFormPreviousLink />
                 <span>Quay Về Trang Chủ</span>
               </div>

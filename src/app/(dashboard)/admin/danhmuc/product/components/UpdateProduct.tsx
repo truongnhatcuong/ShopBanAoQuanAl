@@ -3,13 +3,13 @@
 import Title from "@/app/(client)/components/Title";
 import { assets } from "@/app/assets/frontend_assets/assets";
 import DeleteImage from "@/app/(dashboard)/admin/danhmuc/product/components/componentsImageProduct/DeleteImage";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import AddImage from "./componentsImageProduct/AddImage";
 import { FaPlus, FaRegEdit } from "react-icons/fa";
-import { ShopConText } from "@/app/context/Context";
+
 import SelectCategories from "./componentChild/SelectCategories";
 import SelectBrand from "./componentChild/SelectBrand";
 import SelectSeaSon from "./componentChild/SelectSeason";

@@ -100,7 +100,7 @@ const ProductDetail = ({ productDetail }: IProps) => {
             </span>
             đ
           </p>
-          <p className="mt-5 text-gray-500 text-sm md:w-4/5">
+          <p className="mt-5 text-gray-500 dark:text-gray-100 text-sm md:w-4/5">
             {productDetail.description}
           </p>
           <div className="flex flex-col gap-4 my-8">
@@ -113,8 +113,8 @@ const ProductDetail = ({ productDetail }: IProps) => {
                   }
                   key={item.Size.size_id}
                   title={`Số Lượng size  ${item.stock_quantity} `}
-                  className={`border py-2 px-3.5  bg-slate-100 cursor-pointer ${
-                    item.Size.name_size === size ? " border border-black" : ""
+                  className={`border py-2 px-3.5  bg-slate-100 dark:bg-gray-900 dark:text-gray-50 cursor-pointer ${
+                    item.Size.name_size === size ? " border border-black " : ""
                   }`}
                 >
                   {item.Size.name_size}

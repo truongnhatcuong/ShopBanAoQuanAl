@@ -83,8 +83,8 @@ const ProfileUpdate = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto border border-gray-300 p-4 rounded-md shadow-lg my-4">
-      <h3 className="text-center text-black text-xl font-semibold my-4">
+    <div className="max-w-3xl mx-auto border text-black dark:text-white dark:bg-slate-800 border-gray-300 p-4 rounded-md shadow-lg my-4">
+      <h3 className="text-center text-xl font-semibold my-4">
         Thông Tin Cá Nhân
       </h3>
       {successMessage && (
@@ -94,7 +94,7 @@ const ProfileUpdate = () => {
         <div className="flex justify-around">
           <div className="space-y-4">
             <div className="mb-4">
-              <label className="text-sm ">
+              <label className="text-sm">
                 Họ Và Tên:<span className="text-red-600">*</span>
               </label>
               <br />
@@ -103,11 +103,11 @@ const ProfileUpdate = () => {
                 required
                 value={user?.name || ""}
                 onChange={(e) => setUser({ ...user, name: e.target.value })}
-                className="w-full py-1 px-2 text-gray-800 focus:text-gray-950 border-b-2 border-black focus:outline-none"
+                className="w-full py-1 px-2 dark:bg-slate-700 dark:text-white focus:text-gray-900 border-b-2 border-black focus:outline-none"
                 placeholder="Nhập họ và tên"
               />
             </div>
-            <div className="mb-4 ">
+            <div className="mb-4">
               <label className="text-sm">
                 Số Điện Thoại:<span className="text-red-600">*</span>
               </label>
@@ -117,7 +117,7 @@ const ProfileUpdate = () => {
                 required
                 value={user?.phone || ""}
                 onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                className="w-full py-1 px-2 text-gray-800 focus:text-gray-950 border-b-2 border-black focus:outline-none"
+                className="w-full py-1 px-2 dark:bg-slate-700 dark:text-white focus:text-gray-900 border-b-2 border-black focus:outline-none"
                 placeholder="Nhập số điện thoại"
               />
             </div>
@@ -131,7 +131,7 @@ const ProfileUpdate = () => {
                 required
                 value={user?.address || ""}
                 onChange={(e) => setUser({ ...user, address: e.target.value })}
-                className="w-full py-1 px-2 text-gray-800 border-b-2 focus:text-gray-950 border-black focus:outline-none"
+                className="w-full py-1 px-2 dark:bg-slate-700 dark:text-white border-b-2 border-black focus:outline-none"
                 placeholder="Nhập địa chỉ"
               />
             </div>
@@ -148,7 +148,7 @@ const ProfileUpdate = () => {
                 disabled
                 value={user.username || ""}
                 onChange={(e) => setUser({ ...user, username: e.target.value })}
-                className="w-full py-1 px-2 text-gray-700 border-b-2 border-black focus:outline-none"
+                className="w-full py-1 px-2 text-gray-700 dark:bg-slate-700 dark:text-white border-b-2 border-black focus:outline-none"
                 placeholder="Vô hiệu hóa"
               />
             </div>
@@ -163,8 +163,8 @@ const ProfileUpdate = () => {
                 disabled
                 value={user.email || ""}
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
-                className="w-full py-1 px-2 text-gray-700 border-b-2 border-black focus:outline-none"
-                placeholder="Vô hiệu hóa "
+                className="w-full py-1 px-2 text-gray-700 dark:bg-slate-700 dark:text-white border-b-2 border-black focus:outline-none"
+                placeholder="Vô hiệu hóa"
               />
             </div>
           </div>

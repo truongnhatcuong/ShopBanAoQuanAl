@@ -41,7 +41,7 @@ const CartPage = () => {
   }, []);
   return (
     <div>
-      <div className="text-2xl text-center mb-3">
+      <div className="text-2xl text-center mb-3  ">
         <Title title1="Danh Mục" title2="Giỏ Hàng" />
       </div>
       <div className="flex gap-9 ">
@@ -52,7 +52,7 @@ const CartPage = () => {
           <div className="w-full sm:w-[450px] text-center">
             <TotalCart />
             <button
-              className="bg-black text-white text-sm py-3 px-8 my-8"
+              className="dark:bg-white dark:text-black bg-black text-white  text-sm py-3 px-8 my-8"
               // onClick={() => router.push("/placeOrder")}
             >
               THANH TOÁN

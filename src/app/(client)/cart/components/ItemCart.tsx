@@ -45,14 +45,14 @@ const ItemCart = ({ items }: CartItemListProps) => {
   };
 
   return (
-    <div className="py-4 text-gray-700">
+    <div className="py-4 ">
       {cartItems.map((item) => {
         const productPrice = Number(item.product.price);
         const productTotal = productPrice * item.quantity;
         return (
           <div
             key={item.cartitem_id}
-            className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center"
+            className="py-4 border-t border-b  grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center"
           >
             <div className="flex items-center gap-4">
               <img
@@ -65,7 +65,6 @@ const ItemCart = ({ items }: CartItemListProps) => {
                   <p className="text-sm sm:text-lg font-medium">
                     {item.product.product_name}
                     <br />
-                    {item.cartitem_id}
                   </p>
                   <div className="flex items-center gap-5 mt-2">
                     <p className="text-xs font-bold">
@@ -75,11 +74,6 @@ const ItemCart = ({ items }: CartItemListProps) => {
                       đ
                     </p>
                     {/* Hiển thị kích thước đã chọn */}
-                    <p className="px-2 sm:px-3 sm:py-1 border border-gray-50 text-gray-700 bg-slate-50">
-                      {item.selectedSize
-                        ? item.selectedSize
-                        : "Chưa chọn kích thước"}
-                    </p>
                   </div>
                 </div>
               </Link>
@@ -87,7 +81,15 @@ const ItemCart = ({ items }: CartItemListProps) => {
 
             {/* Quantity Input */}
             <div className="flex justify-around items-center ">
-              {" "}
+              <div>
+                <div className="flex justify-center items-center mr-6">
+                  <p className="px-3 sm:px-4 sm:py-1 border border-gray-300 bg-slate-100 dark:text-black rounded-md text-center">
+                    {item.selectedSize
+                      ? item.selectedSize
+                      : "Chưa chọn kích thước"}
+                  </p>
+                </div>
+              </div>
               <input
                 className="max-w-10 sm:max-w-20 border px-2 py-1 text-center"
                 type="number"
@@ -106,11 +108,11 @@ const ItemCart = ({ items }: CartItemListProps) => {
             </div>
 
             {/* Bin Icon */}
-            <div className="flex justify-end mr-4">
+            <div className="flex justify-end mr-4 dark:bg-transparent">
               <img
                 src={assets.bin_icon.src}
                 onClick={() => deleteCartItem(item.cartitem_id)}
-                className="w-4 sm:w-5 cursor-pointer"
+                className="w-4 sm:w-5 cursor-pointer dark:filter dark:invert"
                 alt="Delete Icon"
               />
             </div>

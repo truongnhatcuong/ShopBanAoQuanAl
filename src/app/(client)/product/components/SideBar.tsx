@@ -65,9 +65,7 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
             onChange={handleChangPrice}
           />
           <p className="text-sm mt-1">
-            {price === 0
-              ? " tất cả sản phẩm"
-              : ` ${price.toLocaleString()}đ - 1,000,000đ`}
+            {` ${price.toLocaleString()}đ - 1,000,000đ`}
           </p>
         </div>
       </div>

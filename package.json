@@ -22,7 +22,7 @@
     "@types/jwt-decode": "^2.2.1",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
-    "class-variance-authority": "^0.7.0",
+    "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.5.1",
     "clsx": "^2.1.1",
     "cookie": "^1.0.1",
@@ -47,7 +47,7 @@
     "sweetalert2": "^11.13.3",
     "sweetalert2-react-content": "^5.0.7",
     "swr": "^2.2.5",
-    "tailwind-merge": "^2.5.2",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"

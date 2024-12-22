@@ -21,6 +21,7 @@ interface IProduct {
   Category: { category_name: string };
   Images: { image_url: string }[];
   ProductSizes: Size[];
+  sizes: { size_id: number; name_size: string; stock_quantity: number }[];
 }
 
 const Page = () => {

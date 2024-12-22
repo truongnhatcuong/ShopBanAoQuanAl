@@ -11,18 +11,21 @@ interface IProduct {
 
 const ProductItem = ({ product_id, Images, price, product_name }: IProduct) => {
   return (
-    <div title={`sản phẩm ${product_name} `} className="">
+    <div
+      title={`sản phẩm ${product_name} `}
+      className="flex flex-col items-center text-center md:text-start"
+    >
       <Link
         href={`/product/${product_id}`}
-        className="text-gray-800 dark:text-white cursor-pointer "
+        className="text-gray-800 dark:text-white cursor-pointer  "
       >
-        <div className="overflow-hidden mt-5">
+        <div className="overflow-hidden mt-5   ">
           <img
             src={Images[0]?.image_url || null}
             alt=""
-            className="hover:scale-110 transition ease-in-out object-cover w-full h-full  sm:w-52 sm:h-52 "
+            className="hover:scale-110 transition ease-in-out object-cover w-full h-full  sm:w-52 sm:h-52  "
           />
-          <p className="pt-3 pb-1 text-base">{product_name}</p>
+          <p className="mt-3 pb-1 text-base">{product_name}</p>
           <p className="text-sm font-medium ">
             {Number(price).toLocaleString("vi-VN").replace(/\./g, ",")}đ
           </p>

@@ -32,7 +32,7 @@ const Notification = () => {
               className="w-[50%]  mx-auto" // Căn giữa hình ảnh
             />
             <button
-              className="absolute top-2 right-64 cursor-pointer  text-gray-900 hover:text-red-500 bg-white text-2xl  rounded-full  mt-2 ml-2" // Đặt vị trí nút "X"
+              className="absolute top-2 right-28  md:right-64  cursor-pointer  text-gray-900 hover:text-red-500 bg-white text-2xl  rounded-full  mt-2 ml-2" // Đặt vị trí nút "X"
               onClick={() => setIsOpen(false)}
             >
               <SlClose />

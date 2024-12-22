@@ -22,13 +22,12 @@ const DarkModeSwitch = () => {
 
   return (
     <div>
-      <button onClick={toggleTheme}>
-        {theme === "dark" ? (
-          <CiLight className="text-2xl  hover:text-amber-500" />
-        ) : (
-          <MdDarkMode className="text-2xl hover:text-amber-500" />
-        )}
-      </button>
+      <input
+        type="checkbox"
+        className="toggle toggle-warning"
+        defaultChecked={theme === "dark"}
+        onChange={toggleTheme}
+      />
     </div>
   );
 };

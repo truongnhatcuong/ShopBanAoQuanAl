@@ -9,7 +9,10 @@ const Page = () => {
     <>
       <Header />
       <Video />
-      <ProductSeller />
+      <div className="ml-5">
+        <ProductSeller />
+      </div>
+
       <CozeChat />
     </>
   );

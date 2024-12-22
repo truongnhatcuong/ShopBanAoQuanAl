@@ -10,7 +10,7 @@ const Header = () => {
     <>
       <Notification />
 
-      <div className="carousel w-full ">
+      <div className="carousel w-full border-t-2 border-gray-300 border-solid	">
         <div id="slide1" className="carousel-item relative w-full">
           <img
             src="https://pos.nvncdn.com/556e88-134541/bn/20230320_zk1SfSVA.png"

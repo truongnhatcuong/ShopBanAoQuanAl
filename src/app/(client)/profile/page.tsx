@@ -63,50 +63,62 @@ const Profile = () => {
   }
 
   return (
-    <div className="container mx-auto my-8 border border-gray-900  shadow-lg max-w-6xl w-full h-[500px] rounded-xl bg-stone-100 opacity-90">
+    <div className="container mx-auto my-8 border border-gray-900 shadow-lg max-w-6xl w-full h-[500px] rounded-xl bg-stone-100 dark:bg-gray-800 dark:border-white opacity-90">
       <div className="w-full bg-black py-4 rounded-t-lg">
         <h2 className="text-center text-2xl text-white font-semibold">
           Thông Tin Khách Hàng
         </h2>
       </div>
-      <div className="  rounded-b-lg p-6 mt-12 ">
+      <div className="rounded-b-lg p-6 mt-12 dark:bg-gray-900 dark:text-white">
         {user && (
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
-            <li className="py-5 px-3">
-              <label className="font-medium text-gray-950 block text-2xl">
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
+              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
                 Tên đăng nhập:
               </label>
-              <span className="text-black text-xl pt-2">{user.username}</span>
+              <span className="text-black dark:text-white text-xl pt-2">
+                {user.username}
+              </span>
             </li>
-            <li className="py-5 px-3">
-              <label className="font-medium text-gray-950 block text-2xl">
+            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
+              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
                 Địa Chỉ:
               </label>
-              <span className="text-black text-xl pt-2">{user.address}</span>
+              <span className="text-black dark:text-white text-xl pt-2">
+                {user.address}
+              </span>
             </li>
-            <li className="py-5 px-3">
-              <label className="font-medium text-gray-950 block text-2xl">
+            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
+              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
                 Tên đầy đủ:
               </label>
-              <span className="text-black text-xl pt-2">{user.name}</span>
+              <span className="text-black dark:text-white text-xl pt-2">
+                {user.name}
+              </span>
             </li>
-            <li className="py-5 px-3">
-              <label className="font-medium text-gray-950 block text-2xl">
+            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
+              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
                 Số điện thoại:
               </label>
-              <span className="text-black text-xl pt-2">{user.phone}</span>
+              <span className="text-black dark:text-white text-xl pt-2">
+                {user.phone}
+              </span>
             </li>
-            <li className="py-5 px-3">
-              <label className="font-medium text-gray-950 block text-2xl">
+            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
+              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
                 Email:
               </label>
-              <span className="text-black text-xl pt-2">{user.email}</span>
+              <span className="text-black dark:text-white text-xl pt-2">
+                {user.email}
+              </span>
             </li>
-            <li className="py-5 px-7">
-              <label className="font-medium text-gray-950 block text-2xl">
+            <li className="py-5 px-7 border-b border-gray-300 dark:border-gray-600">
+              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
                 Giới tính:
               </label>
-              <span className="text-black text-xl pt-2">Nam</span>
+              <span className="text-black dark:text-white text-xl pt-2">
+                Nam
+              </span>
             </li>
           </ul>
         )}

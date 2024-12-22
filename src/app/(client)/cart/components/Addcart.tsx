@@ -48,7 +48,7 @@ const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
 
         {/* Button để thêm sản phẩm vào giỏ */}
         <button
-          className="bg-black text-white px-8 py-3 text-sm active:bg-slate-700"
+          className="bg-black text-white dark:bg-white dark:text-black px-8 py-3 text-sm active:bg-slate-700 family"
           onClick={handleAddToCartClick}
         >
           Thêm vào giỏ

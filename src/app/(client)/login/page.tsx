@@ -59,7 +59,7 @@ const Page = () => {
   return (
     <div className="flex justify-center items-center h-screen mb-16">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="w-full sm:w-1/2 justify-center p-10 bg-gray-950 text-white items-center hidden sm:flex sm:flex-col  ">
+        <div className="w-full sm:w-1/2 justify-center p-10 bg-gray-950 text-white dark:bg-white dark:text-black items-center hidden sm:flex sm:flex-col  ">
           <h2 className="text-4xl  font-semibold">ĐĂNG NHẬP </h2>
           <p className="text-center mt-4 text-sm opacity-80">
             Tham gia để nhận các ưu đãi đặc biệt và trải nghiệm tốt nhất.
@@ -74,7 +74,7 @@ const Page = () => {
                 type="text"
                 name="username"
                 placeholder="Username"
-                className="w-full border rounded  py-3 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded  py-3 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-white"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -103,7 +103,9 @@ const Page = () => {
           </form>
           <div className="flex justify-between  mt-4">
             <p>
-              <span className="text-sm mr-1">chưa có tài khoản?</span>
+              <span className="text-sm mr-1 dark:text-black">
+                chưa có tài khoản?
+              </span>
               <Link
                 href={"/signUp"}
                 className="text-blue-500 hover:text-blue-700 text-sm"

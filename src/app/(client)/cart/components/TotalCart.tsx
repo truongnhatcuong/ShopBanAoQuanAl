@@ -6,11 +6,11 @@ const TotalCart = () => {
   const { totalPrice } = useContext(ShopConText)!;
 
   return (
-    <div className="w-full bg-white p-6  ">
+    <div className="w-full  p-6  ">
       <div className="text-xl font-semibold text-gray-900">
         <Title title1="Tổng Tiền" title2="Giỏ Hàng" />
       </div>
-      <div className="flex flex-col gap-4 mt-4 text-sm text-gray-600">
+      <div className="flex flex-col gap-4 mt-4 text-sm dark:text-white">
         <div className="flex justify-between items-center">
           <p>Thành Tiền:</p>
           <p>{totalPrice.toLocaleString("vi-VN").replace(/\./g, ",")}đ</p>

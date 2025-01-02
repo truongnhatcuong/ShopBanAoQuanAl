@@ -1,63 +1,65 @@
 "use client";
-import React, { useState } from "react";
+import FinanceChart from "@/app/components/Chart/FinanceChart";
+import TinyBarChar from "@/app/components/Chart/TinyBarChar";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import CountOrder from "./components/CountOrder";
+import CountCustomer from "./components/CountCustomer";
 
-const AdminPage = () => {
-  // o day get token ra
-  const [selectedPage, setSelectedPage] = useState("Dashboard");
-  // a chet nham
+const Page = () => {
   return (
-    <div className="flex h-screen">
-      {/* Content Wrapper */}
-      <div className="flex-1 p-6 bg-gray-100">
-        {/* Page Title */}
-        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-        {/* Main Content Area */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          {selectedPage === "Dashboard" && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Dashboard</h2>
-              <p className="mb-4">Welcome to the admin dashboard!</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-blue-100 p-4 rounded-lg shadow">
-                  <h3 className="text-lg font-semibold">Total Users</h3>
-                  <p className="text-2xl">1,200</p>
-                </div>
-                <div className="bg-green-100 p-4 rounded-lg shadow">
-                  <h3 className="text-lg font-semibold">Active Sessions</h3>
-                  <p className="text-2xl">345</p>
-                </div>
-                <div className="bg-yellow-100 p-4 rounded-lg shadow">
-                  <h3 className="text-lg font-semibold">New Orders</h3>
-                  <p className="text-2xl">57</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {selectedPage === "Users" && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Users</h2>
-              <p className="mb-4">Manage users here.</p>
-            </div>
-          )}
-
-          {selectedPage === "Settings" && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Settings</h2>
-              <p className="mb-4">Configure settings here.</p>
-            </div>
-          )}
-
-          {selectedPage === "Reports" && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Reports</h2>
-              <p className="mb-4">View reports here.</p>
-            </div>
-          )}
+    <div className="bg-slate-50">
+      {/* tổng quan */}
+      <div className="flex flex-col md:flex-row ">
+        {/* tổng doanh thu */}
+        <div className="md:w-1/4 w-full mb-2 md:mr-0 bg-blue-200 p-6 border-r-4 border-white">
+          <h1 className="text-xl text-center uppercase mb-4 family">
+            tổng doanh thu
+          </h1>
+          <div className="flex justify-around items-center">
+            <Image
+              src={"/image/danhthu.png"}
+              width={50}
+              height={50}
+              alt=""
+              className=" w-9 h-8 object-contain "
+            />
+            <p className="text-xs text-black">300.000.000đ</p>
+          </div>
+        </div>
+        {/* số đơn đạt hàng*/}
+        <CountOrder />
+        {/* số khách hàng */}
+        <CountCustomer />
+        {/* số lượng bán */}
+        <div className="md:w-1/4 w-full mb-2 md:mr-0 bg-yellow-100 p-6 border-r-4 border-white">
+          <h1 className="text-xl text-center uppercase mb-4 family">
+            Số Lượng Bán
+          </h1>
+          <div className="flex justify-around items-center">
+            <Image
+              src={"/image/soluongban.png"}
+              width={50}
+              height={50}
+              alt=""
+              className=" w-9 h-8 object-contain "
+            />
+            <p className="text-xs text-black">2,364</p>
+          </div>
+        </div>
+      </div>
+      {/* biểu đồ */}
+      <div className="flex flex-col md:flex-row gap-10">
+        {/* tiny chart */}
+        <div className="w-full md:w-1/3 my-3">
+          <TinyBarChar />
+        </div>
+        <div className="w-full md:w-2/3 my-3">
+          <FinanceChart />
         </div>
       </div>
     </div>
   );
 };
 
-export default AdminPage;
+export default Page;

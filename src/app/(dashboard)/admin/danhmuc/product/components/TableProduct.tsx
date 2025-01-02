@@ -47,7 +47,7 @@ const TableProduct = (props: ITable) => {
           <th className="px-4 py-2">Giá</th>
           <th className="px-4 py-2">Tổng số lượng</th>
           <th className="px-4 py-2">Màu sắc</th>
-          <th className="px-4 py-2">Kích thước</th>
+          <th className="px-4 py-2 hidden md:block">Kích thước</th>
           <th className="px-4 py-2">Hình ảnh</th>
           <th className="px-4 py-2">Hành động</th>
         </tr>
@@ -67,8 +67,8 @@ const TableProduct = (props: ITable) => {
             </td>
             <td className="px-4 py-2 text-center">{product.stock_quantity}</td>
             <td className="px-4 py-2 text-center">{product.color}</td>
-            <td className="px-4 py-2">
-              <ul className="flex space-x-2 justify-center">
+            <td className="px-4 py-2 hidden md:block">
+              <ul className="md:flex space-x-2 justify-center   ">
                 {product.ProductSizes.map((size, sizeIndex) => (
                   <li key={sizeIndex} className="mb-1">
                     <span
@@ -82,7 +82,7 @@ const TableProduct = (props: ITable) => {
               </ul>
             </td>
             <td className="px-4 py-2 relative">
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center  ">
                 <img
                   src={product.Images[0]?.image_url}
                   alt={`Hình ảnh sản phẩm ${index}`}

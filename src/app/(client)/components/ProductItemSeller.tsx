@@ -30,7 +30,7 @@ const ProductItemSeller = ({ props }: IProps) => {
           <img
             src={props.products[0].images[0].image_url}
             alt=""
-            className="hover:scale-110 transition ease-in-out object-cover w-full h-full  sm:w-52 sm:h-52 "
+            className="hover:scale-110 transition ease-in-out object-cover w-96 h-80  sm:w-52 sm:h-52 "
           />
           <p className="pt-3 pb-1 text-base">
             {props.products[0].product_name}

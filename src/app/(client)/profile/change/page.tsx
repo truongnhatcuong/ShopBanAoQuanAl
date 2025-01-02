@@ -67,7 +67,7 @@ const ChangePasswordForm = () => {
   }, [errorChange]);
 
   return (
-    <div className="max-w-3xl mx-auto border border-gray-300 dark:border-gray-700 p-4 rounded-md shadow-lg my-4 bg-white dark:bg-gray-800">
+    <div className="max-w-4xl border border-gray-300 dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
       <h3 className="text-center text-black dark:text-white text-xl font-semibold my-4">
         Đổi Mật Khẩu
       </h3>
@@ -106,7 +106,7 @@ const ChangePasswordForm = () => {
             placeholder="Nhập mật khẩu hiện tại"
             value={currentPassword}
             onChange={(e) => setCurrenPassword(e.target.value)}
-            className="w-1/2 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="md:w-1/2 flex-1 px-3 py-2 border border-gray-400  rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         <div className="mb-4 flex items-center gap-x-4">
@@ -122,7 +122,7 @@ const ChangePasswordForm = () => {
             value={newPassword}
             placeholder="Nhập mật khẩu mới"
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-1/2 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="md:w-1/2 flex-1 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         <div className="mb-4 flex items-center gap-x-4">
@@ -138,18 +138,18 @@ const ChangePasswordForm = () => {
             placeholder="Nhập lại mật khẩu"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-1/2 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="md:w-1/2 flex-1 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         {/* hiển thị error */}
         <div className="text-red-600 text-sm mb-1 text-center">
           {errorChange && <p>{errorChange}</p>}
         </div>
-        <div className="mb-4 flex items-center gap-x-4">
+        <div className="mb-4 flex items-center gap-x-4 ">
           <div className="w-1/3"></div>
           <button
             type="submit"
-            className="w-1/4 px-3 py-2 bg-green-600 text-white font-extrabold text-xl rounded hover:bg-green-700 dark:hover:bg-green-500"
+            className="md:w-1/4 w-2/4 px-3 py-2 bg-green-600 text-white font-extrabold text-xl rounded hover:bg-green-700 dark:hover:bg-green-500 text-center"
           >
             Đổi mật khẩu
           </button>

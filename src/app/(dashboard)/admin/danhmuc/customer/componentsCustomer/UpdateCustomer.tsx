@@ -75,7 +75,7 @@ const UpdateCustomer = (props: Iprop) => {
             onRequestClose={() => setIsOpen(false)}
             contentLabel="Thêm Khách Hàng"
             className="fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl mx-auto"
-            overlayClassName="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-md"
+            overlayClassName="fixed inset-0 bg-black bg-opacity-40 backdrop-blue-md"
           >
             <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
               <Title title1="Phân Quyền" title2="Người Dùng" />

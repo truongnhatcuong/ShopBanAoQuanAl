@@ -1,3 +1,4 @@
+import { products } from "./../../assets/frontend_assets/assets";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -30,6 +31,13 @@ export async function GET(request: NextRequest) {
     },
     orderBy: {
       category_name: sortOrder,
+    },
+    include: {
+      _count: {
+        select: {
+          Products: true,
+        },
+      },
     },
   });
 

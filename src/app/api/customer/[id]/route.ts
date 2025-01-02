@@ -1,13 +1,15 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+
 import { authenticateToken } from "@/lib/auth";
-export async function GET({ params }: { params: { id: string } }) {
-  const customerId = Number(params.id);
+
+export async function GET({ params }: { params: { id?: string } }) {
+  const { id } = params;
+
   try {
     const getCustomer = await prisma.customer.findUnique({
       where: {
-        customer_id: customerId,
+        customer_id: Number(id),
       },
     });
     return NextResponse.json(

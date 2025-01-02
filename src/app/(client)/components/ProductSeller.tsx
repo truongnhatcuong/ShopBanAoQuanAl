@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Title from "./Title";
 import ProductItemSeller from "./ProductItemSeller";
+import Image from "next/image";
 
 interface IPromotion {
   discount: number;
@@ -26,17 +27,18 @@ const ProductSeller = () => {
     ProductSeller();
   }, []);
   return (
-    <div className="my-16  block1">
-      <div className="text-center text-2xl text">
+    <div className="my-16  block1 ">
+      <div className="flex justify-center text-5xl">
         <Title title1="Sản Phẩm" title2="Khuyến Mãi" />
-        <p className="text-xs mx-16 sm:text-sm md:text-base hidden sm:block">
-          Hiện nay, khuyến mại đồng giá các sản phẩm đang được các chủ shop áp
-          dụng nhiều nhất trong các chương trình khuyến mại. Kiểu khuyến mại này
-          tạo ra cảm giác thích thú và an tâm hơn khi mua hàng, từ đó kích thích
-          khách hàng mua nhiều mặt hàng hơn.
-        </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ">
+      <Image
+        src={"/Image/sale.png"}
+        alt=""
+        width={500}
+        height={100}
+        className="w-full object-cover "
+      />
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ml-5 ">
         {promotion.slice(0, 5).map((item, index) => (
           <ProductItemSeller props={item} key={index} />
         ))}

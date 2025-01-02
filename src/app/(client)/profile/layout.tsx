@@ -14,9 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div lang="en">
-      <HeaderProfile />
-      <main className={inter.className}>{children}</main>
+    <div lang="en" className="flex h-screen">
+      <div className="w-1/6 border-r ">
+        <HeaderProfile />
+      </div>
+      <main className={`w-5/6`}>{children}</main>
     </div>
   );
 }

@@ -3,14 +3,15 @@ import React, { useContext, useEffect, useState } from "react";
 import ListItem, { MenuHeader } from "./ListItem";
 import Image from "next/image";
 import Link from "next/link";
-import { FaUser } from "react-icons/fa";
-import { IoSearchSharp, IoCart } from "react-icons/io5";
+import { GiShoppingCart } from "react-icons/gi";
+import { FaClipboardCheck, FaUser } from "react-icons/fa";
+import { IoSearchSharp } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { LiaPowerOffSolid } from "react-icons/lia";
 import { AiOutlineUser } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
 import { RiAdminLine } from "react-icons/ri";
-import { HiMenu, HiOutlineShoppingBag } from "react-icons/hi";
+import { HiMenu } from "react-icons/hi";
 import { ShopConText } from "@/app/context/Context";
 import { IoChevronBackOutline } from "react-icons/io5";
 
@@ -77,18 +78,19 @@ export default function HeadePager() {
   };
   return (
     <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-3 ">
-      <div className="dark:bg-transparent">
-        <Link href={"/"} className="hiden md:block ">
+      <div className="dark:bg-transparent hidden md:block ">
+        <Link href={"/"} className="">
           <Image
             src={"/Image/logo.png"}
             alt="Logo"
             width={200}
             height={50}
-            className="dark:filter dark:invert w-[90px] h-[50px] object-cover md:w-[200px] md:h-[50px] "
+            className="dark:filter dark:invert w-[80px] h-[40px] object-cover md:w-[170px] md:h-[50px] "
           />
         </Link>
       </div>
-      <div className=" mr-5 hidden  sm:flex gap-5 uppercase">
+      {/* menu */}
+      <div className=" mr-5 hidden  md:flex gap-5 uppercase">
         <ListItem />
 
         <div className="group relative z-10">
@@ -114,19 +116,19 @@ export default function HeadePager() {
       </div>
 
       {/* phần khác */}
-      <div className="flex items-center space-x-5 mr-1">
+      <div className="flex items-center gap-x-5 ">
         {/* Search Input */}
-        <div className="relative md:flex items-center border rounded-full p-2 pl-4 dark:text-white  hidden ">
+        <div className="relative md:flex items-center border rounded-full md:p-2 md:pl-4 px-3 py-1.5   dark:text-white   ">
           <input
             type="text"
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="outline-none px-2"
+            className="outline-none md:px-2 px-0 text-xs md:text-sm "
             onKeyDown={handleKeyPress}
           />
           <IoSearchSharp
-            className=" ml-2 text-xl sm:text-2xl hover:text-gray-400"
+            className="  text-xl md:text-2xl hover:text-gray-400 absolute right-2 top-2"
             onClick={handleSearchSubmit}
           />
         </div>
@@ -136,18 +138,25 @@ export default function HeadePager() {
         </div>
         <div>
           {isLoggedIn && username ? (
-            <div className="group relative flex z-10 ">
-              <FiUser className=" text-2xl sm:text-xl" />
-              <span className=" hidden md:block ">{username}</span>
+            <div className="group relative flex z-10  ">
+              <FiUser className=" text-2xl md:text-xl " />
+              <span className=" hidden md:block md:text-base ">{username}</span>
               {/* Hiển thị khi hover */}
-              <div className="group-hover:block hidden absolute dropdown-menu pt-10 -right-8 ">
+              <div className="group-hover:block hidden absolute dropdown-menu pt-10 md:-right-8 -right-20 ">
                 <div className="flex flex-col gap-2 w-48 py-3 px-5 bg-slate-50 text-gray-500 rounded-md ">
                   <button
-                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center  "
+                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center ml-3  "
                     onClick={() => router.push("/profile")}
                   >
                     <AiOutlineUser className="mr-1 text-gray-900" />
-                    Xem Thông Tin
+                    Tài Khoản Của Tôi
+                  </button>
+                  <button
+                    className="text-sm text-gray-600 hover:text-red-600 flex items-center ml-4  "
+                    onClick={() => router.push("/profile/listorder")}
+                  >
+                    <FaClipboardCheck className="mr-1 text-gray-700" />
+                    Đơn Mua
                   </button>
                   {(roleId === 3 || roleId === 2) && (
                     <button
@@ -192,17 +201,17 @@ export default function HeadePager() {
           )}
         </div>
 
-        <div className="relative ">
+        <div className="relative mr-3 ">
           {" "}
           <Link href={"/cart"}>
-            <HiOutlineShoppingBag className="text-3xl cursor-pointer mr-5 " />
+            <GiShoppingCart className="text-3xl cursor-pointer mr-8 md:mr-0 " />
           </Link>
-          <p className="absolute right-[-4px] bottom-[-5px] w-[17px] text-center leading-4 bg-black text-white dark:text-black dark:bg-white rounded-full aspect-square text-[10px] mr-5 ">
+          <p className="absolute right-[-3px] bottom-[-3px] w-[17px] text-center leading-4 bg-black text-white dark:text-black dark:bg-white rounded-full aspect-square text-[10px] mr-8 md:mr-0 ">
             {countCart}
           </p>
         </div>
         <div
-          className="block md:hidden text-3xl absolute right-0 m-4"
+          className="block md:hidden text-3xl absolute right-0  "
           onClick={() => setVisible(true)}
         >
           <HiMenu className="text-end " />
@@ -211,18 +220,21 @@ export default function HeadePager() {
         {/* thanh menu ở giao diện màn hình nhỏ */}
         <div
           className={`absolute top-0 right-0 text-gray-500 gap-4 overflow-hidden z-50 bg-white transition-all ${
-            visible ? "w-full h-full" : "w-0 "
+            visible ? "w-full h-full" : "w-0 h-0"
           }`}
         >
-          <div className="mt-5 flex  items-center ">
+          <div
+            className="mt-5 flex items-center w-1/6 "
+            onClick={() => setVisible(false)}
+          >
             <IoChevronBackOutline className="text-4xl" />
-            <span onClick={() => setVisible(false)}> Back</span>
+            <span> Back</span>
           </div>
           <div className="flex flex-col justify-center w-full text-center my-7">
             {MenuHeader.map((item, index) => (
               <div
                 key={index}
-                className={`border border-b-gray-300 p-3 ${
+                className={`border-y-[1px] border-b-gray-400 p-3 ${
                   pathname === item.link ? "bg-black text-white" : ""
                 } `}
               >

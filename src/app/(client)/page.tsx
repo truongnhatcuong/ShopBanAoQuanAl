@@ -1,3 +1,5 @@
+"use client";
+import { useEffect, useState } from "react";
 import CozeChat from "./components/Chatbox";
 import Header from "./components/Header";
 
@@ -9,9 +11,8 @@ const Page = () => {
     <>
       <Header />
       <Video />
-      <div className="ml-5">
-        <ProductSeller />
-      </div>
+
+      <ProductSeller />
 
       <CozeChat />
     </>

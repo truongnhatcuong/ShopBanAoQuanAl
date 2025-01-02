@@ -1,7 +1,8 @@
 "use client";
+import { ShopConText } from "@/app/context/Context";
 import Image from "next/image";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaCircle } from "react-icons/fa";
 
 const Brand = () => {
@@ -19,10 +20,16 @@ const Brand = () => {
     fetchUserInfo();
   }, []);
 
+  const { isLeftMenuVisible } = useContext(ShopConText)!;
+
   return (
-    <div>
-      <div className="flex gap-2 mt-3 justify-center">
-        <div>
+    <div className="">
+      <div
+        className={`md:flex gap-2 ${
+          isLeftMenuVisible ? "mt-2.5" : "md:mt-[54px]  `"
+        } justify-center `}
+      >
+        <div className={` ${isLeftMenuVisible ? "mt-2  " : "mt-0 hidden"}`}>
           <Image
             src={`${
               roleId === 3 ? "/Image/admin.jpg" : "/Image/anhdaidien.jpg"
@@ -33,15 +40,15 @@ const Brand = () => {
             className="rounded-full w-8  "
           />
         </div>
-        <div>
-          <p className="text-base  mb-0.5">{username}</p>
+        <div className={`${isLeftMenuVisible ? "block" : "hidden"} `}>
+          <p className="text-base  mb-0.5 hidden md:block">{username}</p>
           <p className="flex items-center gap-1 text-sm font-medium">
             <FaCircle className="text-green-700 text-xs" />
             online
           </p>
         </div>
       </div>
-      <div className="border-gray-300 border-b-2 mt-2 w-[235px]"></div>
+      <hr className="border-white border-b-2 md:mt-1.5  w-[235px]" />
     </div>
   );
 };

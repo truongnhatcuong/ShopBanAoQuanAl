@@ -57,9 +57,9 @@ const Page = () => {
     }
   }, [errorMessage]);
   return (
-    <div className="flex justify-center items-center h-screen mb-16">
-      <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="w-full sm:w-1/2 justify-center p-10 bg-gray-950 text-white dark:bg-white dark:text-black items-center hidden sm:flex sm:flex-col  ">
+    <div className="flex justify-center items-center md:h-screen h-full mt-2  md:mb-16 mb-0">
+      <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden  flex-col md:flex-row">
+        <div className="w-full sm:w-1/2 justify-center p-10 bg-gray-950 text-white dark:bg-white dark:text-black items-center  flex flex-col  ">
           <h2 className="text-4xl  font-semibold">ĐĂNG NHẬP </h2>
           <p className="text-center mt-4 text-sm opacity-80">
             Tham gia để nhận các ưu đãi đặc biệt và trải nghiệm tốt nhất.

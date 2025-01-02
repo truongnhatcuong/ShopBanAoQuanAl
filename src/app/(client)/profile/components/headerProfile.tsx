@@ -1,30 +1,42 @@
 import React from "react";
 import MenuItemProfile from "./MenuItemProfile";
+import { PiUserCircleGearDuotone } from "react-icons/pi";
+import { MdOutlineLockOpen } from "react-icons/md";
+import { PiAddressBookDuotone } from "react-icons/pi";
+import { HiOutlineClipboardList } from "react-icons/hi";
 
 const listProfile = [
   {
+    id: 1,
+    icon: <PiUserCircleGearDuotone />,
     link: "/profile",
-    title: "Thông Tin",
+    title: "Thông Tin ",
   },
   {
-    link: "/profile/edit",
-    title: "Sửa Thông Tin",
+    id: 2,
+    icon: <PiAddressBookDuotone />,
+    link: "/profile/address",
+    title: "Địa Chỉ",
   },
   {
+    id: 3,
+    icon: <MdOutlineLockOpen />,
     link: "/profile/change",
     title: "Đổi Mật Khẩu",
   },
   {
-    link: "/profile/history",
-    title: "Lịch sử ",
+    id: 4,
+    icon: <HiOutlineClipboardList />,
+    link: "/profile/listorder",
+    title: "Đơn Hàng",
   },
 ];
 const HeaderProfile = () => {
   return (
     <>
-      <ul className="flex justify-around text-black dark:text-white dark:bg-black bg-slate-200 p-3 border border-t-gray-400 pl-16">
+      <ul className="  flex flex-col pl-7 gap-y-6 text-black dark:text-white dark:bg-black bg-slate-100 shadow-lg h-full pt-12">
         {listProfile.map((item) => (
-          <li key={item.link}>
+          <li key={item.id} className="">
             <MenuItemProfile {...item} />
           </li>
         ))}

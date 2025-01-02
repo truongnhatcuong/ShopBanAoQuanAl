@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   const getCustomer = await prisma.customer.findMany();
+
   return NextResponse.json(
     { getCustomer, message: "success" },
     { status: 201 }

@@ -16,7 +16,7 @@ const Page = () => {
   const [cart, setCart] = useState<ICartAd[]>([]);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/api/cartAd");
+      const res = await fetch("/api/admin/manage/cartAd");
       const data = await res.json();
       setCart(data.cartAdmin);
     };

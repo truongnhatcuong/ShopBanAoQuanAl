@@ -43,6 +43,15 @@ const ItemCart = ({ items }: CartItemListProps) => {
       )
     );
   };
+  if (cartItems.length === 0) {
+    return (
+      <div className="py-4">
+        <p className="text-center text-base ">
+          chưa có sản phẩm trong giỏ hàng
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="py-4 ">
@@ -80,9 +89,9 @@ const ItemCart = ({ items }: CartItemListProps) => {
             </div>
 
             {/* Quantity Input */}
-            <div className="flex justify-around items-center ">
+            <div className="flex   justify-around items-center ">
               <div>
-                <div className="flex justify-center items-center mr-6">
+                <div className="flex justify-center items-center mr-1">
                   <p className="px-3 sm:px-4 sm:py-1 border border-gray-300 bg-slate-100 dark:text-black rounded-md text-center">
                     {item.selectedSize
                       ? item.selectedSize
@@ -91,7 +100,7 @@ const ItemCart = ({ items }: CartItemListProps) => {
                 </div>
               </div>
               <input
-                className="max-w-10 sm:max-w-20 border px-2 py-1 text-center"
+                className="max-w-10 md:w-32 border py-1.5 text-center mx-6 md:mx-0"
                 type="number"
                 min={1}
                 defaultValue={item.quantity}
@@ -102,13 +111,13 @@ const ItemCart = ({ items }: CartItemListProps) => {
                   )
                 }
               />
-              <p className="text-sm font-semibold">
+              <p className="text-xs font-semibold hidden md:block ">
                 {productTotal.toLocaleString("vi-VN").replace(/\./g, ",")} đ
               </p>
             </div>
 
             {/* Bin Icon */}
-            <div className="flex justify-end mr-4 dark:bg-transparent">
+            <div className="flex justify-end mr-3 dark:bg-transparent ">
               <img
                 src={assets.bin_icon.src}
                 onClick={() => deleteCartItem(item.cartitem_id)}

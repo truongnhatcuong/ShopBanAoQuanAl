@@ -1,6 +1,7 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { usePathname } from "next/navigation";
+import { ShopConText } from "@/app/context/Context";
 interface IProps {
   menuItem: IMenu;
 }
@@ -15,11 +16,11 @@ interface IMenu {
 
 const SubmenuItems = (props: IProps) => {
   const pathname = usePathname();
+  const { isLeftMenuVisible } = useContext(ShopConText)!;
   return (
     <div
-      className={` flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full p-0.5
-     
-      }`}
+      className={` flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full p-0.5   
+      `}
     >
       <Link
         href={props.menuItem.link}
@@ -29,10 +30,18 @@ const SubmenuItems = (props: IProps) => {
             : ""
         }`}
       >
-        <span className="mr-2 mt-3.5 ml-6">{props.menuItem.icon}</span>
-        <span className="uppercase  text-sm font-bold  ">
-          {props.menuItem.title}
+        <span
+          className={`mr-2  mt-1.5 md:mt-3.5     ${
+            isLeftMenuVisible ? "md:ml-6 ml-0 text-xl " : "md:ml-0 text-2xl"
+          }`}
+        >
+          {props.menuItem.icon}
         </span>
+        {isLeftMenuVisible && (
+          <span className="uppercase  text-sm font-bold  hidden md:block">
+            {props.menuItem.title}
+          </span>
+        )}
       </Link>
     </div>
   );

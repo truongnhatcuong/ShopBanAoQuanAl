@@ -1,28 +1,30 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
-
-interface ICustomer {
-  customer_id: number;
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+interface IUpdate {
   name: string;
-  email: string;
   phone: number | string;
   address: string;
   username: string;
+  email: string;
 }
-
-const Profile = () => {
-  const [user, setUser] = useState<ICustomer | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null); // Thêm state để quản lý lỗi
-
+const ProfileUsername = () => {
+  const [successMessage, setSuccessMessage] = useState<string>("");
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<IUpdate>({
+    name: "",
+    phone: "",
+    address: "",
+    username: "",
+    email: "",
+  });
+  const MySwal = withReactContent(Swal);
 
-  // Lấy token từ localStorage khi component mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const accessToken = window.localStorage.getItem("token");
-      setToken(accessToken);
-    }
+    const accessToken = window.localStorage.getItem("token");
+    setToken(accessToken);
   }, []);
 
   useEffect(() => {
@@ -35,96 +37,189 @@ const Profile = () => {
               Authorization: `Bearer ${token}`, // Gửi token qua Header
             },
           });
-
           if (res.ok) {
             const data = await res.json();
             setUser(data.user);
-            setLoading(false);
-          } else {
-            const dataError = await res.json();
-            setError(dataError.message || "Lỗi khi tải thông tin.");
-            setLoading(false);
           }
-        } catch (error) {
-          setError("Có lỗi xảy ra khi kết nối đến server.");
-          setLoading(false);
+        } catch (error: any) {
+          console.log(error);
         }
       }
+
       getApiCustomer();
     }
   }, [token]);
 
-  if (loading) {
-    return <div>Đang tải thông tin...</div>;
-  }
+  async function UpdateHandle(e: React.FormEvent) {
+    e.preventDefault();
 
-  if (error) {
-    return <div className="text-red-500">{error}</div>; // Hiển thị thông báo lỗi nếu có
+    const res = await fetch("/api/auth/change-information", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: user?.name,
+        phone: user?.phone,
+        address: user?.address,
+      }),
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      MySwal.fire({
+        title: "<strong>Cập Nhật Thành Công</strong>",
+        html: "Thông tin của bạn đã được cập nhật thành công!",
+        icon: "success",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#3085d6",
+        timer: 2500,
+        timerProgressBar: true,
+      });
+    } else {
+      setSuccessMessage("Cập nhật thất bại. Vui lòng thử lại.");
+    }
   }
 
   return (
-    <div className="container mx-auto my-8 border border-gray-900 shadow-lg max-w-6xl w-full h-[500px] rounded-xl bg-stone-100 dark:bg-gray-800 dark:border-white opacity-90">
-      <div className="w-full bg-black py-4 rounded-t-lg">
-        <h2 className="text-center text-2xl text-white font-semibold">
-          Thông Tin Khách Hàng
-        </h2>
+    <div className="max-w-4xl  border text-black dark:text-white dark:bg-slate-800 border-gray-300 p-4  shadow-lg h-full ">
+      <div className="mb-4">
+        <h3 className="text-center text-xl font-semibold  ">
+          Thông Tin Cá Nhân
+        </h3>
+        <p className="text-center text-sm text-gray-400 ">
+          Quản lý thông tin hồ sơ để bảo mật tài khoản
+        </p>
       </div>
-      <div className="rounded-b-lg p-6 mt-12 dark:bg-gray-900 dark:text-white">
-        {user && (
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
-              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
-                Tên đăng nhập:
+      {successMessage && (
+        <p className="text-center text-green-500 my-4">{successMessage}</p>
+      )}
+      <div className="flex gap-5">
+        <form onSubmit={UpdateHandle} className="w-2/3 mt-4">
+          <div className="flex justify-around gap-4 md:gap-0  ">
+            <div className="space-y-4">
+              <div className="mb-4">
+                <label className="text-sm">
+                  Họ Và Tên:<span className="text-red-600">*</span>
+                </label>
+                <br />
+                <input
+                  type="text"
+                  required
+                  value={user?.name || ""}
+                  onChange={(e) => setUser({ ...user, name: e.target.value })}
+                  className="w-full py-1 px-2 dark:bg-slate-700 dark:text-white focus:text-gray-900 border-b-2 border-black focus:outline-none"
+                  placeholder="Nhập họ và tên"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="text-sm">
+                  Số Điện Thoại:<span className="text-red-600">*</span>
+                </label>
+                <br />
+                <input
+                  type="text"
+                  required
+                  value={user?.phone || ""}
+                  onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                  className="w-full py-1 px-2 dark:bg-slate-700 dark:text-white focus:text-gray-900 border-b-2 border-black focus:outline-none"
+                  placeholder="Nhập số điện thoại"
+                />
+              </div>
+              {/* <div className="mb-4">
+              <label className="text-sm">
+                Địa Chỉ:<span className="text-red-600">*</span>
               </label>
-              <span className="text-black dark:text-white text-xl pt-2">
-                {user.username}
-              </span>
-            </li>
-            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
-              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
-                Địa Chỉ:
-              </label>
-              <span className="text-black dark:text-white text-xl pt-2">
-                {user.address}
-              </span>
-            </li>
-            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
-              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
-                Tên đầy đủ:
-              </label>
-              <span className="text-black dark:text-white text-xl pt-2">
-                {user.name}
-              </span>
-            </li>
-            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
-              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
-                Số điện thoại:
-              </label>
-              <span className="text-black dark:text-white text-xl pt-2">
-                {user.phone}
-              </span>
-            </li>
-            <li className="py-5 px-3 border-b border-gray-300 dark:border-gray-600">
-              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
-                Email:
-              </label>
-              <span className="text-black dark:text-white text-xl pt-2">
-                {user.email}
-              </span>
-            </li>
-            <li className="py-5 px-7 border-b border-gray-300 dark:border-gray-600">
-              <label className="font-medium text-lg text-gray-950 dark:text-gray-300 block">
-                Giới tính:
-              </label>
-              <span className="text-black dark:text-white text-xl pt-2">
-                Nam
-              </span>
-            </li>
-          </ul>
-        )}
+              <br />
+              <input
+                type="text"
+                required
+                value={user?.address || ""}
+                onChange={(e) => setUser({ ...user, address: e.target.value })}
+                className="w-full py-1 px-2 dark:bg-slate-700 dark:text-white border-b-2 border-black focus:outline-none"
+                placeholder="Nhập địa chỉ"
+              />
+            </div> */}
+            </div>
+            <div>
+              <div className="mb-4">
+                <label className="text-sm">
+                  Tài Khoản:<span className="text-red-600">*</span>
+                </label>
+                <br />
+                <input
+                  type="text"
+                  required
+                  disabled
+                  value={user.username || ""}
+                  onChange={(e) =>
+                    setUser({ ...user, username: e.target.value })
+                  }
+                  className="w-full py-1 px-2 text-gray-700 dark:bg-slate-700 dark:text-white border-b-2 border-black focus:outline-none"
+                  placeholder="Vô hiệu hóa"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="text-sm">
+                  Email:<span className="text-red-600">*</span>
+                </label>
+                <br />
+                <input
+                  type="text"
+                  required
+                  disabled
+                  value={user.email || ""}
+                  onChange={(e) => setUser({ ...user, email: e.target.value })}
+                  className="w-full py-1 px-2 text-gray-700 dark:bg-slate-700 dark:text-white border-b-2 border-black focus:outline-none"
+                  placeholder="Vô hiệu hóa"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 flex justify-center">
+            <button
+              type="submit"
+              className="bg-green-500 text-white px-7 py-2  w-1/2 md:w-20  rounded hover:bg-green-600 text-center"
+            >
+              Lưu
+            </button>
+          </div>
+        </form>
+        {/* image */}
+        <div className="w-1/3 mt-4 shadow-lg ">
+          <div className="flex justify-center mt-4">
+            <Image
+              src={"/Image/anhdaidien.jpg"}
+              alt=""
+              height={60}
+              width={60}
+              className="rounded-full "
+            />
+          </div>
+          <div className=" mt-5 flex justify-center ">
+            <label
+              htmlFor="image-upload"
+              className="border text-sm px-2 py-1 cursor-pointer"
+            >
+              Chọn ảnh
+              <input
+                type="file"
+                id="image-upload"
+                className="hidden"
+                name="image"
+              />
+            </label>
+          </div>
+          <div className="text-sm text-gray-400 my-5 text-center">
+            <p>Dụng lượng file tối đa 1 MB</p>
+            <p>Định dạng:.JPEG, .PNG</p>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Profile;
+export default ProfileUsername;

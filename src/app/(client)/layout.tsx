@@ -18,12 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ShopContextProvider>
-      {/* HeaderPager bọc toàn bộ ứng dụng */}
-      <HeadePager />
-      <main>{children}</main>
-      <FooterPage />
-      <Footer />
-    </ShopContextProvider>
+    <div suppressHydrationWarning={true}>
+      <ShopContextProvider>
+        {/* HeaderPager bọc toàn bộ ứng dụng */}
+        <HeadePager />
+        <main className="">{children}</main>
+        <FooterPage />
+        <Footer />
+      </ShopContextProvider>
+    </div>
   );
 }

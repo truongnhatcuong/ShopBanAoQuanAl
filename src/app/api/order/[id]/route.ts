@@ -1,7 +1,10 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const orderId = Number(params.id);
   try {
     const getOrderId = await prisma.order.findUnique({
@@ -18,43 +21,32 @@ export async function GET({ params }: { params: { id: string } }) {
   }
 }
 
-export async function PUT(
+export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const orderId = Number(params.id);
-  const data = await req.json();
+  const { id } = await params;
+  const orderId = Number(id);
   try {
-    const updateCartitem = await prisma.order.update({
+    await prisma.orderItem.deleteMany({
       where: {
         order_id: orderId,
       },
-      data: {
-        customer_id: data.customer_id,
-        order_date: data.order_date,
-        total_amount: data.total_amount,
-        order_state: data.order_state,
+    });
+    await prisma.payment.deleteMany({
+      where: {
+        order_id: orderId,
       },
     });
-    return NextResponse.json(
-      { updateCartitem, message: `created success` },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
+    // Sau đó xóa Order
+    const deletedOrder = await prisma.order.delete({
+      where: {
+        order_id: orderId,
+      },
+    });
 
-export async function DELETE({ params }: { params: { id: string } }) {
-  const orderId = Number(params.id);
-  try {
-    const getOrderId = await prisma.order.delete({
-      where: {
-        order_id: orderId,
-      },
-    });
     return NextResponse.json(
-      { getOrderId, message: `deleted success` },
+      { deletedOrder, message: `deleted success` },
       { status: 201 }
     );
   } catch (error: any) {

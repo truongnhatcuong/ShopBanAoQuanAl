@@ -2,18 +2,15 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { assets } from "@/app/assets/frontend_assets/assets";
+import { ShopConText } from "@/app/context/Context";
+
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 
-const TopBar = ({
-  onToggleMenu,
-  isLeftMenuVisible,
-}: {
-  onToggleMenu: () => void;
-  isLeftMenuVisible: boolean;
-}) => {
+const TopBar = () => {
+  const { isLeftMenuVisible, setIsLeftMenuVisible } = useContext(ShopConText)!;
   const [roleId, setRoleId] = useState<number | null>(null);
   async function fetchUserInfo() {
     const res = await fetch("/api/auth/getUsername", {
@@ -28,7 +25,10 @@ const TopBar = ({
   }, []);
   return (
     <div className="navbar bg-base-100 ">
-      <div onClick={onToggleMenu} className="mr-3">
+      <div
+        onClick={() => setIsLeftMenuVisible(!isLeftMenuVisible)}
+        className="mr-3 "
+      >
         {isLeftMenuVisible ? (
           <AiOutlineMenuFold className="text-3xl text-gray-700 cursor-pointer" />
         ) : (

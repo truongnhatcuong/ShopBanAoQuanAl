@@ -118,9 +118,9 @@ const PageProduct = () => {
     setSortOption(option);
   };
   return (
-    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t w-full  ">
+    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10  border-t w-full h-full   ">
       {/* Sidebar */}
-      <div className="sm:w-1/6 w-full flex sm:flex-row flex-col    bg-slate-100 text-black dark:text-black dark:bg-white mb-5 ">
+      <div className="sm:w-1/5 w-full   flex sm:flex-row flex-col shadow-lg  text-black dark:text-black dark:bg-white ">
         <FilterSidebar
           onCategoryChange={(categoryId) => console.log(categoryId)} // Cập nhật khi thay đổi danh mục
           onPriceChange={(price) => setMaxPrice(price)}
@@ -128,9 +128,9 @@ const PageProduct = () => {
       </div>
 
       {/* Giữa các phần: sidebar và nội dung */}
-      <div className="flex-1 w-5/6">
+      <div className="flex-1 sm:w-4/5 w-full  ">
         {/* Select Form bên trái */}
-        <div className="flex  text-base sm:text-2xl mb-4 justify-end md:justify-end ">
+        <div className="flex  text-base sm:text-2xl my-2 justify-end md:justify-end ">
           <SelectForm onSortChange={handleSortChange} />
         </div>{" "}
         <div className="mb-5">
@@ -145,11 +145,11 @@ const PageProduct = () => {
             </p>
           )}
         </div>
-        <div className="text">
+        <div className="text-center md:my-1.5 my-0">
           <Title title1="Tất Cả" title2="Bộ Sưu Tập" />
         </div>
         {/* Content area */}
-        <div className="grid   grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 gap-y-6 ml-9 md:ml-0">
+        <div className="grid   grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 gap-y-6 mx-5 md:mx-0">
           {sortedProduct.length > 0 ? (
             sortedProduct.map((item) => (
               <ProductItem {...item} key={item.product_id} />

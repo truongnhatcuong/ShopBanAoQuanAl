@@ -57,13 +57,13 @@ const ProductDetail = ({ productDetail }: IProps) => {
       <div className="flex flex-col sm:flex-row gap-12 sm:gap-12">
         {/* product images */}
         <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row">
-          <div className="flex sm:flex-col overflow-x-auto sm:overflow-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
+          <div className="flex sm:flex-col overflow-x-auto sm:overflow-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full ">
             {productDetail.Images.map((item, index) => (
               <img
                 src={item.image_url}
                 alt=""
                 key={index}
-                className={`w-[24%] sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer rounded-lg transition-transform duration-200 ease-in-out hover:scale-110 ${
+                className={`w-[29%] h-24 sm:w-full sm:mb-3 flex-shrink-0 cursor-pointer rounded-lg mr-1 transition-transform duration-200 ease-in-out  ${
                   selectImage === item.image_url ? "border border-gray-900" : ""
                 }`}
                 onClick={() => setSelectImage(item.image_url)}
@@ -80,8 +80,8 @@ const ProductDetail = ({ productDetail }: IProps) => {
           </div>
         </div>
         {/* thong tin product */}
-        <div className="flex-1">
-          <h1 className="font-medium text-2xl mt-2 uppercase">
+        <div className="md:flex-1 flex-none ml-7 md:ml-0 ">
+          <h1 className="font-medium text-2xl mt-2 uppercase ">
             {productDetail.product_name}
           </h1>
           <div className="flex items-center gap-1 mt-2 ">

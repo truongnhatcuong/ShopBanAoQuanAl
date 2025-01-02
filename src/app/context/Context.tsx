@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { ThemeProvider } from "next-themes";
+import { boolean } from "zod";
 
 interface IContext {
   cart: any;
@@ -23,7 +24,8 @@ interface IContext {
   handleDeleteCartItem: (cartItemId: number) => Promise<void>;
   countCart: any;
   handleQuantityCart: () => Promise<void>;
-
+  isLeftMenuVisible: boolean;
+  setIsLeftMenuVisible: Dispatch<SetStateAction<boolean>>;
   handleUpdateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
 }
 interface ShopContextProvider {
@@ -35,7 +37,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const [cart, setCart] = useState<any>({ items: [] });
   const [countCart, setCountCart] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const [isLeftMenuVisible, setIsLeftMenuVisible] = useState(true);
   const handleAddToCart = async (
     product_id: number,
     quantity: number,
@@ -153,6 +155,8 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     totalPrice,
     handleDeleteCartItem,
     handleUpdateCartItem,
+    isLeftMenuVisible,
+    setIsLeftMenuVisible,
   };
   return (
     <ThemeProvider defaultTheme="system" attribute="class">

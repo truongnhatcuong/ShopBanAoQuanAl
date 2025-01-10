@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CancellOrder from "../components/CancellOrder";
+import { useRouter } from "next/navigation";
 
 interface Brand {
   brand_name: string;
@@ -49,6 +50,7 @@ enum OrderState {
 
 const PageListOrder = () => {
   const [orderList, setOrderList] = useState<Order[] | null>(null);
+  const route = useRouter();
 
   const orderStateText: { [key in OrderState]: string } = {
     PENDING: "Chờ xử lý",
@@ -96,7 +98,10 @@ const PageListOrder = () => {
                 <button className="bg-red-500 text-white px-3 py-1 rounded text-sm">
                   Chat
                 </button>
-                <button className="border px-3 py-1 rounded text-sm">
+                <button
+                  className="border px-3 py-1 rounded text-sm"
+                  onClick={() => route.push("/product")}
+                >
                   Xem Shop
                 </button>
               </div>

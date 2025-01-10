@@ -5,27 +5,42 @@ export async function GET(req: NextRequest) {
   try {
     const countOrder = await prisma.orderItem.count();
     const customerCount = await prisma.customer.count();
+    const totalOrderAmount = await prisma.order.aggregate({
+      _sum: {
+        total_amount: true, // Thay "total_amount" bằng tên chính xác của trường trong mô hình của bạn
+      },
+    });
+    const totalAmount = totalOrderAmount._sum.total_amount || 0;
+    const totalOrderQuantily = await prisma.orderItem.aggregate({
+      _sum: {
+        quantity: true,
+      },
+    });
+    const totalQuantily = totalOrderQuantily._sum.quantity || 0;
+    const startDate = new Date("2025-01-01");
+    startDate.setHours(0, 0, 0, 0); // Đặt thời gian bắt đầu
 
-    const today = new Date("2025-01-02");
-    today.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(today);
-    endOfDay.setHours(23, 59, 59, 999);
+    const endDate = new Date("2025-01-07");
+    endDate.setHours(23, 59, 59, 999); // Đặt thời gian kết thúc
 
-    const todayOrders = await prisma.order.count({
+    const weeklyOrders = await prisma.order.count({
       where: {
         created_at: {
-          gte: today,
-          lte: endOfDay,
+          gte: startDate,
+          lte: endDate,
         },
       },
     });
+
     return NextResponse.json(
       {
+        totalQuantily,
         countOrder,
+        totalAmount,
         customerCount,
-        count: todayOrders,
-        date: today.toLocaleString("vi-VN"),
-        endOfDay: endOfDay.toLocaleString("vi-VN"),
+        count: weeklyOrders,
+        startDate: startDate.toLocaleString("vi-VN"),
+        endDate: endDate.toLocaleString("vi-VN"),
         message: "succcess",
       },
       { status: 201 }

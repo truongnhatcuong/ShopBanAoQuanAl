@@ -26,14 +26,10 @@ declare global {
 }
 
 const CozeChat: React.FC = () => {
-  const [showNotification, setShowNotification] = useState(true);
   const [isCozeLoaded, setIsCozeLoaded] = useState(false);
   const pathname = usePathname();
 
   // Check if the current route is the admin dashboard
-  const isAdminDashboard = pathname === "/admin";
-  const isLoginPage = pathname === "/logUp";
-  const isRegisterPage = pathname === "/login";
 
   useEffect(() => {
     // Create script element for Coze SDK
@@ -75,11 +71,13 @@ const CozeChat: React.FC = () => {
   // Render notification component
   const AiAdvisoryNotification = () => {
     // Do not render if on admin dashboard
-    if (isAdminDashboard || isLoginPage || isRegisterPage || !showNotification)
-      return null;
 
     return (
-      <div className="fixed bottom-24 right-4 z-50 max-w-xs bg-white shadow-lg rounded-lg p-4 border flex items-start">
+      <div
+        className={`fixed bottom-24 right-4 z-50 max-w-xs bg-white shadow-lg rounded-lg p-4 border flex items-start ${
+          pathname === "/" ? "hidden" : "block"
+        }`}
+      >
         <MessageCircleQuestion
           className="text-blue-600 mr-3  flex-shrink-0"
           size={24}

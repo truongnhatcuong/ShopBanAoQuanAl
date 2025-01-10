@@ -91,11 +91,13 @@ export default function HeadePager() {
       </div>
       {/* menu */}
       <div className=" mr-5 hidden  md:flex gap-5 uppercase">
-        <ListItem />
+        <div>
+          <ListItem />
+        </div>
 
         <div className="group relative z-10">
-          <div className="ml-5 hidden sm:flex gap-5 uppercase cursor-pointer ">
-            <p> DANH MỤC</p>
+          <div className="ml-2 hidden sm:flex  uppercase cursor-pointer text-[15px]">
+            <p className=""> DANH MỤC</p>
           </div>
 
           <div className="group-hover:block hidden absolute dropdown-menu  pt-4 -right-14">

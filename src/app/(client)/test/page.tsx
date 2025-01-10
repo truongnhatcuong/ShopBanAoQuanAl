@@ -1,18 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import PageTest from "./TestApi";
 
-import { ToastContainer, toast } from "react-toastify";
-const page = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  function open() {
-    setIsOpen(true);
-    toast.success("mở thành công");
+const Page = () => {
+  const [promotion, setPromotion] = useState([]);
+  async function fetchApi() {
+    const res = await fetch("/api/promotion");
+    const data = await res.json();
+    setPromotion(data.promotions);
   }
+  useEffect(() => {
+    fetchApi();
+  }, []);
   return (
-    <div className="h-screen">
-      <div onClick={open}>hi</div>
+    <div>
+      <PageTest promotion={promotion} />
     </div>
   );
 };
 
-export default page;
+export default Page;

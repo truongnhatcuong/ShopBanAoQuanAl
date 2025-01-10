@@ -1,6 +1,4 @@
-import React from "react";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FaRegEdit } from "react-icons/fa";
+"use client";
 import {
   Table,
   TableBody,
@@ -10,6 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import React from "react";
+import { AiOutlineDelete } from "react-icons/ai";
+import { FaRegEdit } from "react-icons/fa";
+
 interface IPromotion {
   discount: number;
   start_date: string;
@@ -23,18 +25,18 @@ interface IProp {
   promotion: IPromotion[] | [];
 }
 
-const TablePromotion = (props: IProp) => {
+const PageTest = (props: IProp) => {
   return (
     <>
       <Table>
         <TableCaption>Danh Sách Sản Phẩm Khuyến Mãi</TableCaption>
-        <TableHeader className="table-auto w-full text-left border-collapse bg-gray-900 ">
+        <TableHeader className="table-auto w-full text-left border-collapse">
           <TableRow>
-            <TableHead className="text-white">Giảm Giá (%)</TableHead>
-            <TableHead className="text-white">Ngày Bắt Đầu</TableHead>
-            <TableHead className="text-white">Ngày Kết Thúc</TableHead>
-            <TableHead className="text-white">Tên Sản Phẩm</TableHead>
-            <TableHead className="text-white">Action</TableHead>
+            <TableHead>Giảm Giá (%)</TableHead>
+            <TableHead>Ngày Bắt Đầu</TableHead>
+            <TableHead>Ngày Kết Thúc</TableHead>
+            <TableHead>Tên Sản Phẩm</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -76,4 +78,4 @@ const TablePromotion = (props: IProp) => {
   );
 };
 
-export default TablePromotion;
+export default PageTest;

@@ -5,6 +5,7 @@ import { assets } from "@/app/assets/frontend_assets/assets";
 import React, { useState } from "react";
 import AddToCart from "../../cart/components/Addcart";
 import RelatedProduct from "../../components/RelatedProduct";
+import TextCompact from "./TextCompact";
 
 interface Size {
   stock_quantity: number;
@@ -101,7 +102,7 @@ const ProductDetail = ({ productDetail }: IProps) => {
             đ
           </p>
           <p className="mt-5 text-gray-500 dark:text-gray-100 text-sm md:w-4/5">
-            {productDetail.description}
+            <TextCompact>{productDetail.description}</TextCompact>
           </p>
           <div className="flex flex-col gap-4 my-8">
             <p>Chọn Size</p>

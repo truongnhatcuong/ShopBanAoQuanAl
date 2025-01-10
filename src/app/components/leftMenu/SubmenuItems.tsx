@@ -31,14 +31,14 @@ const SubmenuItems = (props: IProps) => {
         }`}
       >
         <span
-          className={`mr-2  mt-1.5 md:mt-3.5     ${
+          className={`mr-2  mt-1.5 md:mt-3     ${
             isLeftMenuVisible ? "md:ml-6 ml-0 text-xl " : "md:ml-0 text-2xl"
           }`}
         >
           {props.menuItem.icon}
         </span>
         {isLeftMenuVisible && (
-          <span className="uppercase  text-sm font-bold  hidden md:block">
+          <span className="uppercase  text-sm family font-bold  hidden md:block">
             {props.menuItem.title}
           </span>
         )}

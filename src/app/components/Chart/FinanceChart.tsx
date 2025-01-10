@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  ReferenceLine,
 } from "recharts";
 
 interface ChartData {
@@ -21,25 +22,19 @@ const OrderLineChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Lấy dữ liệu 7 ngày gần nhất
-        const promises = [];
-        for (let i = 6; i >= 0; i--) {
-          const date = new Date();
-          date.setDate(date.getDate() - i);
-          const formattedDate = date.toISOString().split("T")[0];
+        // Gọi API để lấy dữ liệu cho 7 ngày gần nhất
+        const response = await fetch("/api/admin/thongke");
+        const result = await response.json();
 
-          promises.push(
-            fetch(`/api/admin/thongke?date=${formattedDate}`)
-              .then((res) => res.json())
-              .then((result) => ({
-                date: new Date(result.date).toLocaleDateString("vi-VN"),
-                orders: result.count,
-              }))
-          );
-        }
+        const formattedData = [
+          {
+            date: new Date(result.startDate).toLocaleDateString("vi-VN"),
+            orders: result.count,
+          },
+          // Thêm logic cho dữ liệu từng ngày nếu cần thiết
+        ];
 
-        const results = await Promise.all(promises);
-        setData(results);
+        setData(formattedData);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -75,6 +70,8 @@ const OrderLineChart = () => {
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
+          {/* Thêm đường tham chiếu màu tím */}
+          <ReferenceLine y={10} stroke="purple" strokeWidth={2} />
         </LineChart>
       </ResponsiveContainer>
     </div>

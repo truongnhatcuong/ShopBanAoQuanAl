@@ -64,7 +64,7 @@ const MenuItems = (props: IProps) => {
 
       {isSubmenuVisible && props.menuItem.submenu && (
         <ul
-          className={`ml-3 bg-white text-black w-8  rounded-lg mt-1 ${
+          className={`ml-3 text-white w-8  rounded-lg mt-1 ${
             isLeftMenuVisible ? " md:w-48 " : "md:w-10  "
           }`}
         >

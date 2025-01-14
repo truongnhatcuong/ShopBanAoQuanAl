@@ -42,7 +42,7 @@ const ProductDetail = ({ productDetail }: IProps) => {
   }
   console.log("Category Name:", productDetail.Category.category_name);
 
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState<number | string>(0);
   const [sizeId, setSizeId] = useState<number | null>(null);
 
   const [selectImage, setSelectImage] = useState<string | null>(

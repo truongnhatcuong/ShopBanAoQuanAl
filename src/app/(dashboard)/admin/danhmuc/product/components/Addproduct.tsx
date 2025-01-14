@@ -307,7 +307,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
                     type="number"
                     className="w-20 border border-gray-300 rounded-md p-2"
                     placeholder="Số lượng"
-                    value={item.stock_quantity || ""}
+                    value={item.stock_quantity || 0}
                     onChange={(e) =>
                       handleSizeChange(
                         index,

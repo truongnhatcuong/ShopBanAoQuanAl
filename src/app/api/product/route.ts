@@ -60,16 +60,16 @@ export async function GET(req: NextRequest) {
             category_name: true, // Tên danh mục
           },
         },
-        Brand: {
-          select: {
-            brand_name: true, // Tên thương hiệu
-          },
-        },
-        Season: {
-          select: {
-            season_name: true, // Tên mùa
-          },
-        },
+        // Brand: {
+        //   select: {
+        //     brand_name: true, // Tên thương hiệu
+        //   },
+        // },
+        // Season: {
+        //   select: {
+        //     season_name: true, // Tên mùa
+        //   },
+        // },
         ProductPromotion: {
           select: {
             Promotion: {

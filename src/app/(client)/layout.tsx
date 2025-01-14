@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import HeadePager from "./components/HeaderPager";
-import FooterPage from "./components/FooterPage";
 import Footer from "./components/Footer";
 import ShopContextProvider from "../context/Context";
 
@@ -23,7 +22,7 @@ export default function RootLayout({
         {/* HeaderPager bọc toàn bộ ứng dụng */}
         <HeadePager />
         <main className="">{children}</main>
-        <FooterPage />
+
         <Footer />
       </ShopContextProvider>
     </div>

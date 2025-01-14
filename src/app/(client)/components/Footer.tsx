@@ -1,15 +1,21 @@
+import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
   return (
     <footer>
-      <div className="flex flex-col sm:flex-row justify-between py-10 mx-5 block1 text-black dark:text-white dark:bg-black">
+      <div
+        className="flex flex-col sm:flex-row justify-between py-10 mx-5  text-black dark:text-white dark:bg-black mt-5 border-t-4"
+        data-aos="zoom-in-up"
+        data-aos-duration="1000"
+        data-aos-easing="ease-in-out"
+      >
         {/* footer 1 */}
-        <div className="w-full md:w-1/3 mb-6 flex flex-col image">
+        <div className="md:h-52 h-full  w-full md:w-1/3 mb-6 md:mb-0  flex flex-col ">
           <h1 className="text-xl font-bold mb-4 text-center md:text-left">
             VỀ CHÚNG TÔI
           </h1>
-          <p className="text-sm leading-relaxed  flex-grow">
+          <p className="text-sm leading-relaxed  flex-grow ps-3 text-left">
             ODIN CLUB luôn lựa chọn những loại vải cao cấp nhất cho các sản phẩm
             của mình.
             <br />
@@ -21,7 +27,7 @@ const Footer = () => {
         </div>
 
         {/* footer 2 */}
-        <div className="w-full md:w-1/3 mb-6 image">
+        <div className="md:h-52 h-full  w-full md:w-1/3 mb-6 md:mb-0  ">
           <div className="flex justify-center">
             <h1 className="text-xl font-bold mb-4 md:text-left text-center">
               THÔNG TIN LIÊN HỆ
@@ -33,14 +39,16 @@ const Footer = () => {
             <p className="text-sm  mb-4">Email: info.odinclub@gmail.com</p>
           </div>
           <div className="flex justify-center">
-            <button className="py-2 px-16 bg-red-800 hover:bg-red-950 rounded text-white">
-              Hệ Thống Cửa Hàng
-            </button>
+            <Link href={"/hethongcuahang"}>
+              <button className="py-2 px-16 bg-red-800 hover:bg-red-950 rounded text-white">
+                Hệ Thống Cửa Hàng
+              </button>
+            </Link>
           </div>
         </div>
 
         {/* footer 3 */}
-        <div className="w-full md:w-1/3 mb-6 flex flex-col image">
+        <div className="md:h-52 h-full  w-full md:w-1/3 mb-6 md:mb-0  flex flex-col ">
           <p className="text-center md:text-left text-3xl font-semibold italic mb-4">
             𝓣𝓻𝓾̛𝓸̛𝓷𝓰 𝓝𝓱𝓪̣̂𝓽 𝓒𝓾̛𝓸̛̀𝓷𝓰 𝓢𝓱𝓸𝓹
           </p>
@@ -55,8 +63,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-2 border-black image dark:border-white">
-        <p className="text-center my-3">
+      <div className="border-t-2 border-black  dark:border-white p-3 ">
+        <p className="text-center ">
           Thiết Kế WebSite Bởi{" "}
           <span className="text-xl">©𝙏𝙧𝙪̛𝙤̛𝙣𝙜 𝙉𝙝𝙖̣̂𝙩 𝘾𝙪̛𝙤̛̀𝙣𝙜</span>
         </p>

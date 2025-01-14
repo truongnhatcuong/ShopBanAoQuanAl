@@ -12,6 +12,7 @@ interface IProduct {
   product_name: string;
   price: number;
   Images: { image_url: string | any }[];
+  ProductPromotion?: { Promotion: { discount: number } }[];
 }
 
 const PageProduct = () => {
@@ -149,13 +150,13 @@ const PageProduct = () => {
           <Title title1="Tất Cả" title2="Bộ Sưu Tập" />
         </div>
         {/* Content area */}
-        <div className="grid   grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 gap-y-6 mx-5 md:mx-0">
+        <div className="grid  grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 gap-y-6  md:mx-0">
           {sortedProduct.length > 0 ? (
             sortedProduct.map((item) => (
               <ProductItem {...item} key={item.product_id} />
             ))
           ) : (
-            <div>không tìm thấy sản phẩm </div>
+            <div className="">không tìm thấy sản phẩm </div>
           )}
         </div>
       </div>

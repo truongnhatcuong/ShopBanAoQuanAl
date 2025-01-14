@@ -14,7 +14,7 @@ const TextCompact = ({ children }: any) => {
         className="text-gray-700 dark:text-white border-b border-gray-700 leading-3 pb-1"
         onClick={() => setIsExpand(!isExpand)}
       >
-        {isExpand ? "thu gọn" : "xem thêm"}
+        {children.length > 40 ? (isExpand ? "Thu gọn" : "Xem thêm") : ""}
       </button>
     </span>
   );

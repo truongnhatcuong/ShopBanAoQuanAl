@@ -27,11 +27,20 @@ const ProductItemSeller = ({ props }: IProps) => {
           <div className="absolute top-0 left-0 bg-red-500 text-white text-sm font-bold px-0.5 py-1 rounded-bl-lg z-20 ">
             -{props.discount}%
           </div>
-          <img
-            src={props.products[0].images[0].image_url}
-            alt=""
-            className="hover:scale-110 transition ease-in-out object-cover w-96 h-80  sm:w-52 sm:h-52 "
-          />
+          <div className="relative group">
+            <img
+              src={props.products[0].images[0].image_url}
+              alt=""
+              className="hover:scale-110 transition-all ease-in-out object-cover w-96 h-80  md:w-52 md:h-52 opacity-100 group-hover:opacity-0"
+            />
+            {props.products[0].images[1].image_url && (
+              <img
+                src={props.products[0].images[1].image_url}
+                alt=""
+                className="hover:scale-110 transition-all ease-in-out object-cover w-96 h-80  md:w-52 md:h-52 absolute top-0 opacity-0 group-hover:opacity-100 duration-700"
+              />
+            )}
+          </div>
           <p className="pt-3 pb-1 text-base">
             {props.products[0].product_name}
           </p>

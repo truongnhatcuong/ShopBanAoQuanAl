@@ -7,7 +7,17 @@ const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setIsOpen(true); // Mở thông báo khi trang tải
+    //local
+    const localstore = "thongbaoshop";
+    const currentTime = Date.now();
+    const twentyMinutes = 20 * 60 * 1000;
+    const lastShow = localStorage.getItem(localstore);
+
+    if (!lastShow || currentTime - Number(lastShow) >= twentyMinutes) {
+      setIsOpen(true);
+      localStorage.setItem(localstore, currentTime.toString());
+    }
+
     // dùng esc để thoát thông báo
     const hanlekeydown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {

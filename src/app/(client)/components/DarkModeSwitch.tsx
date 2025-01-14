@@ -23,13 +23,13 @@ const DarkModeSwitch = () => {
 
   return (
     <div>
-      {/* <input
+      <input
         type="checkbox"
         className="toggle toggle-warning"
         defaultChecked={theme === "dark"}
         onChange={toggleTheme}
-      /> */}
-      <StyledWrapper>
+      />
+      {/* <StyledWrapper>
         <label className="switch">
           <input
             id="input"
@@ -92,7 +92,7 @@ const DarkModeSwitch = () => {
             </div>
           </div>
         </label>
-      </StyledWrapper>
+      </StyledWrapper> */}
     </div>
   );
 };

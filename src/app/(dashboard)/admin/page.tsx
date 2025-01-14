@@ -54,13 +54,13 @@ const Page = () => {
       </div>
       <div className="flex block1">
         {/* tổng doanh thu */}
-        <TotalSale />
+        <TotalSale title="Tổng Doanh Thu" />
         {/* số đơn đạt hàng*/}
-        <CountOrder />
+        <CountOrder title="Đơn Đặt Hàng" />
         {/* số khách hàng */}
-        <CountCustomer />
+        <CountCustomer title="Khách Hàng" />
         {/* số lượng bán */}
-        <TotalQuantity />
+        <TotalQuantity title="Tổng Lượt Bán" />
       </div>
       {/* biểu đồ */}
       <div>

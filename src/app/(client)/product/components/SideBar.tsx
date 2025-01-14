@@ -51,7 +51,7 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
   };
 
   return (
-    <div className=" flex md:flex-col flex-row md:pb-0 pb-4  ">
+    <div className=" flex md:flex-col flex-row md:pb-0 pb-4 h-screen ">
       <div className="ml-4 ">
         <h2 className="text-xl font-bold mt-6">Giá</h2>
         <div className="text-black t-8">

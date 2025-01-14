@@ -1,15 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { assets } from "@/app/assets/frontend_assets/assets";
-import React from "react";
+import React, { useEffect } from "react";
 import Title from "../components/Title";
+import Aos from "aos";
 
-const page = () => {
+const Page = () => {
+  useEffect(() => {
+    Aos.init();
+  }, []);
   return (
     <div>
       {/* Phần tiêu đề */}
 
       <div className="text-2xl text-center pt-8 border-t uppercase my-4 ">
-        <div className="text">
+        <div className="">
           {" "}
           <Title title1="phần" title2="giới thiệu" />
         </div>
@@ -18,9 +23,17 @@ const page = () => {
         <img
           src={assets.about_img.src}
           alt=""
-          className="w-full md:max-w-[450px] image"
+          className="w-full md:max-w-[450px] "
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-easing="ease-in-out"
         />
-        <div className="flex flex-col justify-center gap-6 md:w-2/4  image">
+        <div
+          className="flex flex-col justify-center gap-6 md:w-2/4  "
+          data-aos="fade-up-left"
+          data-aos-duration="1000"
+          data-aos-easing="ease-in-out"
+        >
           <p>
             OdinClub là một thương hiệu thời trang hàng đầu, cam kết cung cấp
             những sản phẩm thời trang chất lượng cao với thiết kế hiện đại và
@@ -45,8 +58,13 @@ const page = () => {
       <div className="text-4xl py-4 text">
         <Title title1="Tại Sao" title2="Chọn Chúng Tôi" />
       </div>
-      <div className="flex flex-col md:flex-row text-sm mb-20 block1">
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
+      <div className="flex flex-col md:flex-row text-sm mb-5 ">
+        <div
+          className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5"
+          data-aos="fade-right"
+          data-aos-duration="1500"
+          data-aos-easing="ease-in-out"
+        >
           <b>Chất Lượng</b>
           <p>
             Sản phẩm có xuất xứ tại Nga, được công nhận và kiểm duyệt bởi Cục y
@@ -57,7 +75,12 @@ const page = () => {
             ngăn ngừa sự xuất hiện các vết rạn da cho các bà bầu...
           </p>
         </div>
-        <div className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5">
+        <div
+          className="border px-10 md:px-16 py-8 sm:py-20 flex flex-col gap-5"
+          data-aos="fade-left"
+          data-aos-duration="1500"
+          data-aos-easing="ease-in-out"
+        >
           <b>Chất Lượng</b>
           <p>
             Sản phẩm có xuất xứ tại Nga, được công nhận và kiểm duyệt bởi Cục y
@@ -73,4 +96,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

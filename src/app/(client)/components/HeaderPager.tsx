@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ListItem, { MenuHeader } from "./ListItem";
 import Image from "next/image";
 import Link from "next/link";
-import { GiShoppingCart } from "react-icons/gi";
+import { BsBagCheck } from "react-icons/bs";
 import { FaClipboardCheck, FaUser } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
@@ -14,7 +14,6 @@ import { RiAdminLine } from "react-icons/ri";
 import { HiMenu } from "react-icons/hi";
 import { ShopConText } from "@/app/context/Context";
 import { IoChevronBackOutline } from "react-icons/io5";
-
 import DarkModeSwitch from "./DarkModeSwitch";
 interface ICategory {
   category_id: number;
@@ -78,7 +77,12 @@ export default function HeadePager() {
   };
   return (
     <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-3 ">
-      <div className="dark:bg-transparent hidden md:block ">
+      <div
+        className="dark:bg-transparent hidden md:block "
+        data-aos="fade-right"
+        data-aos-duration="4000"
+        data-aos-easing="ease-in-out"
+      >
         <Link href={"/"} className="">
           <Image
             src={"/Image/logo.png"}
@@ -90,7 +94,12 @@ export default function HeadePager() {
         </Link>
       </div>
       {/* menu */}
-      <div className=" mr-5 hidden  md:flex gap-5 uppercase">
+      <div
+        className=" mr-5 hidden  md:flex gap-5 uppercase"
+        data-aos="fade-left"
+        data-aos-duration="1000"
+        data-aos-easing="ease-in-out"
+      >
         <div>
           <ListItem />
         </div>
@@ -118,7 +127,12 @@ export default function HeadePager() {
       </div>
 
       {/* phần khác */}
-      <div className="flex items-center gap-x-5 ">
+      <div
+        className="flex items-center gap-x-5 "
+        data-aos="fade-left"
+        data-aos-duration="1000"
+        data-aos-easing="ease-in-out"
+      >
         {/* Search Input */}
         <div className="relative md:flex items-center border rounded-full md:p-2 md:pl-4 px-3 py-1.5   dark:text-white   ">
           <input
@@ -130,7 +144,10 @@ export default function HeadePager() {
             onKeyDown={handleKeyPress}
           />
           <IoSearchSharp
-            className="  text-xl md:text-2xl hover:text-gray-400 absolute right-2 top-2"
+            className={`text-xl md:text-2xl  absolute right-2 top-2 cursor-pointer ${
+              search === "" ? "" : "hover:text-gray-400"
+            }`}
+            aria-disabled={search === ""}
             onClick={handleSearchSubmit}
           />
         </div>
@@ -206,9 +223,9 @@ export default function HeadePager() {
         <div className="relative mr-3 ">
           {" "}
           <Link href={"/cart"}>
-            <GiShoppingCart className="text-3xl cursor-pointer mr-8 md:mr-0 " />
+            <BsBagCheck className="text-3xl cursor-pointer mr-8 md:mr-0  " />
           </Link>
-          <p className="absolute right-[-3px] bottom-[-3px] w-[17px] text-center leading-4 bg-black text-white dark:text-black dark:bg-white rounded-full aspect-square text-[10px] mr-8 md:mr-0 ">
+          <p className="absolute right-[-3.5px] bottom-[-5px] w-[17px] text-center leading-4 bg-black text-white dark:text-black dark:bg-white rounded-full aspect-square text-[10px] mr-8 md:mr-0 ">
             {countCart}
           </p>
         </div>

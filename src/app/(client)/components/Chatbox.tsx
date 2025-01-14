@@ -32,6 +32,7 @@ const CozeChat: React.FC = () => {
   // Check if the current route is the admin dashboard
 
   useEffect(() => {
+    if (pathname !== "/") return;
     // Create script element for Coze SDK
     const script = document.createElement("script");
     script.src =
@@ -66,7 +67,7 @@ const CozeChat: React.FC = () => {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [pathname]);
 
   // Render notification component
   const AiAdvisoryNotification = () => {
@@ -74,9 +75,7 @@ const CozeChat: React.FC = () => {
 
     return (
       <div
-        className={`fixed bottom-24 right-4 z-50 max-w-xs bg-white shadow-lg rounded-lg p-4 border flex items-start ${
-          pathname === "/" ? "hidden" : "block"
-        }`}
+        className={`fixed bottom-24 right-4 z-50 max-w-xs bg-white shadow-lg rounded-lg p-4 border flex items-start`}
       >
         <MessageCircleQuestion
           className="text-blue-600 mr-3  flex-shrink-0"
@@ -93,8 +92,12 @@ const CozeChat: React.FC = () => {
 
   return (
     <>
-      <div id="coze-chat-container"></div>
-      <AiAdvisoryNotification />
+      {pathname === "/" && (
+        <div>
+          <div id="coze-chat-container"></div>
+          <AiAdvisoryNotification />
+        </div>
+      )}
     </>
   );
 };

@@ -68,53 +68,56 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((item) => (
-            <TableRow
-              key={item.order_id}
-              className="odd:bg-gray-100 even:bg-white text-sm"
-            >
-              <TableCell>{item.order_id}</TableCell>
-              <TableCell>{item.Customer.name}</TableCell>
-              <TableCell>
-                {new Date(item.order_date).toLocaleDateString("vi-VN")}
-              </TableCell>
-              <TableCell>
-                <span
-                  className={`p-1.5 text-xs ml-5 ${
-                    item.Payments &&
-                    item.Payments.length > 0 &&
-                    item.Payments[0].payment_status === "COMPLETED"
-                      ? "text-green-700 bg-green-200"
-                      : "text-red-500 bg-red-200"
-                  }`}
-                >
+          {orders
+            .filter((item) => item.order_state !== OrderState.DELIVERED)
+
+            .map((item) => (
+              <TableRow
+                key={item.order_id}
+                className="odd:bg-gray-100 even:bg-white text-sm"
+              >
+                <TableCell>{item.order_id}</TableCell>
+                <TableCell>{item.Customer.name}</TableCell>
+                <TableCell>
+                  {new Date(item.order_date).toLocaleDateString("vi-VN")}
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={`p-1.5 text-xs ml-5 ${
+                      item.Payments &&
+                      item.Payments.length > 0 &&
+                      item.Payments[0].payment_status === "COMPLETED"
+                        ? "text-green-700 bg-green-200"
+                        : "text-red-500 bg-red-200"
+                    }`}
+                  >
+                    {item.Payments && item.Payments.length > 0
+                      ? item.Payments[0].payment_status
+                      : "PENDING"}
+                  </span>
+                </TableCell>
+                <TableCell>{formatCurrency(item.total_amount)}</TableCell>
+                <TableCell>
                   {item.Payments && item.Payments.length > 0
-                    ? item.Payments[0].payment_status
-                    : "PENDING"}
-                </span>
-              </TableCell>
-              <TableCell>{formatCurrency(item.total_amount)}</TableCell>
-              <TableCell>
-                {item.Payments && item.Payments.length > 0
-                  ? item.Payments[0].payment_method
-                  : "CASH"}
-              </TableCell>
-              <TableCell>
-                <span
-                  className={`${
-                    orderStateClasses[item.order_state as OrderState]
-                  } p-1.5 text-xs ml-5`}
-                >
-                  {item.order_state}
-                </span>
-              </TableCell>
-              <TableCell className="flex justify-center">
-                <div>
-                  <UpdateOrder orders={item} reloadData={reloadData} />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+                    ? item.Payments[0].payment_method
+                    : "CASH"}
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={`${
+                      orderStateClasses[item.order_state as OrderState]
+                    } p-1.5 text-xs ml-5`}
+                  >
+                    {item.order_state}
+                  </span>
+                </TableCell>
+                <TableCell className="flex justify-center">
+                  <div>
+                    <UpdateOrder orders={item} reloadData={reloadData} />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </>

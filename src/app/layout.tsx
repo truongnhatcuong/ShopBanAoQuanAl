@@ -4,6 +4,7 @@ import "./globals.css";
 import ShopContextProvider from "./context/Context";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "aos/dist/aos.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

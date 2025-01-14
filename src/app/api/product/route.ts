@@ -70,6 +70,15 @@ export async function GET(req: NextRequest) {
             season_name: true, // Tên mùa
           },
         },
+        ProductPromotion: {
+          select: {
+            Promotion: {
+              select: {
+                discount: true,
+              },
+            },
+          },
+        },
       },
     });
 

@@ -136,3 +136,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+.prata-regular {
+  font-family: "Prata", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.formImage {
+  background-image: url("/Image/nendep.jpg");
+  background-size: cover;
+}

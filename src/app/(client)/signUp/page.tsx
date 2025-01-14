@@ -62,7 +62,7 @@ const Page = () => {
     }
   }
   return (
-    <div className="flex  items-center justify-center md:mb-20 mb-0   md:min-h-screen mt-0 md:mt-3">
+    <div className="flex  items-center justify-center md:mb-20 mb-0   md:min-h-screen mt-0 md:mt-3 formImage">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden  flex-col md:flex-row">
         {/*  */}
         <div className="sm:flex sm:flex-col  justify-center items-center sm:w-1/2 bg-gray-950 dark:bg-white text-white dark:text-black p-10">

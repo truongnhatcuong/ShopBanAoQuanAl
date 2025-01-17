@@ -58,10 +58,10 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
           <input
             type="range"
             min={0}
-            step={50000}
+            step={100000}
             max={1000000}
             className="accent-black h-1.5 w-44 range-input"
-            value={price}
+            defaultValue={price}
             onChange={handleChangPrice}
           />
           <p className="text-sm mt-1">

@@ -223,8 +223,8 @@ export default function HeadePager() {
 
         {/* thanh menu ở giao diện màn hình nhỏ */}
         <div
-          className={`absolute top-0 right-0 text-gray-500 gap-4 overflow-hidden z-50 bg-white transition-all ${
-            visible ? "w-full h-full" : "w-0 h-0"
+          className={`fixed inset-0   text-gray-500 gap-4 overflow-hidden z-50 bg-white transition-all ${
+            visible ? "w-full h-screen" : "w-0 h-0"
           }`}
         >
           <div

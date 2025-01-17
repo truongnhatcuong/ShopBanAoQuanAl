@@ -8,6 +8,15 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = await params;
+  const searchParams = req.nextUrl.searchParams;
+  let sortOrder: any = searchParams?.get("sortOrder") || "asc";
+  const sortField: string = searchParams.get("sortField") || "product_name";
+  const maxPrice = Number(searchParams.get("maxPrice")) || 0;
+
+  if (sortOrder !== "asc" && sortOrder !== "desc") {
+    sortOrder = "asc";
+  }
+
   try {
     const categoryId = Number(id);
     // TODO: Implement logic to fetch and return category details
@@ -18,8 +27,18 @@ export async function GET(
       },
       include: {
         Products: {
+          where: {
+            ...(maxPrice > 0 && {
+              price: {
+                lte: maxPrice, // Lọc sản phẩm có giá nhỏ hơn hoặc bằng maxPrice
+              },
+            }),
+          },
           include: {
             Images: true,
+          },
+          orderBy: {
+            [sortField]: sortOrder,
           },
         },
       },

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CancellOrder from "../components/CancellOrder";
 import { useRouter } from "next/navigation";
+import { ForMatPrice } from "@/lib/FormPrice";
 
 interface Brand {
   brand_name: string;
@@ -90,7 +91,7 @@ const PageListOrder = () => {
         {orderList.map((order) => (
           <div
             key={order.order_id}
-            className="w-full max-w-2xl mx-auto p-4 mb-8 border"
+            className="w-full max-w-2xl mx-auto p-2 mb-8 border"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b pb-2">
@@ -116,7 +117,10 @@ const PageListOrder = () => {
 
             {/* Order Items */}
             {order.OrderItems?.map((item, index) => (
-              <div className="flex gap-4 py-4 border-b" key={index}>
+              <div
+                className="flex gap-4 py-2 border-b items-center"
+                key={index}
+              >
                 <img
                   src={item.Product.Images[0]?.image_url}
                   alt="Product"
@@ -132,16 +136,18 @@ const PageListOrder = () => {
                   <p>x{item.quantity}</p>
                 </div>
                 <div className="flex items-center">
-                  <span>{item.price}đ</span>
+                  <span className="text-sm">
+                    {ForMatPrice(Number(item.price))}
+                  </span>
                 </div>
               </div>
             ))}
 
             {/* Total and Actions */}
-            <div className="flex justify-between py-4">
+            <div className="flex justify-between py-3">
               <span>Số tiền phải trả:</span>
               <span className="text-red-500 text-lg">
-                {order.total_amount}đ
+                {ForMatPrice(Number(order.total_amount))}
               </span>
             </div>
             <div className="flex justify-end gap-2">

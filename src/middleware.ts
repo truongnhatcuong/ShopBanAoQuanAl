@@ -52,12 +52,12 @@ export async function middleware(req: NextRequest) {
     (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/signUp") &&
     token
   ) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/"));
   }
 
   // Đăng xuất
   if (req.nextUrl.pathname === "/logout") {
-    const response = NextResponse.redirect(new URL("/login", req.url));
+    const response = NextResponse.redirect(new URL("/login"));
     response.cookies.set("token", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -91,14 +91,14 @@ export async function middleware(req: NextRequest) {
     const data = await res.json();
     if (data.accessToken) {
       if (data.accessToken.roleId !== 3 && data.accessToken.roleId !== 2) {
-        return NextResponse.redirect(new URL("/", req.url));
+        return NextResponse.redirect(new URL("/"));
       }
     }
 
     return NextResponse.next();
   } catch (error) {
     console.error("Lỗi xác thực token:", error);
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/login"));
   }
 }
 
@@ -110,7 +110,5 @@ export const config = {
     "/cart/:path*",
     "/signUp",
     "/admin/:path*",
-
-    // "/api/:path*",
   ],
 };

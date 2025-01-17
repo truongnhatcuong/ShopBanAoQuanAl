@@ -1,4 +1,3 @@
-import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -10,6 +9,8 @@ export async function GET(req: NextRequest) {
   const limit: number = Number(searchParams?.get("limit") || 0);
   const page: number = Number(searchParams?.get("page") || 1);
   let sortOrder: any = searchParams?.get("sortOrder") || "asc";
+  const sortField: string = searchParams.get("sortField") || "product_name";
+  const maxPrice = Number(searchParams.get("maxPrice")) || 0;
   if (sortOrder !== "asc" && sortOrder !== "desc") {
     sortOrder = "asc";
   }
@@ -32,9 +33,15 @@ export async function GET(req: NextRequest) {
         product_name: {
           contains: search, // Lọc sản phẩm theo tên
         },
+        ...(maxPrice > 0 && {
+          price: {
+            lte: maxPrice,
+          },
+        }),
       },
+
       orderBy: {
-        product_name: sortOrder, // Sắp xếp theo tên sản phẩm
+        [sortField]: sortOrder,
       },
       include: {
         ProductSizes: {
@@ -60,16 +67,6 @@ export async function GET(req: NextRequest) {
             category_name: true, // Tên danh mục
           },
         },
-        // Brand: {
-        //   select: {
-        //     brand_name: true, // Tên thương hiệu
-        //   },
-        // },
-        // Season: {
-        //   select: {
-        //     season_name: true, // Tên mùa
-        //   },
-        // },
         ProductPromotion: {
           select: {
             Promotion: {

@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { assets } from "@/app/assets/frontend_assets/assets";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddToCart from "../../cart/components/Addcart";
 import RelatedProduct from "../../components/RelatedProduct";
 import TextCompact from "./TextCompact";
@@ -40,7 +40,6 @@ const ProductDetail = ({ productDetail }: IProps) => {
       </p>
     );
   }
-  console.log("Category Name:", productDetail.Category.category_name);
 
   const [size, setSize] = useState<number | string>(0);
   const [sizeId, setSizeId] = useState<number | null>(null);
@@ -75,6 +74,9 @@ const ProductDetail = ({ productDetail }: IProps) => {
             <img
               src={selectImage || productDetail.Images[0]?.image_url}
               alt=""
+              data-aos="fade-up"
+              data-aos-duration="1000"
+              data-aos-easing="ease-in-out"
               key={selectImage}
               className="w-full h-auto rounded-lg transition-transform duration-300 ease-in-out "
             />

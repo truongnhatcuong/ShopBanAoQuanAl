@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ProductDetail from "../components/ProductDetail";
+import Aos from "aos";
 
 interface Size {
   stock_quantity: number;
@@ -25,6 +26,9 @@ interface IProduct {
 }
 
 const Page = () => {
+  useEffect(() => {
+    Aos.init();
+  }, []);
   const params = useParams();
   const [productDetail, setProductDetail] = useState<IProduct | null>(null); // Chấp nhận null
   const id = params.id;

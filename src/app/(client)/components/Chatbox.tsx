@@ -70,32 +70,25 @@ const CozeChat: React.FC = () => {
   }, [pathname]);
 
   // Render notification component
-  const AiAdvisoryNotification = () => {
-    // Do not render if on admin dashboard
-
-    return (
-      <div
-        className={`fixed bottom-24 right-4 z-50 max-w-xs bg-white shadow-lg rounded-lg p-4 border flex items-start`}
-      >
-        <MessageCircleQuestion
-          className="text-blue-600 mr-3  flex-shrink-0"
-          size={24}
-        />
-        <div>
-          <p className="text-sm font-medium text-gray-900 mb-2">
-            Tư vấn bằng Ai
-          </p>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <>
       {pathname === "/" && (
         <div>
           <div id="coze-chat-container"></div>
-          <AiAdvisoryNotification />
+          <div
+            className={`fixed bottom-24 right-4 z-50 max-w-xs bg-white shadow-lg rounded-lg p-4 border flex items-start`}
+          >
+            <MessageCircleQuestion
+              className="text-blue-600 mr-3  flex-shrink-0"
+              size={24}
+            />
+            <div>
+              <p className="text-sm font-medium text-gray-900 mb-2">
+                Tư vấn bằng Ai
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </>

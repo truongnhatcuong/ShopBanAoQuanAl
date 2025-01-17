@@ -19,6 +19,19 @@ const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
 
   const [quantity, setQuantity] = useState(1); // Trạng thái lưu số lượng sản phẩm
 
+  const handleIncreate = () => {
+    if (quantity === stockQuantity) {
+      alert(`chỉ còn lại ${stockQuantity} số lượng`);
+      return;
+    }
+    setQuantity((prev) => prev + 1);
+  };
+
+  const handleDecreate = () => {
+    if (quantity === 1) return;
+    setQuantity((prev) => prev - 1);
+  };
+
   // Kiểm tra kích thước có được chọn hay không khi người dùng nhấn nút "Thêm vào giỏ"
   const handleAddToCartClick = () => {
     if (selectedSizeId !== null) {
@@ -30,21 +43,22 @@ const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
 
   return (
     <div>
+      <h1>Chọn Số Lượng</h1>
       <div className="flex items-center gap-4 mt-4">
         {/* Input để chọn số lượng */}
-        <input
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
-          min="1"
-          max={product?.stock_quantity}
-          disabled={product?.stock_quantity === 0} // Disable khi hết hàng
-          className="w-16 p-2 border border-gray-300"
-        />
-        {/* hiển thị số lượng còn lại của size */}
-        {stockQuantity > 0 && (
-          <p className="text-sm font-sans">còn {stockQuantity} sản phẩm</p>
-        )}
+        <button
+          className="border-[1.2px] px-2.5 py-1 border-slate-400 rounded hover:bg-slate-200"
+          onClick={handleDecreate}
+        >
+          -
+        </button>
+        <div>{quantity}</div>
+        <button
+          className="border-[1.2px] px-2.5 py-1 border-slate-400 rounded hover:bg-slate-200"
+          onClick={handleIncreate}
+        >
+          +
+        </button>
 
         {/* Button để thêm sản phẩm vào giỏ */}
         <button

@@ -41,10 +41,6 @@ const Page = () => {
     ApiProductDeTail();
   }, [id]);
 
-  console.log("api trả về :", productDetail);
-
-  //  api cart
-
   return (
     <div>
       <div className="">

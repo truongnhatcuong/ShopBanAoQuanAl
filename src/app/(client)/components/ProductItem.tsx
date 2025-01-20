@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { ForMatPrice } from "@/lib/FormPrice";
 import Link from "next/link";
 import React from "react";
 
@@ -45,9 +46,7 @@ const ProductItem = ({
             </p>
           ) : null}
           <p className="mt-3 pb-1 text-base ">{product_name}</p>
-          <p className="text-sm font-medium ">
-            {Number(price).toLocaleString("vi-VN").replace(/\./g, ",")}đ
-          </p>
+          <p className="text-sm font-medium ">{ForMatPrice(Number(price))}</p>
         </div>
       </Link>
     </div>

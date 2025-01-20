@@ -1,7 +1,8 @@
+"use client";
+import { ShopConText } from "@/app/context/Context";
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/navigation";
-
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
 const PaymentMethodForm = ({
@@ -11,6 +12,8 @@ const PaymentMethodForm = ({
   customerId: number;
   addressId: number;
 }) => {
+  const { couponName, setCouponName } = useContext(ShopConText)!;
+
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const route = useRouter();
 
@@ -22,12 +25,18 @@ const PaymentMethodForm = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ customerId, addressId, paymentMethod }),
+        body: JSON.stringify({
+          customerId,
+          addressId,
+          paymentMethod,
+          couponCode: couponName,
+        }),
       });
 
       const data = await response.json();
       if (response.ok) {
         toast.success("Đã Đặt Thành Công Đơn Hàng");
+        setCouponName("");
         route.push("/profile/listorder");
       } else {
         toast.error(data.message || "ít nhất phải có một sản phẩm");
@@ -41,7 +50,7 @@ const PaymentMethodForm = ({
     <div className="mt-[76px]">
       <form
         onSubmit={handleSubmit}
-        className="bg-white h-full shadow-xl p-4 space-y-6"
+        className="bg-white  shadow-xl p-4 space-y-6"
       >
         <h2 className="text-lg font-semibold">Phương thức thanh toán</h2>
 

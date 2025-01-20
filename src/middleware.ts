@@ -35,6 +35,7 @@ export async function middleware(req: NextRequest) {
 
   if (
     req.nextUrl.pathname.startsWith("/cart") ||
+    req.nextUrl.pathname.startsWith("/placeOrder") ||
     req.nextUrl.pathname.startsWith("/profile")
   )
     return token
@@ -52,12 +53,12 @@ export async function middleware(req: NextRequest) {
     (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/signUp") &&
     token
   ) {
-    return NextResponse.redirect(new URL("/"));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   // Đăng xuất
   if (req.nextUrl.pathname === "/logout") {
-    const response = NextResponse.redirect(new URL("/login"));
+    const response = NextResponse.redirect(new URL("/login", req.url));
     response.cookies.set("token", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -110,5 +111,6 @@ export const config = {
     "/cart/:path*",
     "/signUp",
     "/admin/:path*",
+    "/placeOrder",
   ],
 };

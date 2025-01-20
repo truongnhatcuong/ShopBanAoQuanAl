@@ -4,7 +4,7 @@ import ListItem, { MenuHeader } from "./ListItem";
 import Image from "next/image";
 import Link from "next/link";
 import { BsBagCheck } from "react-icons/bs";
-import { FaClipboardCheck, FaUser } from "react-icons/fa";
+import { FaClipboardCheck, FaRegBell, FaUser } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
 import { LiaPowerOffSolid } from "react-icons/lia";
@@ -15,6 +15,7 @@ import { HiMenu } from "react-icons/hi";
 import { ShopConText } from "@/app/context/Context";
 import { IoChevronBackOutline } from "react-icons/io5";
 import DarkModeSwitch from "./DarkModeSwitch";
+import Notificationcoupon from "./Notificationcoupon";
 interface ICategory {
   category_id: number;
   category_name: string;
@@ -76,7 +77,7 @@ export default function HeadePager() {
     }
   };
   return (
-    <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-3 ">
+    <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-2 ">
       <div className="dark:bg-transparent hidden md:block ">
         <Link href={"/"} className="">
           <Image
@@ -89,7 +90,7 @@ export default function HeadePager() {
         </Link>
       </div>
       {/* menu */}
-      <div className=" mr-5 hidden  md:flex gap-5 uppercase">
+      <div className=" mr-5  hidden  md:flex gap-3 uppercase">
         <div>
           <ListItem />
         </div>
@@ -119,6 +120,7 @@ export default function HeadePager() {
       {/* phần khác */}
       <div className="flex items-center gap-x-5 ">
         {/* Search Input */}
+        <Notificationcoupon />
         <div className="relative md:flex items-center border rounded-full md:p-2 md:pl-4 px-3 py-1.5   dark:text-white   ">
           <input
             type="text"
@@ -224,7 +226,7 @@ export default function HeadePager() {
         {/* thanh menu ở giao diện màn hình nhỏ */}
         <div
           className={`fixed inset-0   text-gray-500 gap-4 overflow-hidden z-50 bg-white transition-all ${
-            visible ? "w-full h-screen" : "w-0 h-0"
+            visible ? "w-full h-[1299px]" : "w-0 h-0"
           }`}
         >
           <div

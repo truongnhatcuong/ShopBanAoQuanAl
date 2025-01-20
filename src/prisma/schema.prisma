@@ -237,7 +237,6 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
 
   model Promotion {
     promotion_id Int      @id @default(autoincrement())
-    
       discount Int
       start_date DateTime
       end_date   DateTime

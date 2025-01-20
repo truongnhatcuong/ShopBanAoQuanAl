@@ -31,6 +31,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -58,6 +59,7 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 .prata-regular {
   font-family: "Prata", serif;
   font-weight: 400;
@@ -73,6 +75,7 @@
     opacity: 0;
     clip-path: inset(100% 100% 0 0);
   }
+
   to {
     opacity: 1;
     clip-path: inset(0 0 0 0);
@@ -84,6 +87,7 @@
     opacity: 0;
     transform: translateY(50px) scale(0.5);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -98,25 +102,31 @@
 
 .block1 {
   animation: appear1 0.6s linear forwards;
-  animation-timeline: view(); /* Đảm bảo trình duyệt hỗ trợ */
+  animation-timeline: view();
+  /* Đảm bảo trình duyệt hỗ trợ */
   animation-range: entry 0;
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(50px); /* Đẩy hình ảnh xuống dưới */
+    transform: translateY(50px);
+    /* Đẩy hình ảnh xuống dưới */
   }
+
   to {
     opacity: 1;
-    transform: translateY(0); /* Đưa về vị trí ban đầu */
+    transform: translateY(0);
+    /* Đưa về vị trí ban đầu */
   }
 }
 
 .text {
-  display: inline-block; /* Đảm bảo animation áp dụng đúng */
+  display: inline-block;
+  /* Đảm bảo animation áp dụng đúng */
   animation: slideUp 0.8s ease-out forwards;
-  opacity: 0; /* Đảm bảo text ẩn trước khi animation chạy */
+  opacity: 0;
+  /* Đảm bảo text ẩn trước khi animation chạy */
 }
 
 .image {
@@ -124,14 +134,17 @@
 }
 
 .scrollbar-custom {
-  scrollbar-width: thin; /* Firefox: thanh cuộn mỏng */
-  scrollbar-color: #fefefe black; /* Firefox: màu thanh cuộn và nền */
+  scrollbar-width: thin;
+  /* Firefox: thanh cuộn mỏng */
+  scrollbar-color: #fefefe black;
+  /* Firefox: màu thanh cuộn và nền */
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

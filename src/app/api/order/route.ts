@@ -1,8 +1,7 @@
 import prisma from "@/prisma/client";
+import { authCustomer } from "@/utils/Auth";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
-
-const JWT_SECRET: string = process.env.JWT_SECRET || "";
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
@@ -15,34 +14,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Giải mã token để lấy thông tin người dùng
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const username = decoded.username;
-
-    if (!username) {
-      return NextResponse.json(
-        { message: "Username không xác thực" },
-        { status: 404 }
-      );
-    }
-
-    // Tìm khách hàng trong cơ sở dữ liệu dựa trên username
-    const customer = await prisma.customer.findUnique({
-      where: { username },
-    });
-
-    if (!customer) {
-      return NextResponse.json(
-        { message: "Khách hàng không tồn tại" },
-        { status: 404 }
-      );
-    }
+    const customer = await authCustomer(req);
 
     // Lấy tất cả đơn hàng của khách hàng này
 
     const orders = await prisma.order.findMany({
       where: {
-        customer_id: customer.customer_id, // Lọc theo customer_id
+        customer_id: customer?.customer_id, // Lọc theo customer_id
       },
       include: {
         OrderItems: {
@@ -58,6 +36,9 @@ export async function GET(req: NextRequest) {
             Size: true,
           },
         },
+      },
+      orderBy: {
+        order_id: "desc",
       },
     });
 
@@ -80,7 +61,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { customerId, addressId, paymentMethod } = await req.json();
+  const { customerId, addressId, paymentMethod, couponCode } = await req.json();
 
   const token = req.cookies.get("token")?.value;
   if (!token) {
@@ -91,20 +72,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // Mã hóa token
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const username = decoded.username;
-
-    if (!username) {
-      return NextResponse.json(
-        { message: "username không xác thực" },
-        { status: 404 }
-      );
-    }
-
-    const customer = await prisma.customer.findUnique({
-      where: { username },
-    });
+    const customer = await authCustomer(req);
 
     if (!customerId) {
       return NextResponse.json(
@@ -140,10 +108,53 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    const totalAmount = cart.CartItems.reduce((total, item) => {
+    // phí vận chuyển mặc định
+    const costShipping = 25000;
+    const subtotal = cart.CartItems.reduce((total, item) => {
       return total + item.quantity * Number(item.Product.price);
     }, 0);
+    // Tính tổng tiền trước khi áp dụng mã giảm giá
+    let totalAmount = subtotal + costShipping;
+
+    if (couponCode) {
+      const coupon = await prisma.coupon.findFirst({
+        where: {
+          coupon_code: couponCode.toUpperCase(),
+        },
+      });
+      if (coupon) {
+        const currentDate = new Date();
+        const startDate = coupon.start_date
+          ? new Date(coupon.start_date)
+          : new Date();
+        const endDate = coupon.end_date
+          ? new Date(coupon.end_date)
+          : new Date();
+        if (currentDate < startDate || currentDate > endDate) {
+          return NextResponse.json(
+            { message: "Mã giảm giá đã hết hạn." },
+            { status: 400 }
+          );
+        }
+
+        // Tính giảm giá
+        let discount = 0;
+        if (coupon.coupon_percentage && Number(coupon.coupon_percentage) > 0) {
+          discount = (subtotal * Number(coupon.coupon_percentage)) / 100;
+        }
+
+        if (discount === 0 && coupon.coupon_amount) {
+          discount = Number(coupon.coupon_amount);
+        }
+
+        // Giảm giá không vượt quá tổng tiền
+        if (discount > totalAmount) {
+          discount = totalAmount;
+        }
+        //áp dụng mã giảm giá
+        totalAmount -= discount;
+      }
+    }
 
     const order = await prisma.order.create({
       data: {

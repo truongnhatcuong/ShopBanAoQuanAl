@@ -51,7 +51,7 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
   };
 
   return (
-    <div className=" flex md:flex-col flex-row md:pb-0 pb-4 h-screen ">
+    <div className=" flex md:flex-col flex-row md:pb-0 pb-4  md:h-screen ">
       <div className="ml-4 ">
         <h2 className="text-xl font-bold mt-6">Giá</h2>
         <div className="text-black t-8">
@@ -83,7 +83,7 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
                 <input
                   type="checkbox"
                   name="item.category_id"
-                  checked={selectedCategory === item.category_id} // Kiểm tra xem danh mục đã được chọn chưa
+                  checked={selectedCategory === item.category_id}
                   onChange={() => handleCategoryChange(item.category_id)} // Chọn danh mục
                 />
                 {item.category_name}

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import TablePromotion from "./components/TablePromotion";
-import AddPrromotion from "./components/AddPrromotion";
+import AddPrromotion from "./components/AddPromotion";
 
 const Page = () => {
   const [promotion, setPromotion] = useState([]);

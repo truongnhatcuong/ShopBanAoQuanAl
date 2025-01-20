@@ -16,6 +16,7 @@ interface IPromotion {
 }
 const ProductSeller = () => {
   const [promotion, setPromotion] = useState<IPromotion[]>([]);
+  const [numberslice, setNumberSlice] = useState(5);
   async function ProductSeller() {
     const res = await fetch("/api/promotion");
     if (res.ok) {
@@ -44,7 +45,7 @@ const ProductSeller = () => {
         data-aos-easing="ease-in-out"
         data-aos="zoom-in"
       >
-        {promotion.slice(0, 5).map((item, index) => (
+        {promotion.slice(0, numberslice).map((item, index) => (
           <ProductItemSeller props={item} key={index} />
         ))}
       </div>

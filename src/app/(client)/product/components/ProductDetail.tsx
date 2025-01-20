@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import AddToCart from "../../cart/components/Addcart";
 import RelatedProduct from "../../components/RelatedProduct";
 import TextCompact from "./TextCompact";
+import { ForMatPrice } from "@/lib/FormPrice";
 
 interface Size {
   stock_quantity: number;
@@ -96,12 +97,7 @@ const ProductDetail = ({ productDetail }: IProps) => {
             <p className="pl-2 text-base">({productDetail.stock_quantity})</p>
           </div>
           <p className="text-xl mt-2 font-medium">
-            <span>
-              {parseInt(productDetail.price)
-                .toLocaleString("vi-VN")
-                .replace(/\./g, ",")}
-            </span>
-            đ
+            <span>{ForMatPrice(parseInt(productDetail.price))}</span>
           </p>
           <p className="mt-5 text-gray-500 dark:text-gray-100 text-sm md:w-4/5">
             <TextCompact>{productDetail.description}</TextCompact>

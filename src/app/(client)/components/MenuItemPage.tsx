@@ -15,7 +15,7 @@ const MenuItemPage = (props: IMenuProps) => {
         <p
           className={`${
             pathname === props.link ? " border-b-2 border-blue-500 " : ""
-          } font-semibold  hover:border-b-2 hover:border-blue-500 text-sm `}
+          } font-semibold  hover:border-b-2 hover:border-blue-500 text-sm mt-0.5 `}
         >
           {props.title}
         </p>

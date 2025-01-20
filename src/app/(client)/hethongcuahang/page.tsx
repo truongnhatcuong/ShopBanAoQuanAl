@@ -21,7 +21,7 @@ const Page = () => {
   return (
     <>
       <div className="container ">
-        <div className="flex justify-center mt-6 gap-10">
+        <div className="flex  flex-col md:flex-row  justify-center  mt-6 gap-10">
           {" "}
           <div className="" data-aos="fade-right" data-aos-duration="2000">
             <iframe
@@ -32,7 +32,7 @@ const Page = () => {
             ></iframe>
           </div>
           <div
-            className="rounded-md border border-gray-400 w-1/3"
+            className="rounded-md border border-gray-400 md:w-1/3 w-full md:ml-0 ml-6"
             data-aos="fade-left"
             data-aos-duration="2000"
           >

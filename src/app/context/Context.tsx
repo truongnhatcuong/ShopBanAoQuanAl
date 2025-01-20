@@ -27,6 +27,8 @@ interface IContext {
   isLeftMenuVisible: boolean;
   setIsLeftMenuVisible: Dispatch<SetStateAction<boolean>>;
   handleUpdateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
+  couponName: string;
+  setCouponName: (value: string) => void;
 }
 interface ShopContextProvider {
   children: ReactNode;
@@ -38,6 +40,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const [countCart, setCountCart] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLeftMenuVisible, setIsLeftMenuVisible] = useState(true);
+  const [couponName, setCouponName] = useState("");
   const handleAddToCart = async (
     product_id: number,
     quantity: number,
@@ -157,6 +160,8 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     handleUpdateCartItem,
     isLeftMenuVisible,
     setIsLeftMenuVisible,
+    couponName,
+    setCouponName,
   };
   return (
     <ThemeProvider defaultTheme="system" attribute="class">

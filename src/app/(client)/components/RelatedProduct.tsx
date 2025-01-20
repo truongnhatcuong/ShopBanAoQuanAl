@@ -14,6 +14,7 @@ interface Product {
 }
 const RelatedProduct = ({ category_name }: { category_name: string }) => {
   const [relate, setRelate] = useState<Product[]>([]);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ApiProductForCategories = async () => {
     const res = await fetch("/api/product");
@@ -22,7 +23,7 @@ const RelatedProduct = ({ category_name }: { category_name: string }) => {
     const filterCategory = data.product.filter(
       (item: any) => item.Category.category_name === category_name
     );
-    setRelate(filterCategory.slice(0, 5));
+    setRelate(filterCategory);
   };
 
   useEffect(() => {
@@ -37,11 +38,15 @@ const RelatedProduct = ({ category_name }: { category_name: string }) => {
         <Title title1="Sản Phẩm" title2="Liên Quan" />
       </div>
       <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-6 ">
-        {relate.length > 0 ? (
-          relate.map((item) => <ProductItem {...item} key={item.product_id} />)
-        ) : (
-          <p className="text-gray-500">Không có sản phẩm liên quan.</p>
-        )}
+        <>
+          {relate.length > 0 ? (
+            relate
+              .slice(0, 5)
+              .map((item) => <ProductItem {...item} key={item.product_id} />)
+          ) : (
+            <p className="text-gray-500">Không có sản phẩm liên quan.</p>
+          )}
+        </>
       </div>
     </div>
   );

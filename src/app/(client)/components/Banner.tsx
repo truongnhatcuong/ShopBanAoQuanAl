@@ -26,7 +26,7 @@ const Banner = () => {
         {[1, 2, 3].map((slide) => (
           <SwiperSlide
             key={slide}
-            className="border-2  bg-blue-100/20 hover:bg-blue-100/10 p-4"
+            className="border-2  bg-blue-100/20 dark:bg-blue-100/80  hover:bg-blue-100/10 p-4"
           >
             <div className="grid grid-cols-2  items-center gap-6 py-8">
               <div className="px-4 lg:ml-4 text-center lg:text-left">
@@ -85,8 +85,8 @@ const Banner = () => {
                   <Image
                     src={`/Image/banner${slide}.png`}
                     alt=""
-                    width={slide === 3 ? 330 : 500}
-                    height={slide === 3 ? 330 : 500}
+                    width={slide === 3 ? 300 : 500}
+                    height={slide === 3 ? 300 : 500}
                   />
                 </div>
               </div>

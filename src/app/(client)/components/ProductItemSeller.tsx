@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { ForMatPrice } from "@/lib/FormPrice";
 import Link from "next/link";
 import React from "react";
 interface IPromotion {
@@ -46,16 +47,10 @@ const ProductItemSeller = ({ props }: IProps) => {
           </p>
           <div className="flex gap-4">
             <b className="text-base font-bold ">
-              {Number(props.products[0].current_price)
-                .toLocaleString("vi-VN")
-                .replace(/\./g, ",")}
-              đ
+              {ForMatPrice(Number(props.products[0].current_price))}
             </b>
             <p className="text-base  text-red-600 font-bold ml-2 line-through ">
-              {Number(props.products[0].original_price)
-                .toLocaleString("vi-VN")
-                .replace(/\./g, ",")}
-              đ
+              {ForMatPrice(Number(props.products[0].original_price))}
             </p>
           </div>
         </div>

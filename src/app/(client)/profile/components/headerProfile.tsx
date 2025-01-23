@@ -4,6 +4,7 @@ import { PiUserCircleGearDuotone } from "react-icons/pi";
 import { MdOutlineLockOpen } from "react-icons/md";
 import { PiAddressBookDuotone } from "react-icons/pi";
 import { HiOutlineClipboardList } from "react-icons/hi";
+import { RiCoupon3Line } from "react-icons/ri";
 
 const listProfile = [
   {
@@ -29,6 +30,12 @@ const listProfile = [
     icon: <HiOutlineClipboardList />,
     link: "/profile/listorder",
     title: "Đơn Hàng",
+  },
+  {
+    id: 5,
+    icon: <RiCoupon3Line />,
+    link: "/profile/voucher",
+    title: "Kho voucher",
   },
 ];
 const HeaderProfile = () => {

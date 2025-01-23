@@ -1,9 +1,5 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
 "use client";
-import { assets } from "@/app/assets/frontend_assets/assets";
 import { ShopConText } from "@/app/context/Context";
-
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
@@ -24,7 +20,7 @@ const TopBar = () => {
     fetchUserInfo();
   }, []);
   return (
-    <div className="navbar bg-base-100 ">
+    <div className="navbar bg-base-100 border-2">
       <div
         onClick={() => setIsLeftMenuVisible(!isLeftMenuVisible)}
         className="mr-3 "
@@ -43,13 +39,13 @@ const TopBar = () => {
         </Link>
       </div>
       <div className="flex-none gap-2">
-        {/* <div className="form-control">
+        <div className="form-control">
           <input
             type="text"
             placeholder="Search"
             className="input input-bordered w-24 md:w-auto"
           />
-        </div> */}
+        </div>
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}

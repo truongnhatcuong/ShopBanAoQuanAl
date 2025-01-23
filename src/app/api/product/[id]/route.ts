@@ -28,10 +28,47 @@ export async function GET(
             },
           },
         },
+        ProductPromotion: {
+          select: {
+            Promotion: {
+              select: {
+                discount: true,
+              },
+            },
+          },
+        },
+        Review: {
+          include: {
+            Customer: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
+
+    const currenPrice = Number(getProduct?.price);
+    let discount;
+    if (
+      getProduct?.ProductPromotion &&
+      getProduct.ProductPromotion.length > 0
+    ) {
+      discount = getProduct.ProductPromotion[0].Promotion?.discount;
+    }
+
+    let originalPrice;
+    if (discount !== undefined) {
+      originalPrice = currenPrice / (1 - discount / 100);
+    }
+
     return NextResponse.json(
-      { getProduct, message: "Get product success" },
+      {
+        getProduct,
+        originalPrice: originalPrice || null,
+        message: "Get product success",
+      },
       { status: 201 }
     );
   } catch (error: any) {

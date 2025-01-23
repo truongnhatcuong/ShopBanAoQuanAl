@@ -26,19 +26,15 @@ const Brand = () => {
     <div className="">
       <div
         className={`md:flex gap-2 ${
-          isLeftMenuVisible ? "mt-2.5" : "md:mt-[54px]  `"
-        } justify-center `}
+          isLeftMenuVisible ? "mt-2.5" : "md:mt-0  "
+        } justify-center  `}
       >
-        <div className={` ${isLeftMenuVisible ? "mt-2  " : "mt-0 hidden"}`}>
-          <Image
-            src={`${
-              roleId === 3 ? "/Image/admin.jpg" : "/Image/anhdaidien.jpg"
-            }`}
-            alt="Logo"
-            width={100}
-            height={40}
-            className="rounded-full w-8  "
-          />
+        <div className={` ${isLeftMenuVisible ? "mt-0  " : "mt-1.5 pb-2.5"}`}>
+          <div className="w-10 h-10 bg-slate-200 rounded-full flex justify-center items-center  ">
+            <span className="text-black">
+              {username?.charAt(0).toUpperCase()}
+            </span>
+          </div>
         </div>
         <div className={`${isLeftMenuVisible ? "block" : "hidden"} `}>
           <p className="text-base  mb-0.5 hidden md:block">{username}</p>
@@ -48,7 +44,7 @@ const Brand = () => {
           </p>
         </div>
       </div>
-      <hr className="border-white border-b-2 md:mt-1.5  w-[235px]" />
+      <hr className="border-white border-b-2 md:mt-[2px] w-screen" />
     </div>
   );
 };

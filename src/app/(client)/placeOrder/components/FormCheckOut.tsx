@@ -119,18 +119,18 @@ const FormCheckOut = ({ cart }: CartItemListProps) => {
           {/* produt */}
           <div className="flex  flex-col md:flex-row  gap-3  items-center border-b pb-1 ">
             <div className="flex gap-3 items-center md:ml-5 ml-0 my-3 md:my-0 ">
-              <div className="relative">
+              <div className="relative mr-2">
                 <img
                   src={item.product.Images[0].image_url}
                   alt=""
                   className="w-14 h-14 object-cover md:my-5 my-0 ml-3 rounded-md  "
                 />
-                <p className=" bg-black text-white w-3 h-3.5 flex items-center justify-center text-sm rounded-sm absolute -top-1 md:top-4 -right-4">
+                <p className=" bg-black text-white w-4 h-3.5 px-2 py-0.5 flex items-center justify-center text-sm rounded-sm absolute -top-1 md:top-4 -right-4">
                   {item.quantity}
                 </p>
               </div>
             </div>
-            <div className="flex justify-around items-center w-full">
+            <div className="flex jusimg items-center w-full">
               <div>
                 {" "}
                 <p className="text-gray-800 font-semibold text-sm  ">

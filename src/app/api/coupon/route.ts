@@ -1,9 +1,21 @@
 import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
+import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  const customer = await authCustomer(req);
+  const customerId = customer?.customer_id;
   const coupon = await prisma.coupon.findMany({
+    where: {
+      PromotionNotifications: {
+        some: {
+          Notifications: {
+            customer_id: customerId,
+          },
+        },
+      },
+    },
     include: {
       PromotionNotifications: {
         select: {

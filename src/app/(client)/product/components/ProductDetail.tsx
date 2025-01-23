@@ -7,6 +7,7 @@ import AddToCart from "../../cart/components/Addcart";
 import RelatedProduct from "../../components/RelatedProduct";
 import TextCompact from "./TextCompact";
 import { ForMatPrice } from "@/lib/FormPrice";
+import ReViewProduct from "./ReViewProduct";
 
 interface Size {
   stock_quantity: number;
@@ -27,13 +28,22 @@ interface IProduct {
   Images: { image_url: string }[];
   ProductSizes: Size[];
   sizes: { size_id: number; name_size: string; stock_quantity: number }[];
+  Review: {
+    review_id: number;
+    comment_review: string;
+    image_url: string;
+    rating: number;
+    review_date: string;
+    Customer: { name: string };
+  }[];
 }
 
 interface IProps {
   productDetail: IProduct | null;
+  originalPrice: number;
 }
 
-const ProductDetail = ({ productDetail }: IProps) => {
+const ProductDetail = ({ productDetail, originalPrice }: IProps) => {
   if (!productDetail) {
     return (
       <p className="text-center">
@@ -96,8 +106,11 @@ const ProductDetail = ({ productDetail }: IProps) => {
             <img src={assets.star_icon.src} alt="" className="w-3" />
             <p className="pl-2 text-base">({productDetail.stock_quantity})</p>
           </div>
-          <p className="text-xl mt-2 font-medium">
+          <p className="text-xl mt-2 font-medium space-x-11">
             <span>{ForMatPrice(parseInt(productDetail.price))}</span>
+            <span className="line-through text-red-500">
+              {originalPrice > 0 ? ForMatPrice(originalPrice) : ""}
+            </span>
           </p>
           <p className="mt-5 text-gray-500 dark:text-gray-100 text-sm md:w-4/5">
             <TextCompact>{productDetail.description}</TextCompact>
@@ -140,8 +153,27 @@ const ProductDetail = ({ productDetail }: IProps) => {
           </div>
         </div>
       </div>
+
       <div>
         <RelatedProduct category_name={productDetail.Category.category_name} />
+      </div>
+      <div className="my-5">
+        {productDetail.Review.length ? (
+          <>
+            {productDetail.Review.map((item) => (
+              <ReViewProduct review={item} key={item.image_url} />
+            ))}
+          </>
+        ) : (
+          <div className="p-6 pb-20 border rounded-lg shadow-sm bg-white">
+            <h1 className="text-xl font-semibold mb-4 text-gray-800">
+              Đánh Giá Sản Phẩm
+            </h1>
+            <p className="text-sm text-gray-500">
+              chưa có bất kì đánh giá nào !{" "}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

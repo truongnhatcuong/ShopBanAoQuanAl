@@ -11,14 +11,14 @@ import TotalQuantity from "./components/TotalQuantity";
 
 const Page = () => {
   return (
-    <div className="bg-slate-50">
+    <div className="bg-slate-50 ">
       {" "}
-      <div className="flex justify-around items-center my-5">
+      <div className="flex justify-around items-center">
         <div>
           <Title title1="Danh Mục" title2="Quản Lý" />
           <ul>
             <Link href={"/admin/danhmuc/product"}>
-              <li className="px-3 py-2 border border-gray-500 family  text-lg my-3 text-center hover:bg-blue-500 cursor-pointer ">
+              <li className="px-3 py-2 border border-gray-500 family  text-lg mb-3 text-center hover:bg-blue-500 cursor-pointer ">
                 Quản Lý Sản Phẩm
               </li>
             </Link>
@@ -36,9 +36,9 @@ const Page = () => {
                 Quản Lý Đơn Hàng
               </li>
             </Link>
-            <Link href={"/admin/danhmuc/cart"}>
+            <Link href={"/admin/danhmuc/promotion"}>
               <li className="px-3 py-2 border border-gray-500 family  text-lg mb-3 text-center hover:bg-blue-500 cursor-pointer ">
-                Quản Lý Giỏ Hàng
+                Quản Lý Khuyến Mãi
               </li>
             </Link>
           </ul>
@@ -52,7 +52,7 @@ const Page = () => {
         {" "}
         <Title title1="Thống Kê" title2="Doanh Thu" />
       </div>
-      <div className="flex block1">
+      <div className="flex gap-2">
         {/* tổng doanh thu */}
         <TotalSale title="Tổng Doanh Thu" />
         {/* số đơn đạt hàng*/}

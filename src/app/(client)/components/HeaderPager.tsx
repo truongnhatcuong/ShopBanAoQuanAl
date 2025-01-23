@@ -4,9 +4,8 @@ import ListItem, { MenuHeader } from "./ListItem";
 import Image from "next/image";
 import Link from "next/link";
 import { BsBagCheck } from "react-icons/bs";
-import { FaClipboardCheck, FaRegBell, FaUser } from "react-icons/fa";
+import { FaClipboardCheck, FaUser } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
-import { FiUser } from "react-icons/fi";
 import { LiaPowerOffSolid } from "react-icons/lia";
 import { AiOutlineUser } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
@@ -145,8 +144,13 @@ export default function HeadePager() {
         <div>
           {isLoggedIn && username ? (
             <div className="group relative flex z-10  ">
-              <FiUser className=" text-2xl md:text-xl " />
-              <span className=" hidden md:block md:text-base ">{username}</span>
+              {/* <FiUser className=" text-2xl md:text-xl " /> */}
+              <div className="w-[25px] h-[25px] bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mr-2 cursor-pointer">
+                <span>{username.charAt(0).toLocaleUpperCase()}</span>
+              </div>
+              <span className=" hidden md:block md:text-base cursor-pointer">
+                {username}
+              </span>
               {/* Hiển thị khi hover */}
               <div className="group-hover:block hidden absolute dropdown-menu pt-10 md:-right-8 -right-20 ">
                 <div className="flex flex-col gap-2 w-48 py-3 px-5 bg-slate-50 text-gray-500 rounded-md ">

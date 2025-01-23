@@ -1,15 +1,33 @@
 import prisma from "@/prisma/client";
+import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const orderId = Number(params.id);
+  const { id } = await params;
+  const orderId = Number(id);
+  const customer = await authCustomer(req);
   try {
     const getOrderId = await prisma.order.findUnique({
       where: {
         order_id: orderId,
+        customer_id: customer?.customer_id,
+      },
+      select: {
+        OrderItems: {
+          include: {
+            Size: true,
+            Product: {
+              include: {
+                Images: {
+                  take: 1,
+                },
+              },
+            },
+          },
+        },
       },
     });
     return NextResponse.json(

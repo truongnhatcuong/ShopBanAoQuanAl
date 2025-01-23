@@ -34,12 +34,10 @@ export default function AdminLayout({
         } `}
       >
         <TopBar />
-
-        <hr className="border-gray-300 border-b-4 w-full  mb-[8px]" />
-
+        {/* <hr className="border-gray-300 border-b-4 w-full  mb-[10px]" /> */}
         <div
           className={`flex-grow bg-white overflow-y-auto overflow-x-auto  scrollbar-custom  ${
-            isLeftMenuVisible ? "" : "pt-5"
+            isLeftMenuVisible ? "" : ""
           } ml-2`}
         >
           {children}

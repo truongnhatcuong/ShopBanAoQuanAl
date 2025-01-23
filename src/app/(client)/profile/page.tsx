@@ -84,7 +84,7 @@ const ProfileUsername = () => {
   }
 
   return (
-    <div className="max-w-4xl  border text-black dark:text-white dark:bg-slate-800 border-gray-300 p-4  shadow-lg h-full ">
+    <div className="max-w-4xl mx-auto border text-black dark:text-white dark:bg-slate-800 border-gray-300 p-4  shadow-lg h-full ">
       <div className="mb-4">
         <h3 className="text-center text-xl font-semibold  ">
           Thông Tin Cá Nhân
@@ -96,8 +96,8 @@ const ProfileUsername = () => {
       {successMessage && (
         <p className="text-center text-green-500 my-4">{successMessage}</p>
       )}
-      <div className="flex gap-5">
-        <form onSubmit={UpdateHandle} className="w-2/3 mt-4">
+      <div className="flex flex-col md:flex-row gap-5">
+        <form onSubmit={UpdateHandle} className="w-full  md:w-2/3 mt-4">
           <div className="flex justify-around gap-4 md:gap-0  ">
             <div className="space-y-4">
               <div className="mb-4">
@@ -128,20 +128,6 @@ const ProfileUsername = () => {
                   placeholder="Nhập số điện thoại"
                 />
               </div>
-              {/* <div className="mb-4">
-              <label className="text-sm">
-                Địa Chỉ:<span className="text-red-600">*</span>
-              </label>
-              <br />
-              <input
-                type="text"
-                required
-                value={user?.address || ""}
-                onChange={(e) => setUser({ ...user, address: e.target.value })}
-                className="w-full py-1 px-2 dark:bg-slate-700 dark:text-white border-b-2 border-black focus:outline-none"
-                placeholder="Nhập địa chỉ"
-              />
-            </div> */}
             </div>
             <div>
               <div className="mb-4">
@@ -188,7 +174,7 @@ const ProfileUsername = () => {
           </div>
         </form>
         {/* image */}
-        <div className="w-1/3 mt-4 shadow-lg ">
+        <div className="md:w-1/3 mt-4 shadow-lg  w-full">
           <div className="flex justify-center mt-4">
             <Image
               src={"/Image/anhdaidien.jpg"}

@@ -12,13 +12,17 @@ const MenuItemProfile = (props: {
   return (
     <Link href={props.link}>
       <div className="flex items-center gap-3  ">
-        <div className="flex items-center justify-center text-2xl">
+        <div
+          className={`flex items-center justify-center md:text-2xl text-3xl  ${
+            pathname === props.link ? " text-red-500 " : ""
+          }  `}
+        >
           {props.icon}
         </div>
         <p
           className={`${
             pathname === props.link ? " text-red-500 " : ""
-          }  text-lg text-end prata-regular font-semibold`}
+          }  text-lg text-end font-semibold Outfit hidden md:block`}
         >
           {props.title}
         </p>

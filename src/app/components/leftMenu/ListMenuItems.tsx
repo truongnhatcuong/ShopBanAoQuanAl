@@ -7,14 +7,14 @@ import {
   FaTruck,
   FaLinkedin,
   FaCloudSun,
-  FaStar,
   FaUser,
-  FaMoneyCheckAlt,
+  FaGift,
 } from "react-icons/fa";
-import { BiBell, BiCart } from "react-icons/bi";
+import { BiCart } from "react-icons/bi";
 import { FiPackage } from "react-icons/fi";
-import { MdOutlinePayments, MdOutlineRateReview } from "react-icons/md";
-import { RiCoupon3Fill } from "react-icons/ri";
+import { MdOutlineRateReview } from "react-icons/md";
+import { RiCoupon2Fill, RiCoupon3Fill } from "react-icons/ri";
+import { FaHeartCirclePlus } from "react-icons/fa6";
 
 const MenuItem = [
   {
@@ -26,31 +26,31 @@ const MenuItem = [
       {
         id: 1,
         icon: <MdOutlineCategory />,
-        title: "Category",
+        title: "Danh Mục",
         link: "/admin/danhmuc/categories",
       },
       {
         id: 2,
         icon: <AiOutlineProduct />,
-        title: "Product",
+        title: "Sản Phẩm",
         link: "/admin/danhmuc/product",
       },
       {
         id: 3,
         icon: <FaTruck />,
-        title: "Supplier",
+        title: "Nhà Cung Cấp",
         link: "/admin/danhmuc/suppliers",
       },
       {
         id: 4,
         icon: <FaLinkedin />,
-        title: "Brand",
+        title: "Thương Hiệu",
         link: "/admin/danhmuc/brand",
       },
       {
         id: 5,
         icon: <FaCloudSun />,
-        title: "Season",
+        title: "Mùa",
         link: "/admin/danhmuc/season",
       },
     ],
@@ -64,80 +64,59 @@ const MenuItem = [
       {
         id: 1,
         icon: <MdOutlineCategory />,
-        title: "Customer",
+        title: "Khách Hàng",
         link: "/admin/danhmuc/customer",
       },
-      { id: 2, icon: <BiCart />, title: "Cart", link: "/admin/danhmuc/cart" },
+      {
+        id: 2,
+        icon: <BiCart />,
+        title: "Giỏ Hàng",
+        link: "/admin/danhmuc/cart",
+      },
       {
         id: 3,
         icon: <FiPackage />,
-        title: "Wishlist",
+        title: "Đơn Hàng",
+        link: "/admin/danhmuc/order",
+      },
+      {
+        id: 4,
+        icon: <FaHeartCirclePlus />,
+        title: "Yêu Thích",
         link: "/admin/danhmuc/wishlist",
       },
     ],
   },
   {
     id: 3,
-    icon: <FaMoneyCheckAlt />,
-    title: "Quản Lý Đơn Hàng",
-    link: "#",
-    submenu: [
-      {
-        id: 1,
-        icon: <FiPackage />,
-        title: "Order",
-        link: "/admin/danhmuc/order",
-      },
-      {
-        id: 2,
-        icon: <MdOutlinePayments />,
-        title: "Payment",
-        link: "/admin/danhmuc/payment",
-      },
-      {
-        id: 3,
-        icon: <FiPackage />,
-        title: "Return",
-        link: "/admin/danhmuc/return",
-      },
-    ],
-  },
-  {
-    id: 4,
     icon: <MdOutlineRateReview />,
     title: "Quản Lý Đánh Giá",
     link: "#",
     submenu: [
       {
         id: 1,
-        icon: <FaStar />,
-        title: "Rating",
-        link: "/admin/danhmuc/rating",
-      },
-      {
-        id: 2,
         icon: <MdOutlineRateReview />,
-        title: "Review",
+        title: "Đánh Giá ",
         link: "/admin/danhmuc/review",
       },
     ],
   },
   {
-    id: 5,
-    icon: <RiCoupon3Fill />,
+    id: 4,
+    icon: <RiCoupon2Fill />,
     title: "Quản Lý Khuyến Mãi",
     link: "#",
     submenu: [
       {
         id: 1,
-        icon: <RiCoupon3Fill />,
-        title: "Promotion",
+        icon: <FaGift />,
+        title: " Khuyến Mãi",
         link: "/admin/danhmuc/promotion",
       },
       {
         id: 2,
         icon: <RiCoupon3Fill />,
-        title: "Coupon",
+        title: "Mã Giảm Giá",
         link: "/admin/danhmuc/coupon",
       },
     ],

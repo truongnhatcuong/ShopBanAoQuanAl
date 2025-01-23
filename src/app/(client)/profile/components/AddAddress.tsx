@@ -163,7 +163,7 @@ const AddAddress = ({ reloadData }: { reloadData: () => void }) => {
           isOpen={showAdd}
           onRequestClose={() => setShowAdd(false)}
           className="fixed inset-0 bg-black/50 flex items-center justify-center"
-          overlayClassName="fixed inset-0 bg-black/50"
+          overlayClassName="fixed inset-0 bg-black/50 z-50 "
           ariaHideApp={false}
         >
           <div className="w-[500px] bg-white rounded-lg p-6">

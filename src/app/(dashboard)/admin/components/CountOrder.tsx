@@ -13,7 +13,7 @@ const CountOrder = ({ title }: { title: string }) => {
     FetchApiOrder();
   }, []);
   return (
-    <div className="md:w-1/4 w-full mb-2 md:mr-0  p-6 border-r-4 border-gray-200 shadow-full rounded-xl">
+    <div className="md:w-1/4 w-full mb-2 md:mr-0  p-6 border-r-4 border-gray-200 shadow-full rounded-xl bg-yellow-400/15 ">
       <div className="flex justify-around items-center">
         <Image
           src={"/image/giohang.png"}

@@ -23,6 +23,14 @@ interface IProduct {
   Images: { image_url: string }[];
   ProductSizes: Size[];
   sizes: { size_id: number; name_size: string; stock_quantity: number }[];
+  Review: {
+    review_id: number;
+    comment_review: string;
+    image_url: string;
+    rating: number;
+    review_date: string;
+    Customer: { name: string };
+  }[];
 }
 
 const Page = () => {
@@ -30,13 +38,15 @@ const Page = () => {
     Aos.init();
   }, []);
   const params = useParams();
-  const [productDetail, setProductDetail] = useState<IProduct | null>(null); // Chấp nhận null
+  const [productDetail, setProductDetail] = useState<IProduct | null>(null);
+  const [originalPrice, setOriginalPrice] = useState(0);
   const id = params.id;
   useEffect(() => {
     async function ApiProductDeTail() {
       const res = await fetch(`/api/product/${id}`);
       const data = await res.json();
       setProductDetail(data.getProduct);
+      setOriginalPrice(data.originalPrice);
     }
     ApiProductDeTail();
   }, [id]);
@@ -44,7 +54,10 @@ const Page = () => {
   return (
     <div>
       <div className="">
-        <ProductDetail productDetail={productDetail} />
+        <ProductDetail
+          productDetail={productDetail}
+          originalPrice={originalPrice}
+        />
       </div>
     </div>
   );

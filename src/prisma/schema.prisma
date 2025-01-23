@@ -197,11 +197,7 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
     COMPLETED
   }
 
-  model Rating {
-    rating_id Int       @id @default(autoincrement())
-    rating    Int?
-    Reviews   Review[]
-  }
+
 
   model Review {
     review_id       Int       @id @default(autoincrement())
@@ -211,10 +207,10 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
     image_url       String?   @db.Text
     review_date     DateTime? @db.DateTime
     seller_response String?   @db.Text
+    hasReviewed     Boolean    @default(false)
     rating          Int
     Product         Product   @relation(fields: [product_id], references: [product_id])
     Customer        Customer  @relation(fields: [customer_id], references: [customer_id])
-    Rating          Rating    @relation(fields: [rating], references: [rating_id])
   }
 
   model Image {

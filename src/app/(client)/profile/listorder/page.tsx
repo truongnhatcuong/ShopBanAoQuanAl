@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import CancellOrder from "../components/CancellOrder";
 import { useRouter } from "next/navigation";
 import { ForMatPrice } from "@/lib/FormPrice";
+import RiviewProduct from "../components/RiviewProduct";
 
 interface Brand {
   brand_name: string;
@@ -29,6 +30,7 @@ interface Product {
 }
 
 interface OrderItem {
+  product_id: number;
   quantity: number;
   price: string;
   Product: Product;
@@ -51,6 +53,7 @@ enum OrderState {
 
 const PageListOrder = () => {
   const [orderList, setOrderList] = useState<Order[] | null>(null);
+  const [hasReviewed, setHasReviewed] = useState(false);
   const route = useRouter();
 
   const orderStateText: { [key in OrderState]: string } = {
@@ -77,6 +80,7 @@ const PageListOrder = () => {
       console.error("Error fetching order data:", error);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -96,9 +100,9 @@ const PageListOrder = () => {
             {/* Header */}
             <div className="flex items-center justify-between border-b pb-2">
               <div className="flex items-center space-x-2">
-                <button className="bg-red-500 text-white px-3 py-1 rounded text-sm">
+                {/* <button className="bg-red-500 text-white px-3 py-1 rounded text-sm">
                   Chat
-                </button>
+                </button> */}
                 <button
                   className="border px-3 py-1 rounded text-sm"
                   onClick={() => route.push("/product")}
@@ -151,6 +155,9 @@ const PageListOrder = () => {
               </span>
             </div>
             <div className="flex justify-end gap-2">
+              {order.order_state === OrderState.DELIVERED && (
+                <RiviewProduct order_id={order.order_id} />
+              )}
               <button className="border px-4 py-2 rounded text-sm">
                 Liên Hệ Người Bán
               </button>

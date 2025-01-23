@@ -67,7 +67,7 @@ const ChangePasswordForm = () => {
   }, [errorChange]);
 
   return (
-    <div className="max-w-4xl border border-gray-300 dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
+    <div className="max-w-4xl mx-auto border border-gray-300 dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
       <h3 className="text-center text-black dark:text-white text-xl font-semibold my-4">
         Đổi Mật Khẩu
       </h3>

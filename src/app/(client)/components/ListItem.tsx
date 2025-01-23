@@ -28,7 +28,7 @@ export const MenuHeader: IMenuProps[] = [
 const ListItem = () => {
   return (
     <>
-      <ul className="flex gap-6   ">
+      <ul className="flex gap-6  ">
         {MenuHeader.map((item) => (
           <li key={item.id}>
             <MenuItemPage {...item} />

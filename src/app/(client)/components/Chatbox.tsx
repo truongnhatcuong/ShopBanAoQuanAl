@@ -32,7 +32,6 @@ const CozeChat: React.FC = () => {
   // Check if the current route is the admin dashboard
 
   useEffect(() => {
-    if (pathname !== "/") return;
     // Create script element for Coze SDK
     const script = document.createElement("script");
     script.src =
@@ -69,7 +68,7 @@ const CozeChat: React.FC = () => {
     };
   }, [pathname]);
 
-  // Render notification component
+  if (pathname !== "/") return;
 
   return (
     <>

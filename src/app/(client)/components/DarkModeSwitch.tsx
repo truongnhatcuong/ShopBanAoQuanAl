@@ -1,9 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MdDarkMode } from "react-icons/md";
 import styled from "styled-components";
-import { CiLight } from "react-icons/ci";
+
 4;
 
 const DarkModeSwitch = () => {

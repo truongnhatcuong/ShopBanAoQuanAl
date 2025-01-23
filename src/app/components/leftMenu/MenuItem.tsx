@@ -22,7 +22,7 @@ const MenuItems = (props: IProps) => {
   const [isSubmenuVisible, setIsSubmenuVisible] = useState<boolean>(false);
   const { isLeftMenuVisible } = useContext(ShopConText)!;
   return (
-    <ul className="flex flex-col cursor-pointer">
+    <ul className="flex flex-col cursor-pointer mt-3">
       <li className="flex items-center justify-between rounded-md transition-colors duration-200 mr-4 font-semibold">
         <div
           className="flex items-center justify-between w-full"
@@ -38,7 +38,7 @@ const MenuItems = (props: IProps) => {
             </span>
             {isLeftMenuVisible && (
               <span
-                className={`ml-1 mt-4 pb-1.5 text-base family hidden md:block `}
+                className={`ml-1 mt-4 pb-1.5 text-lg  Outfit hidden md:block `}
               >
                 {props.menuItem.title}
               </span>

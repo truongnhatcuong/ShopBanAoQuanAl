@@ -99,11 +99,19 @@ const ProductDetail = ({ productDetail, originalPrice }: IProps) => {
             {productDetail.product_name}
           </h1>
           <div className="flex items-center gap-1 mt-2 ">
-            <img src={assets.star_icon.src} alt="" className="w-3" />
-            <img src={assets.star_icon.src} alt="" className="w-3" />
-            <img src={assets.star_icon.src} alt="" className="w-3" />
-            <img src={assets.star_icon.src} alt="" className="w-3" />
-            <img src={assets.star_icon.src} alt="" className="w-3" />
+            <div className="rating mt-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <input
+                  key={star}
+                  type="radio"
+                  name="rating-2"
+                  className="mask mask-star-2 bg-red-600 h-4 transition-all ease-out duration-300"
+                  value={star}
+                  checked={star === productDetail.Review[0].rating}
+                  disabled
+                />
+              ))}
+            </div>
             <p className="pl-2 text-base">({productDetail.stock_quantity})</p>
           </div>
           <p className="text-xl mt-2 font-medium space-x-11">

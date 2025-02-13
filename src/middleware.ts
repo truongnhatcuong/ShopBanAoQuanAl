@@ -32,9 +32,6 @@ export async function middleware(req: NextRequest) {
   if (IGNORE_PATHS.includes(req.nextUrl.pathname)) {
     return NextResponse.next();
   }
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
 
   if (
     req.nextUrl.pathname.startsWith("/cart") ||

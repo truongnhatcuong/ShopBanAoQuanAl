@@ -154,6 +154,12 @@ export async function PUT(
         { status: 400 }
       );
     }
+    if (quantity < 1) {
+      return NextResponse.json(
+        { message: "số lượng ít nhất là 1" },
+        { status: 400 }
+      );
+    }
 
     const updateCartItem = await prisma.cartItem.update({
       where: {

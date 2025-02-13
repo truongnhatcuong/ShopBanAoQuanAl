@@ -2,7 +2,7 @@
 import { assets } from "@/app/assets/frontend_assets/assets";
 import { ShopConText } from "@/app/context/Context";
 import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 interface CartItem {
   cartitem_id: number;
@@ -35,14 +35,43 @@ const ItemCart = ({ items }: CartItemListProps) => {
     );
   };
 
-  const updateCartItemQuantity = (cartItemId: number, quantity: number) => {
-    handleUpdateCartItem(cartItemId, quantity);
-    setCartItems((prevItem) =>
-      prevItem.map((item) =>
-        item.cartitem_id === cartItemId ? { ...item, quantity } : item
-      )
-    );
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  const handleUpdateDecreateCart = useCallback(
+    (cartItemId: number, quantity: number) => {
+      if (quantity <= 1) return;
+      const newQuantity = quantity - 1;
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.cartitem_id === cartItemId
+            ? { ...item, quantity: newQuantity }
+            : item
+        )
+      );
+      handleUpdateCartItem(cartItemId, newQuantity);
+      console.log("After Decrement:", cartItemId, newQuantity);
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+  const handleUpdateIncreateCart = useCallback(
+    (cartItemId: number, quantity: number, maxQuantity: number) => {
+      if (quantity > maxQuantity) return;
+      setCartItems((prev) =>
+        prev.map((item) =>
+          item.cartitem_id === cartItemId
+            ? { ...item, quantity: quantity++ }
+            : item
+        )
+      );
+      handleUpdateCartItem(cartItemId, quantity + 1);
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   if (cartItems.length === 0) {
     return (
       <div className="py-4">
@@ -67,7 +96,7 @@ const ItemCart = ({ items }: CartItemListProps) => {
               <img
                 src={item.product.Images[0].image_url}
                 alt="Product image"
-                className="w-16 sm:w-20"
+                className="w-16 sm:w-20 h-16 sm:h-20 object-contain"
               />
               <Link href={`/product/${item.product_id}`}>
                 <div>
@@ -86,20 +115,16 @@ const ItemCart = ({ items }: CartItemListProps) => {
                   </div>
                 </div>
               </Link>
+              <div className="flex justify-around  items-center mt-3 ml-5 ">
+                <p className="px-3 sm:px-4 sm:py-1 border border-gray-300 bg-slate-100 dark:text-black rounded-md text-center">
+                  {item.selectedSize}
+                </p>
+              </div>
             </div>
 
             {/* Quantity Input */}
-            <div className="flex   justify-around items-center ">
-              <div>
-                <div className="flex justify-center items-center mr-1">
-                  <p className="px-3 sm:px-4 sm:py-1 border border-gray-300 bg-slate-100 dark:text-black rounded-md text-center">
-                    {item.selectedSize
-                      ? item.selectedSize
-                      : "Chưa chọn kích thước"}
-                  </p>
-                </div>
-              </div>
-              <input
+            <div className="flex  justify-between items-center ">
+              {/* <input
                 className="max-w-10 md:w-32 border py-1.5 text-center mx-6 md:mx-0"
                 type="number"
                 min={1}
@@ -110,7 +135,33 @@ const ItemCart = ({ items }: CartItemListProps) => {
                     Number(e.target.value)
                   )
                 }
-              />
+              /> */}
+              <div className="flex items-center flex-col md:flex-row dark:text-black  ">
+                <div
+                  className="py-1.5 px-3 border-slate-400 hover:bg-slate-400  border-[1px] rounded-md bg-slate-200  cursor-pointer"
+                  onClick={() =>
+                    handleUpdateDecreateCart(item.cartitem_id, item.quantity)
+                  }
+                >
+                  -
+                </div>
+                <div className="py-1.5 px-4  mx-1 bg-slate-50  ">
+                  {" "}
+                  {item.quantity}
+                </div>
+                <div
+                  className="py-1.5 px-3 border-slate-400 hover:bg-slate-400 border-[1px]  rounded-md bg-slate-200  cursor-pointer"
+                  onClick={() =>
+                    handleUpdateIncreateCart(
+                      item.cartitem_id,
+                      item.quantity,
+                      item.quantity
+                    )
+                  }
+                >
+                  +
+                </div>
+              </div>
               <p className="text-xs font-semibold hidden md:block ">
                 {productTotal.toLocaleString("vi-VN").replace(/\./g, ",")} đ
               </p>

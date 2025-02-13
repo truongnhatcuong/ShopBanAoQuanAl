@@ -6,8 +6,8 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   // Lấy tham số tìm kiếm, phân trang và sắp xếp
   const search: string = searchParams?.get("search") || "";
-  const limit: number = Number(searchParams?.get("limit") || 0);
-  const page: number = Number(searchParams?.get("page") || 1);
+  const limit: number = Number(searchParams?.get("limit") || 5);
+  const page = Math.max(Number(searchParams?.get("page") || 1), 1);
   let sortOrder: any = searchParams?.get("sortOrder") || "asc";
   const sortField: string = searchParams.get("sortField") || "product_name";
   const maxPrice = Number(searchParams.get("maxPrice")) || 0;
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
       ...(limit > 0 && { skip: totalSkipRecords, take: limit }), // Phân trang
       where: {
         product_name: {
-          contains: search, // Lọc sản phẩm theo tên
+          contains: search.toLowerCase(), // Lọc sản phẩm theo tên
         },
         ...(maxPrice > 0 && {
           price: {
@@ -104,11 +104,10 @@ export async function POST(req: NextRequest) {
       product_name,
       description,
       price,
-      stock_quantity,
       category_id,
       brand_id,
       season_id,
-      sizes, // [{ size_id: number, stock_quantity: number }]
+      sizes,
       color,
     } = data;
     if (

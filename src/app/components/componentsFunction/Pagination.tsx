@@ -1,20 +1,18 @@
 "use client";
-import { useRouter } from "next/navigation";
+
 import React from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 interface PaginationProps {
   currentPage: number;
-  totalPages: number;
-  keyword: string;
   onPageChange: (page: number) => void;
+  hasData: boolean;
 }
 
 const Pagination = ({
   currentPage,
-  totalPages,
-  keyword,
   onPageChange,
+  hasData,
 }: PaginationProps) => {
   function handlerPreviour() {
     if (currentPage > 1) {
@@ -22,7 +20,7 @@ const Pagination = ({
     }
   }
   function handlerNext() {
-    if (currentPage) {
+    if (hasData) {
       onPageChange(currentPage + 1);
     }
   }
@@ -31,7 +29,9 @@ const Pagination = ({
     <div className="fixed bottom-4 right-4  p-3 rounded-lg  z-50">
       <div className="text-gray-950 font-medium flex px-3 pb-1 justify-center sm:justify-start sm:space-x-10  sm:px-0 ">
         <div
-          className="flex flex-col items-center cursor-pointer hover:underline"
+          className={`flex flex-col items-center cursor-pointer hover:underline ${
+            currentPage === 1 ? "opacity-50 cursor-not-allowed " : ""
+          }`}
           onClick={handlerPreviour}
         >
           <BsChevronLeft className="h-4 " />
@@ -41,7 +41,9 @@ const Pagination = ({
         <span className="text-xl">{currentPage}</span>
 
         <div
-          className="flex flex-col items-center cursor-pointer hover:underline"
+          className={`flex flex-col items-center cursor-pointer hover:underline ${
+            !hasData ? "opacity-50 cursor-not-allowed " : ""
+          }`}
           onClick={handlerNext}
         >
           <BsChevronRight className="h-4" />

@@ -17,13 +17,6 @@ interface CartItem {
   image_url: string;
 }
 
-// interface CartData {
-//   cart: {
-//     cart_id: number;
-//     items: CartItem[];
-//   };
-// }
-
 const CartPage = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const fetchCartData = async () => {
@@ -33,7 +26,7 @@ const CartPage = () => {
     const updatedItems =
       data.cart.items?.map((item: CartItem) => ({
         ...item,
-        selectedSize: item.selectedSize, // Cập nhật với size mặc định hoặc giá trị từ API nếu có
+        selectedSize: item.selectedSize,
       })) || [];
     setCart(updatedItems || null);
   };

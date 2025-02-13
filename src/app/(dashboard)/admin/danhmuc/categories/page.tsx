@@ -55,7 +55,7 @@ const PageContent = () => {
     <div className="ml-5">
       <div
         className="flex justify-end mr-7 
-      mb-5"
+      my-5"
       >
         <button
           className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
@@ -86,9 +86,8 @@ const PageContent = () => {
         {!showAddModal && (
           <div>
             <Pagination
+              hasData={categories.length > 0}
               currentPage={currentPage}
-              totalPages={totalPages}
-              keyword={keyword}
               onPageChange={(newPage) => setCurrentPage(newPage)}
             />
           </div>

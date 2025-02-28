@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
       Customer: {
         select: {
           name: true,
+          email: true,
         },
       },
       Payments: {
@@ -21,6 +22,7 @@ export async function GET(req: NextRequest) {
       order_id: "desc",
     },
   });
+
   return NextResponse.json(
     { orderCustomer, message: "success" },
     { status: 201 }

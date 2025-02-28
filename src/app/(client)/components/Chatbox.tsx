@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import { usePathname } from "next/navigation";
 import { MessageCircleQuestion } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface CozeConfig {
   bot_id: string;
@@ -26,8 +26,9 @@ declare global {
 
 const CozeChat: React.FC = () => {
   const [isCozeLoaded, setIsCozeLoaded] = useState(false);
-  const [showNotification, setShowNotification] = useState(true);
+
   const pathname = usePathname();
+
   const chatInstanceRef = useRef<any>(null);
 
   const shouldHideChat =
@@ -104,7 +105,7 @@ const CozeChat: React.FC = () => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldHideChat, pathname]);
+  }, [pathname !== "/"]);
 
   // Watch for pathname changes to trigger cleanup
   useEffect(() => {
@@ -112,7 +113,7 @@ const CozeChat: React.FC = () => {
       cleanupChatWidget();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname !== "/"]);
 
   const AiAdvisoryNotification = () => {
     if (shouldHideChat) return null;

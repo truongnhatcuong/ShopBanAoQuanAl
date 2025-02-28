@@ -18,9 +18,9 @@ export default function AdminLayout({
       {/* Left menu */}
 
       <div
-        className={`bg-gray-900 text-white shadow-lg overflow-y-auto overflow-x-hidden scrollbar-custom ${
+        className={`bg-slate-100 text-black shadow-lg overflow-y-auto overflow-x-hidden scrollbar-custom ${
           isLeftMenuVisible
-            ? " w-[16%]  md:w-[20%] transition-all duration-700 ease-in"
+            ? " w-[16%]  md:w-[19%] transition-all duration-700 ease-in"
             : "md:w-[5%] w-0 transition-all duration-500  ease-out"
         }`}
       >
@@ -30,15 +30,12 @@ export default function AdminLayout({
       {/* TopBar and Content */}
       <div
         className={`flex flex-col ${
-          isLeftMenuVisible ? " w-[84%]" : "w-[100%]"
+          isLeftMenuVisible ? " w-[89%]" : "w-[100%]"
         } `}
       >
         <TopBar />
-        {/* <hr className="border-gray-300 border-b-4 w-full  mb-[10px]" /> */}
         <div
-          className={`flex-grow bg-white overflow-y-auto overflow-x-auto  scrollbar-custom  ${
-            isLeftMenuVisible ? "" : ""
-          } ml-2`}
+          className={`flex-grow bg-white overflow-y-auto overflow-x-auto  scrollbar-custom  ml-2`}
         >
           {children}
         </div>

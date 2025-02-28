@@ -63,10 +63,17 @@ export async function GET(
       originalPrice = currenPrice / (1 - discount / 100);
     }
 
+    const countReview = await prisma.review.count({
+      where: {
+        product_id: Number(productId),
+      },
+    });
+
     return NextResponse.json(
       {
         getProduct,
         originalPrice: originalPrice || null,
+        countReview,
         message: "Get product success",
       },
       { status: 201 }

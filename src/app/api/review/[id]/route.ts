@@ -1,3 +1,4 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -25,28 +26,35 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const data = await req.json();
-  const reviewId = Number(params.id);
+  const { id } = await params;
+  const token = req.cookies.get("token")?.value;
+  const admin = await authenticateToken(token);
+
+  const hashAdmin = admin?.role.permissions.some(
+    (item) => item.permission.permission === "update"
+  );
+  if (!hashAdmin) {
+    console.log("Access denied: Redirecting to login page");
+    return NextResponse.json({ message: "error" }, { status: 401 });
+  }
+
+  const { seller_response } = await req.json();
   try {
-    const createdReview = await prisma.review.update({
+    const updatedReview = await prisma.review.update({
       where: {
-        review_id: reviewId,
+        review_id: Number(id),
       },
       data: {
-        product_id: data.product_id,
-        customer_id: data.customer_id,
-        comment_review: data.comment_review,
-        image_url: data.image_url,
-        seller_response: data.seller_response,
-        rating: data.rating,
+        seller_response: seller_response,
       },
     });
+
+    return NextResponse.json(updatedReview);
+  } catch (error) {
     return NextResponse.json(
-      { createdReview, message: " success" },
-      { status: 201 }
+      { error: "Failed to update review response" },
+      { status: 500 }
     );
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 

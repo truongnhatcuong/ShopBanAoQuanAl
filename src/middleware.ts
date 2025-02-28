@@ -40,7 +40,7 @@ export async function middleware(req: NextRequest) {
   )
     return token
       ? NextResponse.next()
-      : NextResponse.redirect(new URL("/login", req.url));
+      : NextResponse.redirect(new URL("/login", req.nextUrl.origin));
   // cho phép thông qua mà không cần token
   if (
     (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/signUp") &&
@@ -53,12 +53,14 @@ export async function middleware(req: NextRequest) {
     (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/signUp") &&
     token
   ) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/", req.nextUrl.origin));
   }
 
   // Đăng xuất
   if (req.nextUrl.pathname === "/logout") {
-    const response = NextResponse.redirect(new URL("/login", req.url));
+    const response = NextResponse.redirect(
+      new URL("/login", req.nextUrl.origin)
+    );
     response.cookies.set("token", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -70,7 +72,7 @@ export async function middleware(req: NextRequest) {
 
   // Bảo vệ các route yêu cầu token
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
   }
 
   try {
@@ -86,7 +88,7 @@ export async function middleware(req: NextRequest) {
 
     if (!res.ok) {
       console.error("API trả về lỗi:", await res.text());
-      return NextResponse.redirect(new URL("/login", req.url));
+      return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
     }
 
     const data = await res.json();

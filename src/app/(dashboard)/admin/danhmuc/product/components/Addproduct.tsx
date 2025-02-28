@@ -31,11 +31,7 @@ interface ISize {
   name_size: string;
 }
 
-const AddProduct = (props: {
-  reloadData: () => void;
-  query: string;
-  setQuery: (value: any) => void;
-}) => {
+const AddProduct = (props: { reloadData: () => void }) => {
   // hiển thị tên các danh mục
   const [category, setCategory] = useState<ICategory[] | []>([]);
   const [brand, setBrand] = useState<IBrand[] | []>([]);
@@ -192,16 +188,7 @@ const AddProduct = (props: {
 
   return (
     <>
-      <div className="flex justify-between w-full mt-6 items-center mx-4">
-        <div>
-          <input
-            type="text"
-            placeholder="Tìm kiếm sản phẩm..."
-            className="w-96 p-2 border rounded-lg mb-3 py-3"
-            value={props.query}
-            onChange={(e) => props.setQuery(e.target.value)}
-          />
-        </div>
+      <div className="flex justify-end w-full mt-6 items-center mx-4">
         <div
           onClick={() => setShowAdd(true)}
           className="bg-blue-600 px-2  py-1 font-semibold text-white hover:bg-blue-700 flex items-center h-10 "

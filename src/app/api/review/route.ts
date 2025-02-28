@@ -4,12 +4,21 @@ import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const customer = await authCustomer(req);
   const getAllReview = await prisma.review.findMany({
-    where: {
-      customer_id: customer?.customer_id,
+    include: {
+      Customer: {
+        select: {
+          name: true,
+        },
+      },
+      Product: {
+        select: {
+          product_name: true,
+        },
+      },
     },
   });
+
   return NextResponse.json(
     { getAllReview, message: "success" },
     { status: 201 }

@@ -12,7 +12,13 @@ interface Product {
   Category: { category_name: string };
   // Các thuộc tính khác nếu cần
 }
-const RelatedProduct = ({ category_name }: { category_name: string }) => {
+const RelatedProduct = ({
+  category_name,
+  currentProductId,
+}: {
+  category_name: string;
+  currentProductId: number;
+}) => {
   const [relate, setRelate] = useState<Product[]>([]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -21,7 +27,9 @@ const RelatedProduct = ({ category_name }: { category_name: string }) => {
     const data = await res.json();
 
     const filterCategory = data.product.filter(
-      (item: any) => item.Category.category_name === category_name
+      (item: Product) =>
+        item.Category.category_name === category_name &&
+        item.product_id !== currentProductId
     );
     setRelate(filterCategory);
   };

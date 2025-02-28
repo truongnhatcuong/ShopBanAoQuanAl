@@ -22,7 +22,7 @@ const MenuItems = (props: IProps) => {
   const [isSubmenuVisible, setIsSubmenuVisible] = useState<boolean>(false);
   const { isLeftMenuVisible } = useContext(ShopConText)!;
   return (
-    <ul className="flex flex-col cursor-pointer mt-3">
+    <ul className="flex flex-col  cursor-pointer mt-3 ">
       <li className="flex items-center justify-between rounded-md transition-colors duration-200 mr-4 font-semibold">
         <div
           className="flex items-center justify-between w-full"
@@ -38,7 +38,7 @@ const MenuItems = (props: IProps) => {
             </span>
             {isLeftMenuVisible && (
               <span
-                className={`ml-1 mt-4 pb-1.5 text-lg  Outfit hidden md:block `}
+                className={`ml-1 mt-4 pb-1.5 text-lg font-semibold Outfit hidden md:block `}
               >
                 {props.menuItem.title}
               </span>
@@ -46,7 +46,7 @@ const MenuItems = (props: IProps) => {
           </Link>
           {props.menuItem.submenu && (
             <span
-              className={` mt-4 transition-transform duration-200 ${
+              className={` mt-4 transition-transform duration-200 ml-[3px] ${
                 isSubmenuVisible ? "rotate-90" : ""
               }`}
             >
@@ -64,7 +64,7 @@ const MenuItems = (props: IProps) => {
 
       {isSubmenuVisible && props.menuItem.submenu && (
         <ul
-          className={`ml-3 text-white w-8  rounded-lg mt-1 ${
+          className={`ml-3 text-white bg-gray-800 w-8  rounded-lg mt-1 ${
             isLeftMenuVisible ? " md:w-48 " : "md:w-10  "
           }`}
         >

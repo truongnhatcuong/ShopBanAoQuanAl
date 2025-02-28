@@ -4,6 +4,7 @@ import { ShopConText } from "@/app/context/Context";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import QRCode from "./QrReact";
 
 const PaymentMethodForm = ({
   customerId,
@@ -15,6 +16,7 @@ const PaymentMethodForm = ({
   const { couponName, setCouponName } = useContext(ShopConText)!;
 
   const [paymentMethod, setPaymentMethod] = useState("CASH");
+
   const route = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,13 +74,12 @@ const PaymentMethodForm = ({
           <input
             type="radio"
             name="payment"
-            value="BANK_TRANSFER"
-            checked={paymentMethod === "BANK_TRANSFER"}
-            onChange={() => setPaymentMethod("BANK_TRANSFER")}
+            value="CREDIT_CARD"
+            checked={paymentMethod === "CREDIT_CARD"}
+            onChange={() => setPaymentMethod("CREDIT_CARD")}
             className="mr-1 cursor-pointer"
-            disabled
           />
-          <p className="text-sm">Chuyển khoản</p>
+          <p className="text-sm">Stripe</p>
         </div>
 
         <div className="flex " title="không khả dụng">
@@ -89,10 +90,10 @@ const PaymentMethodForm = ({
             checked={paymentMethod === "E_WALLET"}
             onChange={() => setPaymentMethod("E_WALLET")}
             className="mr-1 cursor-pointer"
-            disabled
           />
           <p className="text-sm">ví điện tử</p>
         </div>
+        {paymentMethod === "E_WALLET" && <QRCode />}
         <hr className="border w-full" />
 
         {/* Nút gửi */}

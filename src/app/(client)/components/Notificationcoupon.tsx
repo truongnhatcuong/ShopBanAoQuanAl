@@ -79,9 +79,9 @@ const Notificationcoupon = () => {
                     </label>
                     {item.is_read === false ? (
                       <img
-                        src="https://media.tenor.com/UBNApyolWz4AAAAi/new-blinking-new-blinking-without-background.gif"
+                        src="/Image/newImg.png"
                         alt=""
-                        className="w-9 h-9 absolute -top-1.5 right-3"
+                        className="w-12 h-6 absolute -top-1 right-2"
                       />
                     ) : (
                       ""

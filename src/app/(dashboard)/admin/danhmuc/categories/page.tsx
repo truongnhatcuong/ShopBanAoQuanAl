@@ -7,6 +7,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, Suspense } from "react";
 import Pagination from "@/app/components/componentsFunction/Pagination";
 import { FiPlus } from "react-icons/fi";
+import SelectPagination from "@/app/components/componentsFunction/SelectPagination";
+import SearchParamInput from "@/app/components/componentsFunction/SearchParamInput";
 
 interface Icategories {
   category_id: number;
@@ -54,11 +56,14 @@ const PageContent = () => {
   return (
     <div className="ml-5">
       <div
-        className="flex justify-end mr-7 
+        className="flex justify-between mr-7 
       my-5"
       >
+        <div>
+          <SearchParamInput searchTerm={keyword} setSearchTerm={setKeyword} />
+        </div>
         <button
-          className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
+          className="bg-blue-600 px-2 py-1 h-10 mt-1 font-bold text-white hover:bg-blue-700 flex items-center"
           onClick={() => setShowAddModal(true)}
         >
           <FiPlus /> <span>Thêm mới</span>
@@ -72,6 +77,8 @@ const PageContent = () => {
       </div>
       <div>
         <CategoryTable
+          SetsortOrder={setSortOrder}
+          sortOrder={sortOrder}
           categories={categories}
           setCategories={setCategories}
           openEditModal={openEditModal}
@@ -84,9 +91,11 @@ const PageContent = () => {
           />
         )}
         {!showAddModal && (
-          <div>
+          <div className="flex justify-between">
+            <SelectPagination setLimit={setLimit} value={limit} />
+
             <Pagination
-              hasData={categories.length > 0}
+              hasData={currentPage < totalPages}
               currentPage={currentPage}
               onPageChange={(newPage) => setCurrentPage(newPage)}
             />

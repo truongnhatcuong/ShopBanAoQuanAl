@@ -1,8 +1,10 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
   const searchParams = req.nextUrl.searchParams;
   // Lấy tham số tìm kiếm, phân trang và sắp xếp
   const search: string = searchParams?.get("search") || "";
@@ -28,7 +30,6 @@ export async function GET(req: NextRequest) {
   try {
     // Lấy danh sách sản phẩm kèm thông tin liên quan
     const product = await prisma.product.findMany({
-      ...(limit > 0 && { skip: totalSkipRecords, take: limit }), // Phân trang
       where: {
         product_name: {
           contains: search.toLowerCase(), // Lọc sản phẩm theo tên
@@ -79,9 +80,70 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    const admin = await authenticateToken(token);
+    let magamentProducts: any = [];
+    if (
+      admin?.role.permissions.some(
+        (prev) => prev.permission.permission === "update"
+      )
+    ) {
+      magamentProducts = await prisma.product.findMany({
+        ...(limit > 0 && { skip: totalSkipRecords, take: limit }), // Phân trang
+        where: {
+          product_name: {
+            contains: search.toLowerCase(), // Lọc sản phẩm theo tên
+          },
+          ...(maxPrice > 0 && {
+            price: {
+              lte: maxPrice,
+            },
+          }),
+        },
+
+        orderBy: {
+          [sortField]: sortOrder,
+        },
+        include: {
+          ProductSizes: {
+            select: {
+              stock_quantity: true,
+              Size: {
+                select: {
+                  size_id: true,
+                  name_size: true, // Nếu cần tên kích thước
+                },
+              },
+            },
+          },
+          Images: {
+            select: {
+              image_id: true,
+              image_url: true,
+            },
+          },
+
+          Category: {
+            select: {
+              category_name: true, // Tên danh mục
+            },
+          },
+          ProductPromotion: {
+            select: {
+              Promotion: {
+                select: {
+                  discount: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
     return NextResponse.json(
       {
         product,
+        magamentProducts,
         pagination: {
           totalRecords,
           totalPages,

@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import { ThemeProvider } from "next-themes";
-import { boolean } from "zod";
+import { usePathname } from "next/navigation";
 
 interface IContext {
   cart: any;
@@ -41,6 +41,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLeftMenuVisible, setIsLeftMenuVisible] = useState(true);
   const [couponName, setCouponName] = useState("");
+
   const handleAddToCart = async (
     product_id: number,
     quantity: number,
@@ -80,12 +81,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
         });
       }
     } catch (error) {
-      MySwal.fire({
-        position: "center",
-        icon: "error",
-        title: "Lỗi hệ thống",
-        text: "Không thể kết nối tới server.",
-      });
+      console.log(error);
     }
   };
 

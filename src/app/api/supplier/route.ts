@@ -3,7 +3,31 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const search: string = searchParams.get("search") || "";
+  const limit: number = Number(searchParams.get("limit")) || 0;
+  const page: number = Math.max(Number(searchParams.get("page") || 1) || 1);
+  const sortOrder: any = searchParams.get("sortOrder") || "asc";
+  // kiem tra dieu kien
+  if (sortOrder !== "asc" && sortOrder !== "desc") return sortOrder == "asc";
+  // tìm kiếm
+  const totalRecords = await prisma.supplier.count({
+    where: {
+      supplier_name: {
+        contains: search,
+      },
+    },
+  });
+  // tổng số trang
+  const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
+  const totalSkipRecords = (page - 1) * limit;
   const supplier = await prisma.supplier.findMany({
+    ...(limit > 0 && { skip: totalSkipRecords, take: limit }),
+    where: {
+      supplier_name: {
+        contains: search.toLowerCase(),
+      },
+    },
     include: {
       ProductSuppliers: {
         select: {
@@ -18,10 +42,15 @@ export async function GET(req: NextRequest) {
         },
       },
     },
+    orderBy: { supplier_name: sortOrder },
   });
 
   return NextResponse.json(
-    { supplier, message: "Get supplier success " },
+    {
+      supplier,
+      pagination: { totalRecords, totalPages, currentPage: page, limit },
+      message: "Get supplier success ",
+    },
     { status: 201 }
   );
 }

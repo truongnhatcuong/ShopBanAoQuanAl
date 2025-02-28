@@ -1,7 +1,12 @@
 import prisma from "@/prisma/client";
 import { authCustomer } from "@/utils/Auth";
-import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+
+// Initialize Stripe with your secret key
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2025-01-27.acacia",
+});
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -9,7 +14,6 @@ export async function GET(req: NextRequest) {
   const page: number = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 1;
 
-  // totalrecord
   const totalrecord = await prisma.order.count();
   const totalPage = totalrecord / limit;
   const totalSkipRecord = (page - 1) * limit;
@@ -26,11 +30,9 @@ export async function GET(req: NextRequest) {
   try {
     const customer = await authCustomer(req);
 
-    // Lấy tất cả đơn hàng của khách hàng này
-
     const orders = await prisma.order.findMany({
       where: {
-        customer_id: customer?.customer_id, // Lọc theo customer_id
+        customer_id: customer?.customer_id,
       },
       include: {
         OrderItems: {
@@ -52,34 +54,12 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // Kiểm tra nếu không có đơn hàng nào
     if (orders.length === 0) {
       return NextResponse.json(
         { message: "Không có đơn hàng nào." },
         { status: 404 }
       );
     }
-    // admin
-    const orderCustomer = await prisma.order.findMany({
-      include: {
-        Customer: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-        Payments: {
-          select: {
-            payment_id: true,
-            payment_status: true,
-            payment_method: true,
-          },
-        },
-      },
-      orderBy: {
-        order_id: "desc",
-      },
-    });
 
     return NextResponse.json(
       { orders, message: "Lấy danh sách đơn hàng thành công." },
@@ -112,7 +92,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    //kiểm tra địa chỉ
     const address = await prisma.addressShipper.findUnique({
       where: {
         address_id: addressId,
@@ -126,26 +105,28 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    // Lấy thông tin giỏ hàng
+
     const cart = await prisma.cart.findFirst({
       where: {
         customer_id: customer?.customer_id,
       },
       include: { CartItems: { include: { Product: true, Size: true } } },
     });
+
     if (!cart || cart.CartItems.length === 0) {
       return NextResponse.json(
         { error: "Cart is empty or does not exist." },
         { status: 400 }
       );
     }
-    // phí vận chuyển mặc định
+
     const costShipping = 25000;
     const subtotal = cart.CartItems.reduce((total, item) => {
       return total + item.quantity * Number(item.Product.price);
     }, 0);
-    // Tính tổng tiền trước khi áp dụng mã giảm giá
+
     let totalAmount = subtotal + costShipping;
+    let discount = 0;
 
     if (couponCode) {
       const coupon = await prisma.coupon.findFirst({
@@ -153,6 +134,7 @@ export async function POST(req: NextRequest) {
           coupon_code: couponCode.toUpperCase(),
         },
       });
+
       if (coupon) {
         const currentDate = new Date();
         const startDate = coupon.start_date
@@ -161,6 +143,7 @@ export async function POST(req: NextRequest) {
         const endDate = coupon.end_date
           ? new Date(coupon.end_date)
           : new Date();
+
         if (currentDate < startDate || currentDate > endDate) {
           return NextResponse.json(
             { message: "Mã giảm giá đã hết hạn." },
@@ -168,8 +151,6 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // Tính giảm giá
-        let discount = 0;
         if (coupon.coupon_percentage && Number(coupon.coupon_percentage) > 0) {
           discount = (subtotal * Number(coupon.coupon_percentage)) / 100;
         }
@@ -178,15 +159,15 @@ export async function POST(req: NextRequest) {
           discount = Number(coupon.coupon_amount);
         }
 
-        // Giảm giá không vượt quá tổng tiền
         if (discount > totalAmount) {
           discount = totalAmount;
         }
-        //áp dụng mã giảm giá
+
         totalAmount -= discount;
       }
     }
 
+    // Create order in database
     const order = await prisma.order.create({
       data: {
         customer_id: customerId,
@@ -195,7 +176,6 @@ export async function POST(req: NextRequest) {
         total_amount: totalAmount,
         order_state: "PENDING",
         created_at: new Date(),
-
         OrderItems: {
           create: cart.CartItems.map((item) => ({
             product_id: item.product_id,
@@ -207,32 +187,88 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    await prisma.payment.create({
-      data: {
-        order_id: order.order_id,
-        payment_method: paymentMethod,
-        payment_amount: totalAmount,
-        payment_status: "PENDING",
-      },
-    });
+    // Handle different payment methods
+    if (paymentMethod === "CREDIT_CARD") {
+      // Create Stripe payment session
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: cart.CartItems.map((item) => ({
+          price_data: {
+            currency: "vnd",
+            product_data: {
+              name: item.Product.product_name,
+            },
+            unit_amount: Number(totalAmount),
+          },
+          quantity: item.quantity,
+        })),
+        mode: "payment",
+        success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/order/cancel`,
+        metadata: {
+          order_id: order.order_id,
+        },
+      });
 
-    await prisma.cartItem.deleteMany({
-      where: { cart_id: cart.cart_id },
-    });
+      // Create payment record with Stripe session ID
+      await prisma.payment.create({
+        data: {
+          order_id: order.order_id,
+          payment_method: "CREDIT_CARD",
+          payment_amount: totalAmount,
+          payment_status: "PENDING",
+          stripe_session_id: session.id,
+        },
+      });
 
-    await prisma.cart.delete({
-      where: { cart_id: cart.cart_id },
-    });
-    return NextResponse.json(
-      {
-        order,
-        message: "Đặt hàng thành công",
-      },
-      { status: 201 }
-    );
+      // Clean up cart
+      await prisma.cartItem.deleteMany({
+        where: { cart_id: cart.cart_id },
+      });
+
+      await prisma.cart.delete({
+        where: { cart_id: cart.cart_id },
+      });
+
+      // Return Stripe session URL
+      return NextResponse.json(
+        {
+          order,
+          stripe_session_url: session.url,
+          message: "Đơn hàng đã được tạo, chuyển đến trang thanh toán",
+        },
+        { status: 201 }
+      );
+    } else {
+      // Handle regular card payment
+      await prisma.payment.create({
+        data: {
+          order_id: order.order_id,
+          payment_method: paymentMethod,
+          payment_amount: totalAmount,
+          payment_status: "PENDING",
+        },
+      });
+
+      // Clean up cart
+      await prisma.cartItem.deleteMany({
+        where: { cart_id: cart.cart_id },
+      });
+
+      await prisma.cart.delete({
+        where: { cart_id: cart.cart_id },
+      });
+
+      return NextResponse.json(
+        {
+          order,
+          message: "Đặt hàng thành công",
+        },
+        { status: 201 }
+      );
+    }
   } catch (error: any) {
     console.log(error);
-
     return NextResponse.json({ message: error.message }, { status: 501 });
   }
 }

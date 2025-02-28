@@ -84,3 +84,16 @@
   background-image: url("/Image/nendep.jpg");
   background-size: cover;
 }
+
+
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -7,6 +7,8 @@ import debounce from "lodash.debounce";
 import { Search } from "lucide-react";
 import Pagination from "@/app/components/componentsFunction/Pagination";
 import { useSearchParams } from "next/navigation";
+import SelectPagination from "@/app/components/componentsFunction/SelectPagination";
+import SearchParamInput from "@/app/components/componentsFunction/SearchParamInput";
 interface Product {
   product_id: number;
   product_name: string;
@@ -34,70 +36,67 @@ interface Product {
 }
 
 const PageProduct = () => {
-  const searchParams = useSearchParams();
-  const [query, setQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [limit, setLimit] = useState(5);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(
-    parseInt(searchParams.get("page") || "1", 10)
-  );
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortOrder, setSortOrder] = useState("asc");
   const ApiImage = async () => {
     const res = await fetch("/api/ImageProduct");
     await res.json();
   };
 
   const [product, setProduct] = useState<Product[] | []>([]);
-  const fetchApiProduct = debounce(
-    async (searchTerm: string, page = currentPage) => {
-      setLoading(true);
-      const res = await fetch(
-        `/api/product?search=${searchTerm.toLowerCase()}&page=${page}&limit=5`
-      );
-      const data = await res.json();
-      await ApiImage();
-      setLoading(false);
-      setTotalPages(data.pagination.totalPages);
-      setProduct(data.product);
-    },
-    500
-  );
-
-  console.log("page", currentPage);
-  console.log("total", totalPages);
+  const fetchApiProduct = async () => {
+    setLoading(true);
+    const res = await fetch(
+      `/api/product?search=${searchTerm.toLowerCase()}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`
+    );
+    const data = await res.json();
+    await ApiImage();
+    setLoading(false);
+    setCurrentPage(data.pagination.currentPage);
+    setTotalPages(data.pagination.totalPages);
+    setProduct(data.magamentProducts);
+  };
 
   useEffect(() => {
-    fetchApiProduct(query);
-    return () => fetchApiProduct.cancel();
-  }, [query, currentPage]);
+    fetchApiProduct();
+  }, [searchTerm, currentPage, limit, sortOrder]);
 
-  if (loading === true) {
+  if (loading) {
     <p className="text-gray-500 text-center">Đang tải dữ liệu...</p>;
   }
   return (
     <>
-      <div className="flex justify-end mb-3 mr-7">
-        <AddProduct
-          reloadData={() => fetchApiProduct(query, currentPage)}
-          query={query}
-          setQuery={setQuery}
+      {/* thêm sản phẩm */}
+      <div className="flex justify-between mr-7 ">
+        <div className="mt-4">
+          <SearchParamInput
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+        </div>
+        <div>
+          {" "}
+          <AddProduct reloadData={fetchApiProduct} />
+        </div>
+      </div>
+      {/* danh sách sản phẩm */}
+      <div>
+        <TableProduct
+          setSortOrder={setSortOrder}
+          sortOrder={sortOrder}
+          searchTerm={searchTerm}
+          productData={product}
+          reloadData={fetchApiProduct}
         />
       </div>
+      {/* phân trang */}
+      <div className="flex justify-between">
+        <SelectPagination setLimit={setLimit} value={limit} />
 
-      <div>
-        {product.length === 0 && !loading ? (
-          <p className="text-gray-500 text-center">
-            không có sản phẩm nào có tên{" "}
-            <span className="text-2xl font-medium text-red-500">{query}</span>
-          </p>
-        ) : (
-          <TableProduct
-            productData={product}
-            reloadData={() => fetchApiProduct(query, currentPage)}
-          />
-        )}
-      </div>
-      <div>
-        {" "}
         <Pagination
           hasData={currentPage < totalPages}
           currentPage={currentPage}

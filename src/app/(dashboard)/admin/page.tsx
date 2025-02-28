@@ -13,7 +13,7 @@ const Page = () => {
   return (
     <div className="bg-slate-50 ">
       {" "}
-      <div className="flex justify-around items-center">
+      {/* <div className="flex justify-around items-center">
         <div>
           <Title title1="Danh Mục" title2="Quản Lý" />
           <ul>
@@ -46,9 +46,9 @@ const Page = () => {
         <div>
           <Earth />
         </div>
-      </div>
+      </div> */}
       {/* tổng quan */}
-      <div className="text-center mt-32 mb-5">
+      <div className="text-center mt-3 mb-5">
         {" "}
         <Title title1="Thống Kê" title2="Doanh Thu" />
       </div>

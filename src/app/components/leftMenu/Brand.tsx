@@ -26,7 +26,7 @@ const Brand = () => {
     <div className="">
       <div
         className={`md:flex gap-2 ${
-          isLeftMenuVisible ? "mt-2.5" : "md:mt-0  "
+          isLeftMenuVisible ? "mt-2.5" : "md:0 "
         } justify-center  `}
       >
         <div className={` ${isLeftMenuVisible ? "mt-0  " : "mt-1.5 pb-2.5"}`}>
@@ -44,7 +44,6 @@ const Brand = () => {
           </p>
         </div>
       </div>
-      <hr className="border-white border-b-2 md:mt-[2px] w-screen" />
     </div>
   );
 };

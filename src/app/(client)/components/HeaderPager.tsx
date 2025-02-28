@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsBagCheck } from "react-icons/bs";
 import { FaClipboardCheck, FaUser } from "react-icons/fa";
-import { IoSearchSharp } from "react-icons/io5";
 import { LiaPowerOffSolid } from "react-icons/lia";
 import { AiOutlineUser } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,6 +14,7 @@ import { ShopConText } from "@/app/context/Context";
 import { IoChevronBackOutline } from "react-icons/io5";
 import DarkModeSwitch from "./DarkModeSwitch";
 import Notificationcoupon from "./Notificationcoupon";
+import SearchProduct from "./SearchProduct";
 interface ICategory {
   category_id: number;
   category_name: string;
@@ -53,6 +53,9 @@ export default function HeadePager() {
     setRoleId(data.accessToken?.roleId);
     setIsLoggedIn(true);
   }
+  useEffect(() => {
+    console.log("Username đã thay đổi:", username);
+  }, [username]);
 
   useEffect(() => {
     fetchUserInfo(); // Gọi API lấy thông tin người dùng
@@ -63,18 +66,6 @@ export default function HeadePager() {
     handleQuantityCart();
   }, [handleQuantityCart]);
 
-  // tìm kiếm sản phẩm
-  const handleSearchSubmit = () => {
-    if (search.trim() !== "") {
-      router.push(`/product?search=${search}`);
-    }
-  };
-  //enter
-  const handleKeyPress = (event: any) => {
-    if (event.key === "Enter") {
-      router.push(`/product?search=${search}`);
-    }
-  };
   return (
     <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-2 ">
       <div className="dark:bg-transparent hidden md:block ">
@@ -120,23 +111,8 @@ export default function HeadePager() {
       <div className="flex items-center gap-x-5 ">
         {/* Search Input */}
         <Notificationcoupon />
-        <div className="relative md:flex items-center border rounded-full md:p-2 md:pl-4 px-3 py-1.5   dark:text-white   ">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="outline-none md:px-2 px-0 text-xs md:text-sm "
-            onKeyDown={handleKeyPress}
-          />
-          <IoSearchSharp
-            className={`text-xl md:text-2xl  absolute right-2 top-2 cursor-pointer ${
-              search === "" ? "" : "hover:text-gray-400"
-            }`}
-            aria-disabled={search === ""}
-            onClick={handleSearchSubmit}
-          />
-        </div>
+        {/* product */}
+        <SearchProduct search={search} setSearch={setSearch} />
         <div className="mt-1">
           {" "}
           <DarkModeSwitch />

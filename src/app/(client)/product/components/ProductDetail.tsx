@@ -34,6 +34,7 @@ interface IProduct {
     image_url: string;
     rating: number;
     review_date: string;
+    seller_response: string;
     Customer: { name: string };
   }[];
 }
@@ -41,9 +42,14 @@ interface IProduct {
 interface IProps {
   productDetail: IProduct | null;
   originalPrice: number;
+  countReview: number;
 }
 
-const ProductDetail = ({ productDetail, originalPrice }: IProps) => {
+const ProductDetail = ({
+  productDetail,
+  originalPrice,
+  countReview,
+}: IProps) => {
   if (!productDetail) {
     return (
       <p className="text-center">
@@ -51,6 +57,8 @@ const ProductDetail = ({ productDetail, originalPrice }: IProps) => {
       </p>
     );
   }
+
+  console.log("hihi", countReview);
 
   const [size, setSize] = useState<number | string>(0);
   const [sizeId, setSizeId] = useState<number | null>(null);
@@ -107,7 +115,10 @@ const ProductDetail = ({ productDetail, originalPrice }: IProps) => {
                   name="rating-2"
                   className="mask mask-star-2 bg-red-600 h-4 transition-all ease-out duration-300"
                   value={star}
-                  checked={star === productDetail.Review[0].rating}
+                  checked={
+                    productDetail.Review.length > 0 &&
+                    star === productDetail.Review[0].rating
+                  }
                   disabled
                 />
               ))}
@@ -163,13 +174,20 @@ const ProductDetail = ({ productDetail, originalPrice }: IProps) => {
       </div>
 
       <div>
-        <RelatedProduct category_name={productDetail.Category.category_name} />
+        <RelatedProduct
+          category_name={productDetail.Category.category_name}
+          currentProductId={productDetail.product_id}
+        />
       </div>
       <div className="my-5">
         {productDetail.Review.length ? (
           <>
             {productDetail.Review.map((item) => (
-              <ReViewProduct review={item} key={item.image_url} />
+              <ReViewProduct
+                review={item}
+                countReview={countReview}
+                key={item.image_url}
+              />
             ))}
           </>
         ) : (

@@ -17,7 +17,7 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null); // Chỉ lưu một category_id
   const [isOpen, setIsOpen] = useState(true);
-  const router = useRouter(); // Khởi tạo router
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {

@@ -26,7 +26,7 @@ const Pagination = ({
   }
 
   return (
-    <div className="fixed bottom-4 right-4  p-3 rounded-lg  z-50">
+    <div className=" flex justify-end  p-3 rounded-lg mt-3 mr-5">
       <div className="text-gray-950 font-medium flex px-3 pb-1 justify-center sm:justify-start sm:space-x-10  sm:px-0 ">
         <div
           className={`flex flex-col items-center cursor-pointer hover:underline ${

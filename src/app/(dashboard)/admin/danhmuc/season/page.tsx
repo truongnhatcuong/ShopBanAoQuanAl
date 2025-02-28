@@ -21,7 +21,6 @@ const Page = () => {
     const req = await fetch(`/api/season`);
     const data = await req.json();
     setSeason(data.season || []);
-    console.log(data);
   };
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const Page = () => {
     <div>
       <div className="flex justify-end  mr-7">
         <button
-          className="bg-blue-600 px-2 py-1  font-bold text-white hover:bg-blue-700 flex items-center"
+          className="bg-blue-600 px-2 py-1 mt-4 font-bold text-white hover:bg-blue-700 flex items-center"
           onClick={() => setShowAddModal(true)}
         >
           <FiPlus /> <span>Thêm mới</span>

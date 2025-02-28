@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div suppressHydrationWarning={true}>
+    <div suppressHydrationWarning={true} className={inter.className}>
       <ShopContextProvider>
         {/* HeaderPager bọc toàn bộ ứng dụng */}
         <HeadePager />

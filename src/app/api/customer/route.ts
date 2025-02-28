@@ -1,11 +1,65 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  const getCustomer = await prisma.customer.findMany();
+export async function GET(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+  const admin = await authenticateToken(token);
+
+  const hashAdmin = admin?.role.permissions.some(
+    (item) => item.permission.permission === "update"
+  );
+  if (!hashAdmin) {
+    console.log("Access denied: Redirecting to login page");
+    return NextResponse.json({ message: "error" }, { status: 401 });
+  }
+
+  const searchParams = req.nextUrl.searchParams;
+  const search = searchParams.get("search") ?? "";
+  const limit = Number(searchParams.get("limit")) || 3;
+  const page = Number(searchParams.get("page")) || 1;
+  const sortOrder: any = searchParams.get("sortOrder") || "asc";
+  const totalRecord = await prisma.customer.count({
+    where: {
+      name: {
+        contains: search,
+      },
+    },
+  });
+
+  const totalPages = limit > 0 ? totalRecord / limit : 1;
+  const totalSkipRecord = (page - 1) * limit;
+  const getCustomer = await prisma.customer.findMany({
+    skip: totalSkipRecord,
+    take: limit,
+    where: {
+      name: {
+        contains: search,
+      },
+    },
+    select: {
+      customer_id: true,
+      name: true,
+      email: true,
+      phone: true,
+      roleId: true,
+    },
+    orderBy: {
+      name: sortOrder,
+    },
+  });
 
   return NextResponse.json(
-    { getCustomer, message: "success" },
+    {
+      getCustomer,
+      pagination: {
+        limit,
+        totalRecord,
+        currentPage: page,
+        totalPages,
+      },
+      message: "success",
+    },
     { status: 201 }
   );
 }

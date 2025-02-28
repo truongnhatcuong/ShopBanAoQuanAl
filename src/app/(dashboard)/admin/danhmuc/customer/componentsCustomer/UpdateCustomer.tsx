@@ -14,21 +14,21 @@ interface ICustomer {
 }
 
 interface Iprop {
-  props: ICustomer;
+  customer: ICustomer;
   reloadData: () => void;
 }
 
-const UpdateCustomer = (props: Iprop) => {
+const UpdateCustomer = ({ customer, reloadData }: Iprop) => {
   const MySwal = withReactContent(Swal);
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState<string>(props.props.name);
-  const [email, setEmail] = useState<string>(props.props.email);
-  const [phone, setPhone] = useState<number | string>(props.props.phone);
-  const [roleId, setRoleId] = useState<number>(props.props.roleId);
+  const [name, setName] = useState<string>(customer.email);
+  const [email, setEmail] = useState<string>(customer.email);
+  const [phone, setPhone] = useState<number | string>(customer.phone);
+  const [roleId, setRoleId] = useState<number>(customer.roleId);
 
   async function UpdateCustomerHandle(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch(`/api/customer/${props.props.customer_id}`, {
+    const res = await fetch(`/api/customer/${customer.customer_id}`, {
       method: "PUT",
       headers: { "content-Type": "aplication/json" },
       body: JSON.stringify({ name, email, phone, roleId }),
@@ -37,7 +37,7 @@ const UpdateCustomer = (props: Iprop) => {
     if (res.ok) {
       setIsOpen(false);
       const data = await res.json();
-      props.reloadData();
+      reloadData();
       MySwal.fire({
         position: "center",
         icon: "success",

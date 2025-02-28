@@ -12,12 +12,16 @@ interface ICategoryTableProps {
   categories: Icategories[];
   setCategories: React.Dispatch<React.SetStateAction<Icategories[]>>;
   openEditModal: (category: Icategories) => void;
+  SetsortOrder: (value: string) => void;
+  sortOrder: string;
 }
 
 const CategoryTable = ({
   categories,
   setCategories,
   openEditModal,
+  SetsortOrder,
+  sortOrder,
 }: ICategoryTableProps) => {
   const handleDelete = (category_id: number) => {
     setCategories(
@@ -31,7 +35,24 @@ const CategoryTable = ({
         {/* head */}
         <thead className="bg-black text-white">
           <tr>
-            <th className="p-4 text-center">Tên danh mục</th>
+            <th
+              className="p-4 text-center flex items-center justify-center
+            "
+            >
+              <div> Tên danh mục</div>
+              <div
+                onClick={() =>
+                  SetsortOrder(sortOrder === "asc" ? "desc" : "asc")
+                }
+                className="cursor-pointer mt-[1px] ml-2"
+              >
+                {sortOrder === "asc" ? (
+                  <p className="text-lg">↓</p>
+                ) : (
+                  <p className="text-lg">↑</p>
+                )}
+              </div>
+            </th>
             <th className="p-4 ">Mô tả</th>
             <th className="p-4 text-center">Hành động</th>
           </tr>

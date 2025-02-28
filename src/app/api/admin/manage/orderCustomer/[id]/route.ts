@@ -25,7 +25,7 @@ export async function PUT(
         },
       },
       include: {
-        Payments: true, // Bao gồm thông tin Payments trong kết quả
+        Payments: true,
       },
     });
     return NextResponse.json(

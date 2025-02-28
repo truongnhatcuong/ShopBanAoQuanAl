@@ -28,6 +28,7 @@ interface IProduct {
     comment_review: string;
     image_url: string;
     rating: number;
+    seller_response: string;
     review_date: string;
     Customer: { name: string };
   }[];
@@ -40,6 +41,9 @@ const Page = () => {
   const params = useParams();
   const [productDetail, setProductDetail] = useState<IProduct | null>(null);
   const [originalPrice, setOriginalPrice] = useState(0);
+  const [countReview, setCountReview] = useState(0);
+  console.log(countReview);
+
   const id = params.id;
   useEffect(() => {
     async function ApiProductDeTail() {
@@ -47,6 +51,7 @@ const Page = () => {
       const data = await res.json();
       setProductDetail(data.getProduct);
       setOriginalPrice(data.originalPrice);
+      setCountReview(data.countReview);
     }
     ApiProductDeTail();
   }, [id]);
@@ -57,6 +62,7 @@ const Page = () => {
         <ProductDetail
           productDetail={productDetail}
           originalPrice={originalPrice}
+          countReview={countReview}
         />
       </div>
     </div>

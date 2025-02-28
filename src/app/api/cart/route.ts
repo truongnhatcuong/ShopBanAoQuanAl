@@ -43,12 +43,12 @@ export async function GET(req: NextRequest) {
           include: {
             Product: {
               select: {
-                ProductSizes: {
-                  select: {
-                    size_id: true,
-                    stock_quantity: true,
-                  },
-                },
+                // ProductSizes: {
+                //   select: {
+                //     size_id: true,
+                //     stock_quantity: true,
+                //   },
+                // },
                 product_name: true,
                 price: true,
                 Images: {
@@ -69,6 +69,12 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    const latestOrder = await prisma.order.findFirst({
+      orderBy: {
+        order_id: "desc",
+      },
+    });
+    const idOrderNext = latestOrder?.order_id;
     return NextResponse.json(
       {
         cart: {
@@ -82,6 +88,8 @@ export async function GET(req: NextRequest) {
             image_url: item.Product.Images[0]?.image_url, // Lấy URL hình ảnh
           })),
         },
+        customer: customer.name.toUpperCase(),
+        idOrderNext,
         message: "Success",
       },
       { status: 200 }

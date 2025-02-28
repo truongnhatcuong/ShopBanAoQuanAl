@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import FormCheckOut from "./components/FormCheckOut";
 import ChangeAddress from "./components/ChangeAddress";
-import Title from "../components/Title";
 
 interface CartItem {
   cartitem_id: number;

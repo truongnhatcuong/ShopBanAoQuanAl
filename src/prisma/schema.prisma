@@ -150,6 +150,8 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
     order_id       Int
     payment_method PaymentMethod   
     payment_status PaymentStatus   
+     stripe_payment_intent  String?
+     stripe_session_id String?
     payment_amount Decimal   @db.Decimal(10, 2)
     created_at     DateTime? @db.DateTime
     updated_at     DateTime? @db.DateTime

@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import DeleteSupplier from "./DeleteSupplier";
 import UpdateSupplier from "./UpdateSuplier";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface ISupplier {
   supplier_id: number;
@@ -18,9 +26,10 @@ interface ISupplier {
 interface ISupplierProps {
   supplier: ISupplier[];
   reloadData: () => void;
+  search: string;
 }
 
-const TableSupplier = ({ supplier, reloadData }: ISupplierProps) => {
+const TableSupplier = ({ supplier, reloadData, search }: ISupplierProps) => {
   const [supplierList, setSupplierList] = useState<ISupplier[]>(supplier);
 
   useEffect(() => {
@@ -35,54 +44,74 @@ const TableSupplier = ({ supplier, reloadData }: ISupplierProps) => {
 
   return (
     <div className="overflow-x-auto">
-      <table className="table table-zebra text-sm">
+      <Table className="table table-zebra text-sm">
         {/* head */}
-        <thead className="bg-gray-50 ">
-          <tr>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+        <TableHeader className="bg-gray-50 ">
+          <TableRow>
+            <TableHead className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
               Supplier Name
-            </th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+            </TableHead>
+            <TableHead className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
               Contacts
-            </th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+            </TableHead>
+            <TableHead className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
               Quantity
-            </th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+            </TableHead>
+            <TableHead className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
               SupplyDate
-            </th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+            </TableHead>
+            <TableHead className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
               Product
-            </th>
-            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+            </TableHead>
+            <TableHead className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
               Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {supplierList.map((supplier) =>
-            supplier.ProductSuppliers.map((ps) => (
-              <tr key={supplier.supplier_id} className="">
-                <td className="px-4 py-2">{supplier.supplier_name}</td>
-                <td className="px-4 py-2">{supplier.contact_info}</td>
-                <td className="px-4 py-2 ">{ps.quantity}</td>
-                <td className="px-4 py-2 ">
-                  {new Date(ps.supply_date).toLocaleDateString("vi-VN")}
-                </td>
-                <td className="px-4 py-2">{ps.Product.product_name}</td>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        {supplier.length > 0 ? (
+          <TableBody>
+            {supplierList.map((supplier) =>
+              supplier.ProductSuppliers.map((ps) => (
+                <TableRow key={supplier.supplier_id} className="">
+                  <TableCell className="px-4 py-2">
+                    {supplier.supplier_name}
+                  </TableCell>
+                  <TableCell className="px-4 py-2">
+                    {supplier.contact_info}
+                  </TableCell>
+                  <TableCell className="px-4 py-2 ">{ps.quantity}</TableCell>
+                  <TableCell className="px-4 py-2 ">
+                    {new Date(ps.supply_date).toLocaleDateString("vi-VN")}
+                  </TableCell>
+                  <TableCell className="px-4 py-2">
+                    {ps.Product.product_name}
+                  </TableCell>
 
-                <td className="px-3 py-2 flex space-x-4">
-                  <DeleteSupplier
-                    supplier_id={supplier.supplier_id}
-                    DeleteHandler={DeleteHandle}
-                  />
-                  <UpdateSupplier reloadData={reloadData} supplier={supplier} />
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+                  <TableCell className="px-3 py-2 flex space-x-4">
+                    <DeleteSupplier
+                      supplier_id={supplier.supplier_id}
+                      DeleteHandler={DeleteHandle}
+                    />
+                    <UpdateSupplier
+                      reloadData={reloadData}
+                      supplier={supplier}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        ) : (
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={10} className="text-center">
+                tìm kiếm không phù hợp với{" "}
+                <span className="text-2xl text-red-600">{search}</span>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        )}
+      </Table>
     </div>
   );
 };

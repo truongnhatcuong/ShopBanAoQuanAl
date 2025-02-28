@@ -31,9 +31,9 @@ const Banner = () => {
             <div className="grid grid-cols-2  items-center gap-6 py-8">
               <div className="px-4 lg:ml-4 text-center lg:text-left">
                 <div
-                  data-aos="fade-right"
-                  data-aos-duration="1000"
-                  data-aos-easing="ease-in-out"
+                // data-aos="fade-right"
+                // data-aos-duration="1000"
+                // data-aos-easing="ease-in-out"
                 >
                   <h1 className="text-2xl lg:text-5xl md:py-4 family mb-1  ">
                     Cửa Hàng
@@ -54,7 +54,7 @@ const Banner = () => {
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start">
                   <Button
                     variant="default"
-                    data-aos-delay="50"
+                    data-aos-delay="20"
                     data-aos="fade-up-right"
                     data-aos-easing="ease-in-out"
                     data-aos-duration="1500"
@@ -65,7 +65,7 @@ const Banner = () => {
                   <Button
                     variant="outline"
                     data-aos="fade-up-right"
-                    data-aos-delay="50"
+                    data-aos-delay="10"
                     data-aos-easing="ease-in-out"
                     data-aos-duration="1500"
                     className="w-full sm:w-auto px-4 py-2 shadow-md hover:shadow-lg hover:scale-105 transition-all "
@@ -79,7 +79,8 @@ const Banner = () => {
                 className={`flex justify-center mt-5 md:mt-0`}
                 data-aos="fade-left"
                 data-aos-duration="1000"
-                data-aos-easing="ease-in-out-back"
+                data-aos-delay="10"
+                data-aos-easing="ease-in-out"
               >
                 <div className={` ${slide === 3 ? "mb-5" : ""}`}>
                   <Image

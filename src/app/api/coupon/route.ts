@@ -51,9 +51,7 @@ export async function POST(req: NextRequest) {
   } = await req.json();
   try {
     // kiểm tra đầu vào
-    const token = await req.cookies.get("token")?.value;
-
-    console.log(token);
+    const token = req.cookies.get("token")?.value;
 
     const currentDay = new Date();
     if (new Date(end_date) < currentDay) {

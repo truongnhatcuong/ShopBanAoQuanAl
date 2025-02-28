@@ -8,19 +8,21 @@ export interface Review {
   comment_review: string;
   image_url: string;
   review_date: string;
+  seller_response: string;
   rating: number;
   Customer: { name: string };
 }
 interface ReviewProps {
   review: Review;
+  countReview: number;
 }
-const ReViewProduct = ({ review }: ReviewProps) => {
+const ReViewProduct = ({ review, countReview }: ReviewProps) => {
   moment.locale("vi");
 
   return (
     <div className="p-6 border rounded-lg shadow-sm bg-white">
       <h1 className="text-xl font-semibold mb-4 text-gray-800">
-        Đánh Giá Sản Phẩm
+        Đánh Giá Sản Phẩm <span>({countReview})</span>
       </h1>
       <div className="flex flex-col gap-3">
         {" "}
@@ -73,6 +75,16 @@ const ReViewProduct = ({ review }: ReviewProps) => {
             </div>
           )}
         </div>
+      </div>
+      <div className=" mt-2 w-96">
+        {review.seller_response ? (
+          <div className="bg-gray-50 p-4 rounded-md">
+            <p className="text-sm font-medium mb-2">Phản hồi của bạn:</p>
+            <p className="text-gray-600">{review.seller_response}</p>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { ShopConText } from "@/app/context/Context";
@@ -109,7 +110,7 @@ const FormCheckOut = ({ cart }: CartItemListProps) => {
 
     setDiscountAmount(discount);
     setCouponName("");
-    setFinalTotal(totalPrice - discount);
+    setFinalTotal(totalPrice - discount + 25000);
   };
 
   return (

@@ -147,6 +147,14 @@ export async function PUT(
           },
         }
       );
+
+      await prisma.notification.update({
+        where: { notification_id: existingNotification?.notification_id },
+        data: {
+          is_read: false,
+        },
+      });
+
       if (!existingNotification) {
         const messages =
           discount_type === "percentage"

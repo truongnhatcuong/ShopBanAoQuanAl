@@ -67,34 +67,21 @@ const MenuItem = [
         title: "Khách Hàng",
         link: "/admin/danhmuc/customer",
       },
+
       {
         id: 2,
-        icon: <BiCart />,
-        title: "Giỏ Hàng",
-        link: "/admin/danhmuc/cart",
-      },
-      {
-        id: 3,
         icon: <FiPackage />,
         title: "Đơn Hàng",
         link: "/admin/danhmuc/order",
       },
       {
-        id: 4,
+        id: 3,
         icon: <FaHeartCirclePlus />,
         title: "Yêu Thích",
         link: "/admin/danhmuc/wishlist",
       },
-    ],
-  },
-  {
-    id: 3,
-    icon: <MdOutlineRateReview />,
-    title: "Quản Lý Đánh Giá",
-    link: "#",
-    submenu: [
       {
-        id: 1,
+        id: 4,
         icon: <MdOutlineRateReview />,
         title: "Đánh Giá ",
         link: "/admin/danhmuc/review",

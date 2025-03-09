@@ -29,18 +29,15 @@ const ProductSeller = () => {
   }, []);
   return (
     <div className="my-8 ">
-      <div className="flex justify-center text-7xl prata-regular">
-        <Title title1="Sản Phẩm" title2="Khuyến Mãi" />
-      </div>
       <div className="flex items-center justify-center mx-4">
-        <Image src={"/Image/sale.png"} alt="" width={900} height={400} />
+        <Image src={"/Image/sale.png"} alt="" width={1400} height={400} />
       </div>
       <p className="text-sm text-center mt-2 text-muted-foreground ">
         Những Sản Phẩm Khuyến Mãi Phổ Biến
       </p>
 
       <div
-        className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6 ml-7 "
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mx-44"
         data-aos-duration="1600"
         data-aos-easing="ease-in-out"
         data-aos="zoom-in"

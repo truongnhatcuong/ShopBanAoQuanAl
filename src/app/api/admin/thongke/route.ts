@@ -7,13 +7,22 @@ export async function GET(req: NextRequest) {
     const customerCount = await prisma.customer.count();
     const totalOrderAmount = await prisma.order.aggregate({
       _sum: {
-        total_amount: true, // Thay "total_amount" bằng tên chính xác của trường trong mô hình của bạn
+        total_amount: true,
+      },
+      where: {
+        order_state: "DELIVERED",
       },
     });
+
     const totalAmount = totalOrderAmount._sum.total_amount || 0;
     const totalOrderQuantily = await prisma.orderItem.aggregate({
       _sum: {
         quantity: true,
+      },
+      where: {
+        Order: {
+          order_state: "PROCESSING",
+        },
       },
     });
     const totalQuantily = totalOrderQuantily._sum.quantity || 0;

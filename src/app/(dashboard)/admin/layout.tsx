@@ -18,9 +18,9 @@ export default function AdminLayout({
       {/* Left menu */}
 
       <div
-        className={`bg-slate-100 text-black shadow-lg overflow-y-auto overflow-x-hidden scrollbar-custom ${
+        className={`bg-emerald-200 text-black shadow-lg overflow-y-auto overflow-x-hidden scrollbar-custom ${
           isLeftMenuVisible
-            ? " w-[16%]  md:w-[19%] transition-all duration-700 ease-in"
+            ? " w-[10%]  md:w-[15%] transition-all duration-700 ease-in"
             : "md:w-[5%] w-0 transition-all duration-500  ease-out"
         }`}
       >

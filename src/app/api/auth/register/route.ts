@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
   const data = await prisma.customer.findMany();
   return NextResponse.json({ accessToken: data }, { status: 201 });
 }
+
 const JWT_SECRET = process.env.JWT_SECRET;
 export async function POST(req: NextRequest) {
   const data = await req.json();

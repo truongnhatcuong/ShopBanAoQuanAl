@@ -54,7 +54,7 @@ const Notificationcoupon = () => {
         {" "}
         <DropdownMenuTrigger className="flex items-center mt-1" asChild>
           <p>
-            <FaRegBell className="text-xl" />
+            <FaRegBell className="w-7 h-7" />
           </p>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 mt-3">
@@ -110,7 +110,7 @@ const Notificationcoupon = () => {
         </DropdownMenuContent>
       </DropdownMenu>
       {count > 0 ? (
-        <p className="absolute -right-1 top-0 rounded-full bg-black w-4 h-4 px-[4px] flex items-center text-white text-xs text-center shadow-sm">
+        <p className="absolute -right-0 top-0 rounded-full bg-black w-4 h-4 px-[4px] flex items-center text-white text-xs text-center shadow-sm">
           {count}
         </p>
       ) : (

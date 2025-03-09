@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const FooterPage = () => {
   return (
-    <div className="flex flex-col sm:flex-row  mt-3  ">
+    <div className="flex flex-col sm:flex-row  mx-16 ">
       <div
         className="w-full md:w-1/4 sm:w-1/4 p-2  "
         data-aos="fade-down"

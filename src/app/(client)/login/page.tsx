@@ -116,7 +116,7 @@ const Page = () => {
               </p>
               <p>
                 <Link
-                  href={"/"}
+                  href={"/quen-mat-khau"}
                   className="text-blue-500 hover:text-blue-700 text-sm"
                 >
                   Quên Mật Khẩu?

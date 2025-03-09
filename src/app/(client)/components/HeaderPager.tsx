@@ -4,17 +4,20 @@ import ListItem, { MenuHeader } from "./ListItem";
 import Image from "next/image";
 import Link from "next/link";
 import { BsBagCheck } from "react-icons/bs";
-import { FaClipboardCheck, FaUser } from "react-icons/fa";
-import { LiaPowerOffSolid } from "react-icons/lia";
-import { AiOutlineUser } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
-import { RiAdminLine } from "react-icons/ri";
 import { HiMenu } from "react-icons/hi";
 import { ShopConText } from "@/app/context/Context";
 import { IoChevronBackOutline } from "react-icons/io5";
 import DarkModeSwitch from "./DarkModeSwitch";
 import Notificationcoupon from "./Notificationcoupon";
 import SearchProduct from "./SearchProduct";
+import LoginDropDown from "./LoginDropDown";
+import UserLoginDropdown from "./UserLoginDropdown";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 interface ICategory {
   category_id: number;
   category_name: string;
@@ -84,27 +87,31 @@ export default function HeadePager() {
         <div>
           <ListItem />
         </div>
+        {/* .............. */}
 
-        <div className="group relative z-10">
-          <div className="ml-2 hidden sm:flex  uppercase cursor-pointer text-[15px]">
-            <p className=""> DANH MỤC</p>
-          </div>
-
-          <div className="group-hover:block hidden absolute dropdown-menu  pt-4 -right-14">
-            <div className="flex flex-col gap-2 w-48  bg-gray-100  rounded-md">
+        <HoverCard>
+          <HoverCardTrigger>
+            <div className="ml-2 hidden sm:flex  uppercase cursor-pointer text-[15px]">
+              <p className=""> DANH MỤC</p>
+            </div>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-[400px] mt-[2px]">
+            <div className="grid grid-cols-3 gap-4">
               {categories.map((item) => (
-                <Link
-                  href={`/product?category_id=${item.category_id}`}
+                <div
                   key={item.category_id}
+                  className="text-center hover:text-red-500"
                 >
-                  <p className="block px-2 py-1 my-0.5 text-gray-800 hover:bg-white hover:text-red-600 transition-all text-center text-base">
+                  <Link href={`/product?category_id=${item.category_id}`}>
                     {item.category_name}
-                  </p>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
-          </div>
-        </div>
+          </HoverCardContent>
+        </HoverCard>
+
+        {/* .............. */}
       </div>
 
       {/* phần khác */}
@@ -119,78 +126,20 @@ export default function HeadePager() {
         </div>
         <div>
           {isLoggedIn && username ? (
-            <div className="group relative flex z-10  ">
-              {/* <FiUser className=" text-2xl md:text-xl " /> */}
-              <div className="w-[25px] h-[25px] bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mr-2 cursor-pointer">
-                <span>{username.charAt(0).toLocaleUpperCase()}</span>
-              </div>
-              <span className=" hidden md:block md:text-base cursor-pointer">
-                {username}
-              </span>
-              {/* Hiển thị khi hover */}
-              <div className="group-hover:block hidden absolute dropdown-menu pt-10 md:-right-8 -right-20 ">
-                <div className="flex flex-col gap-2 w-48 py-3 px-5 bg-slate-50 text-gray-500 rounded-md ">
-                  <button
-                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center ml-3  "
-                    onClick={() => router.push("/profile")}
-                  >
-                    <AiOutlineUser className="mr-1 text-gray-900" />
-                    Tài Khoản Của Tôi
-                  </button>
-                  <button
-                    className="text-sm text-gray-600 hover:text-red-600 flex items-center ml-4  "
-                    onClick={() => router.push("/profile/listorder")}
-                  >
-                    <FaClipboardCheck className="mr-1 text-gray-700" />
-                    Đơn Mua
-                  </button>
-                  {(roleId === 3 || roleId === 2) && (
-                    <button
-                      className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-1"
-                      onClick={() => router.push("/admin")}
-                    >
-                      <RiAdminLine className="mr-1 text-gray-900" />
-                      Trang Quản Lý
-                    </button>
-                  )}
-                  <button
-                    className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-7"
-                    onClick={RemoveLcstore}
-                  >
-                    <LiaPowerOffSolid className="mr-1 text-gray-900 " />
-                    Đăng Xuất
-                  </button>
-                </div>
-              </div>
-            </div>
+            <UserLoginDropdown
+              roleId={roleId!}
+              username={username}
+              RemoveLcstore={RemoveLcstore}
+            />
           ) : (
-            <div className="relative group z-10">
-              <FaUser className=" hover:text-blue-500 cursor-pointer text-xl border border-black dark:border-white rounded-full w-6 h-6 p-0.5 " />
-
-              {/* Hiển thị đăng ký/đăng nhập khi hover */}
-
-              <div className="group-hover:block hidden absolute dropdown-menu  pt-4 -right-12">
-                <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-50 text-gray-500 rounded-md">
-                  <Link href="/login">
-                    <button className="text-sm text-gray-600 hover:border-b-2 hover:border-gray-700 ml-4 ">
-                      Đăng Nhập
-                    </button>
-                  </Link>
-                  <Link href="/signUp">
-                    <button className="text-sm text-gray-600 hover:border-b-2 hover:border-gray-700  ml-4 ">
-                      Đăng Ký
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <LoginDropDown login="Đăng Nhập" signUp="Đăng Ký" />
           )}
         </div>
 
-        <div className="relative mr-3 ">
+        <div className="relative mr-3 mb-[2px]">
           {" "}
           <Link href={"/cart"}>
-            <BsBagCheck className="text-2xl cursor-pointer mr-8 md:mr-0  " />
+            <BsBagCheck className="w-7 h-7 cursor-pointer mr-8 md:mr-0  " />
           </Link>
           <p className="absolute right-[-3.5px] bottom-[-5px] w-[15px] text-center leading-4 bg-black text-white dark:text-black dark:bg-white rounded-full aspect-square text-[10px] mr-8 md:mr-0 ">
             {countCart}

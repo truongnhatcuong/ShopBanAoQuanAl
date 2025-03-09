@@ -90,7 +90,7 @@ const ItemCart = ({ items }: CartItemListProps) => {
         return (
           <div
             key={item.cartitem_id}
-            className="py-4 border-t border-b  grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center"
+            className="py-4 ml-7 border-t border-b  grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center"
           >
             <div className="flex items-center gap-4">
               <img
@@ -124,18 +124,6 @@ const ItemCart = ({ items }: CartItemListProps) => {
 
             {/* Quantity Input */}
             <div className="flex  justify-between items-center ">
-              {/* <input
-                className="max-w-10 md:w-32 border py-1.5 text-center mx-6 md:mx-0"
-                type="number"
-                min={1}
-                defaultValue={item.quantity}
-                onChange={(e) =>
-                  updateCartItemQuantity(
-                    item.cartitem_id,
-                    Number(e.target.value)
-                  )
-                }
-              /> */}
               <div className="flex items-center flex-col md:flex-row dark:text-black  ">
                 <div
                   className="py-1.5 px-3 border-slate-400 hover:bg-slate-400  border-[1px] rounded-md bg-slate-200  cursor-pointer"

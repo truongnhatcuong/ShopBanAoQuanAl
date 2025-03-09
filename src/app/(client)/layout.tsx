@@ -22,7 +22,6 @@ export default function RootLayout({
         {/* HeaderPager bọc toàn bộ ứng dụng */}
         <HeadePager />
         <main className="">{children}</main>
-
         <Footer />
       </ShopContextProvider>
     </div>

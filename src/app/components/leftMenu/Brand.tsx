@@ -1,7 +1,5 @@
 "use client";
 import { ShopConText } from "@/app/context/Context";
-import Image from "next/image";
-
 import React, { useContext, useEffect, useState } from "react";
 import { FaCircle } from "react-icons/fa";
 
@@ -29,7 +27,7 @@ const Brand = () => {
           isLeftMenuVisible ? "mt-2.5" : "md:0 "
         } justify-center  `}
       >
-        <div className={` ${isLeftMenuVisible ? "mt-0  " : "mt-1.5 pb-2.5"}`}>
+        <div className={` ${isLeftMenuVisible ? "mt-0 pb-2 " : "mt-1.5 pb-4"}`}>
           <div className="w-10 h-10 bg-slate-200 rounded-full flex justify-center items-center  ">
             <span className="text-black">
               {username?.charAt(0).toUpperCase()}

@@ -34,7 +34,7 @@ const CartPage = () => {
     fetchCartData();
   }, []);
   return (
-    <div>
+    <div className="h-full">
       <div className="text-2xl text-center md:mb-3 mb-0   ">
         <Title title1="Danh Mục" title2="Giỏ Hàng" />
       </div>
@@ -43,7 +43,7 @@ const CartPage = () => {
           <ItemCart items={cart} />
         </div>
         <div className="flex justify-end border border-l-2 p-3  ">
-          <div className="w-full sm:w-[450px] text-center">
+          <div className="w-full md:w-[600px] text-center">
             <TotalCart />
           </div>
         </div>

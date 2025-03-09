@@ -15,7 +15,7 @@ const TotalCart = () => {
     }
   }
   return (
-    <div className="w-full p-6">
+    <div className="h-full w-full ">
       <div className="text-xl font-semibold text-gray-900">
         <Title title1="Tổng Tiền" title2="Giỏ Hàng" />
       </div>

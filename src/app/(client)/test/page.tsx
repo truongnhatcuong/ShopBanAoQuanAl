@@ -1,103 +1,176 @@
 "use client";
+import React, { useState } from "react";
 
-import React, { useEffect, useState } from "react";
-import {
-  Appearance,
-  loadStripe,
-  StripeElementsOptions,
-} from "@stripe/stripe-js";
-import {
-  Elements,
-  PaymentElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
+const Page = () => {
+  const [value0, setValue0] = useState(0);
+  const [value1, setValue1] = useState(0);
+  const [value2, setValue2] = useState(0);
+  const [value3, setValue3] = useState(0);
+  const [value4, setValue4] = useState(0);
+  const [value5, setValue5] = useState(0);
+  const [value6, setValue6] = useState(0);
+  const [value7, setValue7] = useState(0);
+  const [value8, setValue8] = useState(0);
+  const [value9, setValue9] = useState(0);
+  const [operator1, setOperator1] = useState<string>("");
+  const [result, setResult] = useState(0);
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
-
-interface PaymentFormProps {
-  clientSecret: string;
-  orderId: number;
-}
-
-const PaymentForm = ({ clientSecret, orderId }: PaymentFormProps) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [error, setError] = useState<string | null>(null);
-  const [processing, setProcessing] = useState(false);
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
+  function Caculate() {
+    let results = 0;
+    if (operator1 == "+") {
+      results =
+        value0 +
+        value1 +
+        value2 +
+        value4 +
+        value5 +
+        value6 +
+        value7 +
+        value8 +
+        value9;
+    } else if (operator1 == "*") {
+      results =
+        value0 *
+        value1 *
+        value2 *
+        value4 *
+        value5 *
+        value6 *
+        value7 *
+        value8 *
+        value9;
     }
+    setResult(results);
+  }
 
-    setProcessing(true);
+  console.log(value0);
+  console.log(value1);
+  console.log(value2);
+  console.log(value3);
+  console.log(value4);
+  console.log(value5);
+  console.log(value6);
+  console.log(value7);
+  console.log(value8);
+  console.log(value9);
 
-    try {
-      const { error } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/payment/success?order_id=${orderId}`,
-        },
-      });
+  console.log(result);
 
-      if (error) {
-        setError(error.message || "Có lỗi xảy ra khi thanh toán");
-      }
-    } catch (e) {
-      setError("Có lỗi xảy ra khi xử lý thanh toán");
-    }
-
-    setProcessing(false);
-  };
-  //https://claude.ai/chat/f20a5f3b-ce77-4753-a2b1-f007c07119dd
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4">
-      <PaymentElement />
-      {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
-      <button
-        type="submit"
-        disabled={!stripe || processing}
-        className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
-      >
-        {processing ? "Đang xử lý..." : "Thanh toán"}
-      </button>
-    </form>
-  );
-};
+    <div className="flex justify-center">
+      <div className="flex flex-col mt-10">
+        <div className="px-24 py-12 bg-black w-fit mb-2 text-white">
+          {result}
+        </div>
+        <div className="flex">
+          <div className=" ">
+            <div className="flex gap-4 gap-y-3 ">
+              {" "}
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue1(1)}
+              >
+                1
+              </div>
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue2(2)}
+              >
+                2
+              </div>
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue3(3)}
+              >
+                3
+              </div>
+            </div>
+            <div className="flex gap-4 gap-y-2 mt-2">
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue4(4)}
+              >
+                4
+              </div>
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue5(5)}
+              >
+                5
+              </div>
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue6(6)}
+              >
+                6
+              </div>
+            </div>
 
-interface StripePaymentProps {
-  clientSecret: string;
-  orderId: number;
-}
-
-export default function StripePayment({
-  clientSecret,
-  orderId,
-}: StripePaymentProps) {
-  const appearance: Appearance = {
-    theme: "stripe", // ✅ Must be "stripe", "night", or "flat"
-    labels: "floating", // Other allowed values
-  };
-
-  const options: StripeElementsOptions = {
-    clientSecret: "your_client_secret_here",
-    appearance,
-  };
-  return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-2xl font-bold text-center mb-8">
-          Thanh toán đơn hàng
-        </h1>
-        <Elements stripe={stripePromise} options={options}>
-          <PaymentForm clientSecret={clientSecret} orderId={orderId} />
-        </Elements>
+            <div className="flex gap-4 gap-y-2 mt-2">
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue7(7)}
+              >
+                7
+              </div>
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue8(8)}
+              >
+                8
+              </div>
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue9(9)}
+              >
+                9
+              </div>
+            </div>
+            <div className="flex ml-14 mt-4 ">
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={() => setValue0(0)}
+              >
+                0
+              </div>
+              <div
+                className="p-4 bg-slate-500 text-white rounded-full font-bold hover:bg-slate-600 cursor-pointer "
+                onClick={Caculate}
+              >
+                =
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-x-4 ml-4 gap-y-2">
+            <div
+              className="p-4 bg-yellow-600 text-white rounded-full font-bold hover:bg-yellow-700 cursor-pointer "
+              onClick={() => setOperator1("+")}
+            >
+              +
+            </div>
+            <div
+              className="p-4 bg-yellow-600 text-white rounded-full font-bold hover:bg-yellow-700 cursor-pointer "
+              onClick={() => setOperator1("-")}
+            >
+              -
+            </div>
+            <div
+              className="p-4 bg-yellow-600 text-white rounded-full font-bold hover:bg-yellow-700 cursor-pointer "
+              onClick={() => setOperator1("*")}
+            >
+              *
+            </div>
+            <div
+              className="p-4 bg-yellow-600 text-white rounded-full font-bold hover:bg-yellow-700 cursor-pointer "
+              onClick={() => setOperator1("/")}
+            >
+              /
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Page;

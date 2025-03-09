@@ -19,53 +19,34 @@ interface IMenu {
 }
 
 const MenuItems = (props: IProps) => {
-  const [isSubmenuVisible, setIsSubmenuVisible] = useState<boolean>(false);
   const { isLeftMenuVisible } = useContext(ShopConText)!;
   return (
     <ul className="flex flex-col  cursor-pointer mt-3 ">
       <li className="flex items-center justify-between rounded-md transition-colors duration-200 mr-4 font-semibold">
-        <div
-          className="flex items-center justify-between w-full"
-          onClick={() => setIsSubmenuVisible(!isSubmenuVisible)}
-        >
+        <div className="flex items-center justify-between w-full">
           <Link href={props.menuItem.link} className="flex items-center">
             <span
               className={`mr-3 ml-2 mt-4 ${
-                isLeftMenuVisible ? "md:text-2xl text-xl" : "md:text-2xl "
+                isLeftMenuVisible ? "md:text-3xl text-xl" : "md:text-3xl "
               }`}
             >
               {props.menuItem.icon}
             </span>
             {isLeftMenuVisible && (
               <span
-                className={`ml-1 mt-4 pb-1.5 text-lg font-semibold Outfit hidden md:block `}
+                className={`ml-1 mt-4 pb-1.5 text-xl  font-semibold  hidden md:block `}
               >
                 {props.menuItem.title}
               </span>
             )}
           </Link>
-          {props.menuItem.submenu && (
-            <span
-              className={` mt-4 transition-transform duration-200 ml-[3px] ${
-                isSubmenuVisible ? "rotate-90" : ""
-              }`}
-            >
-              <Image
-                src={assets.dropdown_icon.src}
-                width={30}
-                height={40}
-                alt=""
-                className="w-2.5 transition-transform duration-200 hover:scale-125 md:mr-0 mr-5 "
-              />
-            </span>
-          )}
         </div>
       </li>
 
-      {isSubmenuVisible && props.menuItem.submenu && (
+      {props.menuItem.submenu && (
         <ul
-          className={`ml-3 text-white bg-gray-800 w-8  rounded-lg mt-1 ${
-            isLeftMenuVisible ? " md:w-48 " : "md:w-10  "
+          className={`ml-7 text-gray-950 w-8  rounded-lg mt-1 ${
+            isLeftMenuVisible ? " md:w-48 " : "md:w-14  "
           }`}
         >
           {props.menuItem.submenu.map((item, index) => (

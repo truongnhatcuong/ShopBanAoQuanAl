@@ -12,41 +12,6 @@ import TotalQuantity from "./components/TotalQuantity";
 const Page = () => {
   return (
     <div className="bg-slate-50 ">
-      {" "}
-      {/* <div className="flex justify-around items-center">
-        <div>
-          <Title title1="Danh Mục" title2="Quản Lý" />
-          <ul>
-            <Link href={"/admin/danhmuc/product"}>
-              <li className="px-3 py-2 border border-gray-500 family  text-lg mb-3 text-center hover:bg-blue-500 cursor-pointer ">
-                Quản Lý Sản Phẩm
-              </li>
-            </Link>
-
-            <Link href={"/admin/danhmuc/customer"}>
-              <li className="px-3 py-2 border border-gray-500 family  text-lg mb-3 text-center hover:bg-blue-500 cursor-pointer ">
-                {" "}
-                Quản Lý Khách Hàng
-              </li>
-            </Link>
-
-            <Link href={"/admin/danhmuc/order"}>
-              {" "}
-              <li className="px-3 py-2 border border-gray-500 family  text-lg mb-3 text-center hover:bg-blue-500 cursor-pointer ">
-                Quản Lý Đơn Hàng
-              </li>
-            </Link>
-            <Link href={"/admin/danhmuc/promotion"}>
-              <li className="px-3 py-2 border border-gray-500 family  text-lg mb-3 text-center hover:bg-blue-500 cursor-pointer ">
-                Quản Lý Khuyến Mãi
-              </li>
-            </Link>
-          </ul>
-        </div>
-        <div>
-          <Earth />
-        </div>
-      </div> */}
       {/* tổng quan */}
       <div className="text-center mt-3 mb-5">
         {" "}

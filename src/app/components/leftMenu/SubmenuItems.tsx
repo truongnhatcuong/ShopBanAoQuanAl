@@ -19,7 +19,7 @@ const SubmenuItems = (props: IProps) => {
   const { isLeftMenuVisible } = useContext(ShopConText)!;
   return (
     <div
-      className={` flex items-center cursor-pointer rounded-lg transition-colors duration-200 w-full p-0.5   
+      className={` flex items-center cursor-pointer rounded-lg transition-colors duration-200 justify-center w-full p-0.5   
       `}
     >
       <Link
@@ -28,17 +28,19 @@ const SubmenuItems = (props: IProps) => {
           pathname === props.menuItem.link
             ? "text-red-600  rounded-md  font-semibold  "
             : ""
-        }`}
+        }  hover:scale-110 hover:text-4xl transition-all duration-300 ease-out`}
       >
         <span
           className={`mr-2  mt-1.5 md:mt-3    ${
-            isLeftMenuVisible ? "md:ml-6 ml-0 text-xl " : "md:ml-0 text-2xl"
+            isLeftMenuVisible
+              ? "md:ml-3 ml-0 text-xl "
+              : "md:ml-0 text-2xl hover:scale-110 hover:text-4xl transition-all duration-300 ease-out"
           }`}
         >
           {props.menuItem.icon}
         </span>
         {isLeftMenuVisible && (
-          <span className="uppercase  text-base Outfit font-bold  hidden md:block">
+          <span className="uppercase  text-base text-gray-800  font-bold  hidden md:block">
             {props.menuItem.title}
           </span>
         )}

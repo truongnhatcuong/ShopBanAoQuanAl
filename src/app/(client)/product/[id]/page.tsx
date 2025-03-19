@@ -1,8 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ProductDetail from "../components/ProductDetail";
 import Aos from "aos";
+import { trackUserAction } from "@/lib/trackUserAction";
+import { ShopConText } from "@/app/context/Context";
 
 interface Size {
   stock_quantity: number;
@@ -35,26 +38,36 @@ interface IProduct {
 }
 
 const Page = () => {
+  const { user } = useContext(ShopConText)!;
   useEffect(() => {
     Aos.init();
   }, []);
+
   const params = useParams();
   const [productDetail, setProductDetail] = useState<IProduct | null>(null);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [countReview, setCountReview] = useState(0);
-  console.log(countReview);
+  const [idUser, setIdUser] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (user?.customer_id) {
+      setIdUser(user.customer_id);
+    }
+  }, [user]); // Chỉ chạy khi user thay đổi
 
   const id = params.id;
+
   useEffect(() => {
     async function ApiProductDeTail() {
       const res = await fetch(`/api/product/${id}`);
       const data = await res.json();
+      await trackUserAction(Number(idUser), Number(id), "view");
       setProductDetail(data.getProduct);
       setOriginalPrice(data.originalPrice);
       setCountReview(data.countReview);
     }
     ApiProductDeTail();
-  }, [id]);
+  }, [id, idUser]);
 
   return (
     <div>

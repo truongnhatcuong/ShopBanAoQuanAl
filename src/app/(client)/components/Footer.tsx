@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer>
       <div
-        className="flex flex-col sm:flex-row justify-between py-10 mx-5  text-black dark:text-white dark:bg-black mt-5 border-t-4"
+        className="flex flex-col sm:flex-row justify-between py-10   text-black dark:text-white dark:bg-black mt-5 border-t-4"
         data-aos="zoom-in-up"
         data-aos-duration="1000"
         data-aos-easing="ease-in-out"
@@ -63,7 +63,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-2 border-black  dark:border-white p-3 ">
+      <div className="border-t-2 border-black  dark:border-white p-3 h-16">
         <p className="text-center ">
           Thiết Kế WebSite Bởi{" "}
           <span className="text-xl">©𝙏𝙧𝙪̛𝙤̛𝙣𝙜 𝙉𝙝𝙖̣̂𝙩 𝘾𝙪̛𝙤̛̀𝙣𝙜</span>

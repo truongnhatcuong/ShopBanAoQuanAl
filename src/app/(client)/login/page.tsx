@@ -5,16 +5,17 @@ import { FaFacebookF } from "react-icons/fa";
 import { IoLogoGoogle } from "react-icons/io";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const MySwal = withReactContent(Swal);
+  const route = useRouter();
 
   async function loginApi(e: React.FormEvent) {
     e.preventDefault();
-
     const res = await fetch(`api/auth/login`, {
       method: "POST",
       headers: {
@@ -35,10 +36,8 @@ const Page = () => {
         timer: 2500,
         timerProgressBar: true,
       });
-
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1500);
+      route.push("/");
+      route.refresh();
     } else {
       const dataError = await res.json();
       setErrorMessage(
@@ -57,101 +56,126 @@ const Page = () => {
     }
   }, [errorMessage]);
   return (
-    <div className="formImage">
-      <div className="flex justify-center items-center md:h-screen h-full mt-2  md:mb-16 mb-0">
-        <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden  flex-col md:flex-row">
-          <div className="w-full sm:w-1/2 justify-center p-10 bg-gray-950 text-white dark:bg-white dark:text-black items-center  flex flex-col  ">
-            <h2 className="text-4xl  font-semibold">ĐĂNG NHẬP </h2>
-            <p className="text-center mt-4 text-sm opacity-80">
-              Tham gia để nhận các ưu đãi đặc biệt và trải nghiệm tốt nhất.
-            </p>
+    <>
+      <div className="flex justify-center items-center min-h-screen py-10 px-4  dark:bg-gray-900">
+        <div className="flex w-full max-w-7xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden flex-col md:flex-row">
+          {/* Left side - Welcome section */}
+          <div className="w-full md:w-1/2 p-12 bg-gradient-to-br from-gray-900 to-gray-800 text-white dark:from-indigo-900 dark:to-purple-900 flex flex-col justify-center items-center">
+            <div className="max-w-md mx-auto text-center">
+              <h2 className="text-5xl font-bold mb-6">ĐĂNG NHẬP</h2>
+              <p className="text-xl opacity-90 mb-8">
+                Tham gia để nhận các ưu đãi đặc biệt và trải nghiệm tốt nhất cho
+                việc mua sắm của bạn.
+              </p>
+              <div className="hidden md:block mt-8">
+                <div className="h-2 w-20 bg-white opacity-50 mx-auto rounded-full mb-6"></div>
+                <p className="text-lg italic">
+                  Khám phá bộ sưu tập thời trang mới nhất và độc đáo nhất
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="sm:w-1/2 w-full p-8">
+          {/* Right side - Form section */}
+          <div className="md:w-1/2 w-full p-10 md:p-12 bg-white dark:bg-gray-800 dark:text-white">
+            <h3 className="text-2xl font-semibold mb-8 text-center md:text-left dark:text-white">
+              Chào mừng trở lại
+            </h3>
+
             <form className="space-y-6" onSubmit={loginApi}>
-              {" "}
-              <div className="">
+              <div className="relative">
                 <input
                   type="text"
                   name="username"
                   placeholder="Username"
-                  className="w-full border rounded  py-3 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-white"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg py-4 px-5 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-400 dark:text-white transition duration-300"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
-              <div>
+
+              <div className="relative">
                 <input
                   type="password"
                   name="password"
-                  placeholder="password"
-                  className="w-full border rounded py-3 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Password"
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg py-4 px-5 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-400 dark:text-white transition duration-300"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+
               {errorMessage && (
-                <div className="text-red-500 text-sm">{errorMessage}</div>
+                <div className="text-red-500 text-sm font-medium bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                  {errorMessage}
+                </div>
               )}
+
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-gray-950 hover:bg-gray-700 text-white font-bold py-4 px-5 rounded focus:outline-none focus:shadow-inherit"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-bold py-4 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50 shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
                 >
                   Đăng Nhập
                 </button>
               </div>
             </form>
-            <div className="flex justify-between  mt-4">
+
+            <div className="flex justify-between mt-6">
               <p>
-                <span className="text-sm mr-1 dark:text-black">
-                  chưa có tài khoản?
+                <span className="text-sm mr-1 text-gray-600 dark:text-gray-300">
+                  Chưa có tài khoản?
                 </span>
                 <Link
                   href={"/signUp"}
-                  className="text-blue-500 hover:text-blue-700 text-sm"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 font-medium text-sm"
                 >
-                  đăng kí
+                  Đăng ký ngay
                 </Link>
               </p>
               <p>
                 <Link
                   href={"/quen-mat-khau"}
-                  className="text-blue-500 hover:text-blue-700 text-sm"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 font-medium text-sm"
                 >
-                  Quên Mật Khẩu?
+                  Quên Mật Khẩu ?
                 </Link>
               </p>
             </div>
-            <div className="relative flex items-center mb-3">
-              <div className="border border-gray-400 flex-grow"></div>
-              <span className="flex-shrink mx-4 text-gray-700 ">Hoặc</span>
-              <div className="border border-gray-400 flex-grow"></div>
+
+            <div className="relative flex items-center my-8">
+              <div className="border-t border-gray-300 dark:border-gray-700 flex-grow"></div>
+              <span className="flex-shrink mx-4 text-gray-500 dark:text-gray-400">
+                Hoặc
+              </span>
+              <div className="border-t border-gray-300 dark:border-gray-700 flex-grow"></div>
             </div>
+
             <div className="space-y-4">
               <Link
                 href={"/"}
-                className="flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white  py-3 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white py-3.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-md transition duration-300"
               >
-                <span className="mr-2">
+                <span className="mr-3 text-lg">
                   <FaFacebookF />
                 </span>
-                <span> Đăng nhập bằng tài khoản facebook</span>
+                <span className="font-medium">Đăng nhập bằng Facebook</span>
               </Link>
+
               <Link
                 href={"/sign-in"}
-                className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white  py-3 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white py-3.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 shadow-md transition duration-300"
               >
-                <span className="mr-4">
+                <span className="mr-3 text-lg">
                   <IoLogoGoogle />
                 </span>
-                <span> Đăng nhập bằng tài khoản google</span>
+                <span className="font-medium">Đăng nhập bằng Google</span>
               </Link>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

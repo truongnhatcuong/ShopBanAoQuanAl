@@ -58,16 +58,12 @@ const ProductDetail = ({
     );
   }
 
-  console.log("hihi", countReview);
-
-  const [size, setSize] = useState<number | string>(0);
   const [sizeId, setSizeId] = useState<number | null>(null);
 
   const [selectImage, setSelectImage] = useState<string | null>(
     productDetail.Images[0]?.image_url || null
   );
-  const handleSizeSelect = (selectedSize: string, size_id: number) => {
-    setSize(selectedSize);
+  const handleSizeSelect = (size_id: number) => {
     setSizeId(size_id); // Lưu lại size_id khi chọn một kích thước
   };
   return (
@@ -139,13 +135,11 @@ const ProductDetail = ({
             <div className="flex gap-7">
               {productDetail?.ProductSizes.map((item) => (
                 <div
-                  onClick={() =>
-                    handleSizeSelect(item.Size.name_size, item.Size.size_id)
-                  }
+                  onClick={() => handleSizeSelect(item.Size.size_id)}
                   key={item.Size.size_id}
                   title={`Số Lượng size  ${item.stock_quantity} `}
                   className={`border py-2 px-3.5  bg-slate-100 dark:bg-gray-900 dark:text-gray-50 cursor-pointer ${
-                    item.Size.name_size === size ? " border border-black " : ""
+                    item.Size.size_id === sizeId ? " border border-black " : ""
                   }`}
                 >
                   {item.Size.name_size}

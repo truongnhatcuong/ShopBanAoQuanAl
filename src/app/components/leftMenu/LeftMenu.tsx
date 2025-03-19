@@ -5,7 +5,7 @@ import ListMenuItems from "./ListMenuItems";
 
 const LeftMenu = () => {
   return (
-    <div className="flex flex-col items-center  ">
+    <div className="flex flex-col items-center bg-gradient-to-r from-emerald-600 to-emerald-700/80 h-screen">
       <div className="flex items-center justify-center font-bold  w-full pb-2  bg-black text-white">
         <Brand />
       </div>

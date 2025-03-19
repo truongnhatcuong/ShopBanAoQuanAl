@@ -19,7 +19,6 @@ const LoginDropDown = ({ login, signUp }: LoginProps) => {
       <DropdownMenuTrigger>
         <FaUser className=" hover:text-blue-500 cursor-pointer text-xl border border-black dark:border-white rounded-full w-7 h-7 p-0.5 mt-1" />
       </DropdownMenuTrigger>
-      {/* Hiển thị đăng ký/đăng nhập khi hover */}
       <DropdownMenuContent className="mt-3.5">
         <DropdownMenuItem>
           {" "}

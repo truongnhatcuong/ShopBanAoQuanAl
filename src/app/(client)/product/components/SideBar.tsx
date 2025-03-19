@@ -39,7 +39,7 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
   }, [searchParams]);
 
   // input range
-  const handleChangPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(Number(e.target.value));
     onPriceChange(Number(e.target.value));
   };
@@ -51,43 +51,47 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
   };
 
   return (
-    <div className=" flex md:flex-col flex-row md:pb-0 pb-4  md:h-screen ">
-      <div className="ml-4 ">
-        <h2 className="text-xl font-bold mt-6">Giá</h2>
-        <div className="text-black t-8">
-          <input
-            type="range"
-            min={0}
-            step={100000}
-            max={1000000}
-            className="accent-black h-1.5 w-44 range-input"
-            defaultValue={price}
-            onChange={handleChangPrice}
-          />
-          <p className="text-sm mt-1">
-            {` ${price.toLocaleString()}đ - 1,000,000đ`}
-          </p>
-        </div>
+    <div className="flex flex-col items-center mt-7 h-screen w-full  p-6">
+      {/* Bộ lọc Giá */}
+      <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-xl font-bold mb-2">Giá</h2>
+        <input
+          type="range"
+          min={0}
+          max={1000000}
+          step={100000}
+          value={price}
+          onChange={handleChangePrice}
+          className="w-56 h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-black "
+        />
+        <p className="text-sm mt-2 text-gray-700 font-medium">
+          {price.toLocaleString()}đ - 1,000,000đ
+        </p>
       </div>
-      <div className="ml-4">
+
+      {/* Danh mục sản phẩm */}
+      <div className="bg-white p-6 mt-6 rounded-lg shadow-lg text-center w-full max-w-md">
         <div onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
-          <h2 className="text-xl font-bold mt-2 flex items-center">
+          <h2 className="text-2xl font-bold my-2 flex  items-center">
             Danh Mục{" "}
             <span className="text-lg ml-2 mt-0.5">{isOpen ? "-" : "+"}</span>
           </h2>
         </div>
+
         {isOpen && (
-          <div className="space-y-2 mt-2 text-sm">
+          <div className="space-y-3 mt-2 text-lg">
             {categories.map((item) => (
-              <div key={item.category_id} className="space-y-2">
+              <label
+                key={item.category_id}
+                className="flex items-center  gap-2"
+              >
                 <input
                   type="checkbox"
-                  name="item.category_id"
                   checked={selectedCategory === item.category_id}
-                  onChange={() => handleCategoryChange(item.category_id)} // Chọn danh mục
+                  onChange={() => handleCategoryChange(item.category_id)}
                 />
                 {item.category_name}
-              </div>
+              </label>
             ))}
           </div>
         )}

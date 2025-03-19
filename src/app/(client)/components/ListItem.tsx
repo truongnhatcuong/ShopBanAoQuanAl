@@ -23,6 +23,11 @@ export const MenuHeader: IMenuProps[] = [
     title: "Giới Thiệu",
     link: "/about",
   },
+  {
+    id: 4,
+    title: "Trò Chuyện",
+    link: "/chatAI",
+  },
 ];
 
 const ListItem = () => {

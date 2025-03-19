@@ -57,12 +57,11 @@ export default function HeadePager() {
     setIsLoggedIn(true);
   }
   useEffect(() => {
-    console.log("Username đã thay đổi:", username);
-  }, [username]);
+    fetchUserInfo();
+  }, [pathname]);
 
   useEffect(() => {
-    fetchUserInfo(); // Gọi API lấy thông tin người dùng
-    ApiCategories(); // Gọi API lấy danh mục
+    ApiCategories();
   }, []);
 
   useEffect(() => {
@@ -91,7 +90,7 @@ export default function HeadePager() {
 
         <HoverCard>
           <HoverCardTrigger>
-            <div className="ml-2 hidden sm:flex  uppercase cursor-pointer text-[15px]">
+            <div className="ml-2 mt-[1px] hidden sm:flex  uppercase cursor-pointer text-[15px]">
               <p className=""> DANH MỤC</p>
             </div>
           </HoverCardTrigger>

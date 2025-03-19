@@ -16,9 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import UpdateOrder from "./UpdateOrder";
 import SelectOrderStatus from "./SelectOrderStatus";
 import { toast } from "react-toastify";
+import DetailOrder from "./DetailOrder";
+import { ForMatPrice } from "@/lib/FormPrice";
 
 interface IOrder {
   order_id: number;
@@ -66,13 +67,6 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
     COMPLETED: "text-green-700 bg-green-200",
     FAILED: "text-red-700 bg-red-200",
     REFUNDED: "text-blue-700 bg-blue-200",
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(amount);
   };
 
   // Hàm cập nhật trạng thái đơn hàng và thanh toán
@@ -194,7 +188,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
                       </SelectContent>
                     </Select>
                   </TableCell>
-                  <TableCell>{formatCurrency(item.total_amount)}</TableCell>
+                  <TableCell>{ForMatPrice(item.total_amount)}</TableCell>
                   <TableCell>
                     {item.Payments && item.Payments.length > 0
                       ? item.Payments[0].payment_method
@@ -230,9 +224,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
                     </Select>
                   </TableCell>
                   <TableCell className="flex justify-center">
-                    <div>
-                      <UpdateOrder orders={item} reloadData={reloadData} />
-                    </div>
+                    <DetailOrder orderId={item.order_id} />
                   </TableCell>
                 </TableRow>
               );

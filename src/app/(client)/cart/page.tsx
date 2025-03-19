@@ -24,17 +24,18 @@ const CartPage = () => {
     const data = await res.json();
 
     const updatedItems =
-      data.cart.items?.map((item: CartItem) => ({
+      data.cart?.items?.map((item: CartItem) => ({
         ...item,
         selectedSize: item.selectedSize,
       })) || [];
-    setCart(updatedItems || null);
+    if (!data.cart) return "";
+    setCart(updatedItems || []);
   };
   useEffect(() => {
     fetchCartData();
   }, []);
   return (
-    <div className="h-full">
+    <div className="h-[60vh] mt-4">
       <div className="text-2xl text-center md:mb-3 mb-0   ">
         <Title title1="Danh Mục" title2="Giỏ Hàng" />
       </div>

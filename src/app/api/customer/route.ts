@@ -64,16 +64,14 @@ export async function GET(req: NextRequest) {
   );
 }
 export async function POST(req: NextRequest) {
-  const { name, email, phone, address } = await req.json();
-
+  const { name, email, phone } = await req.json();
   try {
-    //kiểm tra tồn tại username
+    //Image
 
     const createCustomer = await prisma.customer.create({
       data: {
         name,
         email,
-        address,
         phone,
         roleId: 1,
       },

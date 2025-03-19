@@ -7,10 +7,22 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useEffect,
   useState,
 } from "react";
 import { ThemeProvider } from "next-themes";
-import { usePathname } from "next/navigation";
+
+interface User {
+  customer_id: number;
+  username: string;
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  roleId: number;
+  image: string;
+  token: string;
+}
 
 interface IContext {
   cart: any;
@@ -28,6 +40,7 @@ interface IContext {
   setIsLeftMenuVisible: Dispatch<SetStateAction<boolean>>;
   handleUpdateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
   couponName: string;
+  user: User;
   setCouponName: (value: string) => void;
 }
 interface ShopContextProvider {
@@ -40,7 +53,19 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const [countCart, setCountCart] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLeftMenuVisible, setIsLeftMenuVisible] = useState(true);
+  const [user, setUser] = useState<User | any>(null);
   const [couponName, setCouponName] = useState("");
+
+  async function fetchUserInfo() {
+    const res = await fetch("/api/auth/getUsername", {
+      method: "GET",
+    });
+    const data = await res.json();
+    setUser(data.accessToken);
+  }
+  useEffect(() => {
+    fetchUserInfo();
+  }, [user?.customer_id]);
 
   const handleAddToCart = async (
     product_id: number,
@@ -158,6 +183,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     setIsLeftMenuVisible,
     couponName,
     setCouponName,
+    user,
   };
   return (
     <ThemeProvider defaultTheme="system" attribute="class">

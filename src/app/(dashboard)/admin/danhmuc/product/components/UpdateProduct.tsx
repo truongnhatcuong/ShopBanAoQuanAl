@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import AddImage from "./componentsImageProduct/AddImage";
 import { FaPlus, FaRegEdit } from "react-icons/fa";
-
 import SelectCategories from "./componentChild/SelectCategories";
 import SelectBrand from "./componentChild/SelectBrand";
 import SelectSeaSon from "./componentChild/SelectSeason";

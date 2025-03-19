@@ -46,7 +46,6 @@ export async function middleware(req: NextRequest) {
     return response;
   }
   if (
-    req.nextUrl.pathname.startsWith("/product") ||
     req.nextUrl.pathname.startsWith("/cart") ||
     req.nextUrl.pathname.startsWith("/profile")
   )
@@ -101,7 +100,7 @@ export const config = {
     "/profile/:path*",
     "/login",
     "/signUp",
+    "/cart",
     "/admin/:path*",
-    "/product/:path*",
   ],
 };

@@ -24,6 +24,18 @@ interface CustomerAddress {
   phone: string;
   AddressShipper: AddressShipper[];
 }
+interface CartItem {
+  cartitem_id: number;
+  product_id: number;
+  quantity: number;
+  selectedSize: string; // Thêm thuộc tính selectedSize
+  product: {
+    product_name: string;
+    price: string;
+    Images: { image_url: string }[];
+  };
+  image_url: string;
+}
 
 const ChangeAddress = () => {
   const [address, setAddress] = useState<CustomerAddress | null>(null);
@@ -38,6 +50,21 @@ const ChangeAddress = () => {
     const data = await res.json();
     setAddress(data.addressShiper);
   };
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const fetchCartData = async () => {
+    const res = await fetch("/api/cart");
+    const data = await res.json();
+
+    const updatedItems =
+      data.cart?.items?.map((item: CartItem) => ({
+        ...item,
+        selectedSize: item.selectedSize, // Cập nhật với size mặc định hoặc giá trị từ API nếu có
+      })) || [];
+    setCart(updatedItems || null);
+  };
+  useEffect(() => {
+    fetchCartData();
+  }, []);
 
   useEffect(() => {
     FetchApi();
@@ -164,6 +191,7 @@ const ChangeAddress = () => {
         <PaymentMethodForm
           addressId={Number(selectedAddressId)}
           customerId={Number(customer_id)}
+          cart={cart}
         />
       </div>
     </>

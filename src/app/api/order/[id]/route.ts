@@ -1,3 +1,4 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -30,8 +31,54 @@ export async function GET(
         },
       },
     });
+    const token = req.cookies.get("token")?.value;
+    // kiem tra admin
+    const admin = await authenticateToken(token);
+    const hashAdmin = admin?.role.permissions.some(
+      (per) => per.permission.permission === "update"
+    );
+    if (!hashAdmin) {
+      return NextResponse.json({ message: "you not admin" }, { status: 404 });
+    }
+
+    // order admin
+    const OrderManage = await prisma.order.findUnique({
+      where: {
+        order_id: orderId,
+      },
+      select: {
+        total_amount: true,
+        order_state: true,
+        Customer: {
+          select: {
+            name: true,
+            phone: true,
+            AddressShipper: {
+              where: {
+                is_default: true,
+              },
+            },
+          },
+        },
+        OrderItems: {
+          select: {
+            orderitem_id: true,
+            quantity: true,
+            price: true,
+            Product: {
+              select: {
+                product_name: true,
+                Images: {
+                  take: 1,
+                },
+              },
+            },
+          },
+        },
+      },
+    });
     return NextResponse.json(
-      { getOrderId, message: `found Id ${orderId} success` },
+      { getOrderId, OrderManage, message: `found Id ${orderId} success` },
       { status: 201 }
     );
   } catch (error: any) {

@@ -27,14 +27,16 @@ const MenuItems = (props: IProps) => {
           <Link href={props.menuItem.link} className="flex items-center">
             <span
               className={`mr-3 ml-2 mt-4 ${
-                isLeftMenuVisible ? "md:text-3xl text-xl" : "md:text-3xl "
+                isLeftMenuVisible
+                  ? "md:text-3xl text-xl text-slate-300/90 "
+                  : "md:text-3xl text-slate-300/90 "
               }`}
             >
               {props.menuItem.icon}
             </span>
             {isLeftMenuVisible && (
               <span
-                className={`ml-1 mt-4 pb-1.5 text-xl  font-semibold  hidden md:block `}
+                className={`ml-1 mt-6 pb-1.5 text-xl  font-semibold  hidden md:block text-white  `}
               >
                 {props.menuItem.title}
               </span>

@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { ShopConText } from "@/app/context/Context";
-import React, { useContext, useState } from "react";
+import { trackUserAction } from "@/lib/trackUserAction";
+import React, { useContext, useEffect, useState } from "react";
 
 interface IProduct {
   product_id: number;
@@ -15,8 +17,8 @@ interface IProps {
 }
 
 const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
-  const { handleAddToCart } = useContext(ShopConText)!; // Lấy hàm handleAddToCart từ context
-
+  const { handleAddToCart, user } = useContext(ShopConText)!; // Lấy hàm handleAddToCart từ context
+  const [userId, setUserId] = useState<any>(null);
   const [quantity, setQuantity] = useState(1); // Trạng thái lưu số lượng sản phẩm
 
   const handleIncreate = () => {
@@ -31,13 +33,24 @@ const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
     if (quantity === 1) return;
     setQuantity((prev) => prev - 1);
   };
+  useEffect(() => {
+    if (user.customer_id) {
+      setUserId(user.customer_id);
+    }
+  }, [user.customer_id]); // Chỉ theo dõi `user.customer_id`, tránh vòng lặp vô hạn
 
   // Kiểm tra kích thước có được chọn hay không khi người dùng nhấn nút "Thêm vào giỏ"
   const handleAddToCartClick = () => {
+    if (!userId) {
+      alert("Vui lòng đăng nhập trước khi thêm vào giỏ hàng");
+      return;
+    }
+
     if (selectedSizeId !== null) {
-      handleAddToCart(product.product_id, quantity, selectedSizeId); // Gọi hàm từ context để thêm vào giỏ
+      handleAddToCart(product.product_id, quantity, selectedSizeId);
+      trackUserAction(userId, product.product_id, "add_to_cart");
     } else {
-      alert("Vui lòng chọn kích thước"); // Thông báo nếu chưa chọn kích thước
+      alert("Vui lòng chọn kích thước");
     }
   };
 

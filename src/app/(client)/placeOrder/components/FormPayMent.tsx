@@ -5,13 +5,16 @@ import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import QRCode from "./QrReact";
+import { trackUserAction } from "@/lib/trackUserAction";
 
 const PaymentMethodForm = ({
   customerId,
   addressId,
+  cart,
 }: {
   customerId: number;
   addressId: number;
+  cart: any[];
 }) => {
   const { couponName, setCouponName } = useContext(ShopConText)!;
 
@@ -39,6 +42,11 @@ const PaymentMethodForm = ({
       if (response.ok) {
         toast.success("Đã Đặt Thành Công Đơn Hàng");
         setCouponName("");
+        await Promise.all(
+          cart.map((item) =>
+            trackUserAction(customerId, item.product_id, "purchase")
+          )
+        );
         route.push("/profile/listorder");
       } else {
         toast.error(data.message || "ít nhất phải có một sản phẩm");

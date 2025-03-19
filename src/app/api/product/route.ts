@@ -186,7 +186,7 @@ export async function POST(req: NextRequest) {
       );
     }
     const totalStockQuantity = sizes.reduce(
-      (sum: any, size: any) => sum + size.stock_quantity,
+      (sum: number, size: any) => sum + size.stock_quantity,
       0
     );
     const newProduct = await prisma.product.create({

@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaRegBell } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
@@ -22,6 +23,7 @@ interface Inotification {
 const Notificationcoupon = () => {
   const [data, setData] = useState<Inotification[]>([]);
   const [count, setCount] = useState<number>(0);
+  const pathname = usePathname();
   const FetchApi = async () => {
     const res = await fetch("/api/notification");
     const data = await res.json();
@@ -40,13 +42,12 @@ const Notificationcoupon = () => {
       FetchApi();
     } else {
       const errorData = await res.json();
-      console.error("Failed to mark notifications as read:", errorData);
     }
   };
 
   useEffect(() => {
     FetchApi();
-  }, []);
+  }, [pathname]);
 
   return (
     <div className="relative cursor-pointer">

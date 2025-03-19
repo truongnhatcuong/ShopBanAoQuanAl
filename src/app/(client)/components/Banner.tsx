@@ -2,98 +2,174 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Autoplay } from "swiper/modules";
+import "swiper/css/effect-fade";
+import { Autoplay, EffectFade } from "swiper/modules";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 
 const Banner = () => {
-  const route = useRouter();
+  const router = useRouter();
+
+  const handleShopNow = () => {
+    router.push("/product");
+  };
 
   return (
-    <div className="container mx-auto px-4 mt-6 ">
+    <div className=" my-20 perspective-1000 h-[60vh]">
       <Swiper
-        modules={[Autoplay]}
+        modules={[Autoplay, EffectFade]}
+        effect="fade"
         autoplay={{
-          delay: 3000,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         loop={true}
-        spaceBetween={50}
+        spaceBetween={0}
         slidesPerView={1}
-        className="mySwiper "
+        className="mySwiper overflow-hidden rounded-xl shadow-lg h-[55vh]"
       >
-        {[1, 2, 3].map((slide) => (
-          <SwiperSlide
-            key={slide}
-            className="border-2  bg-blue-100/20 dark:bg-blue-100/80  hover:bg-blue-100/10 p-4"
-          >
-            <div className="grid grid-cols-2  items-center gap-6 py-8">
-              <div className="px-4 lg:ml-4 text-center lg:text-left">
-                <div
-                // data-aos="fade-right"
-                // data-aos-duration="1000"
-                // data-aos-easing="ease-in-out"
+        {/* Banner 1 - Thời trang hiện đại */}
+        <SwiperSlide>
+          <div className="flex h-full">
+            <div className="flex items-center px-6 py-10 bg-gradient-to-r from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
+              <div className="max-w-lg transform transition-all duration-700 hover:translate-y-2">
+                <h2 className="text-lg md:text-xl font-medium text-red-600 mb-2">
+                  PHONG CÁCH HIỆN ĐẠI
+                </h2>
+                <h1 className="prata-regular text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                  Khám phá bộ sưu tập{" "}
+                  <span className="text-red-600 underline decoration-2 underline-offset-4">
+                    Xuân Hè 2025
+                  </span>
+                </h1>
+                <p className="text-sm md:text-base text-gray-700 dark:text-gray-200 leading-relaxed mb-6">
+                  Tận hưởng phong cách thời thượng với những thiết kế độc đáo,
+                  chất liệu cao cấp và đường may tinh tế. Nâng tầm phong cách cá
+                  nhân của bạn cùng OdinClubs.
+                </p>
+                <Button
+                  onClick={handleShopNow}
+                  className="group bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full flex items-center gap-2"
                 >
-                  <h1 className="text-2xl lg:text-5xl md:py-4 family mb-1  ">
-                    Cửa Hàng
-                  </h1>
-                  <p className="prata-regular text-red-600/80 lg:ml-7 md:text-7xl text-3xl z-20">
-                    OdinClubs
-                  </p>
-                  <p className="text-sm lg:text-base md:pb-7  family ">
-                    Shop OdinClub là địa chỉ thời trang đáng tin cậy, chuyên
-                    cung cấp các sản phẩm phong cách hiện đại, chất lượng cao.
-                    <span className="hidden md:block">
-                      {" "}
-                      giá cả hợp lý, mẫu mã đa dạng, dịch vụ chuyên nghiệp và
-                      tận tâm phục vụ.
-                    </span>
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start">
-                  <Button
-                    variant="default"
-                    data-aos-delay="20"
-                    data-aos="fade-up-right"
-                    data-aos-easing="ease-in-out"
-                    data-aos-duration="1500"
-                    className="w-full sm:w-auto px-4 py-2 bg-black bg-orange-600/90 hover:bg-orange-500 text-white rounded-md shadow-md hover:shadow-lg hover:scale-105 transition-all dark:bg-white dark:text-black"
-                  >
-                    Khám Phá Ngay
-                  </Button>
-                  <Button
-                    variant="outline"
-                    data-aos="fade-up-right"
-                    data-aos-delay="10"
-                    data-aos-easing="ease-in-out"
-                    data-aos-duration="1500"
-                    className="w-full sm:w-auto px-4 py-2 shadow-md hover:shadow-lg hover:scale-105 transition-all "
-                    onClick={() => route.push("/product")}
-                  >
-                    Xem Thêm
-                  </Button>
-                </div>
-              </div>
-              <div
-                className={`flex justify-center mt-5 md:mt-0`}
-                data-aos="fade-left"
-                data-aos-duration="1000"
-                data-aos-delay="10"
-                data-aos-easing="ease-in-out"
-              >
-                <div className={` ${slide === 3 ? "mb-5" : ""}`}>
-                  <Image
-                    src={`/Image/banner${slide}.png`}
-                    alt=""
-                    width={slide === 3 ? 300 : 500}
-                    height={slide === 3 ? 300 : 500}
+                  Mua sắm ngay
+                  <ArrowRight
+                    size={16}
+                    className="transition-transform group-hover:translate-x-1"
                   />
-                </div>
+                </Button>
               </div>
             </div>
-          </SwiperSlide>
-        ))}
+            <div className="relative h-full bg-gray-50 dark:bg-gray-800 overflow-hidden z-50">
+              <Image
+                src="/Image/banner-thoi-trang.jpg"
+                alt="Thời trang hiện đại OdinClubs"
+                width={800}
+                height={600}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 "
+                priority
+              />
+              <div className="absolute bottom-4 right-4 bg-red-600/90 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Mới nhất
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+
+        {/* Banner 2 - Xu hướng mùa */}
+        <SwiperSlide>
+          <div className="flex h-full">
+            <div className="flex items-center px-6 py-10 bg-gradient-to-r from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
+              <div className="max-w-lg transform transition-all duration-700 hover:translate-y-2">
+                <h2 className="text-lg md:text-xl font-medium text-blue-600 mb-2">
+                  XU HƯỚNG MÙA MỚI
+                </h2>
+                <h1 className="prata-regular text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                  Thời trang{" "}
+                  <span className="text-blue-600 underline decoration-2 underline-offset-4">
+                    phá cách
+                  </span>{" "}
+                  cho người dẫn đầu
+                </h1>
+                <p className="text-sm md:text-base text-gray-700 dark:text-gray-200 leading-relaxed mb-6">
+                  Khẳng định cá tính với những thiết kế độc quyền tại OdinClubs.
+                  Chúng tôi mang đến những xu hướng thời trang mới nhất giúp bạn
+                  tự tin tỏa sáng mọi lúc.
+                </p>
+                <Button
+                  onClick={handleShopNow}
+                  className="group bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full flex items-center gap-2"
+                >
+                  Khám phá ngay
+                  <ArrowRight
+                    size={16}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
+                </Button>
+              </div>
+            </div>
+            <div className="relative h-full bg-gray-50 dark:bg-gray-800 overflow-hidden">
+              <Image
+                src="/Image/banner1.png"
+                alt="Xu hướng thời trang OdinClubs"
+                width={800}
+                height={600}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+              <div className="absolute bottom-4 right-4 bg-blue-600/90 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Bán chạy
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+
+        {/* Banner 3 - Phong cách thiết kế */}
+        <SwiperSlide>
+          <div className="flex h-full">
+            <div className="flex items-center px-6 py-10 bg-gradient-to-r from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
+              <div className="max-w-lg transform transition-all duration-700 hover:translate-y-2">
+                <h2 className="text-lg md:text-xl font-medium text-green-600 mb-2">
+                  THIẾT KẾ ĐỘC ĐÁO
+                </h2>
+                <h1 className="prata-regular text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                  Sự kết hợp giữa{" "}
+                  <span className="text-green-600 underline decoration-2 underline-offset-4">
+                    phong cách
+                  </span>{" "}
+                  và thoải mái
+                </h1>
+                <p className="text-sm md:text-base text-gray-700 dark:text-gray-200 leading-relaxed mb-6">
+                  Không chỉ đẹp mắt, trang phục OdinClubs còn mang đến cảm giác
+                  thoải mái suốt ngày dài. Chất liệu cao cấp, thiết kế tinh tế
+                  và đường may chắc chắn.
+                </p>
+                <Button
+                  onClick={handleShopNow}
+                  className="group bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full flex items-center gap-2"
+                >
+                  Tìm hiểu thêm
+                  <ArrowRight
+                    size={16}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
+                </Button>
+              </div>
+            </div>
+            <div className="relative h-full bg-gray-50 dark:bg-gray-800 overflow-hidden">
+              <Image
+                src="/Image/banner2.png"
+                alt="Thiết kế độc đáo OdinClubs"
+                width={800}
+                height={600}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+              <div className="absolute bottom-4 right-4 bg-green-600/90 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Giới hạn
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
       </Swiper>
     </div>
   );

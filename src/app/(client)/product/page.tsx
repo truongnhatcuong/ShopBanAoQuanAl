@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 import { useSearchParams } from "next/navigation";
@@ -6,6 +7,7 @@ import FilterSidebar from "./components/SideBar";
 import SelectForm from "./components/SelectForm";
 import ProductItem from "../components/ProductItem";
 import Title from "../components/Title";
+import { trackUserAction } from "@/lib/trackUserAction";
 
 interface IProduct {
   product_id: number;
@@ -49,6 +51,7 @@ const PageProduct = () => {
         } else {
           if (data.product && data.product.length > 0) {
             setProduct(data.product);
+            // trackUserAction(1, product[0].product_id, "view");
             setErrorMessage("");
           } else {
             setProduct(data.product || []);
@@ -71,7 +74,7 @@ const PageProduct = () => {
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10  border-t w-full h-full   ">
       {/* Sidebar */}
-      <div className="sm:w-1/5 w-full   flex sm:flex-row flex-col shadow-lg  text-black dark:text-black dark:bg-white ">
+      <div className="sm:w-1/5 w-full   flex sm:flex-row items-center  flex-col shadow-lg  text-black dark:text-black dark:bg-white ">
         <FilterSidebar
           onCategoryChange={(categoryId) => console.log(categoryId)} // Cập nhật khi thay đổi danh mục
           onPriceChange={(price) => setMaxPrice(price)}
@@ -81,7 +84,7 @@ const PageProduct = () => {
       {/* Giữa các phần: sidebar và nội dung */}
       <div className="flex-1 sm:w-4/5 w-full  ">
         {/* Select Form bên trái */}
-        <div className="flex  text-base sm:text-2xl my-2 justify-end md:justify-end ">
+        <div className="flex  text-lg sm:text-2xl my-2 justify-end md:justify-end ">
           <SelectForm
             onSortChange={handleSortChange}
             sortField={sortField}

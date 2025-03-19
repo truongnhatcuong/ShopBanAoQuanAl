@@ -1,3 +1,4 @@
+import cloudinary from "@/app/config/cloudinaty";
 import prisma from "@/prisma/client";
 import jwt from "jsonwebtoken";
 
@@ -5,7 +6,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 export async function POST(req: NextRequest) {
-  const { name, phone, address } = await req.json();
+  const formData = await req.formData();
+  const name = formData.get("name") as string;
+  const phone = formData.get("phone") as string;
+  const files = formData.getAll("files") as File[];
+
   if (!JWT_SECRET) {
     return NextResponse.json(
       { message: "JWT_SECRET chưa được định nghĩa" },
@@ -24,6 +29,21 @@ export async function POST(req: NextRequest) {
   // xác thực
 
   try {
+    const uploadPromises = files.map(async (item) => {
+      const buffer = await item.arrayBuffer();
+      const fileBase64 = Buffer.from(buffer).toString("base64");
+      const uploadResult = await cloudinary.uploader.upload(
+        `data:${item.type};base64,${fileBase64}`,
+        { folder: "Upload" }
+      );
+      return {
+        image_url: uploadResult.secure_url,
+        public_id: uploadResult.public_id,
+      };
+    });
+    const UploadImage = await Promise.all(uploadPromises);
+    const firstImageUrl =
+      UploadImage.length > 0 ? UploadImage[0].image_url : null;
     const decoded: any = jwt.verify(token, JWT_SECRET);
     const username = decoded.username;
     if (!username) {
@@ -48,7 +68,7 @@ export async function POST(req: NextRequest) {
       data: {
         name: name,
         phone: phone,
-        address: address,
+        image: firstImageUrl,
       },
     });
 

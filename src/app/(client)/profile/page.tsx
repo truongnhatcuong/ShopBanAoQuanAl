@@ -53,7 +53,7 @@ const ProfileUsername = () => {
       async function getApiCustomer() {
         try {
           const res = await fetch("/api/auth/user/profile", {
-            method: "GET",
+            cache: "no-cache",
             headers: {
               Authorization: `Bearer ${token}`, // Gửi token qua Header
             },

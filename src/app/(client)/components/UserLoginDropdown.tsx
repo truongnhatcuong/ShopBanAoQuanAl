@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
 import {
@@ -12,27 +13,37 @@ import { FaClipboardCheck } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { RiAdminLine } from "react-icons/ri";
 import { LiaPowerOffSolid } from "react-icons/lia";
+import Image from "next/image";
 interface UserLoginDropdownProps {
-  username: string;
-  roleId: number | null;
+  user: { roleId: number; username: string; image: string };
   RemoveLcstore: () => void;
 }
-const UserLoginDropdown = ({
-  roleId,
-  username,
-  RemoveLcstore,
-}: UserLoginDropdownProps) => {
+const UserLoginDropdown = ({ user, RemoveLcstore }: UserLoginDropdownProps) => {
   const router = useRouter();
   return (
     <DropdownMenu>
       {/* <FiUser className=" text-2xl md:text-xl " /> */}
       <DropdownMenuTrigger>
-        <div className="flex">
-          <div className="w-[30px] h-[30px] bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mr-2 cursor-pointer">
-            <span>{username.charAt(0).toLocaleUpperCase()}</span>
-          </div>
-          <span className=" hidden md:block md:text-base cursor-pointer mt-[2px]">
-            {username}
+        <div className="flex ">
+          {user && user.image?.length > 0 ? (
+            <>
+              <Image
+                src={user.image}
+                width={100}
+                height={100}
+                alt=""
+                className="w-7 h-7 border rounded-full "
+              />
+            </>
+          ) : (
+            <>
+              <div className="w-[30px] h-[30px] bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center  cursor-pointer">
+                <span>{user.username.charAt(0).toLocaleUpperCase()}</span>
+              </div>
+            </>
+          )}
+          <span className=" hidden md:block md:text-base cursor-pointer mt-[2px] ml-2">
+            {user.username}
           </span>
         </div>
       </DropdownMenuTrigger>
@@ -59,7 +70,7 @@ const UserLoginDropdown = ({
           </button>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {(roleId === 3 || roleId === 2) && (
+        {(user.roleId === 3 || user.roleId === 2) && (
           <>
             <DropdownMenuItem>
               {" "}

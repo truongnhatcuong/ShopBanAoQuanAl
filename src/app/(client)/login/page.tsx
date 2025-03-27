@@ -26,6 +26,7 @@ const Page = () => {
     if (res.ok) {
       const data = await res.json();
       window.localStorage.setItem("token", data.token);
+      window.localStorage.setItem("userId", data.id);
       MySwal.fire({
         title: "<strong>Thành Công</strong>",
         html: "Bạn đã đăng nhập thành công. Chúc bạn một ngày tuyệt vời!",

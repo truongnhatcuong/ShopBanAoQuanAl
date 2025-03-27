@@ -34,10 +34,10 @@ const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
     setQuantity((prev) => prev - 1);
   };
   useEffect(() => {
-    if (user.customer_id) {
+    if (user?.customer_id) {
       setUserId(user.customer_id);
     }
-  }, [user.customer_id]); // Chỉ theo dõi `user.customer_id`, tránh vòng lặp vô hạn
+  }, [user]);
 
   // Kiểm tra kích thước có được chọn hay không khi người dùng nhấn nút "Thêm vào giỏ"
   const handleAddToCartClick = () => {

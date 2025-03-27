@@ -25,7 +25,10 @@ const Notificationcoupon = () => {
   const [count, setCount] = useState<number>(0);
   const pathname = usePathname();
   const FetchApi = async () => {
-    const res = await fetch("/api/notification");
+    const res = await fetch("/api/notification", {
+      cache: "no-cache",
+      next: { revalidate: 100 },
+    });
     const data = await res.json();
     setData(data.notification || []);
     setCount(data.countNotification);

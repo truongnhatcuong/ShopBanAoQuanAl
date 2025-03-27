@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
       Customer: {
         select: {
           name: true,
+          image: true,
         },
       },
       Product: {

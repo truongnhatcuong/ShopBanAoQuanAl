@@ -9,6 +9,7 @@ import Pagination from "@/app/components/componentsFunction/Pagination";
 import { useSearchParams } from "next/navigation";
 import SelectPagination from "@/app/components/componentsFunction/SelectPagination";
 import SearchParamInput from "@/app/components/componentsFunction/SearchParamInput";
+import ExportExcel from "./components/componentChild/ExportExcel";
 interface Product {
   product_id: number;
   product_name: string;
@@ -51,7 +52,8 @@ const PageProduct = () => {
   const fetchApiProduct = async () => {
     setLoading(true);
     const res = await fetch(
-      `/api/product?search=${searchTerm.toLowerCase()}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`
+      `/api/product?search=${searchTerm.toLowerCase()}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`,
+      { cache: "no-cache" }
     );
     const data = await res.json();
     await ApiImage();
@@ -77,6 +79,10 @@ const PageProduct = () => {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
           />
+        </div>
+        <div className="mt-5">
+          {" "}
+          <ExportExcel product={product} />{" "}
         </div>
         <div>
           {" "}

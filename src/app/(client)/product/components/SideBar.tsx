@@ -8,11 +8,9 @@ interface ICategory {
 }
 
 interface ISideBarProps {
-  onCategoryChange: (categoryId: number | null) => void; // Thay đổi kiểu categoryId là number hoặc null
   onPriceChange: (price: number) => void;
 }
-
-const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
+const SideBar = ({ onPriceChange }: ISideBarProps) => {
   const [price, setPrice] = useState<number>(0);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null); // Chỉ lưu một category_id
@@ -22,7 +20,9 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
 
   useEffect(() => {
     async function ApiCategories() {
-      const res = await fetch("/api/categories");
+      const res = await fetch("/api/categories", {
+        next: { revalidate: 300 },
+      });
       const data = await res.json();
       setCategories(data.categories);
     }
@@ -46,7 +46,7 @@ const SideBar = ({ onCategoryChange, onPriceChange }: ISideBarProps) => {
   const handleCategoryChange = (categoryId: number) => {
     const newSelect = selectedCategory === categoryId ? null : categoryId;
     setSelectedCategory(newSelect);
-    onCategoryChange(newSelect);
+
     router.push(newSelect ? `?category_id=${newSelect}` : `/product`);
   };
 

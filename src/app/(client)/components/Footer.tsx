@@ -3,13 +3,8 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer>
-      <div
-        className="flex flex-col sm:flex-row justify-between py-10   text-black dark:text-white dark:bg-black mt-5 border-t-4"
-        data-aos="zoom-in-up"
-        data-aos-duration="1000"
-        data-aos-easing="ease-in-out"
-      >
+    <>
+      <div className="flex flex-col sm:flex-row justify-between py-10   text-black dark:text-white dark:bg-black mt-5 border-t-4">
         {/* footer 1 */}
         <div className="md:h-52 h-full  w-full md:w-1/3 mb-6 md:mb-0  flex flex-col ">
           <h1 className="text-xl font-bold mb-4 text-center md:text-left">
@@ -69,7 +64,7 @@ const Footer = () => {
           <span className="text-xl">©𝙏𝙧𝙪̛𝙤̛𝙣𝙜 𝙉𝙝𝙖̣̂𝙩 𝘾𝙪̛𝙤̛̀𝙣𝙜</span>
         </p>
       </div>
-    </footer>
+    </>
   );
 };
 

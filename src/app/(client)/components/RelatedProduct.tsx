@@ -23,7 +23,10 @@ const RelatedProduct = ({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ApiProductForCategories = async () => {
-    const res = await fetch("/api/product");
+    const res = await fetch("/api/product", {
+      cache: "no-cache",
+      next: { revalidate: 50 },
+    });
     const data = await res.json();
 
     const filterCategory = data.product.filter(

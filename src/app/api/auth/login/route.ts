@@ -42,18 +42,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const accessToken = jwt.sign({ username: user.username }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const accessToken = jwt.sign(
+      { username: user.username, roleId: user.roleId },
+      JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
 
-    await prisma.customer.update({
+    const customer = await prisma.customer.update({
       where: { username },
       data: { token: accessToken },
     });
 
     const response = NextResponse.json(
       {
-        username: username,
+        id: customer.customer_id,
         token: accessToken,
         message: "Đăng nhập thành công",
       },

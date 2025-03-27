@@ -2,6 +2,7 @@
 import React from "react";
 import moment from "moment";
 import "moment/locale/vi";
+import Image from "next/image";
 
 export interface Review {
   review_id: number;
@@ -10,7 +11,7 @@ export interface Review {
   review_date: string;
   seller_response: string;
   rating: number;
-  Customer: { name: string };
+  Customer: { name: string; image: string };
 }
 interface ReviewProps {
   review: Review;
@@ -28,9 +29,21 @@ const ReViewProduct = ({ review, countReview }: ReviewProps) => {
         {" "}
         <div className="flex items-center gap-4">
           {" "}
-          <div className="w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center">
-            <span>{review.Customer.name.charAt(0).toLocaleUpperCase()}</span>
-          </div>
+          {review.Customer.image?.length > 0 ? (
+            <>
+              <Image
+                src={review.Customer.image}
+                alt=""
+                height={200}
+                width={200}
+                className="w-10 h-10 rounded-full"
+              />
+            </>
+          ) : (
+            <div className="w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center">
+              <span>{review.Customer.name.charAt(0).toLocaleUpperCase()}</span>
+            </div>
+          )}
           <div>
             <h3 className="font-medium text-gray-800">
               {review.Customer.name}

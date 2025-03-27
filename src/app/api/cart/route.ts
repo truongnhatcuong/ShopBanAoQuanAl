@@ -87,9 +87,10 @@ export async function GET(req: NextRequest) {
             product: item.Product,
             image_url: item.Product.Images[0]?.image_url, // Lấy URL hình ảnh
           })),
+          customer: customer.name.toUpperCase(),
+          idOrderNext: idOrderNext ?? 0,
         },
-        customer: customer.name.toUpperCase(),
-        idOrderNext,
+
         message: "Success",
       },
       { status: 200 }

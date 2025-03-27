@@ -28,13 +28,14 @@ interface Product {
 const ProductRecommendations = () => {
   const [recommendations, setRecommendations] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
         setLoading(true);
-        const res = await fetch("/api/recommend");
+        const res = await fetch("/api/recommend", {
+          next: { revalidate: 50 },
+        });
         const data = await res.json();
         setRecommendations(data.data);
       } catch (error) {

@@ -38,7 +38,9 @@ const PageProduct = () => {
             maxPrice > 0 ? `&maxPrice=${maxPrice}` : ""
           }`;
       try {
-        const req = await fetch(endpoint);
+        const req = await fetch(endpoint, {
+          next: { revalidate: 60 },
+        });
         const data = await req.json();
         if (category_Id) {
           if (data.category?.Products && data.category.Products.length > 0) {
@@ -51,7 +53,6 @@ const PageProduct = () => {
         } else {
           if (data.product && data.product.length > 0) {
             setProduct(data.product);
-            // trackUserAction(1, product[0].product_id, "view");
             setErrorMessage("");
           } else {
             setProduct(data.product || []);
@@ -75,10 +76,7 @@ const PageProduct = () => {
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10  border-t w-full h-full   ">
       {/* Sidebar */}
       <div className="sm:w-1/5 w-full   flex sm:flex-row items-center  flex-col shadow-lg  text-black dark:text-black dark:bg-white ">
-        <FilterSidebar
-          onCategoryChange={(categoryId) => console.log(categoryId)} // Cập nhật khi thay đổi danh mục
-          onPriceChange={(price) => setMaxPrice(price)}
-        />
+        <FilterSidebar onPriceChange={(price) => setMaxPrice(price)} />
       </div>
 
       {/* Giữa các phần: sidebar và nội dung */}

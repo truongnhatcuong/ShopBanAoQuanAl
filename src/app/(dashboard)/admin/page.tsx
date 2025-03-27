@@ -86,7 +86,9 @@ const DashboardCharts: React.FC = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/admin/thongke?period=${period}`);
+        const response = await fetch(`/api/admin/thongke?period=${period}`, {
+          cache: "no-cache",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

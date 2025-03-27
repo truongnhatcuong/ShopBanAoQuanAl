@@ -7,6 +7,7 @@
   datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
+    
   }
 
   generator client {
@@ -150,7 +151,7 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
     order_id       Int
     payment_method PaymentMethod   
     payment_status PaymentStatus   
-     stripe_payment_intent  String?
+     stripe_payment_intent  String? @unique
      stripe_session_id String?
     payment_amount Decimal   @db.Decimal(10, 2)
     created_at     DateTime? @db.DateTime
@@ -268,7 +269,7 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
 
   model PromotionNotification {
     promotion_notification_id Int          @id @default(autoincrement())
-    notification_id           Int
+    notification_id            Int
     coupon_id                 Int?
     Coupon                    Coupon?      @relation(fields: [coupon_id], references: [coupon_id])
     Notifications             Notification @relation(fields: [notification_id], references: [notification_id])

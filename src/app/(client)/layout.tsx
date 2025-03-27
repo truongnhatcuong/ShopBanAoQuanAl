@@ -17,15 +17,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div
-      suppressHydrationWarning={true}
-      className={`${inter.className} container mx-auto`}
-    >
+    <div className={`${inter.className} container mx-auto flex flex-col `}>
       <ShopContextProvider>
         {/* HeaderPager bọc toàn bộ ứng dụng */}
-        <HeadePager />
-        <main className="container mx-auto">{children}</main>
-        <Footer />
+        <div>
+          {" "}
+          <HeadePager />
+        </div>
+        <div className="container mx-auto flex-1">{children}</div>
+        <div>
+          {" "}
+          <Footer />
+        </div>
       </ShopContextProvider>
     </div>
   );

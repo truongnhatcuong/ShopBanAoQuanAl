@@ -1,4 +1,6 @@
 "use client";
+
+import NotificationOrderToAdmin from "@/app/(dashboard)/admin/components/NotificationOrderToAdmin";
 import { ShopConText } from "@/app/context/Context";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,14 +9,19 @@ import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 
 const TopBar = () => {
   const { isLeftMenuVisible, setIsLeftMenuVisible } = useContext(ShopConText)!;
-  const [roleId, setRoleId] = useState<number | null>(null);
+  const [user, setUser] = useState({
+    username: "",
+    roleId: 1,
+    image: "",
+  });
   async function fetchUserInfo() {
-    const res = await fetch("/api/auth/getUsername", {
-      method: "GET",
-    });
+    const res = await fetch("/api/auth/getUsername");
     const data = await res.json();
-
-    setRoleId(data.accessToken?.roleId);
+    setUser({
+      username: data.accessToken?.name,
+      roleId: data.accessToken?.roleId,
+      image: data.accessToken?.image,
+    });
   }
   useEffect(() => {
     fetchUserInfo();
@@ -38,6 +45,10 @@ const TopBar = () => {
           </button>
         </Link>
       </div>
+      <div className="mx-3">
+        {" "}
+        <NotificationOrderToAdmin />
+      </div>
       <div className="flex-none gap-2">
         <div className="form-control">
           <input
@@ -54,9 +65,7 @@ const TopBar = () => {
           >
             <div className="w-10 rounded-full ">
               <Image
-                src={`${
-                  roleId === 3 ? "/Image/admin.jpg" : "/Image/anhdaidien.jpg"
-                }`}
+                src={user.image || "/Image/anhdaidien.jpg"}
                 alt="Logo"
                 width={100}
                 height={50}

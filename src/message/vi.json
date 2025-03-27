@@ -1,0 +1,34 @@
+{
+  "menu": {
+    "home": "Trang Chủ",
+    "collection": "Bộ Sưu tập",
+    "about": "Giới Thiệu",
+    "man": "Nam",
+    "woman": "Nữ",
+    "categories": "danh mục"
+  },
+  "fashion": {
+    "modern_style": "Thời trang hiện đại",
+    "title": "Thời trang cho",
+    "season": "mùa",
+    "description": "Khám phá xu hướng thời trang mới nhất và nâng tầm phong cách với OdinClubs.",
+
+    "trend_title": "Xu hướng mùa mới",
+    "trend_heading": "Thời trang  cho người dẫn đầu",
+    "style": "phá cách",
+    "trend_description": "Khẳng định cá tính với những thiết kế độc quyền tại OdinClubs. Chúng tôi mang đến những xu hướng thời trang mới nhất giúp bạn tự tin tỏa sáng mọi lúc.",
+
+    "design_title": "Thiết kế độc đáo",
+    "design_heading": "Sự kết hợp giữa",
+    "design_highlight": "phong cách",
+    "design_description": "Không chỉ đẹp mắt, trang phục OdinClubs còn mang đến cảm giác thoải mái suốt ngày dài. Chất liệu cao cấp, thiết kế tinh tế và đường may chắc chắn.",
+
+    "shop_now": "Mua ngay",
+    "discover_now": "Khám phá ngay",
+    "learn_more": "Tìm hiểu thêm",
+
+    "bestseller": "Bán chạy",
+    "limited": "Giới hạn",
+    "latest": "mới nhất"
+  }
+}

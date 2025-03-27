@@ -47,6 +47,8 @@ export async function GET(
         order_id: orderId,
       },
       select: {
+        order_id: true,
+        order_date: true,
         total_amount: true,
         order_state: true,
         Customer: {

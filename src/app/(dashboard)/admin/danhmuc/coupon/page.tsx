@@ -5,7 +5,10 @@ import AddCoupon from "./components/AddCoupon";
 
 const Page = () => {
   const FetchApi = async () => {
-    const res = await fetch(`/api/coupon`);
+    const res = await fetch(`/api/coupon`, {
+      cache: "force-cache",
+      next: { revalidate: 800 }, // Cập nhật cache mỗi 1 giờ
+    });
     const data = await res.json();
     setCoupon(data.coupon);
   };

@@ -26,7 +26,7 @@ const PageAddress = () => {
   const [address, setAddress] = useState<CustomerAddress | null>(null);
 
   const FetchApi = async () => {
-    const res = await fetch(`/api/addressShiper`);
+    const res = await fetch(`/api/addressShiper`, { next: { revalidate: 10 } });
     const data = await res.json();
     setAddress(data.addressShiper);
   };

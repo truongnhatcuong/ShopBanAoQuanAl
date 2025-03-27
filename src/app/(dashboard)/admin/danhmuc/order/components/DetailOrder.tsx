@@ -5,19 +5,25 @@ import React, { useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import Modal from "react-modal";
 
+import ExportInvoice from "../components/ExportPDF";
+
 interface OrderManage {
+  order_id: number;
+  order_date: string;
   total_amount: string;
   order_state: string;
+
   Customer: {
     name: string;
     phone: number;
     AddressShipper?: {
       street_address: string;
       country: string;
+      district: string;
       province: string;
       ward: string;
     }[];
-  } | null;
+  };
   OrderItems: {
     orderitem_id: number;
     quantity: number;
@@ -51,8 +57,10 @@ const DetailOrder = ({ orderId }: tailOrderProps) => {
   };
 
   useEffect(() => {
-    ApiOrderManage();
-  }, []);
+    if (isOpen) {
+      ApiOrderManage();
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -77,6 +85,9 @@ const DetailOrder = ({ orderId }: tailOrderProps) => {
             <h2 className="text-2xl font-bold text-gray-800">
               Order Details #{orderId}
             </h2>
+            <div className="flex justify-end mt-4">
+              {orderManage && <ExportInvoice order={orderManage} />}
+            </div>
             <button
               onClick={() => setIsOpen(false)}
               className="text-gray-500 hover:text-gray-700 text-xl font-bold"

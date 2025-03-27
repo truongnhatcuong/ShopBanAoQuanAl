@@ -18,7 +18,10 @@ const Page = () => {
   const [selectseason, setSelectseason] = useState<Iseason | null>(null);
 
   const ApiSeason = async () => {
-    const req = await fetch(`/api/season`);
+    const req = await fetch(`/api/season`, {
+      cache: "force-cache",
+      next: { revalidate: 500 },
+    });
     const data = await req.json();
     setSeason(data.season || []);
   };

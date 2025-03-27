@@ -33,7 +33,7 @@ interface IProduct {
     rating: number;
     seller_response: string;
     review_date: string;
-    Customer: { name: string };
+    Customer: { name: string; image: string };
   }[];
 }
 
@@ -59,7 +59,10 @@ const Page = () => {
 
   useEffect(() => {
     async function ApiProductDeTail() {
-      const res = await fetch(`/api/product/${id}`);
+      const res = await fetch(`/api/product/${id}`, {
+        cache: "force-cache",
+        next: { revalidate: 200 },
+      });
       const data = await res.json();
       await trackUserAction(Number(idUser), Number(id), "view");
       setProductDetail(data.getProduct);

@@ -28,16 +28,25 @@ interface CartItem {
   cartitem_id: number;
   product_id: number;
   quantity: number;
-  selectedSize: string; // Thêm thuộc tính selectedSize
+  selectedSize: string;
   product: {
     product_name: string;
     price: string;
     Images: { image_url: string }[];
   };
-  image_url: string;
 }
 
-const ChangeAddress = () => {
+interface CartData {
+  cart_id: number;
+  items: CartItem[];
+  customer: string;
+  idOrderNext: number;
+}
+interface CartApiResponse {
+  cart: CartData;
+}
+
+const ChangeAddress = ({ cart }: CartApiResponse) => {
   const [address, setAddress] = useState<CustomerAddress | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
@@ -50,21 +59,6 @@ const ChangeAddress = () => {
     const data = await res.json();
     setAddress(data.addressShiper);
   };
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const fetchCartData = async () => {
-    const res = await fetch("/api/cart");
-    const data = await res.json();
-
-    const updatedItems =
-      data.cart?.items?.map((item: CartItem) => ({
-        ...item,
-        selectedSize: item.selectedSize, // Cập nhật với size mặc định hoặc giá trị từ API nếu có
-      })) || [];
-    setCart(updatedItems || null);
-  };
-  useEffect(() => {
-    fetchCartData();
-  }, []);
 
   useEffect(() => {
     FetchApi();

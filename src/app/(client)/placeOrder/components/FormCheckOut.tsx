@@ -4,7 +4,6 @@
 import { ShopConText } from "@/app/context/Context";
 import { ForMatPrice } from "@/lib/FormPrice";
 import React, { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 interface CartItem {
   cartitem_id: number;
@@ -16,11 +15,13 @@ interface CartItem {
     price: string;
     Images: { image_url: string }[];
   };
-  image_url: string;
 }
 
-interface CartItemListProps {
-  cart: CartItem[];
+interface CartData {
+  cart_id: number;
+  items: CartItem[];
+  customer: string;
+  idOrderNext: number;
 }
 interface ICoupon {
   coupon_id: number;
@@ -35,39 +36,26 @@ interface ICoupon {
   }[];
 }
 
-const FormCheckOut = ({ cart }: CartItemListProps) => {
-  const { totalPrice, couponName, setCouponName } = useContext(ShopConText)!;
+const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
+  const { totalPrice, couponCode, setCouponCode } = useContext(ShopConText)!;
 
-  const [data, setData] = useState<ICoupon[]>([]);
   const [currentCustomerId, setCurrentCustomerId] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
   const [finalTotal, setFinalTotal] = useState(totalPrice) || totalPrice;
 
-  const FetchApi = async () => {
-    const res = await fetch("/api/coupon");
-    const data = await res.json();
-    setData(data.coupon || []);
-  };
-
-  const FetchUser = async () => {
-    const resUser = await fetch("/api/auth/getUsername");
-    const dataUser = await resUser.json();
-    setCurrentCustomerId(dataUser.accessToken.customer_id);
-  };
-
   useEffect(() => {
-    FetchApi();
-    FetchUser();
+    const storedUserId = window.localStorage.getItem("userId");
+    if (storedUserId) {
+      setCurrentCustomerId(storedUserId);
+    }
   }, []);
 
   const handleApplyCoupon = () => {
-    const coupon = data.find(
-      (item) => item.coupon_code === couponName.trim().toUpperCase()
-    );
+    const coupon = data.find((item) => item.coupon_code === couponCode);
 
     if (!coupon) {
       alert("Mã giảm giá không hợp lệ.");
-      setCouponName("");
+      setCouponCode("");
       setDiscountAmount(0); // Không có giảm giá
       setFinalTotal(totalPrice); // Trả về tổng tiền ban đầu
       return;
@@ -82,7 +70,7 @@ const FormCheckOut = ({ cart }: CartItemListProps) => {
     if (!isValidForCustomer) {
       alert("Mã giảm giá không áp dụng cho bạn.");
       setDiscountAmount(0);
-      setCouponName("");
+      setCouponCode("");
       setFinalTotal(totalPrice);
       return;
     }
@@ -109,13 +97,14 @@ const FormCheckOut = ({ cart }: CartItemListProps) => {
     }
 
     setDiscountAmount(discount);
-    setCouponName("");
+    setCouponCode("");
     setFinalTotal(totalPrice - discount + 25000);
   };
+  console.log("gia cuoi :", finalTotal);
 
   return (
     <div className=" bg-white shadow-lg w-full ml-2  h-full">
-      {cart.map((item) => (
+      {cart.items.map((item) => (
         <div key={item.cartitem_id} className="">
           {/* produt */}
           <div className="flex  flex-col md:flex-row  gap-3  items-center border-b pb-1 ">
@@ -156,8 +145,8 @@ const FormCheckOut = ({ cart }: CartItemListProps) => {
             type="text"
             className="w-2/5 py-[10.4px] px-3  text-sm  border-[2px] border-black  outline-none "
             placeholder="Nhap ma giam gia ....."
-            value={couponName}
-            onChange={(e) => setCouponName(e.target.value.trim())}
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value.trim())}
           />
           <button
             className="hover:bg-black bg-gray-800 text-white w-fit  py-2.5 px-1.5  font-semibold  "

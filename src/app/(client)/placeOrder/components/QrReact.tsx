@@ -1,9 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { QRCodeCanvas } from "qrcode.react";
-import React, { useContext, useEffect, useState } from "react";
-import { ShopConText } from "@/app/context/Context";
-import { ForMatPrice } from "@/lib/FormPrice";
+import React, { useEffect, useState } from "react";
 
 interface CartItem {
   cartitem_id: number;
@@ -20,63 +17,55 @@ interface CartItem {
 interface CartData {
   cart_id: number;
   items: CartItem[];
+  customer: string;
+  idOrderNext: number;
 }
 
-const QRCode = () => {
-  const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState<CartData | null>(null);
-  const [qrError, setQrError] = useState<string | null>(null);
-  const [valueData, setValueData] = useState({
-    id: 0,
-    customer: "",
-  });
+interface CartApiResponse {
+  cart: CartData;
+}
+
+const QRCode = ({ cart }: CartApiResponse) => {
+  const [valueData, setValueData] = useState({ id: 0, customer: "" });
 
   useEffect(() => {
-    async function fetchCart() {
-      try {
-        const res = await fetch(`/api/cart`);
-        const data = await res.json();
-        if (res.ok) {
-          setCart(data.cart);
-          setValueData({
-            id: data.idOrderNext,
-            customer: data.customer,
-          });
-        }
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu đơn hàng:", error);
-        setQrError("Không thể tải dữ liệu giỏ hàng");
-      } finally {
-        setLoading(false);
-      }
+    if (cart) {
+      setValueData({
+        id: cart.idOrderNext, // Không cần Number() vì đã là number
+        customer: cart.customer,
+      });
     }
+  }, [cart]); // Cập nhật khi cart thay đổi
 
-    fetchCart();
-  }, []);
-
-  if (loading) return <p>Đang tải dữ liệu...</p>;
   if (!cart || cart.items.length === 0)
     return <p>Không có sản phẩm trong giỏ hàng.</p>;
-  if (qrError) return <p className="text-red-500">{qrError}</p>;
 
-  // Using MB Bank specific format with alternative image types
   const vietQR = `https://img.vietqr.io/image/MB-0372204152-qr_only_large.png?addInfo=${encodeURIComponent(
-    `MaDonHang#${valueData.id + 1} - ${valueData.customer} Thanh Toán `
+    `MaDonHang#${valueData.id} - ${valueData.customer} Thanh Toán`
   )}`;
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex flex-col items-center gap-2">
-        <img src={vietQR} alt="QR Code" className="w-56 h-56 object-contain" />
-        <p className="text-center text-sm font-bold">
-          Đơn hàng #{valueData.id + 1} - {cart.items.length} sản phẩm
+    <div className="flex flex-col items-center gap-6 py-2 bg-white rounded-xl shadow-lg max-w-sm mx-auto">
+      <img
+        src={vietQR}
+        alt="QR Code"
+        className="w-[292px] h-64 object-contain rounded-md border border-gray-200 p-2 bg-gray-50"
+        onError={() => console.error("Lỗi tải QR Code từ VietQR")}
+      />
+      <div className="text-center space-y-3">
+        <p className="text-base font-bold text-gray-900">
+          Đơn hàng của <span className="text-indigo-600">{cart.customer}</span>
+          <br />
+          Bao gồm: <span className="text-indigo-600">
+            {cart.items.length}
+          </span>{" "}
+          sản phẩm
         </p>
-
-        <p className="text-center text-xs text-gray-600">
+        <p className="text-sm text-gray-500 tracking-wide">
           MB Bank - 0372204152
         </p>
-        <p className="text-lg font-semibold text-gray-800">
-          Vui lòng nhập đúng số tiền{" "}
+        <p className="text-xl font-semibold text-gray-800 bg-yellow-100 px-4 py-2 rounded-md">
+          Vui lòng nhập đúng số tiền
         </p>
       </div>
     </div>

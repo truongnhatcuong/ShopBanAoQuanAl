@@ -35,7 +35,7 @@ interface IProduct {
     rating: number;
     review_date: string;
     seller_response: string;
-    Customer: { name: string };
+    Customer: { name: string; image: string };
   }[];
 }
 

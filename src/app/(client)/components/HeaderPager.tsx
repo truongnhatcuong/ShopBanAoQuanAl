@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import ListItem, { MenuHeader } from "./ListItem";
@@ -13,11 +14,8 @@ import Notificationcoupon from "./Notificationcoupon";
 import SearchProduct from "./SearchProduct";
 import LoginDropDown from "./LoginDropDown";
 import UserLoginDropdown from "./UserLoginDropdown";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+
+import ChangeLanguage from "@/app/components/ChangeLanguage/ChangeLanguage";
 interface ICategory {
   category_id: number;
   category_name: string;
@@ -27,9 +25,13 @@ export default function HeadePager() {
   const { countCart, handleQuantityCart } = useContext(ShopConText)!;
   const router = useRouter();
   const pathname = usePathname();
-  const [username, setUsername] = useState<string | null>(null);
 
-  const [roleId, setRoleId] = useState<number | null>(null);
+  const [user, setUser] = useState({
+    username: "",
+    roleId: 1,
+    image: "",
+  });
+
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -38,32 +40,38 @@ export default function HeadePager() {
   function RemoveLcstore() {
     router.push("/logout");
     window.localStorage.removeItem("token");
+    window.localStorage.removeItem("userId");
     window.location.href = "/login";
   }
   //call api categories
   async function ApiCategories() {
-    const res = await fetch("/api/categories");
+    const res = await fetch("/api/categories", {
+      cache: "force-cache",
+      next: { revalidate: 300 },
+    });
     const data = await res.json();
     setCategories(data.categories);
   }
 
   async function fetchUserInfo() {
     const res = await fetch("/api/auth/getUsername", {
-      method: "GET",
+      cache: "no-store",
     });
     const data = await res.json();
-    setUsername(data.accessToken?.name); // Lấy username từ dữ liệu trả về
-    setRoleId(data.accessToken?.roleId);
+    setUser({
+      username: data.accessToken?.name,
+      roleId: data.accessToken?.roleId,
+      image: data.accessToken?.image,
+    });
+
     setIsLoggedIn(true);
   }
   useEffect(() => {
     fetchUserInfo();
   }, [pathname]);
-
   useEffect(() => {
     ApiCategories();
   }, []);
-
   useEffect(() => {
     handleQuantityCart();
   }, [handleQuantityCart]);
@@ -84,31 +92,9 @@ export default function HeadePager() {
       {/* menu */}
       <div className=" mr-5  hidden  md:flex gap-3 uppercase">
         <div>
-          <ListItem />
+          <ListItem categories={categories} />
         </div>
         {/* .............. */}
-
-        <HoverCard>
-          <HoverCardTrigger>
-            <div className="ml-2 mt-[1px] hidden sm:flex  uppercase cursor-pointer text-[15px]">
-              <p className=""> DANH MỤC</p>
-            </div>
-          </HoverCardTrigger>
-          <HoverCardContent className="w-[400px] mt-[2px]">
-            <div className="grid grid-cols-3 gap-4">
-              {categories.map((item) => (
-                <div
-                  key={item.category_id}
-                  className="text-center hover:text-red-500"
-                >
-                  <Link href={`/product?category_id=${item.category_id}`}>
-                    {item.category_name}
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </HoverCardContent>
-        </HoverCard>
 
         {/* .............. */}
       </div>
@@ -117,6 +103,8 @@ export default function HeadePager() {
       <div className="flex items-center gap-x-5 ">
         {/* Search Input */}
         <Notificationcoupon />
+        <ChangeLanguage />
+
         {/* product */}
         <SearchProduct search={search} setSearch={setSearch} />
         <div className="mt-1">
@@ -124,12 +112,8 @@ export default function HeadePager() {
           <DarkModeSwitch />
         </div>
         <div>
-          {isLoggedIn && username ? (
-            <UserLoginDropdown
-              roleId={roleId!}
-              username={username}
-              RemoveLcstore={RemoveLcstore}
-            />
+          {isLoggedIn && user.username ? (
+            <UserLoginDropdown user={user} RemoveLcstore={RemoveLcstore} />
           ) : (
             <LoginDropDown login="Đăng Nhập" signUp="Đăng Ký" />
           )}
@@ -172,7 +156,7 @@ export default function HeadePager() {
                   pathname === item.link ? "bg-black text-white" : ""
                 } `}
               >
-                <Link href={item.link} onClick={() => setVisible(false)}>
+                <Link href={item.link || ""} onClick={() => setVisible(false)}>
                   {item.title}
                 </Link>
               </div>

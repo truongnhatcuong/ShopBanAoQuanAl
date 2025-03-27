@@ -3,7 +3,7 @@
 
 import Title from "@/app/(client)/components/Title";
 import { assets } from "@/app/assets/frontend_assets/assets";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -51,34 +51,46 @@ const AddProduct = (props: { reloadData: () => void }) => {
     { size_id: 0, stock_quantity: 0 },
   ]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const categoryRes = await fetch("/api/categories");
-      const categoriesData = await categoryRes.json();
+  const fetchData = useCallback(async () => {
+    try {
+      const [categoryRes, brandRes, seasonRes, sizeRes] = await Promise.all([
+        fetch("/api/categories", {
+          cache: "force-cache",
+          next: { revalidate: 3600 },
+        }),
+        fetch("/api/brand", {
+          cache: "force-cache",
+          next: { revalidate: 3600 },
+        }),
+        fetch("/api/season", {
+          cache: "force-cache",
+          next: { revalidate: 86400 },
+        }),
+        fetch("/api/size", {
+          cache: "force-cache",
+          next: { revalidate: 86400 },
+        }),
+      ]);
+
+      const [categoriesData, brandData, seasonData, sizeData] =
+        await Promise.all([
+          categoryRes.json(),
+          brandRes.json(),
+          seasonRes.json(),
+          sizeRes.json(),
+        ]);
+
       setCategory(categoriesData.categories);
-    };
-
-    const fetchBrands = async () => {
-      const brandRes = await fetch("/api/brand");
-      const brandData = await brandRes.json();
       setBrand(brandData.brand);
-    };
-    const fetchSeasons = async () => {
-      const seasonRes = await fetch("/api/season");
-      const seasonData = await seasonRes.json();
       setSeason(seasonData.season);
-    };
-    const fetchSizes = async () => {
-      const sizeRes = await fetch("/api/size");
-      const sizeData = await sizeRes.json();
       setSize(sizeData.size);
-    };
-
-    fetchCategories();
-    fetchBrands();
-    fetchSeasons();
-    fetchSizes();
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu sản phẩm:", error);
+    }
   }, []);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSizeChange = (index: number, field: string, value: any) => {
     const uppdateSize: any = [...sizeInput];

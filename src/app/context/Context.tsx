@@ -1,7 +1,7 @@
 "use client";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-
+import { useTranslation } from "react-i18next";
 import {
   createContext,
   Dispatch,
@@ -39,9 +39,9 @@ interface IContext {
   isLeftMenuVisible: boolean;
   setIsLeftMenuVisible: Dispatch<SetStateAction<boolean>>;
   handleUpdateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
-  couponName: string;
+  couponCode: string;
   user: User;
-  setCouponName: (value: string) => void;
+  setCouponCode: (value: string) => void;
 }
 interface ShopContextProvider {
   children: ReactNode;
@@ -54,18 +54,18 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLeftMenuVisible, setIsLeftMenuVisible] = useState(true);
   const [user, setUser] = useState<User | any>(null);
-  const [couponName, setCouponName] = useState("");
+  const [couponCode, setCouponCode] = useState("");
 
   async function fetchUserInfo() {
     const res = await fetch("/api/auth/getUsername", {
-      method: "GET",
+      cache: "no-store",
     });
     const data = await res.json();
     setUser(data.accessToken);
   }
   useEffect(() => {
     fetchUserInfo();
-  }, [user?.customer_id]);
+  }, []);
 
   const handleAddToCart = async (
     product_id: number,
@@ -111,7 +111,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   };
 
   const handleQuantityCart = async () => {
-    const res = await fetch("/api/cart");
+    const res = await fetch("/api/cart", { cache: "no-store" });
     const data = await res.json();
     // đếm số lượng sản phẩm thêm vào giỏ hàng
     const totalQuantity =
@@ -181,8 +181,8 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     handleUpdateCartItem,
     isLeftMenuVisible,
     setIsLeftMenuVisible,
-    couponName,
-    setCouponName,
+    couponCode,
+    setCouponCode,
     user,
   };
   return (

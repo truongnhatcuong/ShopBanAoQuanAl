@@ -26,7 +26,11 @@ const PageCustomer = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   async function ApiCustomer() {
     const req = await fetch(
-      `/api/customer?search=${search}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`
+      `/api/customer?search=${search}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`,
+      {
+        cache: "force-cache",
+        next: { revalidate: 120 },
+      }
     );
     const data = await req.json();
     SetCustomer(data.getCustomer);

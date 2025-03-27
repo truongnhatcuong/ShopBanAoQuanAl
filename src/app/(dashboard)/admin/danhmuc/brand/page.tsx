@@ -26,7 +26,8 @@ const Page = () => {
   const [search, setSearch] = useState("");
   const ApiBrand = async () => {
     const reponse = await fetch(
-      `/api/brand?limit=${limit}&page=${currentPage}&search=${search}`
+      `/api/brand?limit=${limit}&page=${currentPage}&search=${search}`,
+      { next: { revalidate: 500 }, cache: "force-cache" }
     );
     const data = await reponse.json();
     setBrand(data.brand || []);

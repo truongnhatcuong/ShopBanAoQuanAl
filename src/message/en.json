@@ -1,0 +1,34 @@
+{
+  "menu": {
+    "home": "Home",
+    "collection": "Collection",
+    "about": "About Us",
+    "man": "Male",
+    "woman": "Female",
+    "categories": "categories"
+  },
+  "fashion": {
+    "modern_style": "Modern Style",
+    "title": "Fashion for the",
+    "season": "Season",
+    "description": "Explore the latest fashion trends and elevate your style with OdinClubs.",
+
+    "trend_title": "New Season Trends",
+    "trend_heading": " Fashion for Trendsetters",
+    "style": "Breakthrough",
+    "trend_description": "Express your personality with exclusive designs from OdinClubs. We bring you the latest fashion trends to shine confidently.",
+
+    "design_title": "Unique Designs",
+    "design_heading": "The perfect blend of",
+    "design_highlight": "style",
+    "design_description": "Not only stylish, OdinClubs' outfits also provide comfort all day long. Premium materials, sophisticated designs, and precise stitching.",
+
+    "shop_now": "Shop Now",
+    "discover_now": "Discover Now",
+    "learn_more": "Learn More",
+
+    "bestseller": "Bestseller",
+    "limited": "Limited Edition",
+    "latest": "latest"
+  }
+}

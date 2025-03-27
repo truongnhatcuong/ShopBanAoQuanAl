@@ -7,8 +7,6 @@ export async function GET(req: NextRequest) {
   try {
     const userBehaviorData = await fetchUserBehaviorData();
 
-    console.log("hihi", userBehaviorData);
-
     if (!userBehaviorData || userBehaviorData.length === 0) {
       return NextResponse.json(
         { message: "Không có dữ liệu hành vi", data: [] },
@@ -17,10 +15,9 @@ export async function GET(req: NextRequest) {
     }
 
     const recommendations = await recommendProducts(userBehaviorData);
-    console.log("Khuyến nghị sản phẩm:", recommendations);
+
     return NextResponse.json({ data: recommendations }, { status: 200 });
   } catch (error) {
-    console.error("Lỗi API recommend:", error);
     return NextResponse.json({ error: "Lỗi máy chủ" }, { status: 500 });
   }
 }

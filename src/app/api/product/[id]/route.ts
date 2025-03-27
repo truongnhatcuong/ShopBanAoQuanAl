@@ -42,6 +42,7 @@ export async function GET(
             Customer: {
               select: {
                 name: true,
+                image: true,
               },
             },
           },

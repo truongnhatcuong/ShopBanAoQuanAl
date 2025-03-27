@@ -20,7 +20,7 @@ interface CartItem {
 const CartPage = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const fetchCartData = async () => {
-    const res = await fetch("/api/cart");
+    const res = await fetch("/api/cart", { cache: "no-cache" });
     const data = await res.json();
 
     const updatedItems =

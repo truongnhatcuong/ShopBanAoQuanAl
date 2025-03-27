@@ -36,7 +36,8 @@ const PageContent = () => {
 
   const fetchData = async () => {
     const response = await fetch(
-      `/api/categories?page=${currentPage}&keyword=${keyword}&limit=${limit}&sortOrder=${sortOrder}`
+      `/api/categories?page=${currentPage}&keyword=${keyword}&limit=${limit}&sortOrder=${sortOrder}`,
+      { next: { revalidate: 3600 }, cache: "force-cache" }
     );
 
     const data = await response.json();

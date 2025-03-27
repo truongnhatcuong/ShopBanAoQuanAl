@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 interface Product {
   product_name: string;
@@ -11,6 +12,7 @@ interface Product {
 
 interface Customer {
   name: string;
+  image: string;
 }
 
 interface Review {
@@ -116,9 +118,20 @@ const ReviewManagement = () => {
                   <div className="space-y-4">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-semibold">
-                          {review.Customer.name}
-                        </h3>
+                        <div className="flex items-center gap-3">
+                          <Image
+                            src={
+                              review.Customer.image || "/Image/anhdaidien.jpg"
+                            }
+                            alt=""
+                            width={100}
+                            height={100}
+                            className="w-10 h-10 rounded-full  border-[1px]"
+                          />
+                          <h3 className="font-semibold">
+                            {review.Customer.name}
+                          </h3>
+                        </div>
                         <p className="text-sm text-gray-500">
                           Sản phẩm: {review.Product.product_name}
                         </p>

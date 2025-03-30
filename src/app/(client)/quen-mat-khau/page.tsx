@@ -10,8 +10,12 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      setError("Vui lòng nhập email của bạn");
+    function validateEmail(email: string) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+    if (!validateEmail) {
+      setError("vui lòng nhập đúng định dạng email");
       return;
     }
     try {

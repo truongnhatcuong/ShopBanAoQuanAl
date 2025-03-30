@@ -3,6 +3,9 @@
 import { ShopConText } from "@/app/context/Context";
 import { trackUserAction } from "@/lib/trackUserAction";
 import React, { useContext, useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 interface IProduct {
   product_id: number;
@@ -17,13 +20,17 @@ interface IProps {
 }
 
 const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
-  const { handleAddToCart, user } = useContext(ShopConText)!; // Lấy hàm handleAddToCart từ context
-  const [userId, setUserId] = useState<any>(null);
+  const { handleAddToCart } = useContext(ShopConText)!; // Lấy hàm handleAddToCart từ context
   const [quantity, setQuantity] = useState(1); // Trạng thái lưu số lượng sản phẩm
 
   const handleIncreate = () => {
     if (quantity === stockQuantity) {
-      alert(`chỉ còn lại ${stockQuantity} số lượng`);
+      MySwal.fire({
+        title: "Thông báo",
+        text: `Chỉ còn lại ${stockQuantity} sản phẩm`,
+        icon: "warning",
+        confirmButtonText: "Đã hiểu",
+      });
       return;
     }
     setQuantity((prev) => prev + 1);
@@ -33,24 +40,19 @@ const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
     if (quantity === 1) return;
     setQuantity((prev) => prev - 1);
   };
-  useEffect(() => {
-    if (user?.customer_id) {
-      setUserId(user.customer_id);
-    }
-  }, [user]);
 
   // Kiểm tra kích thước có được chọn hay không khi người dùng nhấn nút "Thêm vào giỏ"
   const handleAddToCartClick = () => {
-    if (!userId) {
-      alert("Vui lòng đăng nhập trước khi thêm vào giỏ hàng");
-      return;
-    }
-
     if (selectedSizeId !== null) {
       handleAddToCart(product.product_id, quantity, selectedSizeId);
-      trackUserAction(userId, product.product_id, "add_to_cart");
+      trackUserAction(product.product_id, "add_to_cart");
     } else {
-      alert("Vui lòng chọn kích thước");
+      MySwal.fire({
+        title: "Chưa chọn kích thước",
+        text: "Vui lòng chọn kích thước trước khi thêm vào giỏ hàng",
+        icon: "warning",
+        confirmButtonText: "Chọn ngay",
+      });
     }
   };
 

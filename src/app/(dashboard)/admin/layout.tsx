@@ -1,6 +1,6 @@
 "use client";
-import TopBar from "@/app/components/dashboard/TopBar";
-import LeftMenu from "@/app/components/leftMenu/LeftMenu";
+import TopBar from "@/app/(dashboard)/admin/components/dashboard/TopBar";
+import LeftMenu from "@/app/(dashboard)/admin/components/leftMenu/LeftMenu";
 import { ShopConText } from "@/app/context/Context";
 import { Inter } from "next/font/google";
 import { useContext } from "react";

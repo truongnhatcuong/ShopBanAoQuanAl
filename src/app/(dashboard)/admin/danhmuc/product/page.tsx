@@ -5,10 +5,10 @@ import TableProduct from "./components/TableProduct";
 import AddProduct from "./components/Addproduct";
 import debounce from "lodash.debounce";
 import { Search } from "lucide-react";
-import Pagination from "@/app/components/componentsFunction/Pagination";
+import Pagination from "@/app/(dashboard)/admin/componentsFunction/Pagination";
 import { useSearchParams } from "next/navigation";
-import SelectPagination from "@/app/components/componentsFunction/SelectPagination";
-import SearchParamInput from "@/app/components/componentsFunction/SearchParamInput";
+import SelectPagination from "@/app/(dashboard)/admin/componentsFunction/SelectPagination";
+import SearchParamInput from "@/app/(dashboard)/admin/componentsFunction/SearchParamInput";
 import ExportExcel from "./components/componentChild/ExportExcel";
 interface Product {
   product_id: number;

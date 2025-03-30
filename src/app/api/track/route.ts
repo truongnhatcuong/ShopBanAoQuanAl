@@ -52,21 +52,17 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId, productId, action } = await req.json();
+  const { productId, action } = await req.json();
 
-  const user = await prisma.customer.findUnique({
-    where: {
-      customer_id: userId,
-    },
-  });
-  if (!user) {
+  const customer = await authCustomer(req);
+  if (!customer) {
     return NextResponse.json(
-      { message: "người dùng không tồn tại" },
-      { status: 404 }
+      { message: "người dùng chưa đăng nhập" },
+      { status: 400 }
     );
   }
   await prisma.userBehavior.create({
-    data: { userId, productId, action },
+    data: { userId: customer?.customer_id!, productId, action },
   });
   return NextResponse.json(
     { message: "Tracked successfully" },

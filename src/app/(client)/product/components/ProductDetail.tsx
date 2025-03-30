@@ -4,7 +4,7 @@
 import { assets } from "@/app/assets/frontend_assets/assets";
 import React, { useEffect, useState } from "react";
 import AddToCart from "../../cart/components/Addcart";
-import RelatedProduct from "../../components/RelatedProduct";
+import RelatedProduct from "./RelatedProduct";
 import TextCompact from "./TextCompact";
 import { ForMatPrice } from "@/lib/FormPrice";
 import ReViewProduct from "./ReViewProduct";
@@ -100,7 +100,7 @@ const ProductDetail = ({
         {/* thong tin product */}
         <div className="md:flex-1 flex-none ml-7 md:ml-0 ">
           <h1 className="font-medium text-2xl mt-2 uppercase ">
-            {productDetail.product_name}
+            {productDetail.product_name.toUpperCase()}
           </h1>
           <div className="flex items-center gap-1 mt-2 ">
             <div className="rating mt-1">
@@ -121,13 +121,13 @@ const ProductDetail = ({
             </div>
             <p className="pl-2 text-base">({productDetail.stock_quantity})</p>
           </div>
-          <p className="text-xl mt-2 font-medium space-x-11">
-            <span>{ForMatPrice(parseInt(productDetail.price))}</span>
+          <p className="text-xl my-3 font-medium space-x-11">
+            <span>{ForMatPrice(Number(productDetail.price))}</span>
             <span className="line-through text-red-500">
               {originalPrice > 0 ? ForMatPrice(originalPrice) : ""}
             </span>
           </p>
-          <p className="mt-5 text-gray-500 dark:text-gray-100 text-sm md:w-4/5">
+          <p className="mt-3 text-gray-500 dark:text-gray-100 text-base md:w-4/5">
             <TextCompact>{productDetail.description}</TextCompact>
           </p>
           <div className="flex flex-col gap-4 my-8">

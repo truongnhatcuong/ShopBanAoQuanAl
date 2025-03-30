@@ -37,11 +37,11 @@ interface ICoupon {
 }
 
 const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
-  const { totalPrice, couponCode, setCouponCode } = useContext(ShopConText)!;
+  const { totalPrice, finalTotal, setFinalTotal } = useContext(ShopConText)!;
 
+  const [couponCode, setCouponCode] = useState("");
   const [currentCustomerId, setCurrentCustomerId] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
-  const [finalTotal, setFinalTotal] = useState(totalPrice) || totalPrice;
 
   useEffect(() => {
     const storedUserId = window.localStorage.getItem("userId");
@@ -50,14 +50,20 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!couponCode && discountAmount === 0) {
+      setFinalTotal(totalPrice + 25000);
+    }
+  }, [couponCode, totalPrice, discountAmount]);
+
   const handleApplyCoupon = () => {
     const coupon = data.find((item) => item.coupon_code === couponCode);
 
     if (!coupon) {
       alert("Mã giảm giá không hợp lệ.");
       setCouponCode("");
-      setDiscountAmount(0); // Không có giảm giá
-      setFinalTotal(totalPrice); // Trả về tổng tiền ban đầu
+      setFinalTotal(totalPrice + 25000);
+      setDiscountAmount(0);
       return;
     }
 
@@ -71,7 +77,7 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
       alert("Mã giảm giá không áp dụng cho bạn.");
       setDiscountAmount(0);
       setCouponCode("");
-      setFinalTotal(totalPrice);
+      setFinalTotal(totalPrice + 25000);
       return;
     }
 
@@ -82,7 +88,7 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
     ) {
       alert("Mã giảm giá đã hết hạn.");
       setDiscountAmount(0); // Không có giảm giá
-      setFinalTotal(totalPrice); // Trả về tổng tiền ban đầu
+      setFinalTotal(totalPrice + 25000);
       return;
     }
 
@@ -97,9 +103,15 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
     }
 
     setDiscountAmount(discount);
-    setCouponCode("");
     setFinalTotal(totalPrice - discount + 25000);
   };
+  const handleCannelCoupon = () => {
+    setCouponCode("");
+    setFinalTotal(totalPrice + 25000);
+    setDiscountAmount(0);
+  };
+  console.log("ma giam gia ", couponCode);
+
   console.log("gia cuoi :", finalTotal);
 
   return (
@@ -140,10 +152,10 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
       ))}
       {/* ma giam gia */}
       <div className="border-b  pb-1">
-        <div className="flex items-center justify-center my-5 ">
+        <div className="flex items-center justify-center my-5 relative  ">
           <input
             type="text"
-            className="w-2/5 py-[10.4px] px-3  text-sm  border-[2px] border-black  outline-none "
+            className="w-2/5 py-[10.4px] px-3  text-sm  border-[2px] border-black  outline-none   "
             placeholder="Nhap ma giam gia ....."
             value={couponCode}
             onChange={(e) => setCouponCode(e.target.value.trim())}
@@ -154,6 +166,14 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
           >
             Xác Nhận
           </button>
+          {discountAmount > 0 && (
+            <div
+              className="absolute right-[240px] top-1/2 -translate-y-1/2 text-red-500 hover:text-red-700 cursor-pointer font-bold text-lg"
+              onClick={handleCannelCoupon}
+            >
+              X
+            </div>
+          )}
         </div>
       </div>
       {/* mount price items */}

@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 interface Product {
-  product_id: number;
   product_name: string;
   description: string;
   price: string;
@@ -51,7 +50,9 @@ const RiviewProduct = ({ order_id }: { order_id: number }) => {
     }
   };
 
-  const productId = data?.length ? Number(data[0].Product.product_id) : null;
+  const productId = data?.length
+    ? Number(data.map((item) => item.product_id))
+    : null;
 
   useEffect(() => {
     fetchData();

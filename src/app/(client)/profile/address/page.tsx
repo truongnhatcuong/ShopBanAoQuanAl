@@ -36,8 +36,8 @@ const PageAddress = () => {
   }, []);
 
   return (
-    <div className="bg-slate-100 dark:bg-black h-full">
-      <div className="max-w-6xl px-auto border dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
+    <div className=" dark:bg-black h-full">
+      <div className="max-w-7xl px-auto border dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
         {/* Thêm địa chỉ */}
         <div className="flex justify-between border-b flex-col md:flex-row">
           <Title title1="Địa Chỉ " title2="Của Tôi" />

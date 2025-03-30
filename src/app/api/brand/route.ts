@@ -46,11 +46,11 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
+    const { brandName, description } = await req.json();
     const newBrand = await prisma.brand.create({
       data: {
-        brand_name: data.brand_name,
-        description: data.description,
+        brand_name: brandName,
+        description,
       },
     });
     return NextResponse.json(

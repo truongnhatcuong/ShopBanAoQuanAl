@@ -152,7 +152,7 @@ const AddAddress = ({ reloadData }: { reloadData: () => void }) => {
   return (
     <>
       <div
-        className="flex items-center bg-red-500 cursor-pointer mb-4 text-white"
+        className="flex items-center bg-blue-500 hover:bg-blue-700 cursor-pointer mb-4 text-white"
         onClick={() => setShowAdd(true)}
       >
         <FaPlus className="ml-1 " />
@@ -277,7 +277,7 @@ const AddAddress = ({ reloadData }: { reloadData: () => void }) => {
                 </button>
                 <button
                   type="submit"
-                  className="border border-gray-300 bg-red-500 text-white px-4 py-1.5 rounded-md hover:bg-red-600"
+                  className="border border-gray-300 bg-blue-500 text-white px-4 py-1.5 rounded-md hover:bg-red-600"
                 >
                   Hoàn Tất
                 </button>

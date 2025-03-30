@@ -12,6 +12,7 @@ import ProductRecommendations from "./components/Productrecommen";
 import ChatAlGemini from "./components/ChatAlGemini";
 import ChatEmployee from "./components/ChatEmployee";
 import ChatBoxSelect from "./test/page";
+import SocalMedia from "./components/SocalMedia";
 
 const Page = () => {
   const [selectedChat, setSelectedChat] = useState<
@@ -30,7 +31,7 @@ const Page = () => {
       <Video />
       <DesignShopLapTop />
       {/* <CozeChat /> */}
-
+      <SocalMedia />
       <ChatEmployee />
       <ChatAlGemini />
     </>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import DeleteCategories from "./DeleteCategories";
-import { FaRegEdit } from "react-icons/fa";
+import UpdateCategories from "./UpdateCategories";
 
 interface Icategories {
   category_id: number;
@@ -10,25 +10,17 @@ interface Icategories {
 
 interface ICategoryTableProps {
   categories: Icategories[];
-  setCategories: React.Dispatch<React.SetStateAction<Icategories[]>>;
-  openEditModal: (category: Icategories) => void;
+  reloadData: () => void;
   SetsortOrder: (value: string) => void;
   sortOrder: string;
 }
 
 const CategoryTable = ({
   categories,
-  setCategories,
-  openEditModal,
   SetsortOrder,
+  reloadData,
   sortOrder,
 }: ICategoryTableProps) => {
-  const handleDelete = (category_id: number) => {
-    setCategories(
-      categories.filter((item) => item.category_id !== category_id)
-    );
-  };
-
   return (
     <div className="overflow-x-auto shadow-lg rounded-lg">
       <table className="table-auto w-full text-sm text-left text-gray-500">
@@ -74,15 +66,13 @@ const CategoryTable = ({
                 <td className="p-4">{category.description}</td>
                 <td className="p-4 flex justify-center gap-4">
                   <DeleteCategories
-                    deleteCategories={handleDelete}
+                    reloadData={reloadData}
                     category_id={category.category_id}
                   />
-                  <button
-                    className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
-                    onClick={() => openEditModal(category)}
-                  >
-                    <FaRegEdit />
-                  </button>
+                  <UpdateCategories
+                    reloadData={reloadData}
+                    category={category}
+                  />
                 </td>
               </tr>
             ))

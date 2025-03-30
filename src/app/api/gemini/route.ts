@@ -2,6 +2,7 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 import Fuse from "fuse.js"; // Thêm Fuse.js
+import { authCustomer } from "@/utils/Auth";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 
@@ -48,7 +49,14 @@ const fuseFashion = new Fuse(FASHION_ADVICE_KEYWORDS, fuseOptions);
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, userId } = await req.json();
+    const { message } = await req.json();
+    const user = await authCustomer(req);
+
+    if (!user)
+      return NextResponse.json(
+        { message: "vui lòng đăng nhập xem đơn hàng của bạn !" },
+        { status: 404 }
+      );
     if (!message) {
       return NextResponse.json(
         { error: "Vui lòng nhập câu hỏi!" },
@@ -66,7 +74,7 @@ export async function POST(req: NextRequest) {
     const orderMatch = checkFuzzyMatch(fuseOrder);
     if (orderMatch) {
       const order = await prisma.order.findFirst({
-        where: { customer_id: userId },
+        where: { customer_id: user?.customer_id },
         orderBy: { order_date: "desc" },
         include: {
           OrderItems: {

@@ -5,12 +5,12 @@ import withReactContent from "sweetalert2-react-content";
 
 interface IDelete {
   category_id: number;
-  deleteCategories: (categories_id: number) => void;
+  reloadData: () => void;
 }
 
-const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
+const DeleteCategories = ({ category_id, reloadData }: IDelete) => {
   const MySwal = withReactContent(Swal);
-  const [show, setShow] = useState(false);
+
   const handleDelete = async () => {
     const result = await MySwal.fire({
       title: "Are you sure?",
@@ -30,14 +30,13 @@ const DeleteCategories = ({ category_id, deleteCategories }: IDelete) => {
 
         if (res.ok) {
           await res.json();
-          deleteCategories(category_id);
+          reloadData();
           MySwal.fire({
             title: "Thông báo!",
             text: "Xóa Danh Mục Thành Công",
             icon: "success",
             confirmButtonText: "OK",
           });
-          setShow(false);
         } else {
           const error = await res.json();
           MySwal.fire({

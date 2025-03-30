@@ -24,9 +24,13 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <select value={locale} onChange={(e) => changeLanguage(e.target.value)}>
-      <option value="vi">Tiếng Việt</option>
-      <option value="en">English</option>
+    <select
+      value={locale}
+      onChange={(e) => changeLanguage(e.target.value)}
+      className="w-[59px] text-center"
+    >
+      <option value="vi">VI</option>
+      <option value="en">EN</option>
     </select>
   );
 }

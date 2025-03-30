@@ -5,7 +5,11 @@ import { authCustomer } from "@/utils/Auth";
 export async function GET(req: NextRequest) {
   try {
     const customer = await authCustomer(req);
-
+    if (!customer)
+      return NextResponse.json(
+        { message: "vui lòng đăng nhập" },
+        { status: 404 }
+      );
     const notification = await prisma.notification.findMany({
       where: {
         customer_id: customer?.customer_id,
@@ -25,6 +29,6 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ message: error.message }, { status: 501 });
+    return NextResponse.json({ message: error?.message }, { status: 501 });
   }
 }

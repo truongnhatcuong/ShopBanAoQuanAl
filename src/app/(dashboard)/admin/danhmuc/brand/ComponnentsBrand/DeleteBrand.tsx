@@ -6,10 +6,9 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 interface IDelete {
   brand_id: number;
-  DeleteHandler(brand_id: number): void;
+  reloadData: () => void;
 }
-const DeleteBrand = ({ brand_id, DeleteHandler }: IDelete) => {
-  const [show, setShow] = useState(false);
+const DeleteBrand = ({ brand_id, reloadData }: IDelete) => {
   const MySwal = withReactContent(Swal);
   const DeleteHander = async () => {
     const result = await MySwal.fire({
@@ -28,15 +27,13 @@ const DeleteBrand = ({ brand_id, DeleteHandler }: IDelete) => {
         });
         if (reponse.ok) {
           const data = await reponse.json();
-          DeleteHandler(brand_id);
-
+          reloadData();
           MySwal.fire({
             title: "Thông báo!",
             text: "Xóa Thương Hiệu Thành Công",
             icon: "success",
             confirmButtonText: "OK",
           });
-          setShow(false);
         } else {
           const error = await reponse.json();
           MySwal.fire({

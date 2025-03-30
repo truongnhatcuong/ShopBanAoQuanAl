@@ -4,10 +4,10 @@ import AddSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSup
 import TableSupplier from "@/app/(dashboard)/admin/danhmuc/suppliers/ComponentsSupplier/TableSupplier";
 import { FiPlus } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
-import SearchParamInput from "@/app/components/componentsFunction/SearchParamInput";
+import SearchParamInput from "@/app/(dashboard)/admin/componentsFunction/SearchParamInput";
 import { useSearchParams } from "next/navigation";
-import SelectPagination from "@/app/components/componentsFunction/SelectPagination";
-import Pagination from "@/app/components/componentsFunction/Pagination";
+import SelectPagination from "@/app/(dashboard)/admin/componentsFunction/SelectPagination";
+import Pagination from "@/app/(dashboard)/admin/componentsFunction/Pagination";
 interface ISupplier {
   supplier_id: number;
 

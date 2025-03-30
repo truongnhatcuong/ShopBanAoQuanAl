@@ -1,8 +1,9 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import Title from "../components/Title";
 import ItemCart from "./components/ItemCart";
 import TotalCart from "./components/TotalCart";
+import { ShopConText } from "@/app/context/Context";
 
 interface CartItem {
   cartitem_id: number;
@@ -18,22 +19,9 @@ interface CartItem {
 }
 
 const CartPage = () => {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const fetchCartData = async () => {
-    const res = await fetch("/api/cart", { cache: "no-cache" });
-    const data = await res.json();
+  const { cart } = useContext(ShopConText)!;
 
-    const updatedItems =
-      data.cart?.items?.map((item: CartItem) => ({
-        ...item,
-        selectedSize: item.selectedSize,
-      })) || [];
-    if (!data.cart) return "";
-    setCart(updatedItems || []);
-  };
-  useEffect(() => {
-    fetchCartData();
-  }, []);
+  console.log("cart", cart);
   return (
     <div className="h-[60vh] mt-4">
       <div className="text-2xl text-center md:mb-3 mb-0   ">

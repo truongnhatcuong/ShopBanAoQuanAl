@@ -67,7 +67,7 @@ const ChangePasswordForm = () => {
   }, [errorChange]);
 
   return (
-    <div className="max-w-4xl mx-auto border border-gray-300 dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
+    <div className="max-w-7xl mx-auto border border-gray-300 dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
       <h3 className="text-center text-black dark:text-white text-xl font-semibold my-4">
         Đổi Mật Khẩu
       </h3>
@@ -106,7 +106,7 @@ const ChangePasswordForm = () => {
             placeholder="Nhập mật khẩu hiện tại"
             value={currentPassword}
             onChange={(e) => setCurrenPassword(e.target.value)}
-            className="md:w-1/2 flex-1 px-3 py-2 border border-gray-400  rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-fit  px-3 py-2 border border-gray-400  rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         <div className="mb-4 flex items-center gap-x-4">
@@ -122,7 +122,7 @@ const ChangePasswordForm = () => {
             value={newPassword}
             placeholder="Nhập mật khẩu mới"
             onChange={(e) => setNewPassword(e.target.value)}
-            className="md:w-1/2 flex-1 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="  px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         <div className="mb-4 flex items-center gap-x-4">
@@ -138,7 +138,7 @@ const ChangePasswordForm = () => {
             placeholder="Nhập lại mật khẩu"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="md:w-1/2 flex-1 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="md:w-1/2  px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         {/* hiển thị error */}

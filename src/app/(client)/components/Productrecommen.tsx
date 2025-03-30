@@ -34,7 +34,7 @@ const ProductRecommendations = () => {
       try {
         setLoading(true);
         const res = await fetch("/api/recommend", {
-          next: { revalidate: 50 },
+          next: { revalidate: 100 },
         });
         const data = await res.json();
         setRecommendations(data.data);

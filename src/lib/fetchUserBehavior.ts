@@ -1,6 +1,6 @@
 export const fetchUserBehaviorData = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/track", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/track`, {
       credentials: "include", // This ensures cookies are sent with the request
     });
 

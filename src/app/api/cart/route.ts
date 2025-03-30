@@ -1,41 +1,18 @@
 import jwt from "jsonwebtoken";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-
-const JWT_SECRET: string = process.env.JWT_SECRET || "";
+import { authCustomer } from "@/utils/Auth";
 
 export async function GET(req: NextRequest) {
-  const token = req.cookies.get("token")?.value;
-
-  if (!token) {
+  const customer = await authCustomer(req);
+  if (!customer) {
     return NextResponse.json(
-      { message: "token không có sẵn" },
+      { message: "Vui lòng đăng nhập trước khi thêm vào giỏ hàng" },
       { status: 404 }
     );
   }
 
   try {
-    // Mã hóa token
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const username = decoded.username;
-
-    if (!username) {
-      return NextResponse.json(
-        { message: "username không xác thực" },
-        { status: 404 }
-      );
-    }
-
-    const customer = await prisma.customer.findUnique({
-      where: { username },
-    });
-    if (!customer) {
-      return NextResponse.json(
-        { message: "Customer not found" },
-        { status: 404 }
-      );
-    }
-
     const cart = await prisma.cart.findFirst({
       where: { customer_id: customer.customer_id },
       include: {
@@ -43,12 +20,6 @@ export async function GET(req: NextRequest) {
           include: {
             Product: {
               select: {
-                // ProductSizes: {
-                //   select: {
-                //     size_id: true,
-                //     stock_quantity: true,
-                //   },
-                // },
                 product_name: true,
                 price: true,
                 Images: {
@@ -69,16 +40,20 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const latestOrder = await prisma.order.findFirst({
-      orderBy: {
-        order_id: "desc",
-      },
-    });
-    const idOrderNext = latestOrder?.order_id;
+    const totalQuantity =
+      cart?.CartItems.reduce((total, item) => total + item.quantity, 0) || 0;
+
+    // Tính tổng giá trị giỏ hàng
+    const totalAmount =
+      cart?.CartItems.reduce(
+        (total, item) => total + Number(item.Product.price) * item.quantity,
+        0
+      ) || 0;
+
     return NextResponse.json(
       {
         cart: {
-          cart_id: cart?.cart_id, // Lấy cart_id từ kết quả giỏ hàng
+          cart_id: cart?.cart_id,
           items: cart?.CartItems.map((item) => ({
             cartitem_id: item.cartitem_id,
             product_id: item.product_id,
@@ -87,8 +62,9 @@ export async function GET(req: NextRequest) {
             product: item.Product,
             image_url: item.Product.Images[0]?.image_url, // Lấy URL hình ảnh
           })),
-          customer: customer.name.toUpperCase(),
-          idOrderNext: idOrderNext ?? 0,
+          customer: customer.name,
+          totalQuantity, // Trả về tổng số lượng sản phẩm
+          totalAmount, // Trả về tổng giá trị giỏ hàng
         },
 
         message: "Success",
@@ -105,28 +81,10 @@ export async function POST(req: NextRequest) {
   // Lấy dữ liệu từ body request (product_id và quantity)
   const { product_id, quantity, size_id } = await req.json();
   // Lấy token từ cookies
-  const token = req.cookies.get("token")?.value;
-  if (!token) {
-    return NextResponse.json(
-      { message: "token không có sẵn" },
-      { status: 404 }
-    );
-  }
-  // Giải mã token và lấy thông tin người dùng
-  const decoded: any = jwt.verify(token, JWT_SECRET);
-  const username = decoded.username;
-  if (!username) {
-    return NextResponse.json({ message: "username error" }, { status: 404 });
-  }
-  // Lấy thông tin khách hàng từ database dựa trên username
-  const customer = await prisma.customer.findUnique({
-    where: { username },
-    select: { customer_id: true },
-  });
-
+  const customer = await authCustomer(req);
   if (!customer) {
     return NextResponse.json(
-      { message: "Customer not found" },
+      { message: "Vui lòng đăng nhập trước khi thêm vào giỏ hàng" },
       { status: 404 }
     );
   }

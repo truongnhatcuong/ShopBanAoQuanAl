@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DeleteSeason from "./DeleteSeason";
 import { FaRegEdit } from "react-icons/fa";
+import UpdateSeason from "./UpdateSeason";
 
 interface Iseason {
   season_id: number;
@@ -10,10 +11,10 @@ interface Iseason {
 
 interface ISeasonProps {
   season: Iseason[];
-  closeHandle: (season: Iseason) => void;
+  reloadData: () => void;
 }
 
-const TableCardSeason = ({ season, closeHandle }: ISeasonProps) => {
+const TableCardSeason = ({ season, reloadData }: ISeasonProps) => {
   const [seasonList, setSeasonList] = useState(season);
 
   useEffect(() => {
@@ -62,12 +63,7 @@ const TableCardSeason = ({ season, closeHandle }: ISeasonProps) => {
                     }}
                     season_id={item.season_id}
                   />
-                  <button
-                    className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
-                    onClick={() => closeHandle(item)}
-                  >
-                    <FaRegEdit />
-                  </button>
+                  <UpdateSeason reloadData={reloadData} season={item} />
                 </td>
               </tr>
             ))

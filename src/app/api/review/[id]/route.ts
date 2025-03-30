@@ -39,6 +39,11 @@ export async function PUT(
   }
 
   const { seller_response } = await req.json();
+  if (!seller_response)
+    return NextResponse.json(
+      { message: "vui lòng nhập thông tin phản hồi" },
+      { status: 401 }
+    );
   try {
     const updatedReview = await prisma.review.update({
       where: {
@@ -49,7 +54,7 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(updatedReview);
+    return NextResponse.json({ updatedReview }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to update review response" },

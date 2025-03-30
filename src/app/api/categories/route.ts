@@ -10,9 +10,6 @@ export async function GET(request: NextRequest) {
   const page: number = Number(searchParams?.get("page") || 1);
   let sortOrder: any = searchParams?.get("sortOrder") || "asc";
 
-  if (sortOrder !== "asc" && sortOrder !== "desc") {
-    sortOrder == "asc";
-  }
   const totalRecords: number = await prisma.category.count({
     where: {
       category_name: {
@@ -59,6 +56,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
+    const { categoriesName, description } = await data;
 
     const categoriesSchema = z.object({
       name: z
@@ -76,8 +74,8 @@ export async function POST(request: NextRequest) {
     }
     const newCategory = await prisma.category.create({
       data: {
-        category_name: data.name,
-        description: data.description,
+        category_name: categoriesName,
+        description: description,
       },
     });
 
@@ -86,6 +84,6 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

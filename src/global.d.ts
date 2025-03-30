@@ -6,3 +6,4 @@ declare module "xlsx-populate" {
     throw new Error("Function not implemented.");
   }
 }
+declare module "three";

@@ -8,20 +8,15 @@ export async function PUT(
 ) {
   const { id } = await params;
   const brandId = Number(id);
-  const { brand_name, description } = await req.json();
-  if (!brand_name || !description) {
-    return NextResponse.json(
-      { message: "vui lòng điền thông tin" },
-      { status: 404 }
-    );
-  }
+  const { brandName, description } = await req.json();
+
   try {
     const update = await prisma.brand.update({
       where: {
         brand_id: brandId,
       },
       data: {
-        brand_name,
+        brand_name: brandName,
         description,
       },
     });
@@ -30,7 +25,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
 
@@ -46,7 +41,7 @@ export async function DELETE(
     // xác thực
     const user = await authenticateToken(token);
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
     // nếu có permisson === delete thì có thể xóa
     const hasDeletePermission = user.role.permissions.some(

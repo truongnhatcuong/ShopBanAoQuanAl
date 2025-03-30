@@ -95,50 +95,37 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { customerId, addressId, paymentMethod, couponCode } = await req.json();
-  console.log("Request body:", {
-    customerId,
-    addressId,
-    paymentMethod,
-    couponCode,
-  });
+  const { customerId, addressId, paymentMethod, finalTotal } = await req.json();
+
   const token = req.cookies.get("token")?.value;
   if (!token) {
     return NextResponse.json(
-      { message: "vui lòng đăng nhập " },
+      { message: "Vui lòng đăng nhập" },
       { status: 404 }
     );
   }
 
   try {
     const customer = await authCustomer(req);
-
     if (!customerId) {
       return NextResponse.json(
-        { message: "vui lòng điền thông tin địa chỉ" },
+        { message: "Vui lòng điền thông tin địa chỉ" },
         { status: 400 }
       );
     }
 
-    //kiểm tra địa chỉ
     const address = await prisma.addressShipper.findUnique({
-      where: {
-        address_id: addressId,
-        customer_id: customerId,
-      },
+      where: { address_id: addressId, customer_id: customerId },
     });
-
     if (!address) {
       return NextResponse.json(
         { message: "Địa chỉ giao hàng không hợp lệ" },
         { status: 400 }
       );
     }
-    // Lấy thông tin giỏ hàng
+
     const cart = await prisma.cart.findFirst({
-      where: {
-        customer_id: customer?.customer_id,
-      },
+      where: { customer_id: customer?.customer_id },
       include: { CartItems: { include: { Product: true, Size: true } } },
     });
     if (!cart || cart.CartItems.length === 0) {
@@ -147,50 +134,14 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    // phí vận chuyển mặc định
-    const costShipping = 25000;
-    const subtotal = cart.CartItems.reduce((total, item) => {
-      return total + item.quantity * Number(item.Product.price);
-    }, 0);
-    // Tính tổng tiền trước khi áp dụng mã giảm giá
-    let totalAmount = subtotal + costShipping;
 
-    if (couponCode) {
-      const coupon = await prisma.coupon.findFirst({
-        where: { coupon_code: couponCode },
-      });
-
-      if (coupon) {
-        const startDate = coupon.start_date
-          ? new Date(coupon.start_date)
-          : new Date();
-        const endDate = coupon.end_date
-          ? new Date(coupon.end_date)
-          : new Date();
-        const currentDate = new Date();
-        if (currentDate < startDate || currentDate > endDate) {
-          return NextResponse.json(
-            { message: "Mã giảm giá đã hết hạn." },
-            { status: 400 }
-          );
-        }
-
-        let discount = 0;
-        if (coupon.coupon_percentage && Number(coupon.coupon_percentage) > 0) {
-          discount = (subtotal * Number(coupon.coupon_percentage)) / 100;
-        } else if (coupon.coupon_amount) {
-          discount = Number(coupon.coupon_amount);
-        }
-
-        discount = Math.min(discount, subtotal); // Giảm tối đa chỉ bằng tổng tiền hàng
-        totalAmount = subtotal + costShipping - discount;
-
-        console.log("Coupon Applied:", {
-          couponCode,
-          discount,
-          totalAmount,
-        });
-      }
+    // Sử dụng finalTotal từ frontend làm totalAmount
+    const totalAmount = Number(finalTotal);
+    if (isNaN(totalAmount) || totalAmount < 0) {
+      return NextResponse.json(
+        { message: "Tổng tiền không hợp lệ" },
+        { status: 400 }
+      );
     }
 
     const order = await prisma.order.create({
@@ -198,7 +149,7 @@ export async function POST(req: NextRequest) {
         customer_id: customerId,
         address_id: addressId,
         order_date: new Date(),
-        total_amount: totalAmount,
+        total_amount: totalAmount, // Sử dụng finalTotal trực tiếp
         order_state: "PENDING",
         created_at: new Date(),
         OrderItems: {
@@ -211,10 +162,10 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-    //stripe
+
     if (paymentMethod === "CREDIT_CARD") {
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(Number(totalAmount)),
+        amount: Math.round(totalAmount),
         currency: "vnd",
         metadata: { order_id: order.order_id.toString() },
         description: `Thanh toán đơn hàng #${order.order_id}`,
@@ -230,13 +181,16 @@ export async function POST(req: NextRequest) {
           created_at: new Date(),
         },
       });
+
       await prisma.cartItem.deleteMany({ where: { cart_id: cart.cart_id } });
       await prisma.cart.delete({ where: { cart_id: cart.cart_id } });
+
       await pusher.trigger("orders", "new-order", {
         orderId: order.order_id,
         customerName: customer?.name,
         totalAmount,
       });
+
       return NextResponse.json(
         {
           order,
@@ -246,7 +200,7 @@ export async function POST(req: NextRequest) {
         { status: 201 }
       );
     }
-    //
+
     await prisma.payment.create({
       data: {
         order_id: order.order_id,
@@ -256,13 +210,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    await prisma.cartItem.deleteMany({
-      where: { cart_id: cart.cart_id },
-    });
-
-    await prisma.cart.delete({
-      where: { cart_id: cart.cart_id },
-    });
+    await prisma.cartItem.deleteMany({ where: { cart_id: cart.cart_id } });
+    await prisma.cart.delete({ where: { cart_id: cart.cart_id } });
 
     await pusher.trigger("orders", "new-order", {
       orderId: order.order_id,
@@ -271,15 +220,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      {
-        order,
-        message: "Đặt hàng thành công",
-      },
+      { order, message: "Đặt hàng thành công" },
       { status: 201 }
     );
   } catch (error: any) {
     console.log(error);
-
     return NextResponse.json({ message: error.message }, { status: 501 });
   }
 }

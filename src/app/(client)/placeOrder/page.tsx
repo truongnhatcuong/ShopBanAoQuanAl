@@ -42,7 +42,9 @@ const Page = () => {
   const [cart, setCart] = useState<CartData | null>(null); // ✅ Fix useState
   const [dataCoupon, setDataCoupon] = useState<ICoupon[]>([]);
   const fetchCartData = async () => {
-    const res = await fetch("/api/cart");
+    const res = await fetch("/api/cart", {
+      cache: "no-store",
+    });
     const data: CartApiResponse = await res.json();
 
     if (data.cart) {

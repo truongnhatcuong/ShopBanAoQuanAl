@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(
     { getAllReview, message: "success" },
-    { status: 201 }
+    { status: 200 }
   );
 }
 export async function POST(req: NextRequest) {
@@ -36,15 +36,6 @@ export async function POST(req: NextRequest) {
   if (!customer) {
     return NextResponse.json(
       { message: "Không tìm thấy người dùng." },
-      { status: 400 }
-    );
-  }
-
-  if (!customer) {
-    return NextResponse.json(
-      {
-        message: "không tìm thấy người dùng.",
-      },
       { status: 400 }
     );
   }

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useEffect, useState } from "react";
+import { ShopConText } from "@/app/context/Context";
+import React, { useContext, useEffect, useState } from "react";
 
 interface CartItem {
   cartitem_id: number;
@@ -26,6 +27,7 @@ interface CartApiResponse {
 }
 
 const QRCode = ({ cart }: CartApiResponse) => {
+  const { finalTotal } = useContext(ShopConText)!;
   const [valueData, setValueData] = useState({ id: 0, customer: "" });
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const QRCode = ({ cart }: CartApiResponse) => {
   if (!cart || cart.items.length === 0)
     return <p>Không có sản phẩm trong giỏ hàng.</p>;
 
-  const vietQR = `https://img.vietqr.io/image/MB-0372204152-qr_only_large.png?addInfo=${encodeURIComponent(
+  const vietQR = `https://img.vietqr.io/image/MB-0372204152-qr_only_large.png?amount=${finalTotal}&addInfo=${encodeURIComponent(
     `MaDonHang#${valueData.id} - ${valueData.customer} Thanh Toán`
   )}`;
 
@@ -49,7 +51,7 @@ const QRCode = ({ cart }: CartApiResponse) => {
       <img
         src={vietQR}
         alt="QR Code"
-        className="w-[292px] h-64 object-contain rounded-md border border-gray-200 p-2 bg-gray-50"
+        className="w-[300px] h-64 object-contain rounded-md border border-gray-200 p-2 bg-gray-50"
         onError={() => console.error("Lỗi tải QR Code từ VietQR")}
       />
       <div className="text-center space-y-3">

@@ -21,7 +21,7 @@ interface Product {
 }
 
 interface ChatResponse {
-  error?: string;
+  message?: string;
   reply?: string;
   products?: Product[];
   result?: { text: string }[];
@@ -34,15 +34,6 @@ const ChatAlGemini = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [userId, setUserId] = useState(0);
-
-  useEffect(() => {
-    const storedUserId = window.localStorage.getItem("userId");
-    if (storedUserId) {
-      setUserId(Number(storedUserId));
-    }
-  }, []);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -65,16 +56,16 @@ const ChatAlGemini = () => {
       const response = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input, userId }),
+        body: JSON.stringify({ message: input }),
       });
 
       const data: ChatResponse = await response.json();
 
       // Xử lý phản hồi từ backend
-      if (data.error) {
+      if (data.message) {
         setMessages((prev: any) => [
           ...prev,
-          { text: data.error, sender: "bot" },
+          { text: data.message, sender: "bot" },
         ]);
       } else if (data.products) {
         setMessages((prev) => [
@@ -105,7 +96,7 @@ const ChatAlGemini = () => {
   }
 
   return (
-    <div className="fixed bottom-20 right-[34px]  z-50">
+    <div className="fixed bottom-[100px] right-[34px]  z-50">
       <div
         className={`relative  cursor-pointer ${
           isOpen ? "hidden" : "inline-block"

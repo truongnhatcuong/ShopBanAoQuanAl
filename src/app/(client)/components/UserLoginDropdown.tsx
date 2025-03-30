@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,35 +14,43 @@ import { useRouter } from "next/navigation";
 import { RiAdminLine } from "react-icons/ri";
 import { LiaPowerOffSolid } from "react-icons/lia";
 import Image from "next/image";
+import ExpiredStorage from "expired-storage";
+import { ShopConText } from "@/app/context/Context";
 interface UserLoginDropdownProps {
   user: { roleId: number; username: string; image: string };
-  RemoveLcstore: () => void;
 }
-const UserLoginDropdown = ({ user, RemoveLcstore }: UserLoginDropdownProps) => {
+const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
   const router = useRouter();
+  const { setCountCart } = useContext(ShopConText)!;
+  const [expiredStorage, setExpiredStorage] = useState<ExpiredStorage | null>(
+    null
+  );
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setExpiredStorage(new ExpiredStorage(localStorage));
+    }
+  }, []);
+
+  function handleLogout() {
+    if (expiredStorage) {
+      expiredStorage.clear();
+      setCountCart(0);
+    }
+    router.push("/logout");
+  }
+
   return (
     <DropdownMenu>
-      {/* <FiUser className=" text-2xl md:text-xl " /> */}
       <DropdownMenuTrigger>
         <div className="flex ">
-          {user && user.image?.length > 0 ? (
-            <>
-              <Image
-                src={user.image}
-                width={100}
-                height={100}
-                alt=""
-                className="w-7 h-7 border rounded-full "
-              />
-            </>
-          ) : (
-            <>
-              <div className="w-[30px] h-[30px] bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center  cursor-pointer">
-                <span>{user.username.charAt(0).toLocaleUpperCase()}</span>
-              </div>
-            </>
-          )}
-          <span className=" hidden md:block md:text-base cursor-pointer mt-[2px] ml-2">
+          <Image
+            src={user.image || "/Image/anhdaidien.jpg"}
+            width={100}
+            height={100}
+            alt=""
+            className="w-7 h-7 border rounded-full "
+          />
+          <span className=" hidden md:block md:text-base cursor-pointer mt-[3px] ml-2">
             {user.username}
           </span>
         </div>
@@ -89,7 +97,7 @@ const UserLoginDropdown = ({ user, RemoveLcstore }: UserLoginDropdownProps) => {
           {" "}
           <button
             className="text-sm text-gray-600 hover:text-red-600 flex items-center justify-center mr-7"
-            onClick={RemoveLcstore}
+            onClick={handleLogout}
           >
             <LiaPowerOffSolid className="mr-1 text-gray-900 " />
             Đăng Xuất

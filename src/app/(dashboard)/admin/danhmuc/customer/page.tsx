@@ -1,9 +1,9 @@
 "use client";
 import AddCustomer from "@/app/(dashboard)/admin/danhmuc/customer/componentsCustomer/AddCustomer";
 import TableCustomer from "@/app/(dashboard)/admin/danhmuc/customer/componentsCustomer/TableCustomer";
-import Pagination from "@/app/components/componentsFunction/Pagination";
-import SearchParamInput from "@/app/components/componentsFunction/SearchParamInput";
-import SelectPagination from "@/app/components/componentsFunction/SelectPagination";
+import Pagination from "@/app/(dashboard)/admin/componentsFunction/Pagination";
+import SearchParamInput from "@/app/(dashboard)/admin/componentsFunction/SearchParamInput";
+import SelectPagination from "@/app/(dashboard)/admin/componentsFunction/SelectPagination";
 import React, { useEffect, useState } from "react";
 
 interface ICustomer {

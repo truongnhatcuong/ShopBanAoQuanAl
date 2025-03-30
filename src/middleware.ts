@@ -1,4 +1,4 @@
-/// middleware
+/// middleware không hỗ trợ prisma
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./lib/decrypt";
 
@@ -10,7 +10,11 @@ export async function middleware(req: NextRequest) {
   const token = authHeader
     ? authHeader.split(" ")[1]
     : req.cookies.get("token")?.value;
-  if (["/login", "/signUp"].includes(req.nextUrl.pathname)) {
+
+  if (
+    (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/signUp") &&
+    !token
+  ) {
     return NextResponse.next();
   }
 
@@ -44,11 +48,6 @@ export async function middleware(req: NextRequest) {
     return token
       ? NextResponse.next()
       : NextResponse.redirect(new URL("/login", req.url));
-
-  // Nếu không có token, chuyển hướng đến trang đăng nhập
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
 
   // Kiểm tra nếu JWT_SECRET chưa được thiết lập
   if (!JWT_SECRET) {

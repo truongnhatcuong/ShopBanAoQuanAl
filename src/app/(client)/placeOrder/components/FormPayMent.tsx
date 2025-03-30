@@ -13,6 +13,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { CreditCard, Banknote, Wallet, CheckCircle, Clock } from "lucide-react";
+import { ForMatPrice } from "@/lib/FormPrice";
 
 interface CartItem {
   cartitem_id: number;
@@ -48,8 +49,8 @@ const PaymentMethodForm = ({
   addressId: number;
   cart: CartData;
 }) => {
-  const { couponCode, setCouponCode } = useContext(ShopConText)!;
-  console.log(couponCode);
+  const { finalTotal } = useContext(ShopConText)!;
+  console.log("endgame", finalTotal);
 
   const [paymentMethod, setPaymentMethod] = useState<
     "CASH" | "CREDIT_CARD" | "E_WALLET"
@@ -77,7 +78,7 @@ const PaymentMethodForm = ({
           customerId,
           addressId,
           paymentMethod,
-          couponCode,
+          finalTotal,
         }),
       });
 
@@ -99,11 +100,8 @@ const PaymentMethodForm = ({
       } else {
         // Xử lý các phương thức khác (CASH, E_WALLET)
         toast.success("Đã đặt thành công đơn hàng");
-        setCouponCode("");
         await Promise.all(
-          cart.items.map((item) =>
-            trackUserAction(customerId, item.product_id, "purchase")
-          )
+          cart.items.map((item) => trackUserAction(item.product_id, "purchase"))
         );
         router.push("/profile/listorder");
       }
@@ -239,14 +237,7 @@ const PaymentMethodForm = ({
             <h3 className="text-lg font-semibold mb-2">Tổng Số Tiền</h3>
             <div className="bg-gray-100 p-4 rounded-lg">
               <p className="text-xl font-bold text-blue-600">
-                {cart.items
-                  .reduce(
-                    (total, item) =>
-                      total + parseFloat(item.product.price) * item.quantity,
-                    0
-                  )
-                  .toLocaleString("vi-VN")}{" "}
-                VND
+                {ForMatPrice(finalTotal)}
               </p>
             </div>
           </div>

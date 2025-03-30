@@ -6,14 +6,20 @@ import { IoLogoGoogle } from "react-icons/io";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useRouter } from "next/navigation";
+import ExpiredStorage from "expired-storage";
 
 const Page = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [expiredStorage, setExpiredStorage] = useState<ExpiredStorage | null>(
+    null
+  );
   const MySwal = withReactContent(Swal);
   const route = useRouter();
-
+  useEffect(() => {
+    setExpiredStorage(new ExpiredStorage(localStorage));
+  }, []);
   async function loginApi(e: React.FormEvent) {
     e.preventDefault();
     const res = await fetch(`api/auth/login`, {
@@ -25,8 +31,10 @@ const Page = () => {
     });
     if (res.ok) {
       const data = await res.json();
-      window.localStorage.setItem("token", data.token);
-      window.localStorage.setItem("userId", data.id);
+      if (expiredStorage) {
+        expiredStorage.setItem("token", data.token, 60 * 60 * 1000);
+        expiredStorage.setItem("userId", data.id, 60 * 60 * 1000);
+      }
       MySwal.fire({
         title: "<strong>Thành Công</strong>",
         html: "Bạn đã đăng nhập thành công. Chúc bạn một ngày tuyệt vời!",
@@ -37,7 +45,7 @@ const Page = () => {
         timer: 2500,
         timerProgressBar: true,
       });
-      route.push("/");
+      window.location.href = "/";
       route.refresh();
     } else {
       const dataError = await res.json();

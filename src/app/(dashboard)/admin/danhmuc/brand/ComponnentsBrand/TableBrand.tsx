@@ -2,6 +2,7 @@
 import React from "react";
 import DeleteBrand from "./DeleteBrand";
 import { FaRegEdit } from "react-icons/fa";
+import UpdateBrand from "./UpdateBrand";
 
 interface IBrand {
   brand_id: number;
@@ -11,15 +12,10 @@ interface IBrand {
 
 interface IBranProps {
   brandlocal: IBrand[];
-  setBrand: React.Dispatch<React.SetStateAction<IBrand[]>>;
-  openEditModal: (brand: IBrand) => void;
+  reloadData: () => void;
 }
 
-const TableBrand = ({ brandlocal, setBrand, openEditModal }: IBranProps) => {
-  const HandlerDelete = (brand_id: number) => {
-    setBrand(brandlocal.filter((item) => item.brand_id !== brand_id));
-  };
-
+const TableBrand = ({ brandlocal, reloadData }: IBranProps) => {
   return (
     <div className="overflow-x-auto p-4">
       <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
@@ -53,15 +49,10 @@ const TableBrand = ({ brandlocal, setBrand, openEditModal }: IBranProps) => {
                 </td>
                 <td className="px-4 py-2 text-sm flex justify-center space-x-4">
                   <DeleteBrand
-                    DeleteHandler={HandlerDelete}
+                    reloadData={reloadData}
                     brand_id={item.brand_id}
                   />
-                  <button
-                    className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl"
-                    onClick={() => openEditModal(item)}
-                  >
-                    <FaRegEdit />
-                  </button>
+                  <UpdateBrand Brand={item} reloadData={reloadData} />
                 </td>
               </tr>
             ))

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import Title from "./Title";
-import ProductItem from "./ProductItem";
+import Title from "../../components/Title";
+import ProductItem from "../../components/ProductItem";
 import { log } from "console";
 
 interface Product {
@@ -24,8 +24,7 @@ const RelatedProduct = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ApiProductForCategories = async () => {
     const res = await fetch("/api/product", {
-      cache: "no-cache",
-      next: { revalidate: 50 },
+      next: { revalidate: 100 },
     });
     const data = await res.json();
 

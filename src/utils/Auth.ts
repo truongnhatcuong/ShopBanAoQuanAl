@@ -5,7 +5,7 @@ const JWT_SECRET: string = process.env.JWT_SECRET || "";
 export async function authCustomer(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   if (!token) {
-    throw new Error("No token provided");
+    return null;
   }
   try {
     const decoded: any = jwt.verify(token, JWT_SECRET);

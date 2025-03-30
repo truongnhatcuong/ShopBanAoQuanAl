@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   PDFDownloadLink,
@@ -13,6 +13,8 @@ import {
 } from "@react-pdf/renderer";
 
 import { FaFilePdf } from "react-icons/fa";
+import { ForMatPrice } from "@/lib/FormPrice";
+import QRCode from "qrcode";
 
 // Interface cho Order
 interface AddressShipper {
@@ -54,6 +56,7 @@ interface OrderManage {
   Customer: Customer;
   OrderItems: OrderItem[];
 }
+
 Font.register({
   family: "Roboto",
   fonts: [
@@ -234,11 +237,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Format số tiền thành VND
-const formatCurrency = (amount: number) => {
-  return amount.toLocaleString("vi-VN") + " ₫";
-};
-
 // Component PDF
 const InvoicePDF = ({ order }: { order: OrderManage }) => {
   const currentDate = new Date().toLocaleDateString("vi-VN");
@@ -261,6 +259,16 @@ const InvoicePDF = ({ order }: { order: OrderManage }) => {
   // Tổng cộng
   const total = parseInt(order.total_amount);
 
+  const vietQR = "http://localhost:3000/"; // Link thanh toán hoặc URL bất kỳ
+  const [qrCode, setQrCode] = useState<string>("");
+  useEffect(() => {
+    const generateQR = async () => {
+      const qr = await QRCode.toDataURL(vietQR);
+      setQrCode(qr);
+    };
+    generateQR();
+  }, []);
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -270,7 +278,6 @@ const InvoicePDF = ({ order }: { order: OrderManage }) => {
             <Text>ĐÃ THANH TOÁN</Text>
           </View>
         )}
-
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.logoContainer}>
@@ -285,23 +292,9 @@ const InvoicePDF = ({ order }: { order: OrderManage }) => {
             <Text style={styles.invoiceInfo}>Ngày lập: {invoiceDate}</Text>
           </View>
         </View>
-
         <View style={styles.divider} />
-
-        {/* Thông tin shop và khách hàng */}
+        Thông tin shop và khách hàng
         <View style={styles.twoColumns}>
-          <View style={styles.column}>
-            <Text style={styles.sectionTitle}>THÔNG TIN CỬA HÀNG</Text>
-            <View style={styles.addressInfo}>
-              <Text>Ordin Club</Text>
-              <Text>Địa chỉ: 123 Đường Lê Lợi, Phường Bến Nghé</Text>
-              <Text>Quận 1, TP Hồ Chí Minh</Text>
-              <Text>Điện thoại: 028 1234 5678</Text>
-              <Text>Email: contact@ordinclub.com</Text>
-              <Text>Website: www.ordinclub.com</Text>
-            </View>
-          </View>
-
           <View style={styles.column}>
             <Text style={styles.sectionTitle}>THÔNG TIN KHÁCH HÀNG</Text>
             <View style={styles.addressInfo}>
@@ -327,8 +320,10 @@ const InvoicePDF = ({ order }: { order: OrderManage }) => {
               </Text>
             </View>
           </View>
+          <View>
+            <Image src={qrCode} style={{ width: 300, height: 300 }} />
+          </View>
         </View>
-
         {/* Chi tiết đơn hàng */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>CHI TIẾT ĐƠN HÀNG</Text>
@@ -365,10 +360,10 @@ const InvoicePDF = ({ order }: { order: OrderManage }) => {
                   {item.quantity}
                 </Text>
                 <Text style={[styles.tableCol, styles.colPrice]}>
-                  {formatCurrency(Number(item.price))}
+                  {ForMatPrice(Number(item.price))}
                 </Text>
                 <Text style={[styles.tableCol, styles.colTotal]}>
-                  {formatCurrency(item.quantity * Number(item.price))}
+                  {ForMatPrice(item.quantity * Number(item.price))}
                 </Text>
               </View>
             ))}
@@ -378,39 +373,33 @@ const InvoicePDF = ({ order }: { order: OrderManage }) => {
           <View style={styles.summaryContainer}>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Tạm tính:</Text>
-              <Text style={styles.summaryValue}>
-                {formatCurrency(subtotal)}
-              </Text>
+              <Text style={styles.summaryValue}>{ForMatPrice(subtotal)}</Text>
             </View>
 
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Phí vận chuyển:</Text>
               <Text style={styles.summaryValue}>
-                {formatCurrency(shippingFee)}
+                {ForMatPrice(shippingFee)}
               </Text>
             </View>
 
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Giảm giá:</Text>
-              <Text style={styles.summaryValue}>
-                -{formatCurrency(discount)}
-              </Text>
+              <Text style={styles.summaryValue}>-{ForMatPrice(discount)}</Text>
             </View>
 
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>TỔNG CỘNG:</Text>
-              <Text style={styles.totalValue}>{formatCurrency(total)}</Text>
+              <Text style={styles.totalValue}>{ForMatPrice(total)}</Text>
             </View>
           </View>
         </View>
-
         {/* Mã vạch */}
         <View style={styles.barcode}>
           {/* Placeholder cho mã vạch */}
 
           <Text style={styles.barcodeText}>{order.order_id || "000001"}</Text>
         </View>
-
         {/* Footer */}
         <View style={styles.footer}>
           <Text>Cảm ơn quý khách đã mua hàng tại Ordin Club!</Text>

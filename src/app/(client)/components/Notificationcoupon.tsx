@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import moment from "moment";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaRegBell } from "react-icons/fa";
@@ -18,12 +19,14 @@ interface Inotification {
   notification_type: string;
   message: string;
   is_read: boolean;
+  created_at: string;
 }
 
 const Notificationcoupon = () => {
   const [data, setData] = useState<Inotification[]>([]);
   const [count, setCount] = useState<number>(0);
   const pathname = usePathname();
+  moment.locale("vi");
   const FetchApi = async () => {
     const res = await fetch("/api/notification", {
       cache: "no-cache",
@@ -91,6 +94,15 @@ const Notificationcoupon = () => {
                       ""
                     )}
                     <div className="text-xs">{item.message}</div>
+                    <div
+                      className={`${
+                        item.is_read === false
+                          ? "text-red-500 text-xs"
+                          : " text-gray-600 text-xs"
+                      } ml-4`}
+                    >
+                      {moment(item.created_at).fromNow()}
+                    </div>
                   </div>
                   <div
                     className=" w-3/12 cursor-pointer"

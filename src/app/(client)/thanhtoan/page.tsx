@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -12,6 +12,8 @@ import {
 } from "@stripe/react-stripe-js";
 import { CreditCard, ShoppingCart, Check } from "lucide-react";
 import { trackUserAction } from "@/lib/trackUserAction";
+import { ShopConText } from "@/app/context/Context";
+import { ForMatPrice } from "@/lib/FormPrice";
 
 const stripePromise = loadStripe(
   "pk_test_51QgFtjLc5Tk8M9gL1NtizufQ65Em2RuzO6y6WnpE5apKamJrjxzUPxcCacg50ED79d2RcUetyih82PNO2apQkNSC00Ws1K0EQp"
@@ -37,23 +39,17 @@ interface CartData {
 }
 
 const PaymentPageContent = () => {
+  const { finalTotal } = useContext(ShopConText)!;
   const router = useRouter();
   const searchParams = useSearchParams();
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [cart, setCart] = useState<CartData | null>(null);
-  const [userId, setUserId] = useState(0);
+
   const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState<
     string | null
   >(null);
-
-  useEffect(() => {
-    const storedUserId = window.localStorage.getItem("userId");
-    if (storedUserId) {
-      setUserId(Number(storedUserId));
-    }
-  }, []);
 
   useEffect(() => {
     const cartData = searchParams.get("cart");
@@ -103,9 +99,7 @@ const PaymentPageContent = () => {
       toast.success("Thanh toán thành công! Đơn hàng đã được đặt.");
 
       await Promise.all(
-        cart.items.map((item) =>
-          trackUserAction(userId, item.product_id, "purchase")
-        )
+        cart.items.map((item) => trackUserAction(item.product_id, "purchase"))
       );
       router.push("/profile/listorder");
     } else {
@@ -125,15 +119,6 @@ const PaymentPageContent = () => {
       </div>
     );
   }
-
-  const calculateTotal = () => {
-    return cart.items
-      .reduce(
-        (total, item) => total + parseFloat(item.product.price) * item.quantity,
-        0
-      )
-      .toLocaleString("vi-VN");
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -174,25 +159,15 @@ const PaymentPageContent = () => {
                       <div className="text-sm text-gray-600 space-y-1">
                         <p>Số lượng: {item.quantity}</p>
                         <p>Kích thước: {item.selectedSize}</p>
-                        <p>
-                          Giá:{" "}
-                          {parseFloat(item.product.price).toLocaleString(
-                            "vi-VN"
-                          )}{" "}
-                          VND
-                        </p>
                       </div>
                     </div>
                     <div className="font-semibold text-blue-600">
-                      {(
-                        parseFloat(item.product.price) * item.quantity
-                      ).toLocaleString("vi-VN")}{" "}
-                      VND
+                      {ForMatPrice(Number(item.product.price))}
                     </div>
                   </div>
                 ))}
                 <div className="mt-4 text-right font-bold text-xl text-blue-700">
-                  Tổng cộng: {calculateTotal()} VND
+                  Tổng cộng: {ForMatPrice(finalTotal)}
                 </div>
               </div>
 

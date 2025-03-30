@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -11,22 +12,24 @@ import {
   useState,
 } from "react";
 import { ThemeProvider } from "next-themes";
+import { usePathname } from "next/navigation";
 
-interface User {
-  customer_id: number;
-  username: string;
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  roleId: number;
-  image: string;
-  token: string;
+interface CartItem {
+  cartitem_id: number;
+  product_id: number;
+  quantity: number;
+  selectedSize: string; // Thêm thuộc tính selectedSize
+  product: {
+    product_name: string;
+    price: string;
+    Images: { image_url: string }[];
+  };
+  image_url: string;
 }
 
 interface IContext {
-  cart: any;
-  setCart: Dispatch<SetStateAction<string>>;
+  cart: CartItem[];
+  setCart: (value: any) => void;
   totalPrice: number;
   handleAddToCart: (
     product_id: number,
@@ -35,13 +38,14 @@ interface IContext {
   ) => Promise<void>;
   handleDeleteCartItem: (cartItemId: number) => Promise<void>;
   countCart: any;
+  setCountCart: (value: number) => void;
   handleQuantityCart: () => Promise<void>;
   isLeftMenuVisible: boolean;
   setIsLeftMenuVisible: Dispatch<SetStateAction<boolean>>;
   handleUpdateCartItem: (cartItemId: number, quantity: number) => Promise<void>;
-  couponCode: string;
-  user: User;
-  setCouponCode: (value: string) => void;
+  user: any;
+  setFinalTotal: (value: number) => void;
+  finalTotal: number;
 }
 interface ShopContextProvider {
   children: ReactNode;
@@ -49,23 +53,51 @@ interface ShopContextProvider {
 export const ShopConText = createContext<IContext | undefined>(undefined);
 const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const MySwal = withReactContent(Swal);
-  const [cart, setCart] = useState<any>({ items: [] });
-  const [countCart, setCountCart] = useState(0);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [countCart, setCountCart] = useState<any>(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLeftMenuVisible, setIsLeftMenuVisible] = useState(true);
-  const [user, setUser] = useState<User | any>(null);
-  const [couponCode, setCouponCode] = useState("");
+  const pathname = usePathname();
+  const [user, setUser] = useState<any>({
+    username: "",
+    roleId: 1,
+    image: "",
+  });
+  const [finalTotal, setFinalTotal] = useState(0) || totalPrice;
 
   async function fetchUserInfo() {
-    const res = await fetch("/api/auth/getUsername", {
-      cache: "no-store",
-    });
+    const res = await fetch("/api/auth/getUsername");
     const data = await res.json();
-    setUser(data.accessToken);
+    setUser({
+      username: data.accessToken?.name,
+      roleId: data.accessToken?.roleId,
+      image: data.accessToken?.image,
+    });
   }
+
   useEffect(() => {
     fetchUserInfo();
-  }, []);
+    handleQuantityCart();
+  }, [pathname]);
+
+  const handleQuantityCart = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/cart", {
+        cache: "no-store",
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setCart(data.cart.items ?? []);
+        setCountCart(data.cart.totalQuantity ?? 0);
+        setTotalPrice(data.cart.totalAmount ?? 0);
+      } else {
+        console.warn("⚠️ API không trả về cart hợp lệ:", data);
+      }
+    } catch (error) {
+      console.error("❌ Lỗi khi gọi API cart:", error);
+    }
+  };
 
   const handleAddToCart = async (
     product_id: number,
@@ -84,10 +116,8 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
           size_id,
         }),
       });
-
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
-
         await handleQuantityCart();
         MySwal.fire({
           position: "center",
@@ -97,12 +127,14 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
           timer: 1500,
         });
       } else {
-        const error = await response.json();
         MySwal.fire({
-          position: "center",
-          icon: "error",
           title: "Lỗi",
-          text: error.message || "Không thể thêm vào giỏ hàng.",
+          text: data.message,
+          icon: "error",
+          confirmButtonText: "Đăng nhập ngay",
+          preConfirm: () => {
+            window.location.href = "/login";
+          },
         });
       }
     } catch (error) {
@@ -110,24 +142,6 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     }
   };
 
-  const handleQuantityCart = async () => {
-    const res = await fetch("/api/cart", { cache: "no-store" });
-    const data = await res.json();
-    // đếm số lượng sản phẩm thêm vào giỏ hàng
-    const totalQuantity =
-      data?.cart?.items?.reduce(
-        (total: number, item: any) => total + item.quantity,
-        0
-      ) || 0;
-    setCountCart(totalQuantity);
-    // tổng giá trị sản phẩm
-    const totalAmount =
-      data?.cart?.items?.reduce((total: number, item: any) => {
-        return total + parseFloat(item.product.price) * item.quantity;
-      }, 0) || 0;
-
-    setTotalPrice(totalAmount);
-  };
   const handleDeleteCartItem = async (cartItemId: number) => {
     const res = await fetch(`/api/cart/${cartItemId}`, { method: "DELETE" });
     if (res.ok) {
@@ -181,9 +195,10 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     handleUpdateCartItem,
     isLeftMenuVisible,
     setIsLeftMenuVisible,
-    couponCode,
-    setCouponCode,
     user,
+    finalTotal,
+    setFinalTotal,
+    setCountCart,
   };
   return (
     <ThemeProvider defaultTheme="system" attribute="class">

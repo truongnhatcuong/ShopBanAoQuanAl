@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import Pusher from "pusher-js";
+import Link from "next/link";
 
 interface Order {
   orderId: number;
@@ -63,13 +64,12 @@ const NotificationOrderToAdmin = () => {
         <DropdownMenuGroup className="cursor-pointer">
           {orders.length > 0 ? (
             orders.map((item, index) => (
-              <DropdownMenuItem
-                key={index}
-                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <strong>{item.customerName}</strong> đã đặt hàng{" "}
-                {ForMatPrice(item.totalAmount)}
-              </DropdownMenuItem>
+              <Link href={"admin/danhmuc/order"} key={index}>
+                <DropdownMenuItem className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <strong>{item.customerName}</strong> đã đặt hàng{" "}
+                  {ForMatPrice(item.totalAmount)}
+                </DropdownMenuItem>
+              </Link>
             ))
           ) : (
             <DropdownMenuItem className="px-4 py-2 text-sm text-gray-500">

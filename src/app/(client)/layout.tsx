@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import HeadePager from "./components/HeaderPager";
+import HeadePager from "./components/HeaderPage";
 import Footer from "./components/Footer";
 import ShopContextProvider from "../context/Context";
 
@@ -17,18 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className={`${inter.className} container mx-auto flex flex-col `}>
+    <div
+      className={`${inter.className} container mx-auto flex flex-col min-h-screen `}
+    >
       <ShopContextProvider>
-        {/* HeaderPager bọc toàn bộ ứng dụng */}
-        <div>
-          {" "}
-          <HeadePager />
-        </div>
+        <HeadePager />
         <div className="container mx-auto flex-1">{children}</div>
-        <div>
-          {" "}
-          <Footer />
-        </div>
+        <Footer />
       </ShopContextProvider>
     </div>
   );

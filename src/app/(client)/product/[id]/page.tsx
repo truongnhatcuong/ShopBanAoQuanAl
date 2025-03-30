@@ -38,7 +38,6 @@ interface IProduct {
 }
 
 const Page = () => {
-  const { user } = useContext(ShopConText)!;
   useEffect(() => {
     Aos.init();
   }, []);
@@ -47,13 +46,6 @@ const Page = () => {
   const [productDetail, setProductDetail] = useState<IProduct | null>(null);
   const [originalPrice, setOriginalPrice] = useState(0);
   const [countReview, setCountReview] = useState(0);
-  const [idUser, setIdUser] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (user?.customer_id) {
-      setIdUser(user.customer_id);
-    }
-  }, [user]); // Chỉ chạy khi user thay đổi
 
   const id = params.id;
 
@@ -64,24 +56,22 @@ const Page = () => {
         next: { revalidate: 200 },
       });
       const data = await res.json();
-      await trackUserAction(Number(idUser), Number(id), "view");
+      await trackUserAction(Number(id), "view");
       setProductDetail(data.getProduct);
       setOriginalPrice(data.originalPrice);
       setCountReview(data.countReview);
     }
     ApiProductDeTail();
-  }, [id, idUser]);
+  }, [id]);
 
   return (
-    <div>
-      <div className="">
-        <ProductDetail
-          productDetail={productDetail}
-          originalPrice={originalPrice}
-          countReview={countReview}
-        />
-      </div>
-    </div>
+    <>
+      <ProductDetail
+        productDetail={productDetail}
+        originalPrice={originalPrice}
+        countReview={countReview}
+      />
+    </>
   );
 };
 

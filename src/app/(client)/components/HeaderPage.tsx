@@ -14,35 +14,23 @@ import Notificationcoupon from "./Notificationcoupon";
 import SearchProduct from "./SearchProduct";
 import LoginDropDown from "./LoginDropDown";
 import UserLoginDropdown from "./UserLoginDropdown";
+import ChangeLanguage from "@/app/(dashboard)/admin/components/ChangeLanguage/ChangeLanguage";
 
-import ChangeLanguage from "@/app/components/ChangeLanguage/ChangeLanguage";
 interface ICategory {
   category_id: number;
   category_name: string;
 }
 
-export default function HeadePager() {
-  const { countCart, handleQuantityCart } = useContext(ShopConText)!;
-  const router = useRouter();
-  const pathname = usePathname();
+export default function HeaderPage() {
+  const { countCart, user, setCountCart } = useContext(ShopConText)!;
 
-  const [user, setUser] = useState({
-    username: "",
-    roleId: 1,
-    image: "",
-  });
+  const pathname = usePathname();
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [search, setSearch] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
 
-  function RemoveLcstore() {
-    router.push("/logout");
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("userId");
-    window.location.href = "/login";
-  }
   //call api categories
   async function ApiCategories() {
     const res = await fetch("/api/categories", {
@@ -52,29 +40,15 @@ export default function HeadePager() {
     const data = await res.json();
     setCategories(data.categories);
   }
-
-  async function fetchUserInfo() {
-    const res = await fetch("/api/auth/getUsername", {
-      cache: "no-store",
-    });
-    const data = await res.json();
-    setUser({
-      username: data.accessToken?.name,
-      roleId: data.accessToken?.roleId,
-      image: data.accessToken?.image,
-    });
-
-    setIsLoggedIn(true);
-  }
   useEffect(() => {
-    fetchUserInfo();
+    if (user) {
+      setIsLoggedIn(true);
+    }
   }, [pathname]);
+
   useEffect(() => {
     ApiCategories();
   }, []);
-  useEffect(() => {
-    handleQuantityCart();
-  }, [handleQuantityCart]);
 
   return (
     <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-2 ">
@@ -113,13 +87,13 @@ export default function HeadePager() {
         </div>
         <div>
           {isLoggedIn && user.username ? (
-            <UserLoginDropdown user={user} RemoveLcstore={RemoveLcstore} />
+            <UserLoginDropdown user={user} />
           ) : (
             <LoginDropDown login="Đăng Nhập" signUp="Đăng Ký" />
           )}
         </div>
 
-        <div className="relative mr-3 mb-[2px]">
+        <div className="relative mr-3 mb-[5px]">
           {" "}
           <Link href={"/cart"}>
             <BsBagCheck className="w-7 h-7 cursor-pointer mr-8 md:mr-0  " />

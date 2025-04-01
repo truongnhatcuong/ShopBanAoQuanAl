@@ -22,9 +22,12 @@ const DeleteBrand = ({ brand_id, reloadData }: IDelete) => {
     });
     try {
       if (result.isConfirmed) {
-        const reponse = await fetch(`/api/brand/${brand_id}`, {
-          method: "DELETE",
-        });
+        const reponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/brand/${brand_id}`,
+          {
+            method: "DELETE",
+          }
+        );
         if (reponse.ok) {
           const data = await reponse.json();
           reloadData();

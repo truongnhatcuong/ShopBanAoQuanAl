@@ -108,11 +108,14 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
     payment_status: string
   ) => {
     try {
-      const res = await fetch(`/api/admin/manage/orderCustomer/${orderId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order_state, payment_status }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/manage/orderCustomer/${orderId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_state, payment_status }),
+        }
+      );
 
       if (res.ok) {
         toast.success("Cập nhật thành công");

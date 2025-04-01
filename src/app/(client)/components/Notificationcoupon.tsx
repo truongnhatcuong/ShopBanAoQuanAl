@@ -28,10 +28,13 @@ const Notificationcoupon = () => {
   const pathname = usePathname();
   moment.locale("vi");
   const FetchApi = async () => {
-    const res = await fetch("/api/notification", {
-      cache: "no-cache",
-      next: { revalidate: 100 },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/notification`,
+      {
+        cache: "no-cache",
+        next: { revalidate: 100 },
+      }
+    );
     const data = await res.json();
     setData(data.notification || []);
     setCount(data.countNotification);

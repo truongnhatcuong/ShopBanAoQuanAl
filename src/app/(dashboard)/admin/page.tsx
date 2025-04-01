@@ -1,20 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ForMatPrice } from "@/lib/FormPrice";
 import SummaryCard from "./components/SummaryCard";
@@ -86,9 +72,12 @@ const DashboardCharts: React.FC = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/admin/thongke?period=${period}`, {
-          cache: "no-cache",
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/thongke?period=${period}`,
+          {
+            cache: "no-cache",
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

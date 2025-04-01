@@ -28,11 +28,14 @@ const UpdateCustomer = ({ customer, reloadData }: Iprop) => {
 
   async function UpdateCustomerHandle(e: React.FormEvent) {
     e.preventDefault();
-    const res = await fetch(`/api/customer/${customer.customer_id}`, {
-      method: "PUT",
-      headers: { "content-Type": "aplication/json" },
-      body: JSON.stringify({ name, email, phone, roleId }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${customer.customer_id}`,
+      {
+        method: "PUT",
+        headers: { "content-Type": "aplication/json" },
+        body: JSON.stringify({ name, email, phone, roleId }),
+      }
+    );
 
     if (res.ok) {
       setIsOpen(false);

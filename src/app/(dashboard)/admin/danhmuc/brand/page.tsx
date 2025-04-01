@@ -24,7 +24,7 @@ const Page = () => {
   const [search, setSearch] = useState("");
   const ApiBrand = async () => {
     const reponse = await fetch(
-      `/api/brand?limit=${limit}&page=${currentPage}&search=${search}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/brand?limit=${limit}&page=${currentPage}&search=${search}`,
       { next: { revalidate: 500 } }
     );
     const data = await reponse.json();

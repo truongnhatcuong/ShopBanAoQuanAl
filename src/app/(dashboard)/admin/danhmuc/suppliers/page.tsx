@@ -31,7 +31,7 @@ const Supplier = () => {
   const [search, setSrearch] = useState("");
   async function apiSupplier() {
     const req = await fetch(
-      `/api/supplier?limit=${limit}&search=${search}&page=${currentPage}`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/supplier?limit=${limit}&search=${search}&page=${currentPage}`
     );
     const data = await req.json();
     setSupplier(data.supplier);

@@ -13,11 +13,14 @@ const AddCategories = (props: { reloadData: () => void }) => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const res = await fetch(`/api/categories`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ categoriesName, description }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoriesName, description }),
+      }
+    );
     const data = await res.json();
     if (res.ok) {
       setCategoriesName("");

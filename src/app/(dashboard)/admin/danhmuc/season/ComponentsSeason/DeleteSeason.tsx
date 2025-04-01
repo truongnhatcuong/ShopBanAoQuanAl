@@ -23,9 +23,12 @@ const DeleteSeason = ({ season_id, DeleteHandler }: IdeleteSeason) => {
     });
     try {
       if (result.isConfirmed) {
-        const res = await fetch(`/api/season/${season_id}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/season/${season_id}`,
+          {
+            method: "DELETE",
+          }
+        );
         if (res.ok) {
           const data = await res.json();
           console.log(data);

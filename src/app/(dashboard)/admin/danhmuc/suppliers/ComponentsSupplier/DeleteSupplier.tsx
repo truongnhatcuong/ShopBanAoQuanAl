@@ -21,9 +21,12 @@ const DeleteSupplier = ({ supplier_id, DeleteHandler }: IDeleteSupplier) => {
     });
     try {
       if (result.isConfirmed) {
-        const res = await fetch(`/api/supplier/${supplier_id}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/supplier/${supplier_id}`,
+          {
+            method: "DELETE",
+          }
+        );
         //
         if (res.ok) {
           const data = await res.json();

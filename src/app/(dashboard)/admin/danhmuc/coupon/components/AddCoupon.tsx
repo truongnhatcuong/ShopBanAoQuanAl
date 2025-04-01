@@ -40,7 +40,7 @@ const AddCoupon = ({ reloadData }: { reloadData: () => void }) => {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await fetch("/api/coupon", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coupon`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

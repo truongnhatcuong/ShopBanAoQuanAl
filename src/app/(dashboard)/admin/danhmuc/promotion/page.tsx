@@ -6,7 +6,7 @@ import AddPrromotion from "./components/AddPromotion";
 const Page = () => {
   const [promotion, setPromotion] = useState([]);
   async function fetchApi() {
-    const res = await fetch("/api/promotion");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/promotion`);
     const data = await res.json();
     setPromotion(data.promotions);
   }

@@ -48,19 +48,22 @@ const UpdateSupplier = ({ supplier, reloadData }: IUpdateSupplier) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/supplier/${supplier.supplier_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          supplier_name,
-          contact_info,
-          product_id,
-          quantity,
-          supply_date,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/supplier/${supplier.supplier_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            supplier_name,
+            contact_info,
+            product_id,
+            quantity,
+            supply_date,
+          }),
+        }
+      );
 
       const result = await response.json();
 

@@ -31,16 +31,19 @@ const AddPrromotion = (props: { reloadData: () => void }) => {
   async function HandleAddpromiton(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const res = await fetch("/api/promotion", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          discount,
-          start_date: startDate,
-          end_date: endDate,
-          product_id,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/promotion`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            discount,
+            start_date: startDate,
+            end_date: endDate,
+            product_id,
+          }),
+        }
+      );
       if (res.ok) {
         await res.json();
         setIsOpen(false);

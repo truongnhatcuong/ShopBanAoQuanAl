@@ -44,7 +44,9 @@ const PageProduct = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [sortOrder, setSortOrder] = useState("asc");
   const ApiImage = async () => {
-    const res = await fetch("/api/ImageProduct");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/ImageProduct`
+    );
     await res.json();
   };
 
@@ -52,7 +54,9 @@ const PageProduct = () => {
   const fetchApiProduct = async () => {
     setLoading(true);
     const res = await fetch(
-      `/api/product?search=${searchTerm.toLowerCase()}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`,
+      `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/product?search=${searchTerm.toLowerCase()}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`,
       { cache: "no-cache" }
     );
     const data = await res.json();

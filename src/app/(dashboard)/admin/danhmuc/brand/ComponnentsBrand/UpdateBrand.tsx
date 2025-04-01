@@ -32,11 +32,14 @@ const UpdateBrand = ({
 
   const UpdateHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    const req = await fetch(`/api/brand/${Brand.brand_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/brand/${Brand.brand_id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }
+    );
     const data = await req.json();
     if (req.ok) {
       setModalIsOpen(false);

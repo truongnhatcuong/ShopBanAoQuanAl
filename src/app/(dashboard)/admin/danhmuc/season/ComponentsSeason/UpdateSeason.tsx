@@ -22,11 +22,14 @@ const UpdateSeason = ({ season, reloadData }: ISeasonProps) => {
   const MySwal = withReactContent(Swal);
   async function UpdateHandler(e: React.FormEvent) {
     e.preventDefault();
-    const req = await fetch(`/api/season/${season.season_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ season_name, description }),
-    });
+    const req = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/season/${season.season_id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ season_name, description }),
+      }
+    );
     if (req.ok) {
       const data = await req.json();
       setmodalIsOpen(false);

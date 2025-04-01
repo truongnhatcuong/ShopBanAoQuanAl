@@ -23,9 +23,12 @@ const DeleteCoupon = ({ coupon_id, reloadData }: IDelete) => {
       confirmButtonText: "Yes, delete it!",
     });
     if (result.isConfirmed) {
-      const res = await fetch(`/api/coupon/${coupon_id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/coupon/${coupon_id}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (res.ok) {
         reloadData();
         MySwal.fire({

@@ -48,7 +48,9 @@ const DetailOrder = ({ orderId }: tailOrderProps) => {
 
   const ApiOrderManage = async () => {
     try {
-      const res = await fetch(`/api/order/${orderId}`);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`
+      );
       const data = await res.json();
       setOrderManage(data.OrderManage);
     } catch (error) {

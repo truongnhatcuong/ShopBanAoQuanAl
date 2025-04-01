@@ -12,7 +12,7 @@ const Addseason = (props: { reloadData: () => void }) => {
   async function AddSeasonHanler(e: any) {
     e.preventDefault();
     setLoading(true);
-    const req = await fetch(`/api/season`, {
+    const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ season_name, description }),

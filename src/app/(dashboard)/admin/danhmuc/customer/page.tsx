@@ -26,7 +26,7 @@ const PageCustomer = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   async function ApiCustomer() {
     const req = await fetch(
-      `/api/customer?search=${search}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/customer?search=${search}&page=${currentPage}&limit=${limit}&sortOrder=${sortOrder}`,
       {
         next: { revalidate: 120 },
       }

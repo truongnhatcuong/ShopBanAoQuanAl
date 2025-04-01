@@ -27,7 +27,7 @@ const PageContent = () => {
 
   const fetchData = async () => {
     const response = await fetch(
-      `/api/categories?page=${currentPage}&keyword=${keyword}&limit=${limit}&sortOrder=${sortOrder}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/categories?page=${currentPage}&keyword=${keyword}&limit=${limit}&sortOrder=${sortOrder}`,
       { next: { revalidate: 600 } }
     );
 

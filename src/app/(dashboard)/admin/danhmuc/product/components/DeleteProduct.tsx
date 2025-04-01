@@ -22,9 +22,12 @@ const DeleteProduct = ({ product_id, reloadData }: IDelete) => {
       confirmButtonText: "Yes, delete it!",
     });
     if (result.isConfirmed) {
-      const res = await fetch(`/api/product/${product_id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/product/${product_id}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (res.ok) {
         const data = await res.json();
         reloadData();

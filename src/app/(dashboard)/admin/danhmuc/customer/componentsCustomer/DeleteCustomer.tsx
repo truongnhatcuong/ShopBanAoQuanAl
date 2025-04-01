@@ -23,9 +23,12 @@ const DeleteCustomer = (props: IDelete) => {
       confirmButtonText: "Yes, delete it!",
     });
     if (result.isConfirmed) {
-      const res = await fetch(`/api/customer/${props.customer_id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/customer/${props.customer_id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (res.ok) {
         const data = await res.json();

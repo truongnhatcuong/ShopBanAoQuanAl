@@ -37,7 +37,7 @@ interface ActiveResponse {
 const ReviewManagement = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const ApiRivew = async () => {
-    const res = await fetch(`/api/review`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/review`);
     const data = await res.json();
     setReviews(data.getAllReview);
   };

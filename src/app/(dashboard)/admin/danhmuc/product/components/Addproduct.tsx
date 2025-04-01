@@ -55,20 +55,16 @@ const AddProduct = (props: { reloadData: () => void }) => {
   const fetchData = useCallback(async () => {
     try {
       const [categoryRes, brandRes, seasonRes, sizeRes] = await Promise.all([
-        fetch("/api/categories", {
-          cache: "force-cache",
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
           next: { revalidate: 3600 },
         }),
-        fetch("/api/brand", {
-          cache: "force-cache",
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`, {
           next: { revalidate: 3600 },
         }),
-        fetch("/api/season", {
-          cache: "force-cache",
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
           next: { revalidate: 86400 },
         }),
-        fetch("/api/size", {
-          cache: "force-cache",
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/size`, {
           next: { revalidate: 86400 },
         }),
       ]);
@@ -139,7 +135,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
       });
       return;
     }
-    const res = await fetch("/api/product", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -173,10 +169,13 @@ const AddProduct = (props: { reloadData: () => void }) => {
         formData.append("files", image); // Thay đổi từ "file" thành "files"
       });
       formData.append("product_id", newdata);
-      const imageRes = await fetch("/api/ImageProduct", {
-        method: "POST",
-        body: formData,
-      });
+      const imageRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/ImageProduct`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       if (imageRes.ok) {
         props.reloadData();
       } else {

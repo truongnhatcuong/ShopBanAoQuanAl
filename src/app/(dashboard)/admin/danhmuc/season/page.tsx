@@ -13,10 +13,8 @@ interface Iseason {
 const Page = () => {
   const [season, setSeason] = useState<Iseason[]>([]);
 
-  const [selectseason, setSelectseason] = useState<Iseason | null>(null);
-
   const ApiSeason = async () => {
-    const req = await fetch(`/api/season`, {
+    const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
       next: { revalidate: 500 },
     });
     const data = await req.json();

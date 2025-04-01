@@ -3,7 +3,7 @@
 import Title from "@/app/(client)/components/Title";
 import { assets } from "@/app/assets/frontend_assets/assets";
 import DeleteImage from "@/app/(dashboard)/admin/danhmuc/product/components/componentsImageProduct/DeleteImage";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -108,54 +108,67 @@ const UpdateProduct = (props: IProduct) => {
     setImages((pev) => pev.filter((item) => item.image_id !== imaga_id));
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const categoryRes = await fetch("/api/categories");
-      const categoriesData = await categoryRes.json();
-      setCategory(categoriesData.categories);
-    };
+  const fetchData = useCallback(async () => {
+    try {
+      const [categoryRes, brandRes, seasonRes, sizeRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
+          next: { revalidate: 3600 },
+        }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`, {
+          next: { revalidate: 3600 },
+        }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
+          next: { revalidate: 86400 },
+        }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/size`, {
+          next: { revalidate: 86400 },
+        }),
+      ]);
 
-    const fetchBrands = async () => {
-      const brandRes = await fetch("/api/brand");
-      const brandData = await brandRes.json();
+      const [categoriesData, brandData, seasonData, sizeData] =
+        await Promise.all([
+          categoryRes.json(),
+          brandRes.json(),
+          seasonRes.json(),
+          sizeRes.json(),
+        ]);
+
+      setCategory(categoriesData.categories);
       setBrand(brandData.brand);
-    };
-    const fetchSeasons = async () => {
-      const seasonRes = await fetch("/api/season");
-      const seasonData = await seasonRes.json();
       setSeason(seasonData.season);
-    };
-    const fetchSizes = async () => {
-      const sizeRes = await fetch("/api/size");
-      const sizeData = await sizeRes.json();
       setSize(sizeData.size);
-    };
-    fetchCategories();
-    fetchBrands();
-    fetchSeasons();
-    fetchSizes();
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu sản phẩm:", error);
+    }
+  }, []);
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Cập nhật thông tin sản phẩm
   async function UpdateProduct(e: React.FormEvent) {
     e.preventDefault();
 
-    const res = await fetch(`/api/product/${props.product_id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        product_name,
-        description,
-        price,
-        color,
-        category_id,
-        brand_id,
-        season_id,
-        sizes: sizeInput,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/product/${props.product_id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_name,
+          description,
+          price,
+          color,
+          category_id,
+          brand_id,
+          season_id,
+          sizes: sizeInput,
+        }),
+      }
+    );
 
     if (res.ok) {
       MySwal.fire("Thành công", "Cập nhật sản phẩm thành công!", "success");

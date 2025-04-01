@@ -29,11 +29,14 @@ const UpdateCategories = ({
   async function handleUpdate(e: any) {
     e.preventDefault();
     setLoading(true);
-    const response = await fetch(`/api/categories/${category.category_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category_name, description }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${category.category_id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category_name, description }),
+      }
+    );
     setLoading(false);
     if (response.ok) {
       const updatedData = await response.json();

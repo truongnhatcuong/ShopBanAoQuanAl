@@ -24,9 +24,12 @@ const DeleteCategories = ({ category_id, reloadData }: IDelete) => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`/api/categories/${category_id}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${category_id}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         if (res.ok) {
           await res.json();

@@ -78,7 +78,9 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const [finalTotal, setFinalTotal] = useState(0) || totalPrice;
 
   async function fetchUserInfo() {
-    const res = await fetch("/api/auth/getUsername");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/getUsername`
+    );
     const data = await res.json();
     setUser({
       username: data.accessToken?.username,
@@ -97,7 +99,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
 
   const handleQuantityCart = async () => {
     try {
-      const res = await fetch("/api/cart", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
         cache: "no-store",
       });
       const data = await res.json();
@@ -120,17 +122,20 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     size_id: number
   ) => {
     try {
-      const response = await fetch("/api/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          product_id,
-          quantity,
-          size_id,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cart`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            product_id,
+            quantity,
+            size_id,
+          }),
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         await handleQuantityCart();
@@ -158,7 +163,10 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   };
 
   const handleDeleteCartItem = async (cartItemId: number) => {
-    const res = await fetch(`/api/cart/${cartItemId}`, { method: "DELETE" });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${cartItemId}`,
+      { method: "DELETE" }
+    );
     if (res.ok) {
       const data = await res.json();
       await handleQuantityCart();
@@ -175,16 +183,19 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
 
   // updateCart
   const handleUpdateCartItem = async (cartItemId: number, quantity: number) => {
-    const res = await fetch(`/api/cart/${cartItemId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cartItemId,
-        quantity,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${cartItemId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartItemId,
+          quantity,
+        }),
+      }
+    );
     if (res.ok) {
       await handleQuantityCart();
     } else {

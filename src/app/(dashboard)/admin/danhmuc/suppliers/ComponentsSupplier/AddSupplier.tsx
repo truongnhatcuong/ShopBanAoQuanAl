@@ -19,7 +19,7 @@ const AddSupplier = (props: { closeHandle: any; reloadData: () => void }) => {
   //gọi lấy id sản phẩm
   useEffect(() => {
     async function ApiProduct() {
-      const res = await fetch("/api/product");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product`);
       const data = await res.json();
       setProduct(data.product);
     }
@@ -31,17 +31,20 @@ const AddSupplier = (props: { closeHandle: any; reloadData: () => void }) => {
 
     setLoading(true);
     try {
-      const req = await fetch(`/api/supplier`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          supplier_name,
-          contact_info,
-          product_id,
-          quantity,
-          supply_date,
-        }),
-      });
+      const req = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/supplier`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            supplier_name,
+            contact_info,
+            product_id,
+            quantity,
+            supply_date,
+          }),
+        }
+      );
       if (req.ok) {
         const data = await req.json();
         console.log(data);

@@ -166,18 +166,7 @@ export const productSchema = z.object({
     .max(100, "Tên sản phẩm không được vượt quá 100 ký tự")
     .trim(),
 
-  description: z
-    .string()
-    .min(10, "Mô tả sản phẩm phải có ít nhất 10 ký tự")
-    .max(500, "Mô tả sản phẩm không được vượt quá 500 ký tự")
-    .trim(),
-
-  price: z
-    .number({
-      invalid_type_error: "Giá sản phẩm phải là số",
-    })
-    .min(1, "Giá sản phẩm phải lớn hơn 0")
-    .max(100000000, "Giá sản phẩm không được vượt quá 100 triệu"),
+  description: z.string().min(10, "Mô tả sản phẩm phải có ít nhất 10 ký tự"),
 
   color: z
     .string()

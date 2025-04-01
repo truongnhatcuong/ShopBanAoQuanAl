@@ -59,9 +59,9 @@ export async function middleware(req: NextRequest) {
   //
 
   try {
-    // if (req.nextUrl.pathname.startsWith("/admin") && decoded.roleId < 2) {
-    //   return NextResponse.redirect(new URL("/", req.url));
-    // }
+    if (req.nextUrl.pathname.startsWith("/admin") && decoded.roleId < 2) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
 
     return NextResponse.next();
   } catch (error) {

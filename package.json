@@ -28,7 +28,6 @@
     "@radix-ui/react-select": "^2.1.6",
     "@radix-ui/react-slot": "^1.1.2",
     "@react-pdf/renderer": "^4.3.0",
-    "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.1",
     "@shadcn/ui": "^0.0.4",
     "@stripe/react-stripe-js": "^3.1.1",

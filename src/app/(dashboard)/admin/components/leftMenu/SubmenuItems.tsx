@@ -15,33 +15,41 @@ interface IMenu {
   submenu?: IMenu[];
 }
 
-const SubmenuItems = (props: IProps) => {
+const SubmenuItems = ({ menuItem }: IProps) => {
   const pathname = usePathname();
   const { isLeftMenuVisible } = useContext(ShopConText)!;
 
+  const isActive = pathname === menuItem.link;
+
   return (
-    <div className="flex items-center cursor-pointer rounded-lg transition-colors duration-200 justify-center w-full p-0.5">
+    <div className="w-full px-2 py-1">
       <Link
-        href={props.menuItem.link}
-        className={`flex items-center w-full transition-colors duration-200 space-y-3 pl-2 pb-0.5 ${
-          pathname === props.menuItem.link
-            ? "bg-white/10 rounded-lg pb-2.5"
-            : ""
-        } hover:scale-110 hover:text-4xl transition-all duration-300 ease-out`}
-      >
-        <div
-          className={`mr-2 mt-1.5 md:mt-3 text-slate-200/70  ${
-            isLeftMenuVisible
-              ? "md:ml-3 ml-0 text-xl hover:scale-110 hover:text-4xl transition-all duration-300 ease-out "
-              : "md:ml-0 text-2xl hover:scale-110 hover:text-4xl transition-all duration-300 ease-out"
+        href={menuItem.link}
+        className={`flex items-center w-full p-2 rounded-lg transition-all duration-300 group
+          ${
+            isActive
+              ? "bg-white/10 shadow-sm"
+              : "hover:bg-[#3d3d3d]/90 hover:shadow-md hover:scale-x-[1.05]"
           }`}
+      >
+        {/* Icon */}
+        <div
+          className={`flex-shrink-0 text-2xl text-slate-200/70 transition-colors duration-200
+            ${isActive ? "text-white" : "group-hover:text-white"}
+            ${isLeftMenuVisible ? "mr-3" : "mr-0"}`}
         >
-          {props.menuItem.icon}
+          {menuItem.icon}
         </div>
+
+        {/* Title - Chỉ hiển thị khi menu mở trên md+ */}
         {isLeftMenuVisible && (
-          <div className="uppercase text-base text-slate-50 font-bold hidden md:block">
-            {props.menuItem.title}
-          </div>
+          <span
+            className={`text-base font-medium text-slate-50 capitalize truncate
+              hidden md:block transition-opacity duration-200
+              ${isActive ? "font-bold text-white" : "group-hover:text-white"}`}
+          >
+            {menuItem.title}
+          </span>
         )}
       </Link>
     </div>

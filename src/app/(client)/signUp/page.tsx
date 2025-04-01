@@ -46,13 +46,16 @@ const Page = () => {
       return;
     }
     // Dừng nếu mật khẩu không khớp
-    const res = await fetch(`/api/auth/register`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ name, email, phone, username, password }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ name, email, phone, username, password }),
+      }
+    );
     if (res.ok) {
       setName("");
       setEmail("");

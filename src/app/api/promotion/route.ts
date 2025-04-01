@@ -86,14 +86,13 @@ export async function POST(req: NextRequest) {
 
     const startDate = new Date(start_date);
     const endDate = new Date(end_date);
-
     if (
       isNaN(startDate.getTime()) ||
       isNaN(endDate.getTime()) ||
       startDate >= endDate
     ) {
       return NextResponse.json(
-        { message: "Ngày không hợp lệ" },
+        { message: "Ngày bắt đầu phải trước ngày kết thúc" },
         { status: 400 }
       );
     }
@@ -161,6 +160,6 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

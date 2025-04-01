@@ -8,24 +8,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 
 const TopBar = () => {
-  const { isLeftMenuVisible, setIsLeftMenuVisible } = useContext(ShopConText)!;
-  const [user, setUser] = useState({
-    username: "",
-    roleId: 1,
-    image: "",
-  });
-  async function fetchUserInfo() {
-    const res = await fetch("/api/auth/getUsername");
-    const data = await res.json();
-    setUser({
-      username: data.accessToken?.name,
-      roleId: data.accessToken?.roleId,
-      image: data.accessToken?.image,
-    });
-  }
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
+  const { isLeftMenuVisible, setIsLeftMenuVisible, user } =
+    useContext(ShopConText)!;
+
   return (
     <div className="navbar bg-base-100 border-2">
       <div

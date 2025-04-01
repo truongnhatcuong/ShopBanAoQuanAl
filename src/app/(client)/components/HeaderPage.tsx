@@ -22,7 +22,7 @@ interface ICategory {
 }
 
 export default function HeaderPage() {
-  const { countCart, user, setCountCart } = useContext(ShopConText)!;
+  const { countCart, user, setUser } = useContext(ShopConText)!;
 
   const pathname = usePathname();
 
@@ -33,15 +33,27 @@ export default function HeaderPage() {
 
   //call api categories
   async function ApiCategories() {
-    const res = await fetch("/api/categories", {
-      cache: "force-cache",
-      next: { revalidate: 300 },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+      {
+        cache: "force-cache",
+        next: { revalidate: 300 },
+      }
+    );
     const data = await res.json();
     setCategories(data.categories);
   }
   useEffect(() => {
-    if (user) {
+    if (pathname === "/login") {
+      setUser({
+        username: "",
+        roleId: 1,
+        image: "",
+        name: "",
+        phone: "",
+        email: "",
+      });
+    } else if (user) {
       setIsLoggedIn(true);
     }
   }, [pathname]);

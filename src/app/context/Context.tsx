@@ -2,7 +2,6 @@
 "use client";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useTranslation } from "react-i18next";
 import {
   createContext,
   Dispatch,
@@ -27,6 +26,15 @@ interface CartItem {
   image_url: string;
 }
 
+interface IUser {
+  name: string;
+  phone: number | string;
+  username: string;
+  image: string;
+  roleId: number;
+  email: string;
+}
+
 interface IContext {
   cart: CartItem[];
   setCart: (value: any) => void;
@@ -46,6 +54,7 @@ interface IContext {
   user: any;
   setFinalTotal: (value: number) => void;
   finalTotal: number;
+  setUser: (value: any) => void;
 }
 interface ShopContextProvider {
   children: ReactNode;
@@ -58,10 +67,13 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLeftMenuVisible, setIsLeftMenuVisible] = useState(true);
   const pathname = usePathname();
-  const [user, setUser] = useState<any>({
+  const [user, setUser] = useState<IUser>({
     username: "",
     roleId: 1,
     image: "",
+    name: "",
+    phone: "",
+    email: "",
   });
   const [finalTotal, setFinalTotal] = useState(0) || totalPrice;
 
@@ -69,9 +81,12 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     const res = await fetch("/api/auth/getUsername");
     const data = await res.json();
     setUser({
-      username: data.accessToken?.name,
+      username: data.accessToken?.username,
       roleId: data.accessToken?.roleId,
       image: data.accessToken?.image,
+      phone: data.accessToken?.phone,
+      name: data.accessToken?.name,
+      email: data.accessToken?.email,
     });
   }
 
@@ -82,7 +97,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
 
   const handleQuantityCart = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/cart", {
+      const res = await fetch("/api/cart", {
         cache: "no-store",
       });
       const data = await res.json();
@@ -199,6 +214,7 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
     finalTotal,
     setFinalTotal,
     setCountCart,
+    setUser,
   };
   return (
     <ThemeProvider defaultTheme="system" attribute="class">

@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   if (!customer) {
     return NextResponse.json(
       { message: "Vui lòng đăng nhập trước khi thêm vào giỏ hàng" },
-      { status: 404 }
+      { status: 400 }
     );
   }
 
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
   if (!customer) {
     return NextResponse.json(
       { message: "Vui lòng đăng nhập trước khi thêm vào giỏ hàng" },
-      { status: 404 }
+      { status: 400 }
     );
   }
 

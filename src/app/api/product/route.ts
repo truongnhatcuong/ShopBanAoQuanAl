@@ -2,6 +2,7 @@ import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
@@ -158,9 +159,44 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+export const productSchema = z.object({
+  product_name: z
+    .string()
+    .min(3, "Tên sản phẩm phải có ít nhất 3 ký tự")
+    .max(100, "Tên sản phẩm không được vượt quá 100 ký tự")
+    .trim(),
+
+  description: z
+    .string()
+    .min(10, "Mô tả sản phẩm phải có ít nhất 10 ký tự")
+    .max(500, "Mô tả sản phẩm không được vượt quá 500 ký tự")
+    .trim(),
+
+  price: z
+    .number({
+      invalid_type_error: "Giá sản phẩm phải là số",
+    })
+    .min(1, "Giá sản phẩm phải lớn hơn 0")
+    .max(100000000, "Giá sản phẩm không được vượt quá 100 triệu"),
+
+  color: z
+    .string()
+    .min(3, "Màu sắc phải có ít nhất 3 ký tự")
+    .max(30, "Màu sắc không được vượt quá 30 ký tự")
+    .trim(),
+});
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
+  const isValid = productSchema.safeParse(data);
+  if (!isValid.success) {
+    return NextResponse.json(
+      {
+        message: isValid.error.errors[0].message,
+      },
+      { status: 400 }
+    );
+  }
   try {
     const {
       product_name,
@@ -172,19 +208,7 @@ export async function POST(req: NextRequest) {
       sizes,
       color,
     } = data;
-    if (
-      !product_name ||
-      !price ||
-      !category_id ||
-      !brand_id ||
-      !sizes ||
-      sizes.length === 0
-    ) {
-      return NextResponse.json(
-        { message: "Missing required fields" },
-        { status: 400 }
-      );
-    }
+
     const totalStockQuantity = sizes.reduce(
       (sum: number, size: any) => sum + size.stock_quantity,
       0

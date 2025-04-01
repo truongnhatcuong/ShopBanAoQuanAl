@@ -1,6 +1,7 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { authCustomer } from "@/utils/Auth";
 const JWT_SECRET = process.env.JWT_SECRET || "";
 // Hàm GET
 export async function GET(
@@ -10,8 +11,6 @@ export async function GET(
   const { id } = await params;
   const cartItemId = Number(id);
   try {
-    const token = req.cookies.get("token")?.value;
-
     const getcartitem = await prisma.cartItem.findUnique({
       where: {
         cartitem_id: cartItemId,
@@ -34,24 +33,13 @@ export async function DELETE(
   const { id } = await params;
 
   const cartItemId = Number(id);
-  // Lấy token từ cookies
-  const token = req.cookies.get("token")?.value;
-
-  if (!token) {
+  const customer = await authCustomer(req);
+  if (!customer) {
     return NextResponse.json(
-      { message: "Token không có sẵn" },
-      { status: 404 }
+      { message: "vui lòng đăng nhập" },
+      { status: 400 }
     );
   }
-  const decoded: any = jwt.verify(token, JWT_SECRET);
-  const username = decoded.username;
-  if (!username) {
-    return NextResponse.json({ message: "Username error" }, { status: 404 });
-  }
-  const customer = await prisma.customer.findUnique({
-    where: { username },
-    select: { customer_id: true },
-  });
   try {
     // Kiểm tra sự tồn tại của sản phẩm trong giỏ hàng
     const cartItem = await prisma.cartItem.findFirst({
@@ -92,36 +80,14 @@ export async function PUT(
         { status: 400 }
       );
     }
-    // lấy token từ cookies
-    const token = req.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json(
-        { message: "Token không có sẵn" },
-        { status: 404 }
-      );
-    }
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-
-    const username = decoded.username;
-    if (!username) {
-      return NextResponse.json(
-        { message: "Không xác định được username" },
-        { status: 401 }
-      );
-    }
-    // xác thực người dùng
-    const customer = await prisma.customer.findUnique({
-      where: {
-        username: username,
-      },
-      select: { customer_id: true },
-    });
+    const customer = await authCustomer(req);
     if (!customer) {
       return NextResponse.json(
-        { message: "Không tìm thấy thông tin khách hàng" },
-        { status: 404 }
+        { message: "vui lòng đăng nhập" },
+        { status: 400 }
       );
     }
+
     // xác minh quyền sở hữu
     const cartItem = await prisma.cartItem.findFirst({
       where: {

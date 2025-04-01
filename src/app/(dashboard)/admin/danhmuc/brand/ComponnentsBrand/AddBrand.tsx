@@ -7,6 +7,7 @@ import withReactContent from "sweetalert2-react-content";
 const AddBrand = (props: { reloadData: () => void }) => {
   const [formData, setFormData] = useState({ brandName: "", description: "" });
   const [showAdd, setShowAdd] = useState<boolean>(false);
+  const MySwal = withReactContent(Swal);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -19,24 +20,22 @@ const AddBrand = (props: { reloadData: () => void }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
+    const data = await req.json();
     if (req.ok) {
-      const data = await req.json();
-
       setFormData({ brandName: "", description: "" });
       setShowAdd(false);
-      const MySwal = withReactContent(Swal);
+
       MySwal.fire({
         title: "Thông báo!",
-        text: "Thêm brand Thành Công",
+        text: "Thêm thương hiệu Thành Công",
         icon: "success",
         confirmButtonText: "OK",
       });
       props.reloadData();
     } else {
-      const MySwal = withReactContent(Swal);
       MySwal.fire({
         title: "Thông báo!",
-        text: "lỗi khi thêm brand",
+        text: data.message.join(","),
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -61,7 +60,7 @@ const AddBrand = (props: { reloadData: () => void }) => {
           <h2 className="text-xl font-bold">Thêm Thương Hiệu</h2>
           <form className="mt-4" onSubmit={Addhandler}>
             <div className="mb-4">
-              <label className="block text-gray-700">Name</label>
+              <label className="block text-gray-700">Thương Hiệu</label>
               <input
                 type="text"
                 name="brandName"
@@ -73,7 +72,7 @@ const AddBrand = (props: { reloadData: () => void }) => {
               />
             </div>
             <div className="mb-4 mt-5 ">
-              <label className="block text-gray-700">Description</label>
+              <label className="block text-gray-700">Mô tả thương hiệu</label>
               <textarea
                 name="description"
                 value={formData.description}

@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         email,
       },
     });
-    if (!customer) {
+    if (!customer?.email) {
       return NextResponse.json(
         { message: "Email không tồn tại trong hệ thống" },
         { status: 404 }

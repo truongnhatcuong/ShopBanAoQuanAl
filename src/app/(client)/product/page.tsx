@@ -31,10 +31,14 @@ const PageProduct = () => {
   useEffect(() => {
     async function fetchProducts() {
       const endpoint = category_Id
-        ? `/api/categories/${category_Id}?sortField=${sortField}&sortOrder=${sortOrder}${
+        ? `${
+            process.env.NEXT_PUBLIC_API_URL
+          }/api/categories/${category_Id}?sortField=${sortField}&sortOrder=${sortOrder}${
             maxPrice > 0 ? `&maxPrice=${maxPrice}` : ""
           }`
-        : `/api/product?search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}${
+        : `${
+            process.env.NEXT_PUBLIC_API_URL
+          }/api/product?search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}${
             maxPrice > 0 ? `&maxPrice=${maxPrice}` : ""
           }`;
       try {

@@ -18,7 +18,7 @@ const Page = () => {
   const currentDate = new Date();
 
   const FetchApi = async () => {
-    const res = await fetch(`/api/coupon`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coupon`);
     const data = await res.json();
     setCoupon(data.coupon);
   };
@@ -37,7 +37,7 @@ const Page = () => {
     FetchApi();
   }, []);
   return (
-    <div className="container mx-auto max-w-4xl border h-screen">
+    <div className="containermax-w-7xl border h-screen">
       <div className="flex justify-between mx-9 mt-5 border-b-2 pb-4">
         <p className="text-xl text-center font-semibold "> Kho VouCher</p>
         <p className="text-red-600 text-sm">

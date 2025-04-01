@@ -23,7 +23,7 @@ const RelatedProduct = ({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ApiProductForCategories = async () => {
-    const res = await fetch("/api/product", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product`, {
       next: { revalidate: 100 },
     });
     const data = await res.json();

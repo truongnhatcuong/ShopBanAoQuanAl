@@ -33,9 +33,12 @@ const ProductRecommendations = () => {
     const fetchRecommendations = async () => {
       try {
         setLoading(true);
-        const res = await fetch("/api/recommend", {
-          next: { revalidate: 100 },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/recommend`,
+          {
+            next: { revalidate: 100 },
+          }
+        );
         const data = await res.json();
         setRecommendations(data.data);
       } catch (error) {

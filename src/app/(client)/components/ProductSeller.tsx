@@ -18,7 +18,7 @@ const ProductSeller = () => {
   const [promotion, setPromotion] = useState<IPromotion[]>([]);
   const [numberslice, setNumberSlice] = useState(5);
   async function ProductSeller() {
-    const res = await fetch("/api/promotion");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/promotion`);
     if (res.ok) {
       const data = await res.json();
       setPromotion(data.promotions);

@@ -1,64 +1,35 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import { ShopConText } from "@/app/context/Context";
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
-import { FaCircle } from "react-icons/fa";
+import React, { useContext } from "react";
 
 const Brand = () => {
-  const [user, setUser] = useState({
-    username: "",
-    roleId: 1,
-    image: "",
-  });
-  async function fetchUserInfo() {
-    const res = await fetch("/api/auth/getUsername");
-    const data = await res.json();
-    setUser({
-      username: data.accessToken?.name,
-      roleId: data.accessToken?.roleId,
-      image: data.accessToken?.image,
-    });
-  }
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
-
   const { isLeftMenuVisible } = useContext(ShopConText)!;
 
   return (
-    <div className="">
+    <div className="container mx-auto px-4">
       <div
-        className={`md:flex gap-2 ${
-          isLeftMenuVisible ? "mt-2.5" : "md:0 "
-        } justify-center  `}
+        className={`flex items-center justify-center gap-3 transition-all duration-300 ${
+          isLeftMenuVisible ? "mt-2" : "mt-2"
+        }`}
       >
-        <div className={` ${isLeftMenuVisible ? "mt-0 pb-2 " : "mt-1.5 pb-4"}`}>
-          {user.image?.length > 0 ? (
-            <>
-              <Image
-                src={user.image}
-                width={300}
-                height={300}
-                alt=""
-                className="w-12 h-12  rounded-full"
-              />
-            </>
-          ) : (
-            <>
-              <div className="w-10 h-10 bg-slate-200 rounded-full flex justify-center items-center  ">
-                <span className="text-black">
-                  {user.username?.charAt(0).toUpperCase()}
-                </span>
-              </div>
-            </>
-          )}
+        <div className="flex-shrink-0">
+          <Image
+            src="/Image/logo.png"
+            alt="OrdinClub Logo"
+            width={100}
+            height={100}
+            className={`border-2 border-gray-200 bg-white object-contain rounded-full shadow-sm  w-12 h-12 hover:scale-105 transition-transform duration-200`}
+            priority
+          />
         </div>
-        <div className={`${isLeftMenuVisible ? "block" : "hidden"} `}>
-          <p className="text-base  mb-0.5 hidden md:block">{user.username}</p>
-          <p className="flex items-center gap-1 text-sm font-medium">
-            <FaCircle className="text-green-700 text-xs" />
-            online
+        <div className={`${isLeftMenuVisible ? "block" : "hidden"}`}>
+          <p
+            className="text-2xl uppercase font-semibold text-white
+            tracking-tight mb-0 hover:text-blue-600 
+            transition-colors duration-200"
+          >
+            Ordin Club
           </p>
         </div>
       </div>

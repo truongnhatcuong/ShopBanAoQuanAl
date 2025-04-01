@@ -109,6 +109,13 @@ export async function DELETE(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+const categoriesSchema = z.object({
+  category_name: z
+    .string()
+    .min(5, { message: "Độ Dài Tối Thiểu: 5" })
+    .max(255, { message: "Độ Dài Tối Đa : 255 " }),
+  description: z.string(),
+});
 
 export async function PUT(
   req: NextRequest,
@@ -119,22 +126,15 @@ export async function PUT(
     const data = await req.json();
     const categoryId = Number(id);
 
-    const categoriesSchema = z.object({
-      category_name: z
-        .string()
-        .min(5, { message: "Độ Dài Tối Thiểu: 5" })
-        .max(255, { message: "Độ Dài Tối Đa : 255 " }),
-      description: z.string(),
-      parent_id: z.number().optional(),
-    });
     const isValid = categoriesSchema.safeParse(data);
 
     if (!isValid.success) {
       return NextResponse.json(
-        { errors: isValid.error.errors },
+        { message: isValid.error?.errors?.map((item) => item.message) || [] },
         { status: 400 }
       );
     }
+
     const updateCategory = await prisma.category.update({
       where: {
         category_id: categoryId,

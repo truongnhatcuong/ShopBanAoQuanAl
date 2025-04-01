@@ -38,12 +38,15 @@ const Notificationcoupon = () => {
   };
 
   const markNotification = async (notification_id: number) => {
-    const res = await fetch(`/api/notification/${notification_id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/notification/${notification_id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (res.ok) {
       FetchApi();
     } else {

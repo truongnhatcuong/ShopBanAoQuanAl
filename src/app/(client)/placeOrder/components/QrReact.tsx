@@ -28,14 +28,11 @@ interface CartApiResponse {
 
 const QRCode = ({ cart }: CartApiResponse) => {
   const { finalTotal } = useContext(ShopConText)!;
-  const [valueData, setValueData] = useState({ id: 0, customer: "" });
+  const [valueData, setValueData] = useState("");
 
   useEffect(() => {
     if (cart) {
-      setValueData({
-        id: cart.idOrderNext, // Không cần Number() vì đã là number
-        customer: cart.customer,
-      });
+      setValueData(cart.customer);
     }
   }, [cart]); // Cập nhật khi cart thay đổi
 
@@ -43,7 +40,7 @@ const QRCode = ({ cart }: CartApiResponse) => {
     return <p>Không có sản phẩm trong giỏ hàng.</p>;
 
   const vietQR = `https://img.vietqr.io/image/MB-0372204152-qr_only_large.png?amount=${finalTotal}&addInfo=${encodeURIComponent(
-    `MaDonHang#${valueData.id} - ${valueData.customer} Thanh Toán`
+    `khách hàng ${valueData} Thanh Toán`
   )}`;
 
   return (

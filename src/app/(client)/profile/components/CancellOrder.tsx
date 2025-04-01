@@ -20,9 +20,12 @@ const CancellOrder = ({ orderId, reloadData }: IOrder) => {
       confirmButtonText: "   Hủy Đơn Hàng!",
     });
     if (result.isConfirmed) {
-      const res = await fetch(`/api/order/${orderId}`, { method: "DELETE" });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`,
+        { method: "DELETE" }
+      );
       if (res.ok) {
-        toast.success("hủy đơn hàng thành công");
+        toast.success("đơn hàng của bạn đã được hủy");
         reloadData();
       } else {
         const error = await res.json();

@@ -41,11 +41,9 @@ interface OrderResponse {
 }
 
 const PaymentMethodForm = ({
-  customerId,
   addressId,
   cart,
 }: {
-  customerId: number;
   addressId: number;
   cart: CartData;
 }) => {
@@ -69,18 +67,20 @@ const PaymentMethodForm = ({
     try {
       setIsProcessing(true);
 
-      const response = await fetch("/api/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          customerId,
-          addressId,
-          paymentMethod,
-          finalTotal,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            addressId,
+            paymentMethod,
+            finalTotal,
+          }),
+        }
+      );
 
       const data: OrderResponse = await response.json();
 

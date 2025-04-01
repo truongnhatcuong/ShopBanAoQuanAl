@@ -2,6 +2,7 @@ import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 
 import { NextRequest, NextResponse } from "next/server";
+import { productSchema } from "../route";
 
 export async function GET(
   req: NextRequest,
@@ -95,7 +96,6 @@ export async function PUT(
     product_name,
     description,
     price,
-    stock_quantity,
     color,
     category_id,
     brand_id,
@@ -103,14 +103,25 @@ export async function PUT(
     sizes,
   } = await req.json();
 
-  if (
-    !product_name ||
-    !price ||
-    !category_id ||
-    !brand_id ||
-    !season_id ||
-    !sizes
-  ) {
+  const isValid = productSchema.safeParse({
+    product_name,
+    description,
+    price,
+    color,
+    category_id,
+    brand_id,
+    season_id,
+    sizes,
+  });
+  if (!isValid.success) {
+    return NextResponse.json(
+      {
+        message: isValid.error.errors[0].message,
+      },
+      { status: 400 }
+    );
+  }
+  if (!category_id || !brand_id || !season_id || !sizes) {
     return NextResponse.json(
       { message: "vui lòng nhập giá trị" },
       { status: 404 }
@@ -157,7 +168,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 501 });
+    return NextResponse.json({ message: error.message }, { status: 501 });
   }
 }
 export async function DELETE(
@@ -195,6 +206,6 @@ export async function DELETE(
       { status: 201 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

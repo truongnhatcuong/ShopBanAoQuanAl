@@ -1,9 +1,17 @@
 import prisma from "@/prisma/client";
+import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
     // Get query parameters for date filtering
+    const customer = await authCustomer(req);
+    if (!customer)
+      return NextResponse.json(
+        { message: "vui lòng đăng nhập" },
+        { status: 400 }
+      );
+
     const url = new URL(req.url);
     const periodParam = url.searchParams.get("period") || "day"; // default to weekly
     const dateParam =

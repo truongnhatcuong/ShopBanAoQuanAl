@@ -10,11 +10,12 @@ import {
   FaUser,
   FaGift,
 } from "react-icons/fa";
-import { BiCart } from "react-icons/bi";
 import { FiPackage } from "react-icons/fi";
 import { MdOutlineRateReview } from "react-icons/md";
 import { RiCoupon2Fill, RiCoupon3Fill } from "react-icons/ri";
 import { FaHeartCirclePlus } from "react-icons/fa6";
+import { RiLogoutCircleLine } from "react-icons/ri";
+import { PiUsersThree } from "react-icons/pi";
 
 const MenuItem = [
   {
@@ -50,7 +51,7 @@ const MenuItem = [
       {
         id: 5,
         icon: <FaCloudSun />,
-        title: "Mùa",
+        title: "Xu Hướng Mùa",
         link: "/admin/danhmuc/season",
       },
     ],
@@ -63,7 +64,7 @@ const MenuItem = [
     submenu: [
       {
         id: 1,
-        icon: <MdOutlineCategory />,
+        icon: <PiUsersThree />,
         title: "Khách Hàng",
         link: "/admin/danhmuc/customer",
       },
@@ -78,7 +79,7 @@ const MenuItem = [
         id: 3,
         icon: <FaHeartCirclePlus />,
         title: "Yêu Thích",
-        link: "/admin/danhmuc/wishlist",
+        link: "#",
       },
       {
         id: 4,
@@ -107,6 +108,12 @@ const MenuItem = [
         link: "/admin/danhmuc/coupon",
       },
     ],
+  },
+  {
+    id: 5,
+    icon: <RiLogoutCircleLine />,
+    title: "Đăng Xuất",
+    link: "/",
   },
 ];
 

@@ -13,14 +13,13 @@ const AddCategories = (props: { reloadData: () => void }) => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const response = await fetch(`/api/categories`, {
+    const res = await fetch(`/api/categories`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ categoriesName, description }),
     });
-
-    if (response.ok) {
-      const data = await response.json();
+    const data = await res.json();
+    if (res.ok) {
       setCategoriesName("");
       setDescription("");
       setShowAddModal(false);
@@ -31,6 +30,13 @@ const AddCategories = (props: { reloadData: () => void }) => {
         confirmButtonText: "OK",
       });
       props.reloadData();
+    } else {
+      MySwal.fire({
+        title: "Thông báo!",
+        text: data.message || "lỗi khi tạo danh mục",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   }
 
@@ -47,10 +53,10 @@ const AddCategories = (props: { reloadData: () => void }) => {
           isOpen={showAddModal}
           ariaHideApp={false}
           contentLabel="Thêm sản phẩm mới"
-          className="fixed  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5 "
+          className="fixed max-w-5xl  top-[50%] left-[58%] transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-3/5 "
           overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-70"
         >
-          <h2 className="text-xl font-bold">Thêm sản phẩm mới</h2>
+          <h2 className="text-xl font-bold">Thêm danh mục mới</h2>
           <form className="mt-4" onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700">Name</label>

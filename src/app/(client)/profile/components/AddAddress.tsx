@@ -101,19 +101,22 @@ const AddAddress = ({ reloadData }: { reloadData: () => void }) => {
       return;
     }
     try {
-      const res = await fetch(`/api/addressShiper`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          country: "Việt Nam",
-          province: cityName,
-          district: districtName,
-          ward: wardName,
-          street_address: specificAddress,
-          note: note || null,
-          is_default: isDefault,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/addressShiper`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            country: "Việt Nam",
+            province: cityName,
+            district: districtName,
+            ward: wardName,
+            street_address: specificAddress,
+            note: note || null,
+            is_default: isDefault,
+          }),
+        }
+      );
       if (res.ok) {
         reloadData();
         MySwal.fire({

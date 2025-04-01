@@ -24,7 +24,9 @@ const SearchProduct = ({ search, setSearch }: ISearchProps) => {
 
   useEffect(() => {
     const fetchApi = async () => {
-      const res = await fetch(`/api/product?search=${search}`);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/product?search=${search}`
+      );
       const data = await res.json();
       setProducts(data.product);
     };

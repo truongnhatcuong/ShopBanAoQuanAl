@@ -20,9 +20,12 @@ const SideBar = ({ onPriceChange }: ISideBarProps) => {
 
   useEffect(() => {
     async function ApiCategories() {
-      const res = await fetch("/api/categories", {
-        next: { revalidate: 300 },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+        {
+          next: { revalidate: 300 },
+        }
+      );
       const data = await res.json();
       setCategories(data.categories);
     }

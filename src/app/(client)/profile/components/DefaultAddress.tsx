@@ -8,13 +8,16 @@ interface IDefault {
 }
 const DefaultAddress = ({ address_id, reloadData }: IDefault) => {
   const handlerDefault = async () => {
-    const res = await fetch(`/api/addressShiper/${address_id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "setDefault",
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/addressShiper/${address_id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "setDefault",
+        }),
+      }
+    );
     if (res.ok) {
       await res.json();
       reloadData();

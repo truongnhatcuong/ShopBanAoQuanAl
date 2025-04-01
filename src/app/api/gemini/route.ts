@@ -52,11 +52,6 @@ export async function POST(req: NextRequest) {
     const { message } = await req.json();
     const user = await authCustomer(req);
 
-    if (!user)
-      return NextResponse.json(
-        { message: "vui lòng đăng nhập xem đơn hàng của bạn !" },
-        { status: 404 }
-      );
     if (!message) {
       return NextResponse.json(
         { error: "Vui lòng nhập câu hỏi!" },
@@ -73,6 +68,11 @@ export async function POST(req: NextRequest) {
     // ✅ Kiểm tra đơn hàng với fuzzy matching
     const orderMatch = checkFuzzyMatch(fuseOrder);
     if (orderMatch) {
+      if (!user)
+        return NextResponse.json(
+          { message: "vui lòng đăng nhập xem đơn hàng của bạn !" },
+          { status: 404 }
+        );
       const order = await prisma.order.findFirst({
         where: { customer_id: user?.customer_id },
         orderBy: { order_date: "desc" },

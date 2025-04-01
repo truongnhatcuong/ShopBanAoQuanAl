@@ -52,7 +52,6 @@ const ChangeAddress = ({ cart }: CartApiResponse) => {
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
     null
   );
-  const [customer_id, setCustomer_id] = useState<number | null>(null);
 
   const FetchApi = async () => {
     const res = await fetch(`/api/addressShiper`);
@@ -73,7 +72,6 @@ const ChangeAddress = ({ cart }: CartApiResponse) => {
         setSelectedAddressId(defaultAddress.address_id);
       }
     }
-    setCustomer_id(Number(address?.AddressShipper[0]?.customer_id));
   }, [address]);
 
   return (
@@ -182,11 +180,7 @@ const ChangeAddress = ({ cart }: CartApiResponse) => {
           </div>
         </div>
 
-        <PaymentMethodForm
-          addressId={Number(selectedAddressId)}
-          customerId={Number(customer_id)}
-          cart={cart}
-        />
+        <PaymentMethodForm addressId={Number(selectedAddressId)} cart={cart} />
       </div>
     </>
   );

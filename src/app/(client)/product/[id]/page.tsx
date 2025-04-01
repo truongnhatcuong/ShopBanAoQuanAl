@@ -51,10 +51,13 @@ const Page = () => {
 
   useEffect(() => {
     async function ApiProductDeTail() {
-      const res = await fetch(`/api/product/${id}`, {
-        cache: "force-cache",
-        next: { revalidate: 200 },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`,
+        {
+          cache: "force-cache",
+          next: { revalidate: 200 },
+        }
+      );
       const data = await res.json();
       await trackUserAction(Number(id), "view");
       setProductDetail(data.getProduct);

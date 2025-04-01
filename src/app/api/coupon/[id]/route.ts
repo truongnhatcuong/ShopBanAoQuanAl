@@ -71,7 +71,7 @@ export async function PUT(
     if (currentDay > new Date(end_date)) {
       return NextResponse.json(
         { message: "Mã khuyến mãi đã hết hạn." },
-        { status: 404 }
+        { status: 400 }
       );
     }
 
@@ -81,18 +81,18 @@ export async function PUT(
       },
     });
     if (!authCustomer) {
-      return NextResponse.json({ message: "error" }, { status: 404 });
+      return NextResponse.json({ message: "error" }, { status: 400 });
     }
 
     const hasUpdatePermission = user?.role.permissions.some(
       (item) => item.permission.permission === "update"
     );
-    // if (!hasUpdatePermission) {
-    //   return NextResponse.json(
-    //     { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
-    //     { status: 403 }
-    //   );
-    // }
+    if (!hasUpdatePermission) {
+      return NextResponse.json(
+        { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
+        { status: 400 }
+      );
+    }
     // check exist coupon
     const existingCoupon = await prisma.coupon.findUnique({
       where: {
@@ -102,7 +102,7 @@ export async function PUT(
     if (!existingCoupon) {
       return NextResponse.json(
         { message: "Mã Khuyến Mãi Không Tồn Tại" },
-        { status: 404 }
+        { status: 400 }
       );
     }
     // update coupon

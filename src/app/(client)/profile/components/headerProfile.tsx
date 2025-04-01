@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import MenuItemProfile from "./MenuItemProfile";
 import { PiUserCircleGearDuotone } from "react-icons/pi";
@@ -11,7 +12,7 @@ const listProfile = [
     id: 1,
     icon: <PiUserCircleGearDuotone />,
     link: "/profile",
-    title: "Thông Tin ",
+    title: "Thông Tin",
   },
   {
     id: 2,
@@ -38,17 +39,16 @@ const listProfile = [
     title: "Kho voucher",
   },
 ];
+
 const HeaderProfile = () => {
   return (
-    <>
-      <ul className="  flex flex-col pl-7 gap-y-6 text-black dark:text-white dark:bg-black bg-slate-100 shadow-lg h-full pt-12">
-        {listProfile.map((item) => (
-          <li key={item.id} className="">
-            <MenuItemProfile {...item} />
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul className="flex h-full flex-col gap-y-6 bg-slate-100 px-6 py-12 shadow-lg dark:bg-slate-900 dark:text-white md:px-7">
+      {listProfile.map((item) => (
+        <li key={item.id}>
+          <MenuItemProfile {...item} />
+        </li>
+      ))}
+    </ul>
   );
 };
 

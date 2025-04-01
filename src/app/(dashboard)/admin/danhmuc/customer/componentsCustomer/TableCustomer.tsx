@@ -72,11 +72,17 @@ const TableCustomer = ({
                 <td className="p-4">{item.phone}</td>
 
                 <td className={`p-2  flex gap-5  }`}>
-                  <DeleteCustomer
-                    customer_id={item.customer_id}
-                    reloadData={reloadData}
-                  />
-                  <UpdateCustomer customer={item} reloadData={reloadData} />
+                  {item.customer_id === 6 ? (
+                    ""
+                  ) : (
+                    <>
+                      <DeleteCustomer
+                        customer_id={item.customer_id}
+                        reloadData={reloadData}
+                      />
+                      <UpdateCustomer customer={item} reloadData={reloadData} />
+                    </>
+                  )}
                 </td>
               </tr>
             ))

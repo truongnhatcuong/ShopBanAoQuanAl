@@ -1,40 +1,46 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { authCustomer } from "@/utils/Auth";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(8, "vui lòng nhập hơn 8 kí tự").max(225),
+  newPassword: z.string().min(8, "vui lòng nhập hơn 8 kí tự").max(225),
+});
 
 export async function POST(req: NextRequest) {
-  if (!JWT_SECRET) {
-    return NextResponse.json(
-      { message: "JWT_SECRET chưa được định nghĩa" },
-      { status: 500 }
-    );
-  }
-
-  const authHeader = req.headers.get("Authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { message: "Token không hợp lệ hoặc không tồn tại" },
-      { status: 401 }
-    );
-  }
-  const token = authHeader.split(" ")[1];
-
   try {
-    const decode: any = jwt.verify(token, JWT_SECRET);
-    const username = decode.username;
-
-    if (!username) {
-      return NextResponse.json({
-        message: "Người dùng không hợp lệ trong token",
-      });
-    }
-
+    const customer = await authCustomer(req);
     const { currentPassword, newPassword } = await req.json();
 
+    const parseResult = changePasswordSchema.safeParse({
+      currentPassword,
+      newPassword,
+    });
+
+    if (!parseResult.success) {
+      return NextResponse.json(
+        { message: parseResult.error.errors[0].message },
+        { status: 400 }
+      );
+    }
+
+    if (!customer) {
+      return NextResponse.json({
+        message: "Người dùng không Tồn tại",
+      });
+    }
+    // Kiểm tra mật khẩu hiện tại
+    if (!customer.password) {
+      return NextResponse.json(
+        {
+          message: "Mật Khẩu hiện tại không đúng vui lòng nhập lại",
+        },
+        { status: 400 }
+      );
+    }
+    //kiểm tra trùng password
     if (currentPassword === newPassword) {
       return NextResponse.json(
         {
@@ -43,54 +49,31 @@ export async function POST(req: NextRequest) {
         { status: 404 }
       );
     }
-
-    const user = await prisma.customer.findUnique({
-      where: { username },
-    });
-
-    if (!user) {
-      return NextResponse.json({
-        message: "Người dùng không Tồn tại",
-      });
-    }
-    // Kiểm tra mật khẩu hiện tại
-    if (!user.password) {
-      return NextResponse.json(
-        {
-          message: "Mật khẩu không tồn tại trong cơ sở dữ liệu",
-        },
-        { status: 404 }
-      );
-    }
-
     // kiểm tra mật khẩu hiện tại có trùng với mật khẩu trong CSDL Không
-
-    const changePassword = await bcrypt.compare(currentPassword, user.password);
+    const changePassword = await bcrypt.compare(
+      currentPassword,
+      customer.password
+    );
 
     if (!changePassword) {
       return NextResponse.json(
         { message: "Vui lòng nhập đúng mật khẩu" },
-        { status: 404 }
+        { status: 400 }
       );
     }
-
     // Mã Hóa Lại Mật Khẩu Mới
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
     await prisma.customer.update({
-      where: { username },
+      where: { customer_id: customer?.customer_id },
       data: {
         password: newPasswordHash,
       },
     });
-
     return NextResponse.json(
       { message: "Mật khẩu đã được thay đổi thành công" },
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json(
-      { message: "Token không hợp lệ hoặc đã hết hạn", error: error.message },
-      { status: 401 }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

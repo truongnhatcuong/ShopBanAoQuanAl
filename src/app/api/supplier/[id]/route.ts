@@ -1,6 +1,7 @@
 import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { productSupplierSchema } from "../route";
 
 export async function GET(
   req: NextRequest,
@@ -29,6 +30,24 @@ export async function PUT(
   const supplierId = Number(id);
   const { supplier_name, contact_info, product_id, quantity, supply_date } =
     await req.json();
+  const parseResult = productSupplierSchema.safeParse({
+    supplier_name,
+    contact_info,
+    product_id,
+    quantity,
+    supply_date,
+  });
+
+  if (!parseResult.success) {
+    return NextResponse.json(
+      {
+        message: parseResult.error.errors
+          .map((item) => item.message)
+          .join("\n"),
+      },
+      { status: 400 }
+    );
+  }
   try {
     const updateSupplier = await prisma.supplier.update({
       where: {

@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     if (!customer)
       return NextResponse.json(
         { message: "vui lòng đăng nhập" },
-        { status: 404 }
+        { status: 400 }
       );
     const notification = await prisma.notification.findMany({
       where: {

@@ -17,7 +17,7 @@ import Image from "next/image";
 import ExpiredStorage from "expired-storage";
 import { ShopConText } from "@/app/context/Context";
 interface UserLoginDropdownProps {
-  user: { roleId: number; username: string; image: string };
+  user: { roleId: number; name: string; image: string };
 }
 const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
   const router = useRouter();
@@ -51,7 +51,7 @@ const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
             className="w-7 h-7 border rounded-full "
           />
           <span className=" hidden md:block md:text-base cursor-pointer mt-[3px] ml-2">
-            {user.username}
+            {user.name}
           </span>
         </div>
       </DropdownMenuTrigger>

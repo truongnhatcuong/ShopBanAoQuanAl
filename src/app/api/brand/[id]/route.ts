@@ -1,6 +1,15 @@
 import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+const brandSchema = z.object({
+  brandName: z
+    .string()
+    .min(5, "tên thương hiệu vui lòng nhập 5 ký tự")
+    .max(255),
+  description: z.string().min(5, "mô tả vui lòng nhập 5 ký tự").max(255),
+});
 
 export async function PUT(
   req: NextRequest,
@@ -10,6 +19,15 @@ export async function PUT(
   const brandId = Number(id);
   const { brandName, description } = await req.json();
 
+  const parseResult = brandSchema.safeParse({ brandName, description });
+  if (!parseResult.success) {
+    return NextResponse.json(
+      {
+        message: parseResult.error.errors[0].message,
+      },
+      { status: 400 }
+    );
+  }
   try {
     const update = await prisma.brand.update({
       where: {
@@ -59,8 +77,11 @@ export async function DELETE(
         brand_id: brandId,
       },
     });
-    return NextResponse.json({ message: "xóa thành công" }, { status: 200 });
+    return NextResponse.json(
+      { message: "xóa thành công thương hiệu này" },
+      { status: 200 }
+    );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

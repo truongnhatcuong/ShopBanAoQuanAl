@@ -1,14 +1,8 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import SubmenuItems from "./SubmenuItems";
-import Image from "next/image";
-import { assets } from "@/app/assets/frontend_assets/assets";
 import { ShopConText } from "@/app/context/Context";
-
-interface IProps {
-  menuItem: IMenu;
-}
 
 interface IMenu {
   id: number;
@@ -18,44 +12,59 @@ interface IMenu {
   submenu?: IMenu[];
 }
 
-const MenuItems = (props: IProps) => {
+interface IProps {
+  menuItem: IMenu;
+}
+
+const MenuItems = ({ menuItem }: IProps) => {
   const { isLeftMenuVisible } = useContext(ShopConText)!;
+  const isLogoutItem = menuItem.id === 5; // Đánh dấu item logout
+
   return (
-    <ul className="flex flex-col  cursor-pointer mt-3 ">
-      <li className="flex items-center justify-between rounded-md transition-colors duration-200 mr-4 font-semibold">
-        <div className="flex items-center justify-between w-full">
-          <Link href={props.menuItem.link} className="flex items-center">
+    <ul className="flex flex-col mt-3">
+      <li className="group">
+        <Link
+          href={menuItem.link}
+          className="flex items-center justify-between w-full p-2 rounded-lg transition-all duration-300 "
+        >
+          <div className="flex items-center flex-1">
+            {/* Icon */}
             <span
-              className={`mr-3 ml-2 mt-4 ${
-                isLeftMenuVisible
-                  ? "md:text-3xl text-xl text-slate-300/90 "
-                  : "md:text-3xl text-slate-300/90 "
-              }`}
+              className={`flex-shrink-0 text-slate-300/90 transition-colors duration-200
+                ${
+                  isLeftMenuVisible
+                    ? "text-xl md:text-3xl"
+                    : "text-xl md:text-3xl"
+                }
+                ${isLogoutItem ? "ml-2 md:ml-6 hover:text-red-500" : "ml-2"}
+                `}
             >
-              {props.menuItem.icon}
+              {menuItem.icon}
             </span>
+
+            {/* Title - Chỉ hiển thị khi menu mở trên md+ */}
             {isLeftMenuVisible && (
               <span
-                className={`ml-1 mt-6 pb-1.5 text-xl  font-semibold  hidden md:block text-white  `}
+                className={`ml-3 text-lg font-semibold text-white uppercase truncate
+                  hidden md:block transition-opacity duration-200
+                  ${isLogoutItem ? "hover:text-red-500" : ""}`}
               >
-                {props.menuItem.title}
+                {menuItem.title}
               </span>
             )}
-          </Link>
-        </div>
+          </div>
+        </Link>
       </li>
 
-      {props.menuItem.submenu && (
+      {/* Submenu */}
+      {menuItem.submenu && (
         <ul
-          className={`ml-7 text-gray-950 w-8  rounded-lg mt-1 ${
-            isLeftMenuVisible ? " md:w-48 " : "md:w-14  "
-          }`}
+          className={`ml-6 mt-1 transition-all duration-300
+            ${isLeftMenuVisible ? "md:w-48" : "md:w-14"}`}
         >
-          {props.menuItem.submenu.map((item, index) => (
-            <li key={item.id} className="">
-              <div className="text-base ">
-                <SubmenuItems menuItem={item} />
-              </div>
+          {menuItem.submenu.map((item) => (
+            <li key={item.id}>
+              <SubmenuItems menuItem={item} />
             </li>
           ))}
         </ul>

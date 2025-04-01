@@ -95,7 +95,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { customerId, addressId, paymentMethod, finalTotal } = await req.json();
+  const { addressId, paymentMethod, finalTotal } = await req.json();
 
   const token = req.cookies.get("token")?.value;
   if (!token) {
@@ -107,15 +107,15 @@ export async function POST(req: NextRequest) {
 
   try {
     const customer = await authCustomer(req);
-    if (!customerId) {
+    if (!customer) {
       return NextResponse.json(
-        { message: "Vui lòng điền thông tin địa chỉ" },
+        { message: "vui lòng đăng nhập" },
         { status: 400 }
       );
     }
 
     const address = await prisma.addressShipper.findUnique({
-      where: { address_id: addressId, customer_id: customerId },
+      where: { address_id: addressId, customer_id: customer?.customer_id },
     });
     if (!address) {
       return NextResponse.json(
@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
 
     const order = await prisma.order.create({
       data: {
-        customer_id: customerId,
+        customer_id: customer.customer_id,
         address_id: addressId,
         order_date: new Date(),
         total_amount: totalAmount, // Sử dụng finalTotal trực tiếp

@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import { authCustomer } from "@/utils/Auth";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 const JWT_SECRET = process.env.JWT_SECRET || "";
@@ -9,13 +10,12 @@ export async function GET(
 ) {
   const { id } = await params;
   const addressId = Number(id);
-  const token = req.cookies.get("token")?.value;
-  if (!token) {
+  const customer = await authCustomer(req);
+  if (!customer)
     return NextResponse.json(
       { message: "vui lòng đăng nhập" },
-      { status: 404 }
+      { status: 400 }
     );
-  }
   try {
     const GetOneAddress = await prisma.addressShipper.findUnique({
       where: {
@@ -91,20 +91,12 @@ export async function DELETE(
 ) {
   const { id } = await params;
   const addressId = Number(id);
-  const token = req.cookies.get("token")?.value;
-  if (!token) {
+  const customer = await authCustomer(req);
+  if (!customer)
     return NextResponse.json(
       { message: "vui lòng đăng nhập" },
-      { status: 404 }
+      { status: 400 }
     );
-  }
-  const decoded: any = jwt.verify(token, JWT_SECRET);
-  const username = decoded.username;
-  const customer = await prisma.customer.findUnique({
-    where: {
-      username: username,
-    },
-  });
 
   try {
     await prisma.addressShipper.delete({

@@ -1,5 +1,6 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -44,9 +45,25 @@ export async function GET(req: NextRequest) {
   );
 }
 
+const brandSchema = z.object({
+  brandName: z
+    .string()
+    .min(5, "tên thương hiệu vui lòng nhập 5 ký tự")
+    .max(255),
+  description: z.string().min(5, "mô tả vui lòng nhập 5 ký tự").max(255),
+});
 export async function POST(req: NextRequest) {
   try {
     const { brandName, description } = await req.json();
+    const parseResult = brandSchema.safeParse({ brandName, description });
+    if (!parseResult.success) {
+      return NextResponse.json(
+        {
+          message: parseResult.error.errors[0].message,
+        },
+        { status: 400 }
+      );
+    }
     const newBrand = await prisma.brand.create({
       data: {
         brand_name: brandName,

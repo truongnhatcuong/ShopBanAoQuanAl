@@ -75,7 +75,10 @@ const PageListOrder = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("/api/order", { cache: "no-cache" });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/order`,
+        { cache: "no-cache" }
+      );
       const data = await response.json();
       setOrderList(data.orders);
     } catch (error) {
@@ -99,7 +102,7 @@ const PageListOrder = () => {
   return (
     <div className="flex flex-col h-screen">
       {/* Tab Navigation - Fixed at top */}
-      <div className="flex border-b mb-4 bg-white sticky top-0 z-10">
+      <div className="flex border-y mb-4 bg-white sticky top-0 z-10">
         {Object.values(OrderState).map((state) => (
           <button
             key={state}

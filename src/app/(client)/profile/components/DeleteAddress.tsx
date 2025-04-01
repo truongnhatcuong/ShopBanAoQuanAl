@@ -22,9 +22,12 @@ const DeleteAddress = ({ address_id, reloadData }: IDefault) => {
     });
     // xác nhận muốn xóa hay không
     if (result.isConfirmed) {
-      const res = await fetch(`/api/addressShiper/${address_id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/addressShiper/${address_id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (res.ok) {
         reloadData();

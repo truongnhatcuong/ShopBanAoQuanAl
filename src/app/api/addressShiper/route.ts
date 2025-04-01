@@ -1,26 +1,13 @@
 import prisma from "@/prisma/client";
+import { authCustomer } from "@/utils/Auth";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
 export async function GET(req: NextRequest) {
-  const token = req.cookies.get("token")?.value;
-  if (!token) {
-    return NextResponse.json(
-      { message: "vui lòng đăng nhập" },
-      { status: 404 }
-    );
-  }
+  const customer = await authCustomer(req);
   try {
-    const decode: any = jwt.verify(token, JWT_SECRET);
-    const username = decode.username;
-    const customer = await prisma.customer.findUnique({
-      where: {
-        username: username,
-      },
-    });
-
     const addressShiper = await prisma.customer.findUnique({
       where: {
         customer_id: customer?.customer_id,
@@ -40,7 +27,7 @@ export async function GET(req: NextRequest) {
   }
 }
 export async function POST(req: NextRequest) {
-  const token = req.cookies.get("token")?.value;
+  const customer = await authCustomer(req);
   const {
     country,
     province,
@@ -51,22 +38,12 @@ export async function POST(req: NextRequest) {
     is_default,
   } = await req.json();
 
-  if (!token) {
-    return NextResponse.json(
-      { message: "vui lòng đăng nhập" },
-      { status: 404 }
-    );
-  }
   try {
-    const decoded: any = jwt.verify(token, JWT_SECRET);
-    const username = decoded.username;
-
-    const customer = await prisma.customer.findUnique({
-      where: {
-        username: username,
-      },
-    });
-
+    if (!customer)
+      return NextResponse.json(
+        { message: "vui lòng đăng nhập" },
+        { status: 400 }
+      );
     //kiểm tra xem khách hàng tồn tại địa chỉ address chưa
     const exitsAddress = await prisma.addressShipper.findMany({
       where: { customer_id: customer?.customer_id },

@@ -12,27 +12,17 @@ const ChangePasswordForm = () => {
   //thực hiện đổi mật khẩu
   async function changePasswordHandle(e: React.FormEvent) {
     e.preventDefault();
-
-    if (newPassword !== confirmPassword) {
-      setErrorChange("Mật khẩu mới và xác nhận mật khẩu không khớp");
-
-      return;
-    }
-    const token = window.localStorage.getItem("token");
-    if (!token) {
-      setErrorChange("Token không hợp lệ hoặc đã hết hạn");
-      return;
-    }
-
     try {
-      const res = await fetch("/api/auth/change-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ currentPassword, newPassword }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/change-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ currentPassword, newPassword }),
+        }
+      );
       const data = await res.json();
       if (res.ok) {
         await MySwal.fire({
@@ -68,25 +58,25 @@ const ChangePasswordForm = () => {
 
   return (
     <div className="max-w-7xl mx-auto border border-gray-300 dark:border-gray-700 p-4 shadow-lg h-full bg-white dark:bg-gray-800">
-      <h3 className="text-center text-black dark:text-white text-xl font-semibold my-4">
+      <h3 className="my-6 text-center text-3xl font-extrabold uppercase tracking-wider text-gray-900 dark:text-white drop-shadow-lg">
         Đổi Mật Khẩu
       </h3>
       <div className="bg-blue-100 dark:bg-blue-900 p-4 rounded-md shadow-lg mb-6">
-        <p className="text-sm text-green-950 dark:text-green-200 font-medium mb-2">
+        <p className="text-xl text-green-950 dark:text-green-200 font-medium mb-2">
           <strong>Quy tắc đặt mật khẩu:</strong>
         </p>
         <ul className="list-disc pl-5 space-y-2">
-          <li className="text-sm text-green-950 dark:text-green-200 flex items-start space-x-2">
+          <li className="text-lg text-green-950 dark:text-green-200 flex items-start space-x-2">
             <span className="text-green-700 dark:text-green-400">✔</span>
             <span>Có từ 8 ký tự trở lên.</span>
           </li>
-          <li className="text-sm text-green-950 dark:text-green-200 flex items-start space-x-2">
+          <li className="text-lg text-green-950 dark:text-green-200 flex items-start space-x-2">
             <span className="text-green-700 dark:text-green-400">✔</span>
             <span>
               Có ít nhất 1 ký tự viết hoa, 1 ký tự viết thường, 1 chữ số.
             </span>
           </li>
-          <li className="text-sm text-green-950 dark:text-green-200 flex items-start space-x-2">
+          <li className="text-lg text-green-950 dark:text-green-200 flex items-start space-x-2">
             <span className="text-green-700 dark:text-green-400">✔</span>
             <span>Mật khẩu không được giống tên đăng nhập.</span>
           </li>
@@ -96,7 +86,7 @@ const ChangePasswordForm = () => {
         <div className="mb-4 flex items-center gap-x-4">
           <label
             htmlFor=""
-            className="block text-sm font-medium w-1/3 text-gray-950 dark:text-gray-300"
+            className="block text-xl ml-7 font-medium w-1/3 text-gray-950 dark:text-gray-300"
           >
             Mật khẩu cũ:<span className="text-red-600">*</span>
           </label>
@@ -106,13 +96,13 @@ const ChangePasswordForm = () => {
             placeholder="Nhập mật khẩu hiện tại"
             value={currentPassword}
             onChange={(e) => setCurrenPassword(e.target.value)}
-            className="w-fit  px-3 py-2 border border-gray-400  rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-96  px-3 py-2 border border-gray-400  rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         <div className="mb-4 flex items-center gap-x-4">
           <label
             htmlFor=""
-            className="block text-sm font-medium w-1/3 text-gray-950 dark:text-gray-300"
+            className="block text-xl ml-7 font-medium w-1/3 text-gray-950 dark:text-gray-300"
           >
             Mật khẩu mới:<span className="text-red-600">*</span>
           </label>
@@ -122,13 +112,13 @@ const ChangePasswordForm = () => {
             value={newPassword}
             placeholder="Nhập mật khẩu mới"
             onChange={(e) => setNewPassword(e.target.value)}
-            className="  px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className=" md:w-96 px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         <div className="mb-4 flex items-center gap-x-4">
           <label
             htmlFor=""
-            className=" text-sm font-medium w-1/3 text-gray-950 dark:text-gray-300"
+            className=" text-xl ml-7 font-medium w-1/3 text-gray-950 dark:text-gray-300"
           >
             Xác nhận mật khẩu mới:<span className="text-red-600">*</span>
           </label>
@@ -138,18 +128,17 @@ const ChangePasswordForm = () => {
             placeholder="Nhập lại mật khẩu"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="md:w-1/2  px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="md:w-96   px-3 py-2 border border-gray-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           />
         </div>
         {/* hiển thị error */}
         <div className="text-red-600 text-sm mb-1 text-center">
           {errorChange && <p>{errorChange}</p>}
         </div>
-        <div className="mb-4 flex items-center gap-x-4 ">
-          <div className="w-1/3"></div>
+        <div className="mb-4 flex justify-center items-center gap-x-4 ">
           <button
             type="submit"
-            className="md:w-1/4 w-2/4 px-3 py-2 bg-green-600 text-white font-extrabold text-xl rounded hover:bg-green-700 dark:hover:bg-green-500 text-center"
+            className="md:w-fit w-2/4 px-3 py-2 bg-green-600 text-white font-extrabold text-xl rounded hover:bg-green-700 dark:hover:bg-green-500 text-center"
           >
             Đổi mật khẩu
           </button>

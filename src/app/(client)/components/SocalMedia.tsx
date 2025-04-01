@@ -18,7 +18,7 @@ const SocalMedia = () => {
           ${isOpen ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
         >
           <Link
-            className="bg-pink-600 hover:scale-110 w-fit hover:shadow-md p-3 text-white rounded-full transition-all duration-75"
+            className="bg-gradient-to-r from-red-600 to-pink-600 hover:scale-110 w-fit hover:shadow-md p-3 text-white rounded-full transition-all duration-75"
             href="https://www.instagram.com/tncuong2004/"
             target="_blank"
           >

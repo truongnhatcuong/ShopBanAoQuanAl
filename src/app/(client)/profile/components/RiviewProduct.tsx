@@ -42,7 +42,9 @@ const RiviewProduct = ({ order_id }: { order_id: number }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/api/order/${order_id}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/order/${order_id}`
+      );
       const data = await response.json();
       setData(data.getOrderId.OrderItems);
     } catch (error) {

@@ -42,7 +42,7 @@ const Page = () => {
   const [cart, setCart] = useState<CartData | null>(null); // ✅ Fix useState
   const [dataCoupon, setDataCoupon] = useState<ICoupon[]>([]);
   const fetchCartData = async () => {
-    const res = await fetch("/api/cart", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
       cache: "no-store",
     });
     const data: CartApiResponse = await res.json();

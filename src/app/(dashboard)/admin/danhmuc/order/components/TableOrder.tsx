@@ -51,6 +51,38 @@ enum PaymentStatus {
   FAILED = "FAILED",
   REFUNDED = "REFUNDED",
 }
+
+const translatePaymentStatus = (value: PaymentStatus): string => {
+  switch (value) {
+    case PaymentStatus.PENDING:
+      return "CHỜ THANH TOÁN";
+    case PaymentStatus.COMPLETED:
+      return "ĐÃ THANH TOÁN";
+    case PaymentStatus.FAILED:
+      return "THANH TOÁN THẤT BẠI";
+    case PaymentStatus.REFUNDED:
+      return "ĐÃ HOÀN TIỀN";
+    default:
+      return value;
+  }
+};
+
+const translateOrderState = (value: OrderState): string => {
+  switch (value) {
+    case OrderState.PENDING:
+      return "ĐANG CHỜ";
+    case OrderState.PROCESSING:
+      return "ĐANG XỬ LÝ";
+    case OrderState.SHIPPED:
+      return "ĐÃ GIAO HÀNG";
+    case OrderState.DELIVERED:
+      return "ĐÃ NHẬN HÀNG";
+    case OrderState.CANCELLED:
+      return "ĐÃ HỦY";
+    default:
+      return value;
+  }
+};
 const PageListOrder = ({ orders, reloadData }: IProps) => {
   const [filterState, setFilterState] = useState<OrderState | "ALL">("ALL");
 
@@ -73,8 +105,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
   const handleUpdate = async (
     orderId: number,
     order_state: string,
-    payment_status: string,
-    email: string // Email khách hàng
+    payment_status: string
   ) => {
     try {
       const res = await fetch(`/api/admin/manage/orderCustomer/${orderId}`, {
@@ -87,23 +118,38 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
         toast.success("Cập nhật thành công");
 
         // Gửi email thông báo
-        await fetch("/api/send-email", {
+        const resEmail = await fetch("/api/send-email", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email,
             subject: "Cập nhật trạng thái đơn hàng",
-            message: `[Thông báo đơn hàng]
-            Đơn hàng #${orderId} của bạn đã được cập nhật.
-            
-            Trạng thái đơn hàng: ${order_state}
-            Trạng thái thanh toán: ${payment_status}
-            
-            Vui lòng kiểm tra chi tiết đơn hàng trên hệ thống của chúng tôi. Nếu bạn có bất kỳ thắc mắc nào, hãy liên hệ với bộ phận hỗ trợ khách hàng.`,
+            message: `[Thông báo đơn hàng]  
+            Kính gửi Quý khách,  
+          
+            Đơn hàng #${orderId} của bạn đã được cập nhật vào lúc ${new Date().toLocaleString(
+              "vi-VN"
+            )}. Dưới đây là thông tin chi tiết:  
+          
+            - **Mã đơn hàng**: #${orderId}  
+            - **Trạng thái đơn hàng**: ${translateOrderState(
+              order_state as OrderState
+            )}  
+            - **Trạng thái thanh toán**: ${translatePaymentStatus(
+              payment_status as PaymentStatus
+            )} 
+          
+            Vui lòng kiểm tra chi tiết đơn hàng trên hệ thống của chúng tôi tại [liên kết hệ thống]. Nếu bạn có bất kỳ thắc mắc nào, hãy liên hệ với bộ phận hỗ trợ khách hàng qua email: support@company.com hoặc số hotline: 1900-1234.  
+          
+            Trân trọng,  
+            Trương Nhật Cường`,
           }),
         });
+        if (!resEmail.ok) {
+          toast.error("gửi email thông báo thất bại!");
+        } else {
+          toast.success("Đã gửi email thông báo!");
+        }
 
-        toast.success("Đã gửi email thông báo!");
         reloadData();
       } else {
         toast.error("Cập nhật thất bại");
@@ -123,13 +169,13 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Order_ID</TableHead>
+            <TableHead>Mã đơn Hàng</TableHead>
             <TableHead>Khách Hàng</TableHead>
             <TableHead>Ngày Đặt</TableHead>
-            <TableHead>Payment Status</TableHead>
+            <TableHead>Trạng thái thanh toán</TableHead>
             <TableHead>Tổng Tiền</TableHead>
             <TableHead>Payment</TableHead>
-            <TableHead>Order Status</TableHead>
+            <TableHead>Trạng thái đơn hàng</TableHead>
 
             <TableHead>Hành Động</TableHead>
           </TableRow>
@@ -162,12 +208,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
                     <Select
                       defaultValue={currentPaymentStatus}
                       onValueChange={(value) => {
-                        handleUpdate(
-                          item.order_id,
-                          item.order_state,
-                          value,
-                          item.Customer.email
-                        );
+                        handleUpdate(item.order_id, item.order_state, value);
                       }}
                     >
                       <SelectTrigger
@@ -182,7 +223,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
                       <SelectContent>
                         {Object.values(PaymentStatus).map((status) => (
                           <SelectItem key={status} value={status}>
-                            {status}
+                            {translatePaymentStatus(status as PaymentStatus)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -202,8 +243,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
                         handleUpdate(
                           item.order_id,
                           value,
-                          currentPaymentStatus,
-                          item.Customer.email
+                          currentPaymentStatus
                         );
                       }}
                     >
@@ -217,7 +257,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
                       <SelectContent>
                         {Object.values(OrderState).map((status) => (
                           <SelectItem key={status} value={status}>
-                            {status}
+                            {translateOrderState(status as OrderState)}
                           </SelectItem>
                         ))}
                       </SelectContent>

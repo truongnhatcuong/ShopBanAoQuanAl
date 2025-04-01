@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
@@ -90,7 +91,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
   }, []);
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   const handleSizeChange = (index: number, field: string, value: any) => {
     const uppdateSize: any = [...sizeInput];

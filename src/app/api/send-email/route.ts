@@ -1,3 +1,4 @@
+import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -12,16 +13,17 @@ const transporter = nodemailer.createTransport({
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, subject, message } = await req.json();
+    const { subject, message } = await req.json();
+    const customer = await authCustomer(req);
 
-    if (!email || !subject || !message) {
+    if (!subject || !message) {
       return NextResponse.json({ error: "Thiếu dữ liệu" }, { status: 400 });
     }
 
     // Cấu hình email
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: email,
+      to: customer?.email,
       subject,
       text: message,
     };

@@ -59,7 +59,7 @@ export async function middleware(req: NextRequest) {
   //
 
   try {
-    if (req.nextUrl.pathname.startsWith("/admin") && decoded.roleId < 2) {
+    if (req.nextUrl.pathname.startsWith("/admin") && decoded.roleId === 1) {
       return NextResponse.redirect(new URL("/", req.url));
     }
 

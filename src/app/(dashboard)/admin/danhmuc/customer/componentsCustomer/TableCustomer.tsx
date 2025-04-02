@@ -72,7 +72,7 @@ const TableCustomer = ({
                 <td className="p-4">{item.phone}</td>
 
                 <td className={`p-2  flex gap-5  }`}>
-                  {item.customer_id === 6 ? (
+                  {item.customer_id === 1 ? (
                     ""
                   ) : (
                     <>

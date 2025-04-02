@@ -62,7 +62,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
           next: { revalidate: 3600 },
         }),
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
-          next: { revalidate: 86400 },
+          next: { revalidate: 3600 },
         }),
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/size`, {
           next: { revalidate: 86400 },
@@ -85,6 +85,9 @@ const AddProduct = (props: { reloadData: () => void }) => {
       console.error("Lỗi khi tải dữ liệu sản phẩm:", error);
     }
   }, []);
+
+  console.log(brand);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -363,7 +366,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
               <textarea
                 id="description"
                 value={description}
-                rows={3}
+                rows={8}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full border border-gray-300 rounded-md p-2"
               />

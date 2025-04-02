@@ -109,7 +109,7 @@ const ChatAlGemini = () => {
         </span>
       </div>
       {isOpen && (
-        <div className="  w-[450px] h-[710px] bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col">
+        <div className="  w-[450px] md:h-[610px] bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col">
           {/* Header */}
           <div className="bg-blue-600 text-white p-3 text-center rounded-t-lg flex justify-between">
             <h3 className="text-lg font-semibold">Al assistant</h3>

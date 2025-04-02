@@ -4,7 +4,7 @@ import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2023-10-16" as any, // Giữ phiên bản ổn định
+  apiVersion: "2024-12-18.acacia" as any, // Giữ phiên bản ổn định
 });
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;

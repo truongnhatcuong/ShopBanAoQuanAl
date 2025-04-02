@@ -48,7 +48,7 @@ const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
             width={100}
             height={100}
             alt=""
-            className="w-7 h-7 border rounded-full "
+            className="w-12  md:w-7 h-8 md:h-7 border rounded-full "
           />
           <span className=" hidden md:block md:text-base cursor-pointer mt-[3px] ml-2">
             {user.name}

@@ -54,7 +54,9 @@ const ChangeAddress = ({ cart }: CartApiResponse) => {
   );
 
   const FetchApi = async () => {
-    const res = await fetch(`/api/addressShiper`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/addressShiper`
+    );
     const data = await res.json();
     setAddress(data.addressShiper);
   };

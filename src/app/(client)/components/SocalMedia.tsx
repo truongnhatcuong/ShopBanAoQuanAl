@@ -13,7 +13,7 @@ const SocalMedia = () => {
     <>
       {isOpen && (
         <div
-          className={`flex flex-col gap-4 text-3xl mr-3.5 fixed bottom-[90px] right-[110px] 
+          className={`flex flex-col gap-4 text-3xl mr-3.5 fixed bottom-[90px] right-[110px]  z-50
           transition-all duration-700 ease-in-out transform 
           ${isOpen ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
         >

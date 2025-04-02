@@ -1,7 +1,7 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-
+import { headers } from "next/headers";
 export const config = {
   api: {
     bodyParser: false,
@@ -14,7 +14,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 export async function POST(req: NextRequest) {
-  const sig = req.headers.get("stripe-signature");
+  const sig = (await headers()).get("stripe-signature");
   const body = await req.text();
 
   if (!sig) {
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret as string);
   } catch (err: any) {
     console.error(`Webhook Error: ${err.message}`);
     return NextResponse.json(
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
+  console.log("✅ Success:", event.id);
 
   try {
     if (event.type === "payment_intent.succeeded") {

@@ -56,7 +56,8 @@ export const recommendProducts = async (userBehaviorData: number[][]) => {
       ...product,
       score: recommendationScores[0]?.[index] || 0, // Kiểm tra undefined
     }))
-    .sort((a, b) => b.score - a.score);
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10);
 
   // Giải phóng tài nguyên
   model.dispose();

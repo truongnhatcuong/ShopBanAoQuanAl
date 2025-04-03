@@ -18,10 +18,10 @@ export default function AdminLayout({
       {/* Left menu */}
 
       <div
-        className={` shadow-lg overflow-y-auto overflow-x-hidden scrollbar-custom ${
+        className={` shadow-lg   scrollbar-custom  hidden md:block bg-black/90 md:h-[760px] 2xl:h-[1000px] ${
           isLeftMenuVisible
-            ? " w-[10%]  md:w-[15%] transition-all duration-700 ease-in"
-            : "md:w-[5%] w-0 transition-all duration-500  ease-out"
+            ? " w-[10%]  md:w-[18%] transition-all duration-700 ease-in"
+            : " w-0 md:w-[5%] transition-all duration-500  ease-out"
         }`}
       >
         <LeftMenu />
@@ -35,7 +35,7 @@ export default function AdminLayout({
       >
         <TopBar />
         <div
-          className={`flex-grow bg-white overflow-y-auto overflow-x-auto  scrollbar-custom  ml-2`}
+          className={`flex-grow bg-white  overflow-x-auto  mx-auto container scrollbar-custom  ml-2`}
         >
           {children}
         </div>

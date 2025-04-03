@@ -100,16 +100,16 @@ const PageListOrder = () => {
   const hasOrders = filteredOrders.length > 0;
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen  ">
       {/* Tab Navigation - Fixed at top */}
-      <div className="flex border-y mb-4 bg-white sticky top-0 z-10">
+      <div className="flex border-y mb-4 bg-white sticky top-0 z-10 overflow-x-auto">
         {Object.values(OrderState).map((state) => (
           <button
             key={state}
-            className={`px-4 py-2 whitespace-nowrap ${
+            className={`px-4 py-2 whitespace-nowrap  ${
               activeTab === state
-                ? `border-b-2 font-medium ${orderStateClasses[state]}`
-                : "text-gray-500"
+                ? `border-b-2 font-medium ${orderStateClasses[state]} `
+                : "text-gray-500 "
             }`}
             onClick={() => setActiveTab(state)}
           >
@@ -126,7 +126,7 @@ const PageListOrder = () => {
       </div>
 
       {/* Orders List - Scrollable content */}
-      <div className="flex-1 overflow-y-auto pb-4">
+      <div className="flex-1 overflow-y-auto pb-4 ">
         {!hasOrders ? (
           <div className="text-center py-8">
             Không có đơn hàng nào trong trạng thái {orderStateText[activeTab]}

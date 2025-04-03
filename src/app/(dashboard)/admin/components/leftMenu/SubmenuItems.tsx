@@ -1,7 +1,7 @@
-import Link from "next/link";
 import React, { useContext } from "react";
 import { usePathname } from "next/navigation";
 import { ShopConText } from "@/app/context/Context";
+import Link from "next/link";
 
 interface IProps {
   menuItem: IMenu;
@@ -22,10 +22,10 @@ const SubmenuItems = ({ menuItem }: IProps) => {
   const isActive = pathname === menuItem.link;
 
   return (
-    <div className="w-full px-2 py-1">
+    <div className="w-full  py-[2.5px]">
       <Link
         href={menuItem.link}
-        className={`flex items-center w-full p-2 rounded-lg transition-all duration-300 group
+        className={`flex items-center w-full p-[5px] rounded-lg transition-all duration-300 group
           ${
             isActive
               ? "bg-white/10 shadow-sm"
@@ -36,7 +36,7 @@ const SubmenuItems = ({ menuItem }: IProps) => {
         <div
           className={`flex-shrink-0 text-2xl text-slate-200/70 transition-colors duration-200
             ${isActive ? "text-white" : "group-hover:text-white"}
-            ${isLeftMenuVisible ? "mr-3" : "mr-0"}`}
+            ${isLeftMenuVisible ? "mr-2" : "mr-0"}`}
         >
           {menuItem.icon}
         </div>

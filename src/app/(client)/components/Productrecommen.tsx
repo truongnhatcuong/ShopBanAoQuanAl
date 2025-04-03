@@ -36,7 +36,7 @@ const ProductRecommendations = () => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/recommend`,
           {
-            next: { revalidate: 100 },
+            next: { revalidate: 300 },
           }
         );
         const data = await res.json();

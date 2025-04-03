@@ -25,28 +25,6 @@ interface IProps {
   categories: ICategory[];
 }
 
-export const MenuHeader: IMenuProps[] = [
-  {
-    id: 1,
-    title: "Trang Chủ",
-    link: "/",
-  },
-  {
-    id: 2,
-    title: "Bộ Sưu tập",
-    link: "/product",
-  },
-  {
-    id: 3,
-    title: "Giới Thiệu",
-    link: "/about",
-  },
-  {
-    id: 4,
-    title: "Trò Chuyện",
-    link: "/chatAI",
-  },
-];
 const ListItem = ({ categories }: IProps) => {
   const t = useTranslations();
   const MenuHeader: IMenuProps[] = [

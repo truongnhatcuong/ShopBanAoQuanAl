@@ -28,7 +28,9 @@ export default async function RootLayout({
         <ToastContainer />
         {/* Bao bọc NextIntlClientProvider */}
         <NextIntlClientProvider locale={locale}>
-          <ShopContextProvider>{children}</ShopContextProvider>
+          <ShopContextProvider>
+            <main className="container mx-auto">{children}</main>
+          </ShopContextProvider>
         </NextIntlClientProvider>
       </body>
     </html>

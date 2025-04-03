@@ -19,10 +19,10 @@ const Page = () => {
   }, []);
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="h-[50vh]">
-      <div className="flex  flex-col md:flex-row  justify-center  mt-20 gap-10 ">
+    <div className="md:h-[70vh] h-screen my-10">
+      <div className="flex  flex-col md:flex-row  justify-center  gap-10  ">
         {" "}
-        <div className="" data-aos="fade-right" data-aos-duration="2000">
+        <div className="mx-2" data-aos="fade-right" data-aos-duration="2000">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.2843515910736!2d105.89187027471526!3d21.061302286661054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135a997586f6a11%3A0xbf1482476dccc7bc!2zMiBQLiDDlCBDw6FjaCwgxJDhu6ljIEdpYW5nLCBMb25nIEJpw6puLCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1736740624397!5m2!1svi!2s"
             width="600"
@@ -31,7 +31,7 @@ const Page = () => {
           ></iframe>
         </div>
         <div
-          className="rounded-md border border-gray-400 md:w-1/3 w-full md:ml-0 ml-6"
+          className="rounded-md border border-gray-400 md:w-1/3 w-[90%] mx-auto "
           data-aos="fade-left"
           data-aos-duration="2000"
         >

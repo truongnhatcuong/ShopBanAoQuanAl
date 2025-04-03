@@ -77,9 +77,9 @@ const PageProduct = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10  border-t w-full h-full   ">
+    <div className="flex flex-col sm:flex-row gap-1 sm:gap-10  border-t w-full h-full  mb-5  ">
       {/* Sidebar */}
-      <div className="sm:w-1/5 w-full   flex sm:flex-row items-center  flex-col shadow-lg  text-black dark:text-black dark:bg-white ">
+      <div className="md:w-1/5 w-full  flex md:flex-row items-center  flex-col shadow-lg  text-black dark:text-black dark:bg-white ">
         <FilterSidebar onPriceChange={(price) => setMaxPrice(price)} />
       </div>
 
@@ -109,7 +109,7 @@ const PageProduct = () => {
           <Title title1="Tất Cả" title2="Bộ Sưu Tập" />
         </div>
         {/* Content area */}
-        <div className="grid  grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 gap-y-6  md:mx-0">
+        <div className="ml-2  grid  grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 gap-y-6  md:mx-0">
           {product.length > 0 ? (
             product.map((item) => (
               <ProductItem {...item} key={item.product_id} />

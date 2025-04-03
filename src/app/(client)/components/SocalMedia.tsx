@@ -48,7 +48,7 @@ const SocalMedia = () => {
       )}
 
       <div
-        className="text-2xl mt-5 text-white border-2 bg-blue-300/20 w-fit rounded-full bg-white p-3 cursor-pointer fixed bottom-5 right-[120px] transition-all duration-300 hover:scale-110"
+        className="text-2xl mt-5 text-white border-2 bg-blue-300/20 w-fit rounded-full bg-white p-3 cursor-pointer fixed bottom-4 z-40 right-[120px] transition-all duration-300 hover:scale-110 hidden md:block"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? <>✖️</> : <>🔗</>}

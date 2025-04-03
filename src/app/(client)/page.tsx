@@ -15,9 +15,6 @@ import ChatBoxSelect from "./test/page";
 import SocalMedia from "./components/SocalMedia";
 
 const Page = () => {
-  const [selectedChat, setSelectedChat] = useState<
-    "employee" | "gemini" | null
-  >(null);
   useEffect(() => {
     AOS.init();
   }, []);

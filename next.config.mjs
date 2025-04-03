@@ -16,12 +16,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    turbo: {
-      cache: true,
-      loaders: {}, // Bật Turbo Mode
-    },
-  },
+  experimental: {},
 };
 const withNextIntl = createNextIntlPlugin();
 

@@ -27,7 +27,7 @@ export default function LanguageSwitcher() {
     <select
       value={locale}
       onChange={(e) => changeLanguage(e.target.value)}
-      className="w-[59px] text-center"
+      className="w-[59px] text-center "
     >
       <option value="vi">VI</option>
       <option value="en">EN</option>

@@ -15,7 +15,7 @@ const TopBar = () => {
     <div className="navbar bg-base-100 border-2">
       <div
         onClick={() => setIsLeftMenuVisible(!isLeftMenuVisible)}
-        className="mr-3 "
+        className="mr-3 hidden md:block"
       >
         {isLeftMenuVisible ? (
           <AiOutlineMenuFold className="text-3xl text-gray-700 cursor-pointer" />
@@ -25,8 +25,8 @@ const TopBar = () => {
       </div>
       <div className="flex-1">
         <Link href="/admin">
-          <button className="px-2 py-1 text-black prata-regular  text-2xl">
-            Dashboard
+          <button className="px-2 py-1 text-black prata-regular  text-xl">
+            Quản Lý
           </button>
         </Link>
       </div>

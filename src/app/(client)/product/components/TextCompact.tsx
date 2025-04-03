@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-
+import ReactMarkdown from "react-markdown";
 const TextCompact = ({ children }: any) => {
   const [isExpand, setIsExpand] = useState(false);
 
@@ -14,7 +14,9 @@ const TextCompact = ({ children }: any) => {
         className="text-gray-700 dark:text-white border-b border-gray-700 leading-3 pb-1"
         onClick={() => setIsExpand(!isExpand)}
       >
-        {children.length > 40 ? (isExpand ? "Thu gọn" : "Xem thêm") : ""}
+        <ReactMarkdown>
+          {children.length > 40 ? (isExpand ? "Thu gọn" : "Xem thêm") : ""}
+        </ReactMarkdown>{" "}
       </button>
     </span>
   );

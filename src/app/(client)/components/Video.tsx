@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
-
+import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import Image from "next/image";
 const Video = () => {
@@ -26,6 +26,12 @@ const Video = () => {
             pagination={{
               clickable: true,
             }}
+            breakpoints={{
+              480: { slidesPerView: 2, spaceBetween: 5 }, // Điện thoại nhỏ
+              768: { slidesPerView: 3, spaceBetween: 10 }, // Tablet
+              1024: { slidesPerView: 4, spaceBetween: 15 }, // Laptop
+              1280: { slidesPerView: 5, spaceBetween: 20 }, // Màn hình lớn
+            }}
             modules={[Pagination]}
             data-aos="flip-left"
             data-aos-easing="ease-out-cubic"
@@ -44,7 +50,13 @@ const Video = () => {
               data-aos-easing="ease-out-cubic"
               data-aos-duration="1500"
             >
-              <Image src={"/Image/vd2.webp"} alt="" width={250} height={225} />
+              <Image
+                src={"/Image/vd2.webp"}
+                alt=""
+                width={270}
+                height={270}
+                className="w-[380px] h-[337px] object-contain md:w-full md:h-96"
+              />
             </SwiperSlide>
             <SwiperSlide
               data-aos="flip-left"
@@ -79,7 +91,13 @@ const Video = () => {
               data-aos-easing="ease-out-cubic"
               data-aos-duration="1500"
             >
-              <Image src={"/Image/vd1.webp"} alt="" width={250} height={225} />
+              <Image
+                src={"/Image/vd1.webp"}
+                alt=""
+                width={250}
+                height={225}
+                className="w-[380px] h-[337px] object-contain  md:w-full md:h-96"
+              />
             </SwiperSlide>
           </Swiper>
         </div>

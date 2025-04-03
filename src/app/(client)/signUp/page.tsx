@@ -83,7 +83,7 @@ const Page = () => {
     }
   }
   return (
-    <div className="flex items-center justify-center md:min-h-screen py-10 px-4 formImage">
+    <div className="flex items-center justify-center md:min-h-screen md:py-10 md:px-4 formImage">
       <div className="flex w-full max-w-7xl bg-white shadow-2xl rounded-lg overflow-hidden flex-col md:flex-row">
         {/* Left Panel */}
         <div className="md:w-2/5 bg-gradient-to-br from-gray-900 to-gray-800 dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 text-white dark:text-white p-12 flex flex-col justify-center items-center">

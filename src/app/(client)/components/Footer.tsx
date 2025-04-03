@@ -4,7 +4,7 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <div className="flex flex-col sm:flex-row justify-between py-10   text-black dark:text-white dark:bg-black mt-5 border-t-4">
+      <div className="flex flex-col sm:flex-row justify-between py-10   bg-black/80 text-gray-300  border-t-4 container mx-auto">
         {/* footer 1 */}
         <div className="md:h-52 h-full  w-full md:w-1/3 mb-6 md:mb-0  flex flex-col ">
           <h1 className="text-xl font-bold mb-4 text-center md:text-left">
@@ -58,7 +58,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-2 border-black  dark:border-white p-3 h-16">
+      <div className="border-t-2 border-black  dark:border-white p-3 h-12">
         <p className="text-center ">
           Thiết Kế WebSite Bởi{" "}
           <span className="text-xl">©𝙏𝙧𝙪̛𝙤̛𝙣𝙜 𝙉𝙝𝙖̣̂𝙩 𝘾𝙪̛𝙤̛̀𝙣𝙜</span>

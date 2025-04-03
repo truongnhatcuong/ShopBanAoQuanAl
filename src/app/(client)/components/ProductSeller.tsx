@@ -29,7 +29,7 @@ const ProductSeller = () => {
   }, []);
   return (
     <div className="my-8 ">
-      <div className="flex items-center justify-center mx-4">
+      <div className="flex items-center justify-center  ">
         <Image src={"/Image/sale.png"} alt="" width={1400} height={400} />
       </div>
       <p className="text-sm text-center mt-2 text-muted-foreground ">
@@ -37,7 +37,7 @@ const ProductSeller = () => {
       </p>
 
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 "
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 ml-14 md:ml-0"
         data-aos-duration="1600"
         data-aos-easing="ease-in-out"
         data-aos="zoom-in"

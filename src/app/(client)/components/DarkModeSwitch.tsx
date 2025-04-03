@@ -29,8 +29,8 @@ const DarkModeSwitch = () => {
     <>
       <div onClick={toggleTheme} className="cursor-pointer">
         {theme === "dark" ? (
-          <div className="rounded-md border-2 mb-2 p-1.5 hover:bg-gray-100/20 ">
-            <Sun className=" h-5 w-5" />
+          <div className="rounded-md border-2  p-1.5 pb-2 hover:bg-gray-100/20 ">
+            <Sun className=" h-5 w-5 " />
           </div>
         ) : (
           <div className="rounded-md border-2 mb-2 p-1.5 hover:bg-gray-100 ">

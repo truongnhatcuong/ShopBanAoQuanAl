@@ -69,7 +69,7 @@ const Page = () => {
   }, [errorMessage]);
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen py-10 px-4  dark:bg-gray-900">
+      <div className="flex justify-center items-center min-h-screen md:py-10 md:px-4   dark:bg-gray-900">
         <div className="flex w-full max-w-7xl bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden flex-col md:flex-row">
           {/* Left side - Welcome section */}
           <div className="w-full md:w-1/2 p-12 bg-gradient-to-br from-gray-900 to-gray-800 text-white dark:from-indigo-900 dark:to-purple-900 flex flex-col justify-center items-center">

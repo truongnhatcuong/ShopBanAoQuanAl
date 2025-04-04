@@ -49,14 +49,14 @@ const SearchProduct = ({ search, setSearch }: ISearchProps) => {
       {/* Main Search Container */}
       <div className="relative flex items-center w-full">
         {/* Desktop View: Input + Icon */}
-        <div className="hidden md:flex relative flex-1 items-center border rounded-md p-3 pl-4 dark:text-white">
+        <div className="hidden md:flex relative flex-1 items-center border rounded-md p-2.5 pl-3 dark:text-white">
           <input
             type="text"
             placeholder="bạn tìm kiếm gì..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setShowDropdown(true)}
-            className="outline-none px-2 text-sm w-full bg-transparent"
+            className="outline-none px-1 text-sm w-[90%] bg-transparent"
           />
           <TfiSearch
             className={`text-2xl absolute right-2 top-2.5 cursor-pointer ${
@@ -77,13 +77,13 @@ const SearchProduct = ({ search, setSearch }: ISearchProps) => {
         </div>
 
         {/* Dropdown Results for Desktop */}
-        {showDropdown && products.length > 0 && (
-          <div className="absolute top-full left-0 w-full mt-1 bg-white dark:bg-gray-800 border rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 md:w-full">
+        {showDropdown && search !== "" && products.length > 0 && (
+          <div className="absolute top-full left-0 w-full mt-1 bg-white dark:bg-gray-800 border rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 md:w-full hidden md:block ">
             <div className="p-2">
               {products.map((product) => (
                 <div
                   key={product.product_id}
-                  className="flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded-lg"
+                  className="md:flex items-center gap-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer rounded-lg "
                   onClick={() => {
                     handleSearch(product.product_id);
                     setSearch(product.product_name);
@@ -152,7 +152,7 @@ const SearchProduct = ({ search, setSearch }: ISearchProps) => {
             </div>
 
             {/* Dropdown Results in Modal */}
-            {showDropdown && products.length > 0 && (
+            {showDropdown && search !== "" && products.length > 0 && (
               <div className="mt-2 bg-white dark:bg-gray-800 border rounded-lg max-h-64 overflow-y-auto">
                 <div className="p-2">
                   {products.map((product) => (
@@ -188,7 +188,7 @@ const SearchProduct = ({ search, setSearch }: ISearchProps) => {
             )}
 
             {/* No Results Message in Modal */}
-            {showDropdown && !search && products.length === 0 && (
+            {showDropdown && search && products.length === 0 && (
               <div className="mt-2 bg-white dark:bg-gray-800 border rounded-lg p-4">
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                   Không tìm thấy sản phẩm

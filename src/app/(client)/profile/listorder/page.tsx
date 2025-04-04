@@ -1,10 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
 import CancellOrder from "../components/CancellOrder";
 import { useRouter } from "next/navigation";
 import { ForMatPrice } from "@/lib/FormPrice";
 import RiviewProduct from "../components/RiviewProduct";
+import Image from "next/image";
 
 interface Brand {
   brand_name: string;
@@ -163,7 +163,9 @@ const PageListOrder = () => {
                     className="flex gap-4 py-2 border-b items-center"
                     key={index}
                   >
-                    <img
+                    <Image
+                      width={200}
+                      height={200}
                       src={item.Product.Images[0]?.image_url}
                       alt="Product"
                       className="w-20 h-20 object-cover"

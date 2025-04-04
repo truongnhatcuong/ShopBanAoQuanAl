@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @next/next/no-img-element */
+
 "use client";
 import { Stars } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
@@ -173,7 +174,9 @@ const RiviewProduct = ({ order_id }: { order_id: number }) => {
                 className="flex gap-4 py-1.5 border-b items-center"
                 key={index}
               >
-                <img
+                <Image
+                  width={200}
+                  height={200}
                   src={item.Product.Images[0]?.image_url}
                   alt="Product"
                   className="w-20 h-20 object-cover"
@@ -240,7 +243,9 @@ const RiviewProduct = ({ order_id }: { order_id: number }) => {
               <div className="flex mt-2 gap-2">
                 {imageFiles.length > 0 &&
                   imageFiles.map((item, index) => (
-                    <img
+                    <Image
+                      width={200}
+                      height={200}
                       key={index}
                       src={URL.createObjectURL(item)}
                       alt="Uploaded"

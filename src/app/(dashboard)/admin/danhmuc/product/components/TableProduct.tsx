@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
 import UpdateProduct from "./UpdateProduct";
 import DeleteProduct from "./DeleteProduct";
@@ -11,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from "next/image";
 
 interface Product {
   product_id: number;
@@ -35,6 +35,23 @@ interface Product {
     image_url: string;
   }[];
 }
+interface ICategory {
+  category_id: number;
+  category_name: string;
+}
+
+interface IBrand {
+  brand_id: number;
+  brand_name: string;
+}
+interface ISeason {
+  season_id: number;
+  season_name: string;
+}
+interface ISize {
+  size_id: number;
+  name_size: string;
+}
 
 interface ITable {
   productData: Product[];
@@ -42,6 +59,10 @@ interface ITable {
   searchTerm: string;
   sortOrder: string;
   setSortOrder: (value: string) => void;
+  category: ICategory[];
+  brand: IBrand[];
+  season: ISeason[];
+  size: ISize[];
 }
 
 const TableProduct = (props: ITable) => {
@@ -110,7 +131,9 @@ const TableProduct = (props: ITable) => {
               </TableCell>
               <TableCell className="px-4 py-2 relative">
                 <div className="flex items-center justify-center  ">
-                  <img
+                  <Image
+                    width={200}
+                    height={200}
                     src={product.Images[0]?.image_url}
                     alt={`Hình ảnh sản phẩm ${index}`}
                     className="w-20 h-20 object-cover rounded-md shadow-sm"
@@ -128,7 +151,9 @@ const TableProduct = (props: ITable) => {
                   <div className="absolute z-10  bg-white  mt-2 cursor-pointer w-full">
                     <div className="flex space-x-2 justify-center">
                       {product.Images.map((image, imageIndex) => (
-                        <img
+                        <Image
+                          width={200}
+                          height={200}
                           key={imageIndex}
                           src={image.image_url}
                           alt={`Hình ảnh sản phẩm ${index}-${imageIndex}`}
@@ -146,7 +171,14 @@ const TableProduct = (props: ITable) => {
                     reloadData={props.reloadData}
                   />
                   {!showAllImages && (
-                    <UpdateProduct {...product} reloadData={props.reloadData} />
+                    <UpdateProduct
+                      {...product}
+                      reloadData={props.reloadData}
+                      brand={props.brand}
+                      category={props.category}
+                      season={props.season}
+                      size={props.size}
+                    />
                   )}
                 </div>
               </TableCell>

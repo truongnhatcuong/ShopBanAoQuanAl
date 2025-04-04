@@ -5,7 +5,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const getAllReview = await prisma.review.findMany({
-    include: {
+    select: {
+      review_id: true,
+      comment_review: true,
+      image_url: true,
+      review_date: true,
+      seller_response: true,
+      hasReviewed: true,
+      rating: true,
       Customer: {
         select: {
           name: true,

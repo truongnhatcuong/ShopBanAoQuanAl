@@ -3,25 +3,6 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { productSupplierSchema } from "../route";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const supplierId = Number(params.id);
-  try {
-    const getSupplier = await prisma.supplier.findUnique({
-      where: {
-        supplier_id: supplierId,
-      },
-    });
-    return NextResponse.json(
-      { getSupplier, message: `Get Data ${supplierId} success` },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -41,9 +22,7 @@ export async function PUT(
   if (!parseResult.success) {
     return NextResponse.json(
       {
-        message: parseResult.error.errors
-          .map((item) => item.message)
-          .join("\n"),
+        message: parseResult.error.errors[0].message,
       },
       { status: 400 }
     );
@@ -70,9 +49,6 @@ export async function PUT(
             },
           },
         },
-      },
-      include: {
-        ProductSuppliers: true,
       },
     });
     return NextResponse.json(

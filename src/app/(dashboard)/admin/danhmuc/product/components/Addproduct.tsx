@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
 import Title from "@/app/(client)/components/Title";
 import { assets } from "@/app/assets/frontend_assets/assets";
 import React, { useCallback, useEffect, useState } from "react";
@@ -13,6 +11,7 @@ import SelectBrand from "./componentChild/SelectBrand";
 import SelectSeaSon from "./componentChild/SelectSeason";
 import { FiPlus } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa";
+import Image from "next/image";
 
 interface ICategory {
   category_id: number;
@@ -32,12 +31,21 @@ interface ISize {
   name_size: string;
 }
 
-const AddProduct = (props: { reloadData: () => void }) => {
-  // hiển thị tên các danh mục
-  const [category, setCategory] = useState<ICategory[] | []>([]);
-  const [brand, setBrand] = useState<IBrand[] | []>([]);
-  const [season, setSeason] = useState<ISeason[] | []>([]);
-  const [size, setSize] = useState<ISize[] | []>([]);
+interface IAddproduct {
+  category: ICategory[];
+  brand: IBrand[];
+  season: ISeason[];
+  size: ISize[];
+  reloadData: () => void;
+}
+
+const AddProduct = ({
+  brand,
+  category,
+  reloadData,
+  season,
+  size,
+}: IAddproduct) => {
   //hook thêm sản phẩm
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [product_name, setproduct_name] = useState("");
@@ -51,46 +59,6 @@ const AddProduct = (props: { reloadData: () => void }) => {
   const [sizeInput, setSizeInput] = useState([
     { size_id: 0, stock_quantity: 0 },
   ]);
-
-  const fetchData = useCallback(async () => {
-    try {
-      const [categoryRes, brandRes, seasonRes, sizeRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
-          next: { revalidate: 3600 },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`, {
-          next: { revalidate: 3600 },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
-          next: { revalidate: 3600 },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/size`, {
-          next: { revalidate: 86400 },
-        }),
-      ]);
-
-      const [categoriesData, brandData, seasonData, sizeData] =
-        await Promise.all([
-          categoryRes.json(),
-          brandRes.json(),
-          seasonRes.json(),
-          sizeRes.json(),
-        ]);
-
-      setCategory(categoriesData.categories);
-      setBrand(brandData.brand);
-      setSeason(seasonData.season);
-      setSize(sizeData.size);
-    } catch (error) {
-      console.error("Lỗi khi tải dữ liệu sản phẩm:", error);
-    }
-  }, []);
-
-  console.log(brand);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleSizeChange = (index: number, field: string, value: any) => {
     const uppdateSize: any = [...sizeInput];
@@ -155,7 +123,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
     if (res.ok) {
       const data = await res.json();
       const newdata = data.product_id;
-      props.reloadData();
+      reloadData();
       setShowAdd(false);
       const MySwal = withReactContent(Swal);
 
@@ -180,7 +148,7 @@ const AddProduct = (props: { reloadData: () => void }) => {
         }
       );
       if (imageRes.ok) {
-        props.reloadData();
+        reloadData();
       } else {
         MySwal.fire({
           title: "Thông báo!",
@@ -339,7 +307,13 @@ const AddProduct = (props: { reloadData: () => void }) => {
                       onClick={() => handleDeleteSize(index)}
                       className="bg-red-500 hover:bg-red-700 p-2 rounded-md"
                     >
-                      <img src={assets.bin_icon.src} alt="" className="w-4" />
+                      <Image
+                        width={100}
+                        height={100}
+                        src={assets.bin_icon.src}
+                        alt=""
+                        className="w-4 h-4"
+                      />
                     </button>
                   )}
                 </div>
@@ -375,23 +349,19 @@ const AddProduct = (props: { reloadData: () => void }) => {
               <label htmlFor="productImage">
                 <p className="mb-2 "> Ảnh Sản Phẩm</p>
                 <div className="flex gap-6">
-                  {images && images.length > 0 ? (
-                    images.map((item, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={URL.createObjectURL(item)}
-                          alt={`Image ${index}`}
-                          className="w-25 h-20"
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <img
-                      src={"/Image/upload_area.png"}
-                      alt=""
-                      className="w-32 h-29 object-contain "
-                    />
-                  )}
+                  {images!.map((item, index) => (
+                    <div key={index} className="relative">
+                      <Image
+                        width={200}
+                        height={200}
+                        src={
+                          URL.createObjectURL(item) || "Image/upload_area.png"
+                        }
+                        alt={`Image ${index}`}
+                        className="w-25 h-20"
+                      />
+                    </div>
+                  ))}
                 </div>
                 <input
                   id="productImage"

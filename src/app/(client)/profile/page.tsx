@@ -1,13 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import { ShopConText } from "@/app/context/Context";
+import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 interface IUpdate {
   name: string;
-  phone: number | string;
+  phone: string;
   username: string;
   image: string;
   email: string;
@@ -21,7 +21,7 @@ const ProfileUsername = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (user) setLoading(false);
+    if (user as IUpdate) setLoading(false);
   }, [user]);
 
   const MySwal = withReactContent(Swal);
@@ -100,8 +100,10 @@ const ProfileUsername = () => {
               <div className="flex w-full flex-col items-center rounded-lg bg-gray-50 p-6 dark:bg-slate-700/50 md:w-1/3">
                 <div className="group relative">
                   <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-emerald-500 shadow-md">
-                    <img
-                      src={preview || "/Image/anhdaidien.jpg"}
+                    <Image
+                      width={200}
+                      height={200}
+                      src={preview || user.image || "/Image/anhdaidien.jpg"}
                       alt="Avatar"
                       className="h-full w-full object-cover"
                     />
@@ -151,9 +153,12 @@ const ProfileUsername = () => {
                           required
                           value={user?.name || ""}
                           onChange={(e) =>
-                            setUser({ ...user, name: e.target.value })
+                            setUser({
+                              ...user,
+                              name: e.target.value.trim(),
+                            })
                           }
-                          className="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 transition-all duration-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+                          className="w-full  rounded-md border border-gray-300 bg-gray-50 px-3 py-2 transition-all duration-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                           placeholder="Nhập họ và tên"
                         />
                       </div>

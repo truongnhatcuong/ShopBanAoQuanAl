@@ -5,25 +5,10 @@ import ItemCart from "./components/ItemCart";
 import TotalCart from "./components/TotalCart";
 import { ShopConText } from "@/app/context/Context";
 
-interface CartItem {
-  cartitem_id: number;
-  product_id: number;
-  quantity: number;
-  selectedSize: string; // Thêm thuộc tính selectedSize
-  product: {
-    product_name: string;
-    price: string;
-    Images: { image_url: string }[];
-  };
-  image_url: string;
-}
-
 const CartPage = () => {
   const { cart } = useContext(ShopConText)!;
-
-  console.log("cart", cart);
   return (
-    <div className="h-[60vh] mt-4">
+    <div className="h-screen mt-4 overflow-auto">
       <div className="text-2xl text-center md:mb-3 mb-0   ">
         <Title title1="Danh Mục" title2="Giỏ Hàng" />
       </div>

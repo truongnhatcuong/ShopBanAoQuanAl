@@ -41,16 +41,16 @@ const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div className="flex ">
+      <DropdownMenuTrigger className="">
+        <div className="flex w-full items-center ">
           <Image
             src={user.image || "/Image/anhdaidien.jpg"}
-            width={100}
+            width={100} // kích thước mặc định (cho mobile)
             height={100}
-            alt=""
-            className="  md:w-8 md:h-8 w-24 h-7    border rounded-full "
+            alt="avatar"
+            className="rounded-full md:w-8 md:h-8 "
           />
-          <span className=" hidden md:block md:text-base cursor-pointer mt-[3px] ml-2">
+          <span className="hidden md:block text-sm cursor-pointer mt-[3px] ml-2">
             {user.name}
           </span>
         </div>

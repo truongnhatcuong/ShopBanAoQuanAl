@@ -18,7 +18,7 @@ export default function AdminLayout({
       {/* Left menu */}
 
       <div
-        className={` shadow-lg   scrollbar-custom  hidden md:block bg-black/90 md:h-[760px] 2xl:h-[1000px] ${
+        className={` shadow-lg   scrollbar-custom  hidden md:block bg-black/90 md:h-[560px] 2xl:h-[1000px] ${
           isLeftMenuVisible
             ? " w-[10%]  md:w-[18%] transition-all duration-700 ease-in"
             : " w-0 md:w-[5%] transition-all duration-500  ease-out"

@@ -2,26 +2,6 @@ import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const riviewId = Number(params.id);
-  try {
-    const getIdReview = await prisma.review.findUnique({
-      where: {
-        review_id: riviewId,
-      },
-    });
-    return NextResponse.json(
-      { getIdReview, message: " success" },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
-
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }

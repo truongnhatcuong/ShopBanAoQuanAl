@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import Title from "@/app/(client)/components/Title";
 import { assets } from "@/app/assets/frontend_assets/assets";
@@ -12,6 +11,7 @@ import { FaPlus, FaRegEdit } from "react-icons/fa";
 import SelectCategories from "./componentChild/SelectCategories";
 import SelectBrand from "./componentChild/SelectBrand";
 import SelectSeaSon from "./componentChild/SelectSeason";
+import Image from "next/image";
 
 interface IProduct {
   product_id: number;
@@ -36,6 +36,10 @@ interface IProduct {
     image_url: string;
   }[];
   reloadData: () => void;
+  category: ICategory[];
+  brand: IBrand[];
+  season: ISeason[];
+  size: ISize[];
 }
 
 interface ICategory {
@@ -60,10 +64,6 @@ interface ISize {
 
 const UpdateProduct = (props: IProduct) => {
   const MySwal = withReactContent(Swal);
-  const [category, setCategory] = useState<ICategory[]>([]);
-  const [brand, setBrand] = useState<IBrand[]>([]);
-  const [season, setSeason] = useState<ISeason[]>([]);
-  const [size, setSize] = useState<ISize[]>([]);
 
   const [showUpdate, setShowUpdate] = useState(false);
   const [product_name, setproduct_name] = useState(props.product_name);
@@ -107,44 +107,6 @@ const UpdateProduct = (props: IProduct) => {
   const handleDeleteImage = (imaga_id: number) => {
     setImages((pev) => pev.filter((item) => item.image_id !== imaga_id));
   };
-
-  const fetchData = useCallback(async () => {
-    try {
-      const [categoryRes, brandRes, seasonRes, sizeRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
-          next: { revalidate: 3600 },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`, {
-          next: { revalidate: 3600 },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
-          next: { revalidate: 86400 },
-        }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/size`, {
-          next: { revalidate: 86400 },
-        }),
-      ]);
-
-      const [categoriesData, brandData, seasonData, sizeData] =
-        await Promise.all([
-          categoryRes.json(),
-          brandRes.json(),
-          seasonRes.json(),
-          sizeRes.json(),
-        ]);
-
-      setCategory(categoriesData.categories);
-      setBrand(brandData.brand);
-      setSeason(seasonData.season);
-      setSize(sizeData.size);
-    } catch (error) {
-      console.error("Lỗi khi tải dữ liệu sản phẩm:", error);
-    }
-  }, []);
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Cập nhật thông tin sản phẩm
   async function UpdateProduct(e: React.FormEvent) {
@@ -205,18 +167,18 @@ const UpdateProduct = (props: IProduct) => {
             {/* Danh Mục, Thương Hiệu, Mùa - trên cùng một hàng */}
             <div className="mb-4 flex space-x-5 justify-between">
               <SelectCategories
-                categories={category}
+                categories={props.category}
                 category_id={category_id}
                 onCategoryChange={setCategoryId}
               />
               <SelectBrand
-                brand={brand}
+                brand={props.brand}
                 brand_id={brand_id}
                 onChangeBrand={setBrandId}
               />
               <SelectSeaSon
                 onchangeSeason={setSeasonId}
-                season={season}
+                season={props.season}
                 season_id={season_id}
               />
             </div>
@@ -280,7 +242,7 @@ const UpdateProduct = (props: IProduct) => {
                     }
                   >
                     <option value="">Chọn Kích Thước</option>
-                    {size.map((size) => (
+                    {props.size.map((size) => (
                       <option key={size.size_id} value={size.size_id}>
                         {size.name_size}
                       </option>
@@ -305,7 +267,13 @@ const UpdateProduct = (props: IProduct) => {
                       onClick={() => handleDeleteSize(index)}
                       className="bg-red-500 hover:bg-red-700 p-2 rounded-md"
                     >
-                      <img src={assets.bin_icon.src} alt="" className="w-4" />
+                      <Image
+                        width={150}
+                        height={150}
+                        src={assets.bin_icon.src}
+                        alt=""
+                        className="w-4"
+                      />
                     </button>
                   )}
                 </div>
@@ -339,7 +307,9 @@ const UpdateProduct = (props: IProduct) => {
                 <div className="flex flex-row text-sm font-semibold gap-6">
                   {images.map((item, index) => (
                     <div key={index}>
-                      <img
+                      <Image
+                        width={200}
+                        height={200}
                         src={item.image_url}
                         alt={item.image_url}
                         className="w-20 h-20 object-cover border-gray-700 border cursor-pointer"

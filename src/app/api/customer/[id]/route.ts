@@ -3,23 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { authenticateToken } from "@/lib/auth";
 
-export async function GET({ params }: { params: { id?: string } }) {
-  const { id } = params;
-
-  try {
-    const getCustomer = await prisma.customer.findUnique({
-      where: {
-        customer_id: Number(id),
-      },
-    });
-    return NextResponse.json(
-      { getCustomer, message: "success" },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }

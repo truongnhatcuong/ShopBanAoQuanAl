@@ -140,11 +140,19 @@ const ShopContextProvider = ({ children }: ShopContextProvider) => {
       if (response.ok) {
         await handleQuantityCart();
         MySwal.fire({
-          position: "center",
+          position: "top-end",
           icon: "success",
-          title: "Đã thêm vào giỏ hàng",
+          title: "🎉 Sản phẩm đã được thêm vào giỏ hàng!",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 3200,
+          toast: true,
+          timerProgressBar: true,
+          showClass: {
+            popup: "animate__animated animate__fadeInDown",
+          },
+          hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+          },
         });
       } else {
         MySwal.fire({

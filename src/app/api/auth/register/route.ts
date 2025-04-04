@@ -13,14 +13,19 @@ const userSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Tên không được để trống" })
-    .max(100, { message: "Tên không được quá 100 ký tự" }),
+    .max(100, { message: "Tên không được quá 100 ký tự" })
+    .regex(/^[A-Za-zÀ-ỹ\s]+$/, {
+      message: "Tên không được chứa số hoặc ký tự đặc biệt",
+    }),
 
   email: z.string().email({ message: "Địa chỉ email không hợp lệ" }),
   phone: z
     .string()
     .min(10, { message: "Số điện thoại phải có ít nhất 10 ký tự" })
     .max(11, { message: "Số điện thoại không được vượt quá 11 ký tự" })
-    .regex(/^[0-9]+$/, { message: "Số điện thoại chỉ được chứa các chữ số" }),
+    .regex(/^(?!([0-9])\1{9,10}$)[0-9]+$/, {
+      message: "Số điện thoại không hợp lệ",
+    }),
   password: z
     .string()
     .min(8, { message: "Mật khẩu phải có ít nhất 8 ký tự" })

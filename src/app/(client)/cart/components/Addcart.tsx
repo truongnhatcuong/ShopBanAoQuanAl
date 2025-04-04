@@ -58,26 +58,32 @@ const AddToCart = ({ product, selectedSizeId, stockQuantity }: IProps) => {
 
   return (
     <div>
-      <h1>Chọn Số Lượng</h1>
-      <div className="flex items-center gap-4 mt-4">
+      <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+        Chọn Số Lượng
+      </h1>
+      <div className="flex items-center gap-2 mt-6">
         {/* Input để chọn số lượng */}
         <button
-          className="border-[1.2px] px-2.5 py-1 border-slate-400 rounded hover:bg-slate-200"
+          className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 hover:border-gray-400 active:bg-gray-200 transition-all duration-200"
           onClick={handleDecreate}
+          aria-label="Giảm số lượng"
         >
-          -
+          <span className="text-xl font-medium">-</span>
         </button>
-        <div>{quantity}</div>
+        <div className="w-12 text-center text-lg font-medium text-gray-900 dark:text-gray-100">
+          {quantity}
+        </div>
         <button
-          className="border-[1.2px] px-2.5 py-1 border-slate-400 rounded hover:bg-slate-200"
+          className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 hover:border-gray-400 active:bg-gray-200 transition-all duration-200"
           onClick={handleIncreate}
+          aria-label="Tăng số lượng"
         >
-          +
+          <span className="text-xl font-medium">+</span>
         </button>
 
         {/* Button để thêm sản phẩm vào giỏ */}
         <button
-          className="bg-black text-white dark:bg-white dark:text-black px-8 py-3 text-sm active:bg-slate-700 family"
+          className="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-8 py-3 rounded-lg text-sm font-medium shadow-md hover:from-indigo-700 hover:to-blue-600 active:from-indigo-800 active:to-blue-700 transition-all duration-300 dark:from-gray-100 dark:to-gray-200 dark:text-gray-900 dark:hover:from-gray-200 dark:hover:to-gray-300"
           onClick={handleAddToCartClick}
         >
           Thêm vào giỏ

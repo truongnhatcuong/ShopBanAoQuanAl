@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ForMatPrice } from "@/lib/FormPrice";
 import React, { useEffect, useState } from "react";
@@ -6,6 +5,7 @@ import { FaRegEdit } from "react-icons/fa";
 import Modal from "react-modal";
 
 import ExportInvoice from "../components/ExportPDF";
+import Image from "next/image";
 
 interface OrderManage {
   order_id: number;
@@ -25,13 +25,11 @@ interface OrderManage {
     }[];
   };
   OrderItems: {
-    orderitem_id: number;
     quantity: number;
     price: number;
     Product: {
       product_name: string;
       Images: {
-        id?: number;
         image_url?: string;
       }[];
     };
@@ -142,13 +140,15 @@ const DetailOrder = ({ orderId }: tailOrderProps) => {
                   Order Items
                 </h3>
                 <div className="space-y-4">
-                  {orderManage.OrderItems.map((item) => (
+                  {orderManage.OrderItems.map((item, index) => (
                     <div
-                      key={item.orderitem_id}
+                      key={index}
                       className="flex items-center gap-4 border-b pb-2"
                     >
-                      <img
-                        src={item.Product.Images[0]?.image_url}
+                      <Image
+                        width={200}
+                        height={200}
+                        src={item.Product.Images[0]?.image_url || ""}
                         alt={item.Product.product_name}
                         className="w-20 h-20 object-cover rounded"
                       />

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { assets } from "@/app/assets/frontend_assets/assets";
 import { ShopConText } from "@/app/context/Context";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
@@ -28,6 +29,7 @@ const ItemCart = ({ items }: CartItemListProps) => {
   useEffect(() => {
     setCartItems(items);
   }, [items]);
+
   const deleteCartItem = async (cartItemId: number) => {
     handleDeleteCartItem(cartItemId);
     setCartItems((prevItems) =>
@@ -83,62 +85,62 @@ const ItemCart = ({ items }: CartItemListProps) => {
   }
 
   return (
-    <div className="py-4 ">
+    <div className="py-4">
       {cartItems.map((item) => {
         const productPrice = Number(item.product.price);
         const productTotal = productPrice * item.quantity;
         return (
           <div
             key={item.cartitem_id}
-            className="py-4 ml-7 border-t border-b  grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center"
+            className="py-4 px-4 sm:px-7 border-t border-b border-gray-200 grid grid-cols-[3fr_1fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-2 sm:gap-4"
           >
-            <div className="flex items-center gap-4">
-              <img
+            {/* Product Info */}
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Image
+                width={100}
+                height={100}
                 src={item.product.Images[0].image_url}
                 alt="Product image"
-                className="w-16 sm:w-20 h-16 sm:h-20 object-contain"
+                className="w-14 h-14 sm:w-20 sm:h-20 object-contain rounded-md"
               />
-              <Link href={`/product/${item.product_id}`}>
+              <Link href={`/product/${item.product_id}`} className="flex-1">
                 <div>
-                  <p className="text-sm sm:text-lg font-medium">
+                  <p className="text-sm sm:text-lg font-medium line-clamp-2 hover:text-blue-600 transition-colors">
                     {item.product.product_name}
-                    <br />
                   </p>
-                  <div className="flex items-center gap-5 mt-2">
-                    <p className="text-xs font-bold">
+                  <div className="flex items-center gap-3 sm:gap-5 mt-1 sm:mt-2">
+                    <p className="text-xs sm:text-sm font-bold text-gray-800">
                       {Number(item.product.price)
                         .toLocaleString("vi-VN")
                         .replace(/\./g, ",")}{" "}
                       đ
                     </p>
-                    {/* Hiển thị kích thước đã chọn */}
                   </div>
                 </div>
               </Link>
-              <div className="flex justify-around  items-center mt-3 ml-5 ">
-                <p className="px-3 sm:px-4 sm:py-1 border border-gray-300 bg-slate-100 dark:text-black rounded-md text-center">
+              <div className="ml-2 sm:ml-5">
+                <p className="px-2 py-1 sm:px-3 sm:py-1.5 border border-gray-300 bg-gray-100 text-xs sm:text-sm rounded-md text-center dark:bg-gray-700 dark:text-white">
                   {item.selectedSize}
                 </p>
               </div>
             </div>
 
             {/* Quantity Input */}
-            <div className="flex  justify-between items-center ">
-              <div className="flex items-center flex-col md:flex-row dark:text-black  ">
-                <div
-                  className="py-1.5 px-3 border-slate-400 hover:bg-slate-400  border-[1px] rounded-md bg-slate-200  cursor-pointer"
+            <div className="flex items-center justify-between gap-2 sm:gap-4">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <button
+                  className="p-1.5 sm:p-2 border border-gray-300 hover:bg-gray-300 bg-gray-200 rounded-md transition-colors dark:bg-gray-600 dark:hover:bg-gray-500 dark:border-gray-500"
                   onClick={() =>
                     handleUpdateDecreateCart(item.cartitem_id, item.quantity)
                   }
                 >
                   -
-                </div>
-                <div className="py-1.5 px-4  mx-1 bg-slate-50  ">
-                  {" "}
+                </button>
+                <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-50 text-sm sm:text-base rounded-md dark:bg-gray-700 dark:text-white">
                   {item.quantity}
                 </div>
-                <div
-                  className="py-1.5 px-3 border-slate-400 hover:bg-slate-400 border-[1px]  rounded-md bg-slate-200  cursor-pointer"
+                <button
+                  className="p-1.5 sm:p-2 border border-gray-300 hover:bg-gray-300 bg-gray-200 rounded-md transition-colors dark:bg-gray-600 dark:hover:bg-gray-500 dark:border-gray-500"
                   onClick={() =>
                     handleUpdateIncreateCart(
                       item.cartitem_id,
@@ -148,19 +150,19 @@ const ItemCart = ({ items }: CartItemListProps) => {
                   }
                 >
                   +
-                </div>
+                </button>
               </div>
-              <p className="text-xs font-semibold hidden md:block ">
+              <p className="text-xs sm:text-sm font-semibold text-gray-800 hidden sm:block">
                 {productTotal.toLocaleString("vi-VN").replace(/\./g, ",")} đ
               </p>
             </div>
 
             {/* Bin Icon */}
-            <div className="flex justify-end mr-3 dark:bg-transparent ">
+            <div className="flex justify-end">
               <img
                 src={assets.bin_icon.src}
                 onClick={() => deleteCartItem(item.cartitem_id)}
-                className="w-4 sm:w-5 cursor-pointer dark:filter dark:invert"
+                className="w-4 sm:w-5 h-4 sm:h-5 cursor-pointer hover:opacity-70 transition-opacity dark:filter dark:invert"
                 alt="Delete Icon"
               />
             </div>

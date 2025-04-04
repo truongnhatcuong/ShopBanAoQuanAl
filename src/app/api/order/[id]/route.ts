@@ -56,6 +56,15 @@ export async function GET(
             name: true,
             phone: true,
             AddressShipper: {
+              select: {
+                country: true,
+                is_default: true,
+                province: true,
+                district: true,
+                ward: true,
+                street_address: true,
+                note: true,
+              },
               where: {
                 is_default: true,
               },
@@ -72,6 +81,9 @@ export async function GET(
                 product_name: true,
                 Images: {
                   take: 1,
+                  select: {
+                    image_url: true,
+                  },
                 },
               },
             },
@@ -80,7 +92,7 @@ export async function GET(
       },
     });
     return NextResponse.json(
-      { getOrderId, OrderManage, message: `found Id ${orderId} success` },
+      { OrderManage, message: `found Id ${orderId} success` },
       { status: 201 }
     );
   } catch (error: any) {

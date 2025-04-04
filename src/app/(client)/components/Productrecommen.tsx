@@ -1,19 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useState } from "react";
-import { Sparkles, ShoppingCart, CircleAlert, ThumbsUp } from "lucide-react";
+import { Sparkles, CircleAlert, ThumbsUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-interface ProductImage {
-  image_id: number;
-  product_id: number;
-  image_url: string;
-  created_at: string;
-  updated_at: string;
-}
 
 interface Product {
   product_id: number;
@@ -21,7 +12,7 @@ interface Product {
   description: string;
   price: string;
   stock_quantity: number;
-  Images: ProductImage[];
+  Images: { image_url: string }[];
   score: number;
 }
 
@@ -34,10 +25,7 @@ const ProductRecommendations = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/recommend`,
-          {
-            next: { revalidate: 300 },
-          }
+          `${process.env.NEXT_PUBLIC_API_URL}/api/recommend`
         );
         const data = await res.json();
         setRecommendations(data.data);

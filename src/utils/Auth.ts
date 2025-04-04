@@ -15,6 +15,16 @@ export async function authCustomer(req: NextRequest) {
     }
     const customer = await prisma.customer.findUnique({
       where: { username },
+      select: {
+        customer_id: true,
+        name: true,
+        email: true,
+        phone: true,
+        image: true,
+        username: true,
+        token: true,
+        roleId: true,
+      },
     });
     return customer;
   } catch (error: any) {

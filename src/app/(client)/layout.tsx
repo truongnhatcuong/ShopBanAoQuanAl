@@ -17,10 +17,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className={`${inter.className}  flex flex-col min-h-screen `}>
+    <div className={`${inter.className}  flex flex-col min-h-screen gap-3`}>
       <ShopContextProvider>
         <HeadePager />
-        <div className=" mx-auto container  flex-1">{children}</div>
+        <div className=" mx-auto container  flex-1 flex-wrap ">{children}</div>
         <Footer />
       </ShopContextProvider>
     </div>

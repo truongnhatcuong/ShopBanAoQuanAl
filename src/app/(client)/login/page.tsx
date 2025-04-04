@@ -45,10 +45,10 @@ const Page = () => {
         showConfirmButton: true,
         confirmButtonText: "OK",
         confirmButtonColor: "#3085d6",
-        timer: 2500,
+        timer: 3500,
         timerProgressBar: true,
       });
-      window.location.href = "/";
+      route.push("/");
       route.refresh();
     } else {
       const dataError = await res.json();

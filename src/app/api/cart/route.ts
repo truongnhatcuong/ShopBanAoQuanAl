@@ -17,7 +17,10 @@ export async function GET(req: NextRequest) {
       where: { customer_id: customer.customer_id },
       include: {
         CartItems: {
-          include: {
+          select: {
+            cartitem_id: true,
+            quantity: true,
+
             Product: {
               select: {
                 product_name: true,
@@ -56,7 +59,6 @@ export async function GET(req: NextRequest) {
           cart_id: cart?.cart_id,
           items: cart?.CartItems.map((item) => ({
             cartitem_id: item.cartitem_id,
-            product_id: item.product_id,
             quantity: item.quantity,
             selectedSize: item.Size?.name_size, // Cung cấp selectedSize từ bảng Size
             product: item.Product,

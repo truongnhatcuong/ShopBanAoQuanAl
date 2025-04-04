@@ -10,6 +10,7 @@ import {
   IoInformationCircleOutline,
 } from "react-icons/io5";
 import { SiZalo } from "react-icons/si";
+import Notificationcoupon from "./Notificationcoupon";
 
 interface IMenuMobiPhone {
   visible: boolean;
@@ -77,6 +78,7 @@ const MenuItemMobiPhone = ({
             <IoChevronBackOutline className="text-4xl" />
             <span className=""> Trở Lại</span>
           </div>
+          <Notificationcoupon />
           <LanguageSwitcher />
         </div>
 

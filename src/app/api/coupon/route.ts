@@ -16,14 +16,19 @@ export async function GET(req: NextRequest) {
         },
       },
     },
-    include: {
+    select: {
+      coupon_id: true,
+      coupon_code: true,
+      coupon_percentage: true,
+      coupon_amount: true,
+      start_date: true,
+      end_date: true,
       PromotionNotifications: {
         select: {
           Notifications: {
             select: {
               Customer: {
                 select: {
-                  customer_id: true,
                   name: true,
                 },
               },

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { ShopConText } from "@/app/context/Context";
+import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 
 interface CartItem {
@@ -45,7 +46,9 @@ const QRCode = ({ cart }: CartApiResponse) => {
 
   return (
     <div className="flex flex-col items-center gap-6 py-2 bg-white rounded-xl shadow-lg max-w-sm mx-auto">
-      <img
+      <Image
+        width={200}
+        height={200}
         src={vietQR}
         alt="QR Code"
         className="w-[300px] h-64 object-contain rounded-md border border-gray-200 p-2 bg-gray-50"

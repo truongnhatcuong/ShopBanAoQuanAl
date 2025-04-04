@@ -44,7 +44,7 @@ const SubmenuItems = ({ menuItem }: IProps) => {
         {/* Title - Chỉ hiển thị khi menu mở trên md+ */}
         {isLeftMenuVisible && (
           <span
-            className={`text-base font-medium text-slate-50 capitalize truncate
+            className={` font-medium text-slate-50 capitalize text-sm truncate
               hidden md:block transition-opacity duration-200
               ${isActive ? "font-bold text-white" : "group-hover:text-white"}`}
           >

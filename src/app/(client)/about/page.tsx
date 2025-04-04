@@ -4,6 +4,7 @@ import { assets } from "@/app/assets/frontend_assets/assets";
 import React, { useEffect } from "react";
 import Title from "../components/Title";
 import Aos from "aos";
+import Image from "next/image";
 
 const Page = () => {
   useEffect(() => {
@@ -20,7 +21,9 @@ const Page = () => {
         </div>
       </div>
       <div className="my-10 flex flex-col sm:flex-row gap-16">
-        <img
+        <Image
+          width={200}
+          height={200}
           src={assets.about_img.src}
           alt=""
           className="w-full md:max-w-[450px] "

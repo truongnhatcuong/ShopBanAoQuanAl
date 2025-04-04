@@ -10,12 +10,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from "next/image";
 interface IPromotion {
   discount: number;
   start_date: string;
   end_date: string;
   products: {
     product_name: string;
+    images: string;
   }[];
 }
 
@@ -34,6 +36,7 @@ const TablePromotion = (props: IProp) => {
             <TableHead className="text-white">Ngày Bắt Đầu</TableHead>
             <TableHead className="text-white">Ngày Kết Thúc</TableHead>
             <TableHead className="text-white">Tên Sản Phẩm</TableHead>
+            <TableHead className="text-white">Hình Ảnh</TableHead>
             <TableHead className="text-white">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -57,6 +60,9 @@ const TablePromotion = (props: IProp) => {
                 </TableCell>
                 <TableCell className="py-2 px-4 border">
                   {item1.product_name}
+                </TableCell>
+                <TableCell className="py-2 pl-5 border">
+                  <Image alt="" src={item1.images} width={50} height={50} />
                 </TableCell>
                 <TableCell className="flex gap-3">
                   {" "}

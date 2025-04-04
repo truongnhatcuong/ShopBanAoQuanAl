@@ -45,28 +45,15 @@ export async function GET(req: NextRequest) {
       orderBy: {
         [sortField]: sortOrder,
       },
-      include: {
-        ProductSizes: {
-          select: {
-            stock_quantity: true,
-            Size: {
-              select: {
-                size_id: true,
-                name_size: true, // Nếu cần tên kích thước
-              },
-            },
-          },
-        },
-        Images: {
-          select: {
-            image_id: true,
-            image_url: true,
-          },
-        },
+      select: {
+        product_id: true,
+        product_name: true,
 
-        Category: {
+        price: true,
+        Images: {
+          take: 2,
           select: {
-            category_name: true, // Tên danh mục
+            image_url: true,
           },
         },
         ProductPromotion: {
@@ -76,6 +63,11 @@ export async function GET(req: NextRequest) {
                 discount: true,
               },
             },
+          },
+        },
+        Category: {
+          select: {
+            category_name: true,
           },
         },
       },
@@ -104,13 +96,16 @@ export async function GET(req: NextRequest) {
         orderBy: {
           [sortField]: sortOrder,
         },
-        include: {
+        select: {
+          product_id: true,
+          product_name: true,
+          stock_quantity: true,
+          price: true,
           ProductSizes: {
             select: {
               stock_quantity: true,
               Size: {
                 select: {
-                  size_id: true,
                   name_size: true, // Nếu cần tên kích thước
                 },
               },
@@ -118,23 +113,7 @@ export async function GET(req: NextRequest) {
           },
           Images: {
             select: {
-              image_id: true,
               image_url: true,
-            },
-          },
-
-          Category: {
-            select: {
-              category_name: true, // Tên danh mục
-            },
-          },
-          ProductPromotion: {
-            select: {
-              Promotion: {
-                select: {
-                  discount: true,
-                },
-              },
             },
           },
         },

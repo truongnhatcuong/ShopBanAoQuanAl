@@ -12,10 +12,6 @@ const seasonSchema = z.object({
     .string()
     .min(3, "Tên mùa phải có ít nhất 3 ký tự")
     .max(100, "Tên mùa không được vượt quá 100 ký tự"),
-  description: z
-    .string()
-    .min(10, "Mô tả mùa phải có ít nhất 10 ký tự")
-    .max(500, "Mô tả mùa không được vượt quá 500 ký tự"),
 });
 
 export async function POST(req: NextRequest) {
@@ -24,7 +20,7 @@ export async function POST(req: NextRequest) {
   const isValid = seasonSchema.safeParse({ season_name, description });
   if (!isValid.success) {
     return NextResponse.json(
-      { message: isValid.error?.errors?.map((item) => item.message) || [] },
+      { message: isValid.error?.errors[0].message },
       { status: 400 }
     );
   }
@@ -40,6 +36,6 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

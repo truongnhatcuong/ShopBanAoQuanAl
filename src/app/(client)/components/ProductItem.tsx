@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ForMatPrice } from "@/lib/FormPrice";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -28,13 +29,17 @@ const ProductItem = ({
         className="text-gray-800 dark:text-white cursor-pointer  "
       >
         <div className="overflow-hidden mt-5 relative  group">
-          <img
+          <Image
+            width={200}
+            height={200}
             src={Images[0]?.image_url || null}
             alt=""
             className="object-cover w-full h-full md:w-56 md:h-52 transition-all duration-400 ease-in-out opacity-100 group-hover:opacity-0"
           />
           {Images[1] && (
-            <img
+            <Image
+              width={200}
+              height={200}
               src={Images[1].image_url}
               alt=""
               className="absolute top-0 left-0 object-cover w-full h-full md:w-56 md:h-52 transition-all ease-in-out opacity-0 group-hover:opacity-100 duration-700"

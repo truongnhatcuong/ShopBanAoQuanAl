@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,8 +16,6 @@ interface Customer {
 
 interface Review {
   review_id: number;
-  product_id: number;
-  customer_id: number;
   comment_review: string | null;
   image_url: string | null;
   review_date: string;
@@ -69,12 +66,15 @@ const ReviewManagement = () => {
       return alert("Vui lòng nhập nội dung phản hồi");
     }
     try {
-      const response = await fetch(`/api/review/${review_id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          seller_response: activeResponse.response,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/review/${review_id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            seller_response: activeResponse.response,
+          }),
+        }
+      );
 
       setReviews(
         reviews.map((review) =>
@@ -160,7 +160,9 @@ const ReviewManagement = () => {
                       {review.image_url && (
                         <div className="flex gap-4">
                           {review.image_url.split(",").map((url, index) => (
-                            <img
+                            <Image
+                              width={200}
+                              height={200}
                               src={url}
                               alt={url}
                               key={index}

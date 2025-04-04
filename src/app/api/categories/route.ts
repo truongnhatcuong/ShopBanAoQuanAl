@@ -1,4 +1,3 @@
-import { products } from "./../../assets/frontend_assets/assets";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -69,7 +68,7 @@ export async function POST(request: NextRequest) {
 
     if (!isValid.success) {
       return NextResponse.json(
-        { message: isValid.error?.errors?.map((item) => item.message) || [] },
+        { message: isValid.error?.errors[0].message || [] },
         { status: 400 }
       );
     }

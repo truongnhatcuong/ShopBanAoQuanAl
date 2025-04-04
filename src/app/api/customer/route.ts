@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   const searchParams = req.nextUrl.searchParams;
   const search = searchParams.get("search") ?? "";
-  const limit = Number(searchParams.get("limit")) || 3;
+  const limit = Number(searchParams.get("limit")) || 5;
   const page = Number(searchParams.get("page")) || 1;
   const sortOrder: any = searchParams.get("sortOrder") || "asc";
   const totalRecord = await prisma.customer.count({
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  const totalPages = limit > 0 ? totalRecord / limit : 1;
+  const totalPages = limit > 0 ? Math.ceil(totalRecord / limit) : 1;
   const totalSkipRecord = (page - 1) * limit;
   const getCustomer = await prisma.customer.findMany({
     skip: totalSkipRecord,

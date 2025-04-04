@@ -14,6 +14,13 @@ export async function GET(req: NextRequest) {
       where: {
         customer_id: customer?.customer_id,
       },
+      select: {
+        notification_id: true,
+        notification_type: true,
+        message: true,
+        is_read: true,
+        created_at: true,
+      },
       orderBy: {
         notification_id: "desc",
       },

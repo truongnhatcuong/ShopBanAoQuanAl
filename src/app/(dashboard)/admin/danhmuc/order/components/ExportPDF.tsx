@@ -39,7 +39,6 @@ interface Product {
 }
 
 interface OrderItem {
-  orderitem_id: number;
   quantity: number;
   price: number;
   Product: Product;
@@ -349,7 +348,7 @@ const InvoicePDF = ({ order }: { order: OrderManage }) => {
                     ? styles.tableRowLast
                     : styles.tableRow
                 }
-                key={item.orderitem_id}
+                key={index}
               >
                 <Text style={[styles.tableCol, styles.colProduct]}>
                   {item.Product.product_code &&

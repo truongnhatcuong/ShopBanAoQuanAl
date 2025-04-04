@@ -28,7 +28,7 @@ const PageAddress = () => {
   const FetchApi = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/addressShiper`,
-      { next: { revalidate: 10 } }
+      { next: { revalidate: 100 } }
     );
     const data = await res.json();
     setAddress(data.addressShiper);

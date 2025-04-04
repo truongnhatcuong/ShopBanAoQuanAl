@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ForMatPrice } from "@/lib/FormPrice";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 interface IPromotion {
@@ -29,13 +30,17 @@ const ProductItemSeller = ({ props }: IProps) => {
             -{props.discount}%
           </div>
           <div className="relative group">
-            <img
+            <Image
+              width={200}
+              height={200}
               src={props.products[0].images[0].image_url}
               alt=""
               className="hover:scale-110 transition-all ease-in-out object-cover w-96 h-80  md:w-52 md:h-52 opacity-100 group-hover:opacity-0"
             />
             {props.products[0].images[1].image_url && (
-              <img
+              <Image
+                width={200}
+                height={200}
                 src={props.products[0].images[1].image_url}
                 alt=""
                 className="hover:scale-110 transition-all ease-in-out object-cover w-96 h-80  md:w-52 md:h-52 absolute top-0 opacity-0 group-hover:opacity-100 duration-700"

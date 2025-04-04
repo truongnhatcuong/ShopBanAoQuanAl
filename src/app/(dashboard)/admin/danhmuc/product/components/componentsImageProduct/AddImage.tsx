@@ -1,6 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
+import Image from "next/image";
 import React, { useState } from "react";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -58,24 +57,18 @@ const AddImage = ({ product_id, reloadData }: IAdd) => {
           htmlFor="productImage"
           className="flex flex-col items-center gap-2 cursor-pointer"
         >
-          {images.length > 0 ? (
-            <div className="grid grid-cols-3 gap-3">
-              {images.map((item, index) => (
-                <img
-                  src={URL.createObjectURL(item)}
-                  alt=""
-                  key={index}
-                  className="w-24 h-20 object-cover rounded-md shadow"
-                />
-              ))}
-            </div>
-          ) : (
-            <img
-              src={"/Image/upload_area.png"}
-              alt=""
-              className="w-32 h-25 object-contain "
-            />
-          )}
+          <div className="grid grid-cols-3 gap-3">
+            {images.map((item, index) => (
+              <Image
+                width={200}
+                height={200}
+                src={URL.createObjectURL(item) || "/Image/upload_area.png"}
+                alt=""
+                key={index}
+                className="w-24 h-20 object-cover rounded-md shadow"
+              />
+            ))}
+          </div>
 
           <input
             type="file"

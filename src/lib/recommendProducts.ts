@@ -39,9 +39,15 @@ export const recommendProducts = async (userBehaviorData: number[][]) => {
 
   // 🛒 Lấy danh sách sản phẩm từ Prisma (MySQL)
   const allProducts = await prisma.product.findMany({
-    include: {
+    select: {
+      product_id: true,
+      product_name: true,
+      description: true,
+      stock_quantity: true,
+      price: true,
       Images: {
         take: 1,
+        select: { image_url: true },
       },
     },
   });

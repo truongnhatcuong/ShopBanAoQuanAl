@@ -63,7 +63,7 @@ const ListItem = ({ categories }: IProps) => {
   ];
 
   return (
-    <ul className="flex gap-6">
+    <ul className="flex gap-5">
       {MenuHeader.map((item) =>
         item.hasDropdown ? (
           <li key={item.id}>

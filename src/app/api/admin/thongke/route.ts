@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    // Get query parameters for date filtering
     const customer = await authCustomer(req);
     if (!customer)
       return NextResponse.json(
@@ -17,40 +16,15 @@ export async function GET(req: NextRequest) {
     const dateParam =
       url.searchParams.get("date") || new Date().toISOString().split("T")[0]; // default to today
     const [year, month, day] = dateParam.split("-").map(Number);
-    // Base statistics
-    const countOrder = await prisma.orderItem.count();
+
     const customerCount = await prisma.customer.count();
-
-    // Delivered orders total amount
-    const totalOrderAmount = await prisma.order.aggregate({
-      _sum: {
-        total_amount: true,
-      },
-      where: {
-        order_state: "DELIVERED",
-      },
-    });
-    const totalAmount = totalOrderAmount._sum.total_amount || 0;
-
-    // Processing orders total quantity
-    const totalOrderQuantity = await prisma.orderItem.aggregate({
-      _sum: {
-        quantity: true,
-      },
-      where: {
-        Order: {
-          order_state: "PROCESSING",
-        },
-      },
-    });
-    const totalQuantity = totalOrderQuantity._sum.quantity || 0;
 
     // Date range calculations
     const currentDate = new Date(Date.UTC(year, month - 1, day));
     let startDate = new Date(currentDate);
     let endDate = new Date(currentDate);
 
-    // Determine date ranges based on period
+    // ĐẶT XUỐNG ĐÂY: Determine date ranges based on period
     switch (periodParam) {
       case "day":
         startDate.setHours(0, 0, 0, 0);
@@ -58,8 +32,9 @@ export async function GET(req: NextRequest) {
         break;
       case "week":
         // Set to beginning of week (Monday)
-        const day = startDate.getDay();
-        const diff = startDate.getDate() - day + (day === 0 ? -6 : 1);
+        const dayOfWeek = startDate.getDay();
+        const diff =
+          startDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
         startDate = new Date(startDate.setDate(diff));
         startDate.setHours(0, 0, 0, 0);
 
@@ -87,6 +62,51 @@ export async function GET(req: NextRequest) {
         endDate.setHours(23, 59, 59, 999);
         break;
     }
+
+    // CHỈ SAU KHI ĐÃ TÍNH ĐÚNG startDate VÀ endDate THÌ MỚI THỰC HIỆN CÁC TRUY VẤN
+    // Base statistics
+    const countOrder = await prisma.orderItem.count({
+      where: {
+        Order: {
+          order_date: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+      },
+    });
+
+    // Delivered orders total amount
+    const totalOrderAmount = await prisma.order.aggregate({
+      _sum: {
+        total_amount: true,
+      },
+      where: {
+        order_state: "DELIVERED",
+        order_date: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+    const totalAmount = totalOrderAmount._sum.total_amount || 0;
+
+    // Processing orders total quantity
+    const totalOrderQuantity = await prisma.orderItem.aggregate({
+      _sum: {
+        quantity: true,
+      },
+      where: {
+        Order: {
+          order_state: "PROCESSING",
+          order_date: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+      },
+    });
+    const totalQuantity = totalOrderQuantity._sum.quantity || 0;
 
     // Period order count
     const periodOrders = await prisma.order.count({

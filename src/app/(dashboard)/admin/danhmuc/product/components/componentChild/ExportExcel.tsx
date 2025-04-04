@@ -11,10 +11,6 @@ interface Product {
   stock_quantity: number;
   color: string;
 
-  description: string;
-  category_id: number;
-  brand_id: number;
-  season_id: number;
   sizes: any[];
   ProductSizes: {
     size_id: number;

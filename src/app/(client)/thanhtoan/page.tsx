@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
@@ -14,6 +13,7 @@ import { CreditCard, ShoppingCart, Check } from "lucide-react";
 import { trackUserAction } from "@/lib/trackUserAction";
 import { ShopConText } from "@/app/context/Context";
 import { ForMatPrice } from "@/lib/FormPrice";
+import Image from "next/image";
 
 const stripePromise = loadStripe(
   "pk_test_51QgFtjLc5Tk8M9gL1NtizufQ65Em2RuzO6y6WnpE5apKamJrjxzUPxcCacg50ED79d2RcUetyih82PNO2apQkNSC00Ws1K0EQp"
@@ -144,7 +144,9 @@ const PaymentPageContent = () => {
                     key={item.cartitem_id}
                     className="flex items-center border-b last:border-b-0 py-4 hover:bg-gray-100 transition-colors"
                   >
-                    <img
+                    <Image
+                      width={200}
+                      height={200}
                       src={
                         item.product.Images[0]?.image_url ||
                         "/default-image.jpg"

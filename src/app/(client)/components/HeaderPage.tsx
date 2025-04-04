@@ -84,7 +84,9 @@ export default function HeaderPage() {
       {/* phần khác */}
       <div className="flex items-center gap-x-5 md:justify-start justify-end">
         {/* Search Input */}
-        <Notificationcoupon />
+        <div className="hidden md:block">
+          <Notificationcoupon />
+        </div>
 
         <div className="hidden md:block">
           {" "}
@@ -114,7 +116,7 @@ export default function HeaderPage() {
             <LoginDropDown login="Đăng Nhập" signUp="Đăng Ký" />
           )}
         </div>
-        <div className="relative md:ml-6 mb-[9px]">
+        <div className="relative md:ml-5 mb-[7px]">
           {" "}
           <Link href={"/cart"}>
             <BsBagCheck className="w-[30px] h-[30px] cursor-pointer mr-8 md:mr-0  " />

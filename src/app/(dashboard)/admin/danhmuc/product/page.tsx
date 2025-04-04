@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TableProduct from "./components/TableProduct";
 import AddProduct from "./components/Addproduct";
 import debounce from "lodash.debounce";
@@ -16,7 +16,6 @@ interface Product {
   price: number;
   stock_quantity: number;
   color: string;
-
   description: string;
   category_id: number;
   brand_id: number;
@@ -36,6 +35,24 @@ interface Product {
   }[];
 }
 
+interface ICategory {
+  category_id: number;
+  category_name: string;
+}
+
+interface IBrand {
+  brand_id: number;
+  brand_name: string;
+}
+interface ISeason {
+  season_id: number;
+  season_name: string;
+}
+interface ISize {
+  size_id: number;
+  name_size: string;
+}
+
 const PageProduct = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [limit, setLimit] = useState(5);
@@ -43,6 +60,11 @@ const PageProduct = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortOrder, setSortOrder] = useState("asc");
+  // hiển thị tên các danh mục
+  const [category, setCategory] = useState<ICategory[] | []>([]);
+  const [brand, setBrand] = useState<IBrand[] | []>([]);
+  const [season, setSeason] = useState<ISeason[] | []>([]);
+  const [size, setSize] = useState<ISize[] | []>([]);
   const ApiImage = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/ImageProduct`
@@ -71,6 +93,46 @@ const PageProduct = () => {
     fetchApiProduct();
   }, [searchTerm, currentPage, limit, sortOrder]);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [categoryRes, brandRes, seasonRes, sizeRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`, {
+          next: { revalidate: 3600 },
+        }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brand`, {
+          next: { revalidate: 3600 },
+        }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/season`, {
+          next: { revalidate: 3600 },
+        }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/size`, {
+          next: { revalidate: 86400 },
+        }),
+      ]);
+
+      const [categoriesData, brandData, seasonData, sizeData] =
+        await Promise.all([
+          categoryRes.json(),
+          brandRes.json(),
+          seasonRes.json(),
+          sizeRes.json(),
+        ]);
+
+      setCategory(categoriesData.categories);
+      setBrand(brandData.brand);
+      setSeason(seasonData.season);
+      setSize(sizeData.size);
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu sản phẩm:", error);
+    }
+  }, []);
+
+  console.log(brand);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   if (loading) {
     <p className="text-gray-500 text-center">Đang tải dữ liệu...</p>;
   }
@@ -90,7 +152,13 @@ const PageProduct = () => {
         </div>
         <div>
           {" "}
-          <AddProduct reloadData={fetchApiProduct} />
+          <AddProduct
+            reloadData={fetchApiProduct}
+            brand={brand}
+            category={category}
+            season={season}
+            size={size}
+          />
         </div>
       </div>
       {/* danh sách sản phẩm */}
@@ -101,6 +169,10 @@ const PageProduct = () => {
           searchTerm={searchTerm}
           productData={product}
           reloadData={fetchApiProduct}
+          brand={brand}
+          category={category}
+          season={season}
+          size={size}
         />
       </div>
       {/* phân trang */}

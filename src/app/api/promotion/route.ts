@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
               price: true,
               Images: {
                 select: {
-                  image_id: true,
                   image_url: true,
                 },
               },
@@ -38,9 +37,8 @@ export async function GET(req: NextRequest) {
         current_price: currentPrice.toFixed(0),
         original_price: originalPrice.toFixed(0),
         images: productPromotion.Product.Images.map((image) => ({
-          image_id: image.image_id,
           image_url: image.image_url,
-        })),
+        })).slice(0, 2),
       };
     }),
   }));

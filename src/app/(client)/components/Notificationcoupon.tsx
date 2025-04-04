@@ -39,6 +39,9 @@ const Notificationcoupon = () => {
     setData(data.notification || []);
     setCount(data.countNotification);
   };
+  useEffect(() => {
+    FetchApi();
+  }, []);
 
   const markNotification = async (notification_id: number) => {
     const res = await fetch(
@@ -56,10 +59,6 @@ const Notificationcoupon = () => {
       const errorData = await res.json();
     }
   };
-
-  useEffect(() => {
-    FetchApi();
-  }, [pathname]);
 
   return (
     <div className="relative cursor-pointer">

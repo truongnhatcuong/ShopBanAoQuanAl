@@ -105,11 +105,11 @@
     order_date   DateTime?       @db.DateTime
     total_amount Decimal         @db.Decimal(10, 2)
   order_state   OrderState      @default(PENDING)
-    created_at   DateTime?       @db.DateTime
-    updated_at   DateTime?       @db.DateTime
+     created_at   DateTime? @db.DateTime
+    updated_at   DateTime? @db.DateTime
     Customer     Customer        @relation(fields: [customer_id], references: [customer_id])
     address_id     Int?
-AddressShipper AddressShipper? @relation(fields: [address_id], references: [address_id])
+  AddressShipper AddressShipper? @relation(fields: [address_id], references: [address_id])
 
     OrderItems   OrderItem[]
     Payments     Payment[]
@@ -124,6 +124,8 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
     SHIPPED
     DELIVERED
     CANCELLED
+    PARTIALLY_REFUNDED
+    REFUNDED
   }
 
 
@@ -184,8 +186,8 @@ AddressShipper AddressShipper? @relation(fields: [address_id], references: [addr
     return_date   DateTime? @db.Date
     return_status  ReturnStatus @default(PENDING)
     return_amount Decimal   @db.Decimal(10, 2)
-    created_at    DateTime? @db.DateTime
-    updated_at    DateTime? @db.DateTime
+      created_at   DateTime? @db.DateTime
+    updated_at   DateTime? @db.DateTime
     Order         Order     @relation(fields: [order_id], references: [order_id])
     Product       Product   @relation(fields: [product_id], references: [product_id])
     @@index([order_id])

@@ -52,19 +52,14 @@ export async function POST(req: NextRequest) {
   // lấy token
   const token = req.cookies.get("token")?.value;
   const user = await authenticateToken(token);
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  // nếu có permisson === general chỉ có admin đc truy cập
-  const permisionAdmin = user.role.permissions.some(
-    (admin) => admin.permission.permission === "general"
+  const hashAdmin = user?.some(
+    (item) => item.permission.permission === "update"
   );
-  if (!permisionAdmin) {
+  if (!hashAdmin)
     return NextResponse.json(
-      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
-      { status: 401 }
+      { message: "bạn không có quyền truy cập" },
+      { status: 400 }
     );
-  }
   const { discount, start_date, end_date, product_id } = await req.json();
 
   try {

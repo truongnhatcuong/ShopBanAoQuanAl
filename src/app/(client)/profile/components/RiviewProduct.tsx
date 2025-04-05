@@ -88,7 +88,7 @@ const RiviewProduct = ({ order_id }: { order_id: number }) => {
     formData.append("rating", rating.toString());
 
     try {
-      const res = await fetch(`/api/review`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/review`, {
         method: "POST",
         body: formData,
       });
@@ -121,7 +121,9 @@ const RiviewProduct = ({ order_id }: { order_id: number }) => {
   const checkIfReviewed = async () => {
     if (!productId) return;
     try {
-      const response = await fetch("/api/review");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/review`
+      );
       const data = await response.json();
       // Kiểm tra xem người dùng đã đánh giá sản phẩm này chưa
       if (data && data.getAllReview) {
@@ -247,7 +249,7 @@ const RiviewProduct = ({ order_id }: { order_id: number }) => {
                       width={200}
                       height={200}
                       key={index}
-                      src={URL.createObjectURL(item)}
+                      src={URL.createObjectURL(item) || ""}
                       alt="Uploaded"
                       className="w-20 h-20 object-cover rounded border"
                     />

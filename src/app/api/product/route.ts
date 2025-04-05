@@ -73,13 +73,9 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const admin = await authenticateToken(token);
+    const user = await authenticateToken(token);
     let magamentProducts: any = [];
-    if (
-      admin?.role.permissions.some(
-        (prev) => prev.permission.permission === "update"
-      )
-    ) {
+    if (user?.some((item) => item.permission.permission === "update")) {
       magamentProducts = await prisma.product.findMany({
         ...(limit > 0 && { skip: totalSkipRecords, take: limit }), // Phân trang
         where: {

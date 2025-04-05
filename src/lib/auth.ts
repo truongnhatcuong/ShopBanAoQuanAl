@@ -29,7 +29,7 @@ export async function authenticateToken(token: string | undefined) {
         },
       },
     });
-    return user; // Trả về thông tin người dùng bao gồm vai trò và quyền
+    return user?.role.permissions; // Trả về thông tin người dùng bao gồm vai trò và quyền
   } catch (err) {
     return null;
   }

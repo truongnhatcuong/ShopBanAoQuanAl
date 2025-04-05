@@ -11,19 +11,14 @@ export async function PUT(
   const token = req.cookies.get("token")?.value;
   // xác thực người dùng
   const user = await authenticateToken(token);
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  //cấp quyền
-  const permisionAdmin = user.role.permissions.some(
-    (admin) => admin.permission.permission === "general"
+  const hashAdmin = user?.some(
+    (item) => item.permission.permission === "update"
   );
-  if (!permisionAdmin) {
+  if (!hashAdmin)
     return NextResponse.json(
-      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
-      { status: 401 }
+      { message: "bạn không có quyền truy cập" },
+      { status: 400 }
     );
-  }
   const data = await req.json();
   const customerId = Number(params.id);
 
@@ -57,20 +52,14 @@ export async function DELETE(
   const token = req.cookies.get("token")?.value;
   // xác thực
   const user = await authenticateToken(token);
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  // nếu có permisson === delete thì có thể xóa
-  const hasDeletePermission = user.role.permissions.some(
-    (perm) => perm.permission.permission === "delete"
+  const hashAdmin = user?.some(
+    (item) => item.permission.permission === "delete"
   );
-
-  if (!hasDeletePermission) {
+  if (!hashAdmin)
     return NextResponse.json(
-      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
-      { status: 403 }
+      { message: "bạn không có quyền truy cập" },
+      { status: 400 }
     );
-  }
   try {
     const deleteCustomer = await prisma.customer.delete({
       where: {

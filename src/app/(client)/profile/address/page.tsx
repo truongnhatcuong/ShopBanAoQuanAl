@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Title from "../../components/Title";
 import ListAddress from "../components/ListAddress";
 import AddAddress from "../components/AddAddress";
+import { usePathname } from "next/navigation";
 
 interface AddressShipper {
   address_id: number;
@@ -23,6 +24,7 @@ interface CustomerAddress {
 
 const PageAddress = () => {
   // Khai báo trạng thái với kiểu CustomerAddress[]
+
   const [address, setAddress] = useState<CustomerAddress | null>(null);
 
   const FetchApi = async () => {

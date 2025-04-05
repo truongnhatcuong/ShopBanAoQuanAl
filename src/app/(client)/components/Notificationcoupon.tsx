@@ -131,7 +131,7 @@ const Notificationcoupon = () => {
         </DropdownMenuContent>
       </DropdownMenu>
       {count > 0 ? (
-        <p className="absolute -right-0 top-0 rounded-full bg-black w-4 h-4 px-[4px] flex items-center text-white text-xs text-center shadow-sm">
+        <p className="absolute -right-0 -top-0.5 rounded-full bg-black w-4 h-4 px-[4px] flex items-center text-white text-xs text-center shadow-sm">
           {count}
         </p>
       ) : (

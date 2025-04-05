@@ -80,19 +80,14 @@ export async function PUT(
         name: customer?.name,
       },
     });
-    if (!authCustomer) {
-      return NextResponse.json({ message: "error" }, { status: 400 });
-    }
-
-    const hasUpdatePermission = user?.role.permissions.some(
+    const hashAdmin = user?.some(
       (item) => item.permission.permission === "update"
     );
-    if (!hasUpdatePermission) {
+    if (!hashAdmin)
       return NextResponse.json(
-        { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
+        { message: "bạn không có quyền truy cập" },
         { status: 400 }
       );
-    }
     // check exist coupon
     const existingCoupon = await prisma.coupon.findUnique({
       where: {

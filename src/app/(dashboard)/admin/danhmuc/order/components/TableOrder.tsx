@@ -109,7 +109,7 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
   ) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/manage/orderCustomer/${orderId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -179,7 +179,6 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
             <TableHead>Tổng Tiền</TableHead>
             <TableHead>Payment</TableHead>
             <TableHead>Trạng thái đơn hàng</TableHead>
-
             <TableHead>Hành Động</TableHead>
           </TableRow>
         </TableHeader>

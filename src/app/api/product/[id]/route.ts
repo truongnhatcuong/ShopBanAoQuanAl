@@ -15,9 +15,22 @@ export async function GET(
       where: {
         product_id: Number(productId),
       },
-      include: {
-        Category: true,
-        Images: true,
+      select: {
+        product_id: true,
+        product_name: true,
+        description: true,
+        price: true,
+        stock_quantity: true,
+        Category: {
+          select: {
+            category_name: true,
+          },
+        },
+        Images: {
+          select: {
+            image_url: true,
+          },
+        },
         ProductSizes: {
           select: {
             stock_quantity: true,
@@ -39,7 +52,13 @@ export async function GET(
           },
         },
         Review: {
-          include: {
+          select: {
+            review_id: true,
+            comment_review: true,
+            image_url: true,
+            review_date: true,
+            seller_response: true,
+            rating: true,
             Customer: {
               select: {
                 name: true,
@@ -179,20 +198,14 @@ export async function DELETE(
   const token = req.cookies.get("token")?.value;
   // xác thực
   const user = await authenticateToken(token);
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  // nếu có permisson === delete thì có thể xóa
-  const hasDeletePermission = user.role.permissions.some(
-    (perm) => perm.permission.permission === "delete"
+  const hashAdmin = user?.some(
+    (item) => item.permission.permission === "delete"
   );
-
-  if (!hasDeletePermission) {
+  if (!hashAdmin)
     return NextResponse.json(
-      { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
-      { status: 403 }
+      { message: "bạn không có quyền truy cập" },
+      { status: 400 }
     );
-  }
   const productId = Number(params.id);
   try {
     //xóa sản phẩm

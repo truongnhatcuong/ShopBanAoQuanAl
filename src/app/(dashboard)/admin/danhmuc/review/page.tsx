@@ -45,7 +45,7 @@ const ReviewManagement = () => {
   });
   useEffect(() => {
     ApiRivew();
-  }, [activeResponse.response]);
+  }, []);
 
   const handleResponse = (review_id: number) => {
     const review = reviews.find((r) => r.review_id === review_id);

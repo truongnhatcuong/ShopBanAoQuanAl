@@ -66,16 +66,14 @@ export async function POST(req: NextRequest) {
       );
     }
     const user = await authenticateToken(token);
-    const hasDeletePermission = user?.role.permissions.some(
-      (perm) => perm.permission.permission === "create"
+    const hashAdmin = user?.some(
+      (item) => item.permission.permission === "create"
     );
-
-    if (!hasDeletePermission) {
+    if (!hashAdmin)
       return NextResponse.json(
-        { message: "Bạn Không Có quyền truy Cập thông Tin Này" },
-        { status: 403 }
+        { message: "bạn không có quyền truy cập" },
+        { status: 400 }
       );
-    }
     const existingCoupon = await prisma.coupon.findMany({
       where: { coupon_code: coupon_code },
     });

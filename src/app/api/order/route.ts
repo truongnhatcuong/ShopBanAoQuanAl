@@ -1,3 +1,4 @@
+import { authenticateToken } from "@/lib/auth";
 import { pusher } from "@/lib/Pusher";
 import prisma from "@/prisma/client";
 import { authCustomer } from "@/utils/Auth";
@@ -7,15 +8,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2024-12-18.acacia" as any, // Giữ phiên bản ổn định
 });
 export async function GET(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams;
-  const search = searchParams.get("search") || "";
-  const page: number = Number(searchParams.get("page")) || 1;
-  const limit = Number(searchParams.get("limit")) || 1;
+  // const searchParams = req.nextUrl.searchParams;
+  // const search = searchParams.get("search") || "";
+  // const page: number = Number(searchParams.get("page")) || 1;
+  // const limit = Number(searchParams.get("limit")) || 1;
 
-  // totalrecord
-  const totalrecord = await prisma.order.count();
-  const totalPage = totalrecord / limit;
-  const totalSkipRecord = (page - 1) * limit;
+  // // totalrecord
+  // const totalrecord = await prisma.order.count();
+  // const totalPage = totalrecord / limit;
+  // const totalSkipRecord = (page - 1) * limit;
 
   const token = req.cookies.get("token")?.value;
 
@@ -25,7 +26,7 @@ export async function GET(req: NextRequest) {
       { status: 404 }
     );
   }
-
+  const user = await authenticateToken(token);
   try {
     const customer = await authCustomer(req);
 
@@ -62,9 +63,22 @@ export async function GET(req: NextRequest) {
         { status: 404 }
       );
     }
-    // admin
-    const orderCustomer = await prisma.order.findMany({
-      include: {
+    // quản lý đơn hàng
+
+    const hashAdmin = user?.some(
+      (item) => item.permission.permission === "update"
+    );
+    if (!hashAdmin)
+      return NextResponse.json(
+        { message: "bạn không có quyền truy cập" },
+        { status: 400 }
+      );
+    const manageOrder = await prisma.order.findMany({
+      select: {
+        order_id: true,
+        order_date: true,
+        total_amount: true,
+        order_state: true,
         Customer: {
           select: {
             name: true,
@@ -73,7 +87,6 @@ export async function GET(req: NextRequest) {
         },
         Payments: {
           select: {
-            payment_id: true,
             payment_status: true,
             payment_method: true,
           },
@@ -85,7 +98,7 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { orders, message: "Lấy danh sách đơn hàng thành công." },
+      { orders, manageOrder, message: "Lấy danh sách đơn hàng thành công." },
       { status: 200 }
     );
   } catch (error: any) {

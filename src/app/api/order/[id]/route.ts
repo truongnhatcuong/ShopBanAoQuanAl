@@ -33,13 +33,15 @@ export async function GET(
     });
     const token = req.cookies.get("token")?.value;
     // kiem tra admin
-    const admin = await authenticateToken(token);
-    const hashAdmin = admin?.role.permissions.some(
-      (per) => per.permission.permission === "update"
+    const user = await authenticateToken(token);
+    const hashAdmin = user?.some(
+      (item) => item.permission.permission === "update"
     );
-    if (!hashAdmin) {
-      return NextResponse.json({ message: "you not admin" }, { status: 404 });
-    }
+    if (!hashAdmin)
+      return NextResponse.json(
+        { message: "bạn không có quyền truy cập" },
+        { status: 400 }
+      );
 
     // order admin
     const OrderManage = await prisma.order.findUnique({
@@ -92,7 +94,7 @@ export async function GET(
       },
     });
     return NextResponse.json(
-      { OrderManage, message: `found Id ${orderId} success` },
+      { getOrderId, OrderManage, message: `found Id ${orderId} success` },
       { status: 201 }
     );
   } catch (error: any) {
@@ -130,5 +132,54 @@ export async function DELETE(
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const token = await req.cookies.get("token")?.value;
+  const { id } = await params;
+  const orderId = Number(id);
+  const { payment_status, order_state } = await req.json();
+  const user = await authenticateToken(token);
+
+  const hashAdmin = user?.some(
+    (item) => item.permission.permission === "update"
+  );
+  if (!hashAdmin)
+    return NextResponse.json(
+      { message: "bạn không có quyền truy cập" },
+      { status: 400 }
+    );
+
+  try {
+    const update = await prisma.order.update({
+      where: {
+        order_id: orderId,
+      },
+      data: {
+        order_state: order_state,
+        order_date: new Date(),
+        Payments: {
+          updateMany: {
+            where: { order_id: orderId },
+            data: {
+              payment_status: payment_status,
+            },
+          },
+        },
+      },
+      include: {
+        Payments: true,
+      },
+    });
+    return NextResponse.json(
+      { update, message: "cập nhật thành công" },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message }, { status: 501 });
   }
 }

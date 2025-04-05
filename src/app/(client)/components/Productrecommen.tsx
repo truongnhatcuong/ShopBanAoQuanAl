@@ -5,6 +5,7 @@ import { Sparkles, CircleAlert, ThumbsUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Product {
   product_id: number;
@@ -67,17 +68,19 @@ const ProductRecommendations = () => {
         </div>
       ) : recommendations.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {recommendations.map((product) => (
+          {recommendations.map((product, index) => (
             <Link
               href={`/product/${product.product_id}`}
-              key={product.product_id}
+              key={index}
               className="block h-full"
             >
               <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full">
                 {/* Image container with fixed height */}
                 <div className="relative h-52  dark:bg-gray-700 overflow-hidden group">
                   {product.Images && product.Images.length > 0 ? (
-                    <img
+                    <Image
+                      width={200}
+                      height={200}
                       src={product.Images[0].image_url}
                       alt={product.product_name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

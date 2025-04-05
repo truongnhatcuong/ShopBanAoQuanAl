@@ -30,7 +30,7 @@ const ProductSeller = () => {
   return (
     <div className="my-8 ">
       <div className="flex items-center justify-center  ">
-        <Image src={"/Image/sale.png"} alt="" width={1400} height={400} />
+        <Image src={"/Image/sale.png"} alt="" width={1500} height={400} />
       </div>
       <p className="text-sm text-center mt-2 text-muted-foreground ">
         Những Sản Phẩm Khuyến Mãi Phổ Biến

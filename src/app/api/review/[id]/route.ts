@@ -8,15 +8,16 @@ export async function PUT(
 ) {
   const { id } = await params;
   const token = req.cookies.get("token")?.value;
-  const admin = await authenticateToken(token);
+  const user = await authenticateToken(token);
 
-  const hashAdmin = admin?.role.permissions.some(
+  const hashAdmin = user?.some(
     (item) => item.permission.permission === "update"
   );
-  if (!hashAdmin) {
-    console.log("Access denied: Redirecting to login page");
-    return NextResponse.json({ message: "error" }, { status: 401 });
-  }
+  if (!hashAdmin)
+    return NextResponse.json(
+      { message: "bạn không có quyền truy cập" },
+      { status: 400 }
+    );
 
   const { seller_response } = await req.json();
   if (!seller_response)

@@ -32,7 +32,9 @@ const MenuItems = ({ menuItem }: IProps) => {
             <span
               className={`flex-shrink-0 text-slate-300/90 transition-colors duration-200
                 ${isLeftMenuVisible ? "text-2xl " : "text-xl md:text-3xl"}
-                ${isLogoutItem ? "ml-2 md:ml-4 hover:text-red-500" : ""}
+                ${
+                  isLogoutItem ? "ml-2 text-[#FF0000]   hover:text-red-600" : ""
+                }
                 `}
             >
               {menuItem.icon}
@@ -55,7 +57,7 @@ const MenuItems = ({ menuItem }: IProps) => {
       {/* Submenu */}
       {menuItem.submenu && (
         <ul
-          className={`ml-5  transition-all duration-300
+          className={`ml-3  transition-all duration-300
             ${isLeftMenuVisible ? "md:w-48" : "md:w-14"}`}
         >
           {menuItem.submenu.map((item) => (

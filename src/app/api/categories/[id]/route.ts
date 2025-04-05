@@ -77,20 +77,14 @@ export async function DELETE(
     const token = req.cookies.get("token")?.value;
     // xác thực
     const user = await authenticateToken(token);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    // nếu có permisson === delete thì có thể xóa
-    const hasDeletePermission = user.role.permissions.some(
-      (perm) => perm.permission.permission === "delete"
+    const hashAdmin = user?.some(
+      (item) => item.permission.permission === "delete"
     );
-
-    if (!hasDeletePermission) {
+    if (!hashAdmin)
       return NextResponse.json(
-        { message: "Bạn Không Có quyền truy Cập thông Tin Này " },
-        { status: 404 }
+        { message: "bạn không có quyền truy cập" },
+        { status: 400 }
       );
-    }
     const categoryId = Number(id);
     // TODO: Implement logic to delete category
     const deleteCategory = await prisma.category.delete({

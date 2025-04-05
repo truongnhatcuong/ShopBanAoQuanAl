@@ -25,18 +25,18 @@ const SubmenuItems = ({ menuItem }: IProps) => {
     <div className="w-full  py-[2.5px]">
       <Link
         href={menuItem.link}
-        className={`flex items-center w-full p-[5px] rounded-lg transition-all duration-300 group
+        className={`flex items-center w-full p-[5px] rounded-lg  transition-all duration-300 group
           ${
             isActive
-              ? "bg-white/10 shadow-sm"
-              : "hover:bg-[#3d3d3d]/90 hover:shadow-md hover:scale-x-[1.05]"
+              ? "bg-slate-200/10 dark:bg-red-900/20 border-l-4 border-red-500 "
+              : "hover:bg-[#3d3d3d]/90 hover:shadow-md hover:scale-x-[1.05] "
           }`}
       >
         {/* Icon */}
         <div
           className={`flex-shrink-0 text-2xl text-slate-200/70 transition-colors duration-200
             ${isActive ? "text-white" : "group-hover:text-white"}
-            ${isLeftMenuVisible ? "mr-2" : "mr-0"}`}
+            ${isLeftMenuVisible ? "mr-2" : "mr-0 "}`}
         >
           {menuItem.icon}
         </div>

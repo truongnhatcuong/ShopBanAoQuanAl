@@ -5,11 +5,9 @@ import PageListOrder from "./components/TableOrder";
 const Page = () => {
   const [order, setOrder] = useState([]);
   async function FetchApiOrder() {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/manage/orderCustomer`
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order`);
     const data = await res.json();
-    setOrder(data.orderCustomer);
+    setOrder(data.manageOrder);
   }
 
   useEffect(() => {

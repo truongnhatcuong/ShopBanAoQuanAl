@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    if (!orders.length && !hashAdmin) {
+    if (!orders.length) {
       return NextResponse.json(
         { message: "Không có đơn hàng nào." },
         { status: 404 }

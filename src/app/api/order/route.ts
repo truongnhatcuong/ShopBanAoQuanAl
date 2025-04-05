@@ -8,16 +8,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2024-12-18.acacia" as any, // Giữ phiên bản ổn định
 });
 export async function GET(req: NextRequest) {
-  // const searchParams = req.nextUrl.searchParams;
-  // const search = searchParams.get("search") || "";
-  // const page: number = Number(searchParams.get("page")) || 1;
-  // const limit = Number(searchParams.get("limit")) || 1;
-
-  // // totalrecord
-  // const totalrecord = await prisma.order.count();
-  // const totalPage = totalrecord / limit;
-  // const totalSkipRecord = (page - 1) * limit;
-
   const token = req.cookies.get("token")?.value;
 
   if (!token) {
@@ -26,15 +16,15 @@ export async function GET(req: NextRequest) {
       { status: 404 }
     );
   }
-  const user = await authenticateToken(token);
+
   try {
+    const user = await authenticateToken(token);
     const customer = await authCustomer(req);
 
-    // Lấy tất cả đơn hàng của khách hàng này
-
+    // Đơn hàng của customer (nếu có)
     const orders = await prisma.order.findMany({
       where: {
-        customer_id: customer?.customer_id, // Lọc theo customer_id
+        customer_id: customer?.customer_id,
       },
       include: {
         OrderItems: {
@@ -56,49 +46,51 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // Kiểm tra nếu không có đơn hàng nào
-    if (orders.length === 0) {
+    const hashAdmin = user?.some(
+      (item) => item.permission.permission === "update"
+    );
+
+    let manageOrder = null;
+
+    if (hashAdmin) {
+      manageOrder = await prisma.order.findMany({
+        select: {
+          order_id: true,
+          order_date: true,
+          total_amount: true,
+          order_state: true,
+          Customer: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          Payments: {
+            select: {
+              payment_status: true,
+              payment_method: true,
+            },
+          },
+        },
+        orderBy: {
+          order_id: "desc",
+        },
+      });
+    }
+
+    if (!orders.length && !hashAdmin) {
       return NextResponse.json(
         { message: "Không có đơn hàng nào." },
         { status: 404 }
       );
     }
-    // quản lý đơn hàng
-
-    const hashAdmin = user?.some(
-      (item) => item.permission.permission === "update"
-    );
-    if (!hashAdmin)
-      return NextResponse.json(
-        { message: "bạn không có quyền truy cập" },
-        { status: 400 }
-      );
-    const manageOrder = await prisma.order.findMany({
-      select: {
-        order_id: true,
-        order_date: true,
-        total_amount: true,
-        order_state: true,
-        Customer: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-        Payments: {
-          select: {
-            payment_status: true,
-            payment_method: true,
-          },
-        },
-      },
-      orderBy: {
-        order_id: "desc",
-      },
-    });
 
     return NextResponse.json(
-      { orders, manageOrder, message: "Lấy danh sách đơn hàng thành công." },
+      {
+        orders,
+        manageOrder,
+        message: "Lấy danh sách đơn hàng thành công.",
+      },
       { status: 200 }
     );
   } catch (error: any) {

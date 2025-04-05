@@ -1,22 +1,49 @@
+import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+  const user = await authenticateToken(token);
+
+  const hashAdmin = user?.some(
+    (item) => item.permission.permission === "update"
+  );
+
+  if (!hashAdmin) {
+    console.log("Access denied: Redirecting to login page");
+    return NextResponse.json({ message: "error" }, { status: 401 });
+  }
   const returns = await prisma.returnProduct.findMany({
-    include: {
-      Order: {
-        select: {
-          order_id: true,
-          order_date: true,
-          total_amount: true,
-          order_state: true,
-        },
-      },
+    select: {
+      return_id: true,
+      order_id: true,
+      product_id: true,
+      return_reason: true,
+      return_date: true,
+      return_status: true,
+      return_amount: true,
       Product: {
         select: {
-          product_id: true,
           product_name: true,
-          price: true,
+          Images: {
+            take: 1,
+            select: {
+              image_url: true,
+            },
+          },
+        },
+      },
+      Order: {
+        select: {
+          order_date: true,
+          order_state: true,
+          OrderItems: {
+            select: {
+              quantity: true,
+              Size: true,
+            },
+          },
         },
       },
     },

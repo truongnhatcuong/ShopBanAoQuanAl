@@ -4,11 +4,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
-  const admin = await authenticateToken(token);
+  const user = await authenticateToken(token);
 
-  const hashAdmin = admin?.role.permissions.some(
+  const hashAdmin = user?.some(
     (item) => item.permission.permission === "update"
   );
+
   if (!hashAdmin) {
     console.log("Access denied: Redirecting to login page");
     return NextResponse.json({ message: "error" }, { status: 401 });

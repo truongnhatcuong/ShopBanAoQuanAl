@@ -175,6 +175,16 @@ export async function PUT(
         Payments: true,
       },
     });
+    if (update.Payments[0].payment_status === "REFUNDED") {
+      await prisma.returnProduct.updateMany({
+        where: {
+          order_id: orderId,
+        },
+        data: {
+          return_status: "COMPLETED",
+        },
+      });
+    }
     return NextResponse.json(
       { update, message: "cập nhật thành công" },
       { status: 201 }

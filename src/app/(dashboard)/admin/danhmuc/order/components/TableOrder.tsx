@@ -38,36 +38,24 @@ interface IProps {
   reloadData: () => void;
 }
 
-enum OrderState {
+export enum OrderState {
   PENDING = "PENDING",
   PROCESSING = "PROCESSING",
   SHIPPED = "SHIPPED",
   DELIVERED = "DELIVERED",
   CANCELLED = "CANCELLED",
+  PARTIALLY_REFUNDED = "PARTIALLY_REFUNDED",
+  REFUNDED = "REFUNDED",
 }
-enum PaymentStatus {
+
+export enum PaymentStatus {
   PENDING = "PENDING",
   COMPLETED = "COMPLETED",
   FAILED = "FAILED",
   REFUNDED = "REFUNDED",
 }
 
-const translatePaymentStatus = (value: PaymentStatus): string => {
-  switch (value) {
-    case PaymentStatus.PENDING:
-      return "CHỜ THANH TOÁN";
-    case PaymentStatus.COMPLETED:
-      return "ĐÃ THANH TOÁN";
-    case PaymentStatus.FAILED:
-      return "THANH TOÁN THẤT BẠI";
-    case PaymentStatus.REFUNDED:
-      return "ĐÃ HOÀN TIỀN";
-    default:
-      return value;
-  }
-};
-
-const translateOrderState = (value: OrderState): string => {
+export const translateOrderState = (value: OrderState): string => {
   switch (value) {
     case OrderState.PENDING:
       return "ĐANG CHỜ";
@@ -79,27 +67,48 @@ const translateOrderState = (value: OrderState): string => {
       return "ĐÃ NHẬN HÀNG";
     case OrderState.CANCELLED:
       return "ĐÃ HỦY";
+    case OrderState.PARTIALLY_REFUNDED:
+      return "HOÀN TRẢ MỘT PHẦN"; // Thêm dịch cho PARTIALLY_REFUNDED
+    case OrderState.REFUNDED:
+      return "ĐÃ HOÀN TRẢ"; // Thêm dịch cho REFUNDED
     default:
-      return value;
+      return value; // Trả về giá trị gốc nếu không khớp
   }
 };
+
+export const translatePaymentStatus = (value: PaymentStatus): string => {
+  switch (value) {
+    case PaymentStatus.PENDING:
+      return "CHỜ THANH TOÁN";
+    case PaymentStatus.COMPLETED:
+      return "ĐÃ THANH TOÁN";
+    case PaymentStatus.FAILED:
+      return "THANH TOÁN THẤT BẠI";
+    case PaymentStatus.REFUNDED:
+      return "ĐÃ HOÀN TIỀN";
+    default:
+      return value; // Trả về giá trị gốc nếu không khớp
+  }
+};
+export const orderStateClasses: { [key in OrderState]: string } = {
+  [OrderState.PENDING]: "text-red-700 bg-red-200",
+  [OrderState.PROCESSING]: "text-yellow-700 bg-yellow-200",
+  [OrderState.SHIPPED]: "text-blue-700 bg-blue-200",
+  [OrderState.DELIVERED]: "text-green-700 bg-green-200",
+  [OrderState.CANCELLED]: "text-white bg-black",
+  [OrderState.PARTIALLY_REFUNDED]: "text-purple-700 bg-purple-200",
+  [OrderState.REFUNDED]: "text-indigo-700 bg-indigo-200",
+};
+
+export const paymentStatusClasses: { [key in PaymentStatus]: string } = {
+  PENDING: "text-red-700 bg-red-200",
+  COMPLETED: "text-green-700 bg-green-200",
+  FAILED: "text-red-700 bg-red-200",
+  REFUNDED: "text-blue-700 bg-blue-200",
+};
+
 const PageListOrder = ({ orders, reloadData }: IProps) => {
   const [filterState, setFilterState] = useState<OrderState | "ALL">("ALL");
-
-  const orderStateClasses: { [key in OrderState]: string } = {
-    PENDING: "text-red-700 bg-red-200",
-    PROCESSING: "text-yellow-700 bg-yellow-200",
-    SHIPPED: "text-blue-700 bg-blue-200",
-    DELIVERED: "text-green-700 bg-green-200",
-    CANCELLED: "text-white bg-black",
-  };
-
-  const paymentStatusClasses: { [key in PaymentStatus]: string } = {
-    PENDING: "text-red-700 bg-red-200",
-    COMPLETED: "text-green-700 bg-green-200",
-    FAILED: "text-red-700 bg-red-200",
-    REFUNDED: "text-blue-700 bg-blue-200",
-  };
 
   // Hàm cập nhật trạng thái đơn hàng và thanh toán
   const handleUpdate = async (
@@ -119,7 +128,6 @@ const PageListOrder = ({ orders, reloadData }: IProps) => {
 
       if (res.ok) {
         toast.success("Cập nhật thành công");
-
         // Gửi email thông báo
         const resEmail = await fetch("/api/send-email", {
           method: "POST",

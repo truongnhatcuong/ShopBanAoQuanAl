@@ -76,8 +76,8 @@ const ProductDetail = ({
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-auto justify-between sm:justify-normal sm:w-[18.7%] w-full gap-2 sm:gap-4">
             {productDetail.Images.map((item, index) => (
               <Image
-                width={200}
-                height={200}
+                width={400}
+                height={400}
                 src={item.image_url}
                 alt={`Thumbnail ${index + 1}`}
                 key={index}

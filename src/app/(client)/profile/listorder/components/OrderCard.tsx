@@ -1,10 +1,15 @@
 import React from "react";
-import { OrderState } from "./OrderTabs";
+
 import { useRouter } from "next/navigation";
 import OrderItem from "./OrderItem";
 import { ForMatPrice } from "@/lib/FormPrice";
 import RiviewProduct from "../../components/RiviewProduct";
 import CancellOrder from "../../components/CancellOrder";
+import {
+  OrderState,
+  orderStateClasses,
+  translateOrderState,
+} from "@/app/(dashboard)/admin/danhmuc/order/components/TableOrder";
 
 interface IOrderCard {
   order: {
@@ -22,21 +27,6 @@ interface IOrderCard {
   fetchData: () => void;
   onOpenReturnModal: (order: any) => void;
 }
-const orderStateText: { [key in OrderState]: string } = {
-  PENDING: "Chờ xử lý",
-  PROCESSING: "Đang xử lý",
-  SHIPPED: "Đang gửi hàng",
-  DELIVERED: "Đã giao",
-  CANCELLED: "Đã hủy",
-};
-
-const orderStateClasses: { [key in OrderState]: string } = {
-  PENDING: "text-red-700",
-  PROCESSING: "text-yellow-700",
-  SHIPPED: "text-blue-700",
-  DELIVERED: "text-green-700",
-  CANCELLED: "text-red-700",
-};
 
 const OrderCard = ({ order, fetchData, onOpenReturnModal }: IOrderCard) => {
   const router = useRouter();
@@ -52,10 +42,8 @@ const OrderCard = ({ order, fetchData, onOpenReturnModal }: IOrderCard) => {
             Xem Shop
           </button>
         </div>
-        <span
-          className={`${orderStateClasses[order.order_state as OrderState]}`}
-        >
-          {orderStateText[order.order_state as OrderState]}
+        <span className={`${order.order_state as OrderState}`}>
+          {translateOrderState(order.order_state as OrderState)}
         </span>
       </div>
       {/* Order Items */}
@@ -92,12 +80,20 @@ const OrderCard = ({ order, fetchData, onOpenReturnModal }: IOrderCard) => {
               Hoàn Trả
             </button>
           </>
-        ) : (
+        ) : order.order_state === OrderState.REFUNDED ||
+          order.order_state === OrderState.PARTIALLY_REFUNDED ? (
           <>
-            <button className="border px-4 py-2 rounded text-sm">
-              Liên Hệ Người Bán
+            <button
+              className="border px-4 py-2 rounded text-sm"
+              onClick={() =>
+                router.push(`/product/${order.OrderItems[0].product_id}`)
+              }
+            >
+              Mua Lại
             </button>
           </>
+        ) : (
+          <></>
         )}
         {(order.order_state === OrderState.PENDING ||
           order.order_state === OrderState.PROCESSING) && (

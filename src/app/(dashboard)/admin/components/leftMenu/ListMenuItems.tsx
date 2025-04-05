@@ -9,11 +9,11 @@ import {
   FaCloudSun,
   FaUser,
   FaGift,
+  FaUndoAlt,
 } from "react-icons/fa";
 import { FiPackage } from "react-icons/fi";
 import { MdOutlineRateReview } from "react-icons/md";
 import { RiCoupon2Fill, RiCoupon3Fill } from "react-icons/ri";
-import { FaHeartCirclePlus } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { PiUsersThree } from "react-icons/pi";
 
@@ -77,10 +77,11 @@ const MenuItem = [
       },
       {
         id: 3,
-        icon: <FaHeartCirclePlus />,
-        title: "Yêu Thích",
-        link: "#",
+        icon: <FaUndoAlt />, // hoặc <FaExchangeAlt />
+        title: "Hoàn Trả ",
+        link: "/admin/danhmuc/hoan-tra-don-hang", // nên là đường dẫn thật nếu có
       },
+
       {
         id: 4,
         icon: <MdOutlineRateReview />,

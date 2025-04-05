@@ -6,16 +6,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { OrderState } from "./TableOrder";
 interface ISelect {
   setFillterState: (value: any) => void;
   OrderState: any;
-}
-enum OrderState {
-  PENDING = "PENDING",
-  PROCESSING = "PROCESSING",
-  SHIPPED = "SHIPPED",
-  DELIVERED = "DELIVERED",
-  CANCELLED = "CANCELLED",
 }
 
 const SelectOrderStatus = ({ OrderState, setFillterState }: ISelect) => {

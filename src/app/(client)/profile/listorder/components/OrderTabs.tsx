@@ -7,7 +7,7 @@ import React from "react";
 
 interface IOrderTabsProps {
   activeTab: OrderState;
-  setActiveTab: (state: OrderState) => void;
+  setActiveTab: any;
   orderList: { order_state: string }[];
 }
 

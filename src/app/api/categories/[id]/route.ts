@@ -25,7 +25,9 @@ export async function GET(
       where: {
         category_id: categoryId,
       },
-      include: {
+      select: {
+        category_id: true,
+        category_name: true,
         Products: {
           where: {
             ...(maxPrice > 0 && {
@@ -35,7 +37,7 @@ export async function GET(
             }),
           },
           include: {
-            Images: true,
+            Images: { take: 2, select: { image_url: true } },
           },
           orderBy: {
             [sortField]: sortOrder,
@@ -91,6 +93,7 @@ export async function DELETE(
       where: {
         category_id: Number(categoryId),
       },
+      select: { category_id: true },
     });
     if (deleteCategory === null) {
       return NextResponse.json(

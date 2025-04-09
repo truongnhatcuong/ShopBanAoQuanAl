@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
         customer_id: customer.customer_id,
         product_id: Number(product_id),
       },
+      select: {},
     });
 
     if (existingReview) {
@@ -70,7 +71,7 @@ export async function POST(req: NextRequest) {
         customer_id: customer?.customer_id,
         order_state: "DELIVERED",
       },
-      include: {
+      select: {
         OrderItems: true,
       },
     });

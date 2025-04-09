@@ -196,6 +196,7 @@ export async function POST(req: NextRequest) {
           ),
         },
       },
+      select: { product_id: true },
     });
     return NextResponse.json(
       {

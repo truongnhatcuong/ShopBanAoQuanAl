@@ -2,7 +2,6 @@
 import { ForMatPrice } from "@/lib/FormPrice";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 interface IProduct {
   product_id: number;
@@ -19,39 +18,60 @@ const ProductItem = ({
   product_name,
   ProductPromotion,
 }: IProduct) => {
+  const hasDiscount =
+    ProductPromotion && ProductPromotion[0]?.Promotion.discount > 0;
+
   return (
     <div
-      title={`sản phẩm ${product_name} `}
-      className="flex flex-col items-center text-center md:text-start"
+      title={`Sản phẩm ${product_name}`}
+      className="group relative flex flex-col h-full rounded-lg transition-all duration-200 hover:shadow-md"
     >
       <Link
         href={`/product/${product_id}`}
-        className="text-gray-800 dark:text-white cursor-pointer  "
+        className="flex h-full flex-col text-gray-800 dark:text-white"
       >
-        <div className="overflow-hidden mt-5 relative  group">
+        {/* Product Image Container */}
+        <div className="relative aspect-square overflow-hidden rounded-t-lg bg-gray-100">
+          {/* Primary Image */}
           <Image
-            width={200}
-            height={200}
-            src={Images[0]?.image_url || null}
-            alt=""
-            className="object-cover w-full h-full md:w-56 md:h-52 transition-all duration-400 ease-in-out opacity-100 group-hover:opacity-0"
+            width={400}
+            height={400}
+            src={
+              Images[0]?.image_url || "/placeholder.svg?height=400&width=400"
+            }
+            alt={product_name}
+            className="h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+            priority={true}
           />
+
+          {/* Secondary Image (shown on hover) */}
           {Images[1] && (
             <Image
-              width={200}
-              height={200}
-              src={Images[1].image_url}
-              alt=""
-              className="absolute top-0 left-0 object-cover w-full h-full md:w-56 md:h-52 transition-all ease-in-out opacity-0 group-hover:opacity-100 duration-700"
+              width={400}
+              height={400}
+              src={Images[1].image_url || "/placeholder.svg"}
+              alt={`${product_name} - alternate view`}
+              className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
             />
           )}
-          {ProductPromotion && ProductPromotion[0]?.Promotion.discount ? (
-            <p className="absolute top-0 left-0 px-0.5 py-1 bg-red-600 text-sm font-bold rounded-bl-md text-white">
+
+          {/* Discount Badge */}
+          {hasDiscount && (
+            <div className="absolute left-0 top-0 z-10 rounded-br-lg bg-red-600 px-2 py-1 text-xs font-bold text-white shadow-sm">
               -{ProductPromotion[0]?.Promotion.discount}%
-            </p>
-          ) : null}
-          <p className="mt-3 pb-1 text-base ">{product_name}</p>
-          <p className="text-sm font-medium ">{ForMatPrice(Number(price))}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Product Info */}
+        <div className="flex flex-1 flex-col p-3">
+          <h3 className="mb-1 line-clamp-2 min-h-[2.5rem] text-sm font-medium md:text-base">
+            {product_name}
+          </h3>
+
+          <p className="mt-auto text-sm font-semibold text-black dark:text-white md:text-base">
+            {ForMatPrice(Number(price))}
+          </p>
         </div>
       </Link>
     </div>

@@ -71,6 +71,7 @@ export async function PUT(
       });
       await prisma.addressShipper.update({
         where: { address_id: addressId },
+        select: { is_default: true },
         data: { is_default: true }, // Đặt địa chỉ hiện tại làm mặc định
       });
       return NextResponse.json(
@@ -95,7 +96,7 @@ export async function DELETE(
   if (!customer)
     return NextResponse.json(
       { message: "vui lòng đăng nhập" },
-      { status: 400 }
+      { status: 401 }
     );
 
   try {
@@ -103,15 +104,18 @@ export async function DELETE(
       where: {
         address_id: addressId,
       },
+      select: { address_id: true },
     });
     const remainingAddresses = await prisma.addressShipper.findMany({
       where: { customer_id: customer?.customer_id },
+      select: { customer_id: true, address_id: true },
     });
     if (remainingAddresses.length === 1) {
       await prisma.addressShipper.update({
         where: {
           address_id: remainingAddresses[0].address_id,
         },
+        select: { is_default: true },
         data: {
           is_default: true,
         },

@@ -17,7 +17,7 @@ interface IPromotion {
   end_date: string;
   products: {
     product_name: string;
-    images: string;
+    images: { image_url: string }[];
   }[];
 }
 
@@ -62,7 +62,12 @@ const TablePromotion = (props: IProp) => {
                   {item1.product_name}
                 </TableCell>
                 <TableCell className="py-2 pl-5 border">
-                  <Image alt="" src={item1.images} width={50} height={50} />
+                  <Image
+                    alt="ok"
+                    src={item1.images[0].image_url}
+                    width={50}
+                    height={50}
+                  />
                 </TableCell>
                 <TableCell className="flex gap-3">
                   {" "}

@@ -22,6 +22,7 @@ export async function authCustomer(req: NextRequest) {
         phone: true,
         image: true,
         username: true,
+        password: true,
         token: true,
         roleId: true,
       },

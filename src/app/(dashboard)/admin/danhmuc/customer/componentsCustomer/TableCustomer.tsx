@@ -31,7 +31,7 @@ const TableCustomer = ({
         {/* head */}
         <thead className="bg-gray-950 text-white">
           <tr>
-            <th className="p-4">STT</th>
+            <th className="p-4">Mã Khách Hàng</th>
             <th className="p-4 flex items-center gap-2 cursor-pointer">
               <div>Tên khách hàng</div>
               <div
@@ -64,9 +64,7 @@ const TableCustomer = ({
                 key={item.customer_id}
                 className="border-b hover:bg-gray-100 transition-colors"
               >
-                <td className="p-4">
-                  {sortOrder === "asc" ? index + 1 : customer.length - index}
-                </td>
+                <td className="p-4">{item.customer_id}</td>
                 <td className="p-4">{item.name}</td>
                 <td className="p-4">{item.email}</td>
                 <td className="p-4">{item.phone}</td>

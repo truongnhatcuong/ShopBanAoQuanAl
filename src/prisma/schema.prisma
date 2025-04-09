@@ -155,6 +155,7 @@
     payment_status PaymentStatus   
      stripe_payment_intent  String? @unique
      stripe_session_id String?
+     paypal_order_id    String?   @unique
     payment_amount Decimal   @db.Decimal(10, 2)
     created_at     DateTime? @db.DateTime
     updated_at     DateTime? @db.DateTime

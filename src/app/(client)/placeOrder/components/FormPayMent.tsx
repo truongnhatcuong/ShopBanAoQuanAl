@@ -3,7 +3,6 @@ import { ShopConText } from "@/app/context/Context";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import QRCode from "./QrReact";
 import { trackUserAction } from "@/lib/trackUserAction";
 import {
   Dialog,
@@ -37,6 +36,7 @@ interface CartData {
 interface OrderResponse {
   order: any;
   paymentIntentClientSecret?: string;
+  links?: any; // Thêm paymentUrl cho VNPay
   message: string;
 }
 
@@ -57,6 +57,7 @@ const PaymentMethodForm = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState<{
     clientSecret?: string;
+    paymentUrl?: string; // Thêm paymentUrl cho VNPay
     cart?: CartData;
   }>({});
   const router = useRouter();
@@ -74,6 +75,7 @@ const PaymentMethodForm = ({
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include", // Gửi cookie nếu cần
           body: JSON.stringify({
             addressId,
             paymentMethod,
@@ -90,15 +92,24 @@ const PaymentMethodForm = ({
         return;
       }
 
+      // Xử lý từng phương thức thanh toán
       if (paymentMethod === "CREDIT_CARD" && data.paymentIntentClientSecret) {
-        // Open modal for credit card payment
+        // Thanh toán bằng Stripe
         setPaymentDetails({
           clientSecret: data.paymentIntentClientSecret,
-          cart: cart,
+          cart,
         });
         setIsModalOpen(true);
-      } else {
-        // Xử lý các phương thức khác (CASH, E_WALLET)
+      } else if (paymentMethod === "E_WALLET" && data.links) {
+        //
+        const approvalUrl = data.links.find(
+          (link: any) => link.rel === "approve"
+        )?.href;
+        if (approvalUrl) {
+          window.location.href = approvalUrl;
+        }
+      } else if (paymentMethod === "CASH") {
+        // Thanh toán khi nhận hàng
         toast.success("Đã đặt thành công đơn hàng");
         await Promise.all(
           cart.items.map((item) => trackUserAction(item.product_id, "purchase"))
@@ -136,7 +147,7 @@ const PaymentMethodForm = ({
           </h2>
 
           <div className="space-y-4">
-            {/* Payment Method Options */}
+            {/* Thanh toán khi nhận hàng */}
             <label className="flex items-center space-x-3 cursor-pointer">
               <input
                 type="radio"
@@ -153,6 +164,7 @@ const PaymentMethodForm = ({
               </div>
             </label>
 
+            {/* Thanh toán bằng thẻ tín dụng (Stripe) */}
             <label className="flex items-center space-x-3 cursor-pointer">
               <input
                 type="radio"
@@ -169,10 +181,8 @@ const PaymentMethodForm = ({
               </div>
             </label>
 
-            <label
-              className="flex items-center space-x-3 cursor-pointer "
-              title="Không khả dụng"
-            >
+            {/* Thanh toán bằng VNPay */}
+            <label className="flex items-center space-x-3 cursor-pointer">
               <input
                 type="radio"
                 name="payment"
@@ -183,12 +193,10 @@ const PaymentMethodForm = ({
                 disabled={isProcessing}
               />
               <div className="flex items-center space-x-3">
-                <Wallet className="text-red-600" size={24} />
-                <span className="text-red-600">Ví điện tử</span>
+                <Wallet className="text-purple-600" size={24} />
+                <span className="text-gray-700">PayPal</span>
               </div>
             </label>
-
-            {paymentMethod === "E_WALLET" && <QRCode cart={cart} />}
           </div>
 
           <hr className="border-t border-gray-200 my-4" />
@@ -219,7 +227,7 @@ const PaymentMethodForm = ({
         </form>
       </div>
 
-      {/* Payment Confirmation Modal */}
+      {/* Modal xác nhận thanh toán Stripe */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

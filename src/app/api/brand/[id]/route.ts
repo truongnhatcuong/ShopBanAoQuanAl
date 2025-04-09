@@ -8,7 +8,6 @@ const brandSchema = z.object({
     .string()
     .min(5, "tên thương hiệu vui lòng nhập 5 ký tự")
     .max(255),
-  description: z.string().min(5, "mô tả vui lòng nhập 5 ký tự").max(255),
 });
 
 export async function PUT(
@@ -33,6 +32,7 @@ export async function PUT(
       where: {
         brand_id: brandId,
       },
+      select: { brand_name: true, description: true },
       data: {
         brand_name: brandName,
         description,
@@ -70,6 +70,7 @@ export async function DELETE(
       where: {
         brand_id: brandId,
       },
+      select: { brand_id: true },
     });
     return NextResponse.json(
       { message: "xóa thành công thương hiệu này" },

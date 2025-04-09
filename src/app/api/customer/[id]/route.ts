@@ -27,6 +27,7 @@ export async function PUT(
       where: {
         customer_id: customerId,
       },
+
       data: {
         name: data.name,
         email: data.email,
@@ -65,6 +66,7 @@ export async function DELETE(
       where: {
         customer_id: customerId,
       },
+      select: { customer_id: true },
     });
     return NextResponse.json(
       { deleteCustomer, message: "deleted success" },

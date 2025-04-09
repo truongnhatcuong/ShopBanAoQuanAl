@@ -17,11 +17,11 @@ import Image from "next/image";
 import ExpiredStorage from "expired-storage";
 import { ShopConText } from "@/app/context/Context";
 interface UserLoginDropdownProps {
-  user: { roleId: number; name: string; image: string };
+  user: { roleId: number; username: string; image: string };
 }
 const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
   const router = useRouter();
-  const { setCountCart } = useContext(ShopConText)!;
+  const { setCountCart, setUser } = useContext(ShopConText)!;
   const [expiredStorage, setExpiredStorage] = useState<ExpiredStorage | null>(
     null
   );
@@ -35,6 +35,14 @@ const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
     if (expiredStorage) {
       expiredStorage.clear();
       setCountCart(0);
+      setUser({
+        username: "",
+        roleId: 1,
+        image: "",
+        name: "",
+        phone: "",
+        email: "",
+      });
     }
     router.push("/logout");
   }
@@ -50,8 +58,8 @@ const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
             alt="avatar"
             className="rounded-full md:w-8 md:h-8 "
           />
-          <span className="hidden md:block text-sm cursor-pointer mt-[3px] ml-2">
-            {user.name}
+          <span className="hidden md:block text-base cursor-pointer mt-[3px] ml-2 capitalize">
+            {user.username}
           </span>
         </div>
       </DropdownMenuTrigger>
@@ -74,7 +82,7 @@ const UserLoginDropdown = ({ user }: UserLoginDropdownProps) => {
             onClick={() => router.push("/profile/listorder")}
           >
             <FaClipboardCheck className="mr-1 text-gray-700" />
-            Đơn Mua
+            Đơn Hàng Đã Mua
           </button>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

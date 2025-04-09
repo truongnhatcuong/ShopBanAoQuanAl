@@ -1,29 +1,28 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { authCustomer } from "@/utils/Auth";
-const JWT_SECRET = process.env.JWT_SECRET || "";
+
 // Hàm GET
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const { id } = await params;
-  const cartItemId = Number(id);
-  try {
-    const getcartitem = await prisma.cartItem.findUnique({
-      where: {
-        cartitem_id: cartItemId,
-      },
-    });
-    return NextResponse.json(
-      { getcartitem, message: `found Id ${cartItemId} success` },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
+// export async function GET(
+//   req: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   const { id } = await params;
+//   const cartItemId = Number(id);
+//   try {
+//     const getcartitem = await prisma.cartItem.findUnique({
+//       where: {
+//         cartitem_id: cartItemId,
+//       },
+//     });
+//     return NextResponse.json(
+//       { getcartitem, message: `found Id ${cartItemId} success` },
+//       { status: 201 }
+//     );
+//   } catch (error: any) {
+//     return NextResponse.json({ error: error.message }, { status: 500 });
+//   }
+// }
 
 // xóa
 export async function DELETE(
@@ -47,6 +46,7 @@ export async function DELETE(
         Cart: { customer_id: customer?.customer_id },
         cartitem_id: cartItemId,
       },
+      select: { Cart: { select: { customer_id: true } }, cartitem_id: true },
     });
     if (!cartItem) {
       return NextResponse.json(
@@ -56,6 +56,7 @@ export async function DELETE(
     }
     await prisma.cartItem.delete({
       where: { cartitem_id: cartItem.cartitem_id },
+      select: { cartitem_id: true },
     });
     return NextResponse.json(
       { message: "Sản phẩm đã được xóa khỏi giỏ hàng" },
@@ -134,6 +135,7 @@ export async function PUT(
       data: {
         quantity,
       },
+      select: { quantity: true },
     });
 
     return NextResponse.json(

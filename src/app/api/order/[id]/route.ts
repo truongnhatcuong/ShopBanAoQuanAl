@@ -109,26 +109,34 @@ export async function DELETE(
   const { id } = await params;
   const orderId = Number(id);
   try {
-    await prisma.orderItem.deleteMany({
-      where: {
-        order_id: orderId,
-      },
-    });
-    await prisma.payment.deleteMany({
-      where: {
-        order_id: orderId,
-      },
-    });
-    // Sau đó xóa Order
-    const deletedOrder = await prisma.order.delete({
-      where: {
-        order_id: orderId,
-      },
+    const deletedOrder = await prisma.$transaction(async (tx) => {
+      await tx.orderItem.deleteMany({
+        where: {
+          order_id: orderId,
+        },
+      });
+      await tx.returnProduct.deleteMany({
+        where: {
+          order_id: orderId,
+        },
+      });
+      await tx.payment.deleteMany({
+        where: {
+          order_id: orderId,
+        },
+      });
+      // Sau đó xóa Order
+      return await tx.order.delete({
+        where: {
+          order_id: orderId,
+        },
+        select: { order_id: true },
+      });
     });
 
     return NextResponse.json(
       { deletedOrder, message: `deleted success` },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -171,8 +179,8 @@ export async function PUT(
           },
         },
       },
-      include: {
-        Payments: true,
+      select: {
+        Payments: { select: { payment_status: true } },
       },
     });
     if (update.Payments[0].payment_status === "REFUNDED") {

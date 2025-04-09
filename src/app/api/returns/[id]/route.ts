@@ -54,17 +54,8 @@ export async function PUT(
     });
     if (status === "APPROVED") {
       const order = returnProduct.Order;
-      const totalItems = order.OrderItems.length;
-      const approvedReturns = order.Returns.filter(
-        (r) => r.return_status === "APPROVED" || r.return_id === returnId
-      ).length;
-
       let newOrderState = order.order_state;
-      if (approvedReturns === totalItems) {
-        newOrderState = "REFUNDED";
-      } else if (approvedReturns > 0) {
-        newOrderState = "PARTIALLY_REFUNDED";
-      }
+      newOrderState = "REFUNDED";
       await prisma.order.update({
         where: { order_id: order.order_id },
         data: {

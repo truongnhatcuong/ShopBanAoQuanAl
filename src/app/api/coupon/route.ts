@@ -4,7 +4,12 @@ import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+  if (!token) {
+    return null;
+  }
   const customer = await authCustomer(req);
+  const user = await authenticateToken(token);
   const customerId = customer?.customer_id;
   const coupon = await prisma.coupon.findMany({
     where: {
@@ -41,7 +46,39 @@ export async function GET(req: NextRequest) {
       coupon_id: "desc",
     },
   });
-  return NextResponse.json({ coupon, message: "success" }, { status: 201 });
+  let couponManage: any = [];
+  if (user?.some((item) => item.permission.permission === "update")) {
+    couponManage = await prisma.coupon.findMany({
+      select: {
+        coupon_id: true,
+        coupon_code: true,
+        coupon_percentage: true,
+        coupon_amount: true,
+        start_date: true,
+        end_date: true,
+        PromotionNotifications: {
+          select: {
+            Notifications: {
+              select: {
+                Customer: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        coupon_id: "desc",
+      },
+    });
+  }
+  return NextResponse.json(
+    { coupon, couponManage, message: "success" },
+    { status: 201 }
+  );
 }
 
 export async function POST(req: NextRequest) {
@@ -76,6 +113,7 @@ export async function POST(req: NextRequest) {
       );
     const existingCoupon = await prisma.coupon.findMany({
       where: { coupon_code: coupon_code },
+      select: { coupon_code: true },
     });
     if (existingCoupon.length > 0) {
       return NextResponse.json(
@@ -101,6 +139,7 @@ export async function POST(req: NextRequest) {
       where: {
         customer_id: { in: customerIds },
       },
+      select: { customer_id: true },
     });
 
     const notificationCustomers = customers.map(async (item) => {

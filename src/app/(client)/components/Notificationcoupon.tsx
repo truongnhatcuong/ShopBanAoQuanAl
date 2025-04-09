@@ -32,7 +32,7 @@ const Notificationcoupon = () => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/notification`,
       {
         cache: "no-cache",
-        next: { revalidate: 100 },
+        next: { revalidate: 200 },
       }
     );
     const data = await res.json();

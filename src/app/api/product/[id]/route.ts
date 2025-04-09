@@ -177,6 +177,7 @@ export async function PUT(
           ),
         },
       },
+      select: { product_name: true },
     });
 
     return NextResponse.json(
@@ -213,6 +214,7 @@ export async function DELETE(
       where: {
         product_id: productId,
       },
+      select: { product_name: true },
     });
     return NextResponse.json(
       { Delete: deleteProduct, message: "deleted product success" },

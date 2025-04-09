@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
 
     const customer = await prisma.customer.update({
       where: { username },
+      select: { token: true, customer_id: true },
       data: { token: accessToken },
     });
 

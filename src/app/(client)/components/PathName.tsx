@@ -7,7 +7,7 @@ const PathName = () => {
   const pathname = usePathname();
 
   // Nếu là trang chủ thì không hiển thị
-  if (pathname === "/") return null;
+  if (pathname === "/" || "/order/cancel" || "/order/success") return null;
 
   // Tách đường dẫn thành các phần tử
   const pathSegments = pathname.slice(1).split("/"); // Loại bỏ dấu "/" đầu tiên và tách

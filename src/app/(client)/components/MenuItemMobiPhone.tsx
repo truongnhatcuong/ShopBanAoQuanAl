@@ -1,7 +1,8 @@
+"use client";
+
 import LanguageSwitcher from "@/app/(dashboard)/admin/components/ChangeLanguage/ChangeLanguage";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import React from "react";
 import { CiInstagram } from "react-icons/ci";
 import { FaFacebookSquare, FaStoreAlt, FaTiktok } from "react-icons/fa";
 import { HiHome, HiMenu } from "react-icons/hi";
@@ -18,6 +19,7 @@ interface IMenuMobiPhone {
   categories: any[];
   pathname: any;
 }
+
 interface IMenuProps {
   id: number;
   title: string;
@@ -53,101 +55,136 @@ const MenuItemMobiPhone = ({
       icon: <IoInformationCircleOutline className="text-2xl" />,
     },
   ];
+
   return (
     <>
+      {/* Menu trigger button */}
       <div
-        className="block md:hidden text-3xl absolute right-0 cursor-pointer ml-7 "
+        className="block md:hidden text-3xl absolute right-0 cursor-pointer p-2"
         onClick={() => setVisible(true)}
+        aria-label="Open menu"
       >
-        <HiMenu className="text-end " />
+        <HiMenu className="text-end" />
       </div>
 
-      {/* thanh menu ở giao diện màn hình nhỏ */}
+      {/* Mobile sidebar overlay */}
       <div
-        className={`fixed inset-0 bg-white z-50 transition-all duration-700 transform ${
-          visible
-            ? "translate-x-0 opacity-100"
-            : "translate-x-full opacity-0 pointer-events-none"
+        className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 ${
+          visible ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-        style={{ transitionTimingFunction: "ease-in-out" }}
+        onClick={() => setVisible(false)}
+      ></div>
+
+      {/* Mobile sidebar panel */}
+      <div
+        className={`fixed inset-y-0 right-0 w-[85%] max-w-sm bg-white z-50 shadow-xl transition-transform duration-500 ease-in-out ${
+          visible ? "translate-x-0" : "translate-x-full"
+        } flex flex-col h-full`}
       >
-        {/* back */}
+        {/* Header with back button and controls */}
+        <div className="flex items-center justify-between px-4 py-3 border-b">
+          <button
+            className="flex items-center space-x-1 text-gray-700 hover:text-black transition-colors"
+            onClick={() => setVisible(false)}
+          >
+            <IoChevronBackOutline className="text-2xl" />
+            <span className="font-medium">Trở Lại</span>
+          </button>
 
-        <div className="flex items-center  justify-between mt-5  cursor-pointer">
-          <div className="flex items-center " onClick={() => setVisible(false)}>
-            <IoChevronBackOutline className="text-4xl" />
-            <span className=""> Trở Lại</span>
+          <div className="flex items-center space-x-3">
+            <Notificationcoupon />
+            <LanguageSwitcher />
           </div>
-          <Notificationcoupon />
-          <LanguageSwitcher />
         </div>
 
-        <div className="flex flex-col justify-center w-full text-center my-7">
-          {MenuHeader.map((item, index) => (
-            <div
-              key={index}
-              className={`border-y-[1px] border-b-gray-400 p-1.5 ${
-                pathname === item.link ? "bg-black text-white" : ""
-              } `}
-            >
-              <Link href={item.link || ""} onClick={() => setVisible(false)}>
-                <div className="flex items-center justify-center gap-2">
-                  {item.icon}
-                  {item.title}
-                </div>
-              </Link>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-col gap-4 bg-gray-100 rounded-lg shadow-lg p-4 cursor-pointer">
-          <div className=" mt-7 text-center text-2xl font-semibold text-black uppercase">
-            danh mục sản phẩm
-          </div>
-          <div className="flex flex-col divide-y divide-gray-300">
-            {categories.map((item) => (
+        {/* Main menu section */}
+        <div className="flex flex-col overflow-y-auto flex-1">
+          {/* Main navigation links */}
+          <nav className="py-2">
+            {MenuHeader.map((item, index) => (
               <Link
-                href={`/product?category_id=${item.category_id}`}
-                key={item.category_id}
+                key={index}
+                href={item.link || ""}
                 onClick={() => setVisible(false)}
-                className="block px-4 py-3 text-gray-600 hover:bg-gray-200 hover:text-red-500 rounded-lg transition-all"
+                className={`flex items-center justify-center gap-3 py-3.5 px-4 border-b border-gray-100 transition-colors ${
+                  pathname === item.link
+                    ? "bg-black text-white font-medium"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
               >
-                <p className="text-base font-medium text-center">
-                  {item.category_name}
-                </p>
+                {item.icon}
+                <span className="text-base">{item.title}</span>
               </Link>
             ))}
+          </nav>
+
+          {/* Categories section */}
+          <div className="mt-2 px-4 py-5 bg-gray-50 flex-1">
+            <h2 className="text-center text-lg font-bold text-gray-800 uppercase mb-4 tracking-wide">
+              Danh mục sản phẩm
+            </h2>
+
+            <div className="rounded-lg bg-white shadow-sm overflow-hidden">
+              {categories.map((item, index) => (
+                <Link
+                  href={`/product?category_id=${item.category_id}`}
+                  key={item.category_id}
+                  onClick={() => setVisible(false)}
+                  className={`block px-4 py-3.5 text-gray-700 hover:bg-gray-50 hover:text-red-500 transition-colors ${
+                    index !== categories.length - 1
+                      ? "border-b border-gray-100"
+                      : ""
+                  }`}
+                >
+                  <p className="text-center font-medium">
+                    {item.category_name}
+                  </p>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-        <div
-          className={`flex  gap-7 mt-6 ml-2 justify-end`} // Thêm các lớp cho responsive
-        >
-          <Link
-            className="bg-gradient-to-r from-red-600 to-pink-600 hover:scale-110 w-fit hover:shadow-md p-1.5 text-white rounded-full transition-all duration-75 sm:p-2"
-            href="https://www.instagram.com/tncuong2004/"
-            target="_blank"
-          >
-            <CiInstagram />
-          </Link>
-          <Link
-            className="bg-black dark:border-2 w-fit hover:scale-110 hover:shadow-md p-1.5 text-white rounded-full transition-all duration-75 sm:p-2"
-            href="https://www.tiktok.com/@developerwebjs?_t=ZS-8v7W8sc6l7p&_r=1"
-            target="_blank"
-          >
-            <FaTiktok />
-          </Link>
-          <Link
-            className="bg-blue-500 hover:scale-110 hover:shadow-md w-fit p-1.5 text-white rounded-full transition-all duration-75 sm:p-2"
-            href="#"
-          >
-            <SiZalo />
-          </Link>
-          <Link
-            className="bg-blue-700 hover:scale-110 hover:shadow-md w-fit p-1.5 text-white rounded-full transition-all duration-75 sm:p-2"
-            href="https://www.facebook.com/tncuong2004/"
-            target="_blank"
-          >
-            <FaFacebookSquare />
-          </Link>
+
+        {/* Social media links footer */}
+        <div className="mt-auto border-t border-gray-200">
+          <div className="p-4">
+            <p className="text-sm text-gray-500 mb-3 text-center">
+              Kết nối với chúng tôi
+            </p>
+            <div className="flex justify-center items-center gap-4">
+              <Link
+                className="bg-black hover:bg-gray-800 p-2.5 text-white rounded-full transition-all duration-200 hover:scale-110 flex items-center justify-center w-10 h-10"
+                href="https://www.instagram.com/tncuong2004/"
+                target="_blank"
+                aria-label="Instagram"
+              >
+                <CiInstagram className="text-xl" />
+              </Link>
+              <Link
+                className="bg-black hover:bg-gray-800 p-2.5 text-white rounded-full transition-all duration-200 hover:scale-110 flex items-center justify-center w-10 h-10"
+                href="https://www.tiktok.com/@developerwebjs?_t=ZS-8v7W8sc6l7p&_r=1"
+                target="_blank"
+                aria-label="TikTok"
+              >
+                <FaTiktok className="text-xl" />
+              </Link>
+              <Link
+                className="bg-black hover:bg-gray-800 p-2.5 text-white rounded-full transition-all duration-200 hover:scale-110 flex items-center justify-center w-10 h-10"
+                href="#"
+                aria-label="Zalo"
+              >
+                <SiZalo className="text-xl" />
+              </Link>
+              <Link
+                className="bg-black hover:bg-gray-800 p-2.5 text-white rounded-full transition-all duration-200 hover:scale-110 flex items-center justify-center w-10 h-10"
+                href="https://www.facebook.com/tncuong2004/"
+                target="_blank"
+                aria-label="Facebook"
+              >
+                <FaFacebookSquare className="text-xl" />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </>

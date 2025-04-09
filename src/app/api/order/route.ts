@@ -4,9 +4,24 @@ import prisma from "@/prisma/client";
 import { authCustomer } from "@/utils/Auth";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import paypal from "@paypal/checkout-server-sdk";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2024-12-18.acacia" as any, // Giữ phiên bản ổn định
 });
+
+function getPaypalClient() {
+  const clientId = process.env.PAYPAL_CLIENT_ID;
+  const secret = process.env.PAYPAL_SECRET;
+  if (!clientId || !secret) {
+    throw new Error("Missing PayPal credentials");
+  }
+  const environment =
+    process.env.NODE_ENV === "production"
+      ? new paypal.core.LiveEnvironment(clientId, secret)
+      : new paypal.core.SandboxEnvironment(clientId, secret);
+  return new paypal.core.PayPalHttpClient(environment);
+}
+
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
 
@@ -120,7 +135,8 @@ export async function POST(req: NextRequest) {
     }
 
     const address = await prisma.addressShipper.findUnique({
-      where: { address_id: addressId, customer_id: customer?.customer_id },
+      where: { address_id: addressId, customer_id: customer.customer_id },
+      select: { address_id: true, customer_id: true },
     });
     if (!address) {
       return NextResponse.json(
@@ -131,7 +147,11 @@ export async function POST(req: NextRequest) {
 
     const cart = await prisma.cart.findFirst({
       where: { customer_id: customer?.customer_id },
-      include: { CartItems: { include: { Product: true, Size: true } } },
+      include: {
+        CartItems: {
+          include: { Product: { select: { price: true } }, Size: true },
+        },
+      },
     });
     if (!cart || cart.CartItems.length === 0) {
       return NextResponse.json(
@@ -167,7 +187,7 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-
+    // thanh toán stripe
     if (paymentMethod === "CREDIT_CARD") {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(totalAmount),
@@ -205,7 +225,57 @@ export async function POST(req: NextRequest) {
         { status: 201 }
       );
     }
+    // thanh toán paypal
+    if (paymentMethod === "E_WALLET") {
+      const client = getPaypalClient();
 
+      const request = new paypal.orders.OrdersCreateRequest();
+      request.requestBody({
+        intent: "CAPTURE",
+        purchase_units: [
+          {
+            amount: {
+              currency_code: "USD",
+              value: (totalAmount / 25.0).toString(),
+            },
+          },
+        ],
+        application_context: {
+          return_url: `${process.env.NEXT_PUBLIC_API_URL}/api/paypal/success`,
+          cancel_url: `${process.env.NEXT_PUBLIC_API_URL}/api/paypal/cancel`,
+        },
+      });
+      await pusher.trigger("orders", "new-order", {
+        orderId: order.order_id,
+        customerName: customer?.name,
+        totalAmount,
+      });
+
+      const response = await client.execute(request);
+
+      // Lưu thông tin thanh toán vào database với trạng thái PENDING
+      await prisma.payment.create({
+        data: {
+          order_id: order.order_id,
+          paypal_order_id: response.result.id,
+          payment_method: paymentMethod,
+          payment_amount: totalAmount,
+          payment_status: "PENDING",
+        },
+      });
+
+      return NextResponse.json(
+        {
+          id: response.result.id,
+          status: response.result.status,
+          links: response.result.links,
+        },
+        { status: 200 }
+      );
+    }
+    // thanh toán momo
+
+    // thanh toán khi nhận đơn hàng
     await prisma.payment.create({
       data: {
         order_id: order.order_id,
@@ -216,7 +286,9 @@ export async function POST(req: NextRequest) {
     });
 
     await prisma.cartItem.deleteMany({ where: { cart_id: cart.cart_id } });
-    await prisma.cart.delete({ where: { cart_id: cart.cart_id } });
+    await prisma.cart.delete({
+      where: { cart_id: cart.cart_id },
+    });
 
     await pusher.trigger("orders", "new-order", {
       orderId: order.order_id,

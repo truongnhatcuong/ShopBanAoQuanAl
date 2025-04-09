@@ -44,7 +44,6 @@ export enum OrderState {
   SHIPPED = "SHIPPED",
   DELIVERED = "DELIVERED",
   CANCELLED = "CANCELLED",
-  PARTIALLY_REFUNDED = "PARTIALLY_REFUNDED",
   REFUNDED = "REFUNDED",
 }
 
@@ -67,12 +66,10 @@ export const translateOrderState = (value: OrderState): string => {
       return "ĐÃ NHẬN HÀNG";
     case OrderState.CANCELLED:
       return "ĐÃ HỦY";
-    case OrderState.PARTIALLY_REFUNDED:
-      return "HOÀN TRẢ MỘT PHẦN"; // Thêm dịch cho PARTIALLY_REFUNDED
     case OrderState.REFUNDED:
-      return "ĐÃ HOÀN TRẢ"; // Thêm dịch cho REFUNDED
+      return "ĐÃ HOÀN TRẢ";
     default:
-      return value; // Trả về giá trị gốc nếu không khớp
+      return value;
   }
 };
 
@@ -96,7 +93,6 @@ export const orderStateClasses: { [key in OrderState]: string } = {
   [OrderState.SHIPPED]: "text-blue-700 bg-blue-200",
   [OrderState.DELIVERED]: "text-green-700 bg-green-200",
   [OrderState.CANCELLED]: "text-white bg-black",
-  [OrderState.PARTIALLY_REFUNDED]: "text-purple-700 bg-purple-200",
   [OrderState.REFUNDED]: "text-indigo-700 bg-indigo-200",
 };
 

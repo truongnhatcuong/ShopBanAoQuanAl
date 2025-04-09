@@ -26,7 +26,8 @@ const ProductRecommendations = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/recommend`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/recommend`,
+          { next: { revalidate: 500 } }
         );
         const data = await res.json();
         setRecommendations(data.data);

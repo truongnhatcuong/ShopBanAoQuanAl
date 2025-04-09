@@ -80,8 +80,7 @@ const OrderCard = ({ order, fetchData, onOpenReturnModal }: IOrderCard) => {
               Hoàn Trả
             </button>
           </>
-        ) : order.order_state === OrderState.REFUNDED ||
-          order.order_state === OrderState.PARTIALLY_REFUNDED ? (
+        ) : order.order_state === OrderState.REFUNDED ? (
           <>
             <button
               className="border px-4 py-2 rounded text-sm"

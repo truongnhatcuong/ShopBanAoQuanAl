@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
       where: {
         email,
       },
+      select: { token: true, email: true, name: true, username: true },
     });
     if (!customer?.email) {
       return NextResponse.json(
@@ -25,6 +26,7 @@ export async function POST(req: NextRequest) {
 
     const updatedCustomer = await prisma.customer.update({
       where: { email },
+      select: { token: true },
       data: { token: hashedToken },
     });
 

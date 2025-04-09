@@ -57,6 +57,7 @@ export async function PUT(
         season_name,
         description,
       },
+      select: { season_name: true },
     });
     return NextResponse.json(
       { updateSeasonId, message: "Updated success" },
@@ -87,6 +88,7 @@ export async function DELETE(
       where: {
         season_id: seasonId,
       },
+      select: { season_id: true },
     });
     return NextResponse.json(
       { deleteSeason, message: "Deleted success" },

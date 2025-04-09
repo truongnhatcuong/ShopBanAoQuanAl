@@ -67,7 +67,9 @@ const TableCoupon = ({ coupon, reloadData }: Iprop) => {
                           : `${ForMatPrice(Number(item.coupon_amount))} `}
                       </TableCell>
                       <TableCell className="text-center">
-                        {item.usage_limit} Lượt
+                        {item.usage_limit > 0
+                          ? `${item.usage_limit} Lượt`
+                          : "đã hết Lượt sử dụng"}
                       </TableCell>
                       <TableCell>
                         {" "}
@@ -86,7 +88,7 @@ const TableCoupon = ({ coupon, reloadData }: Iprop) => {
                         )}
                       </TableCell>
                       <TableCell className="flex gap-3">
-                        <UpdateCoupon coupon={item} reloadData={reloadData} />
+                        {/* <UpdateCoupon coupon={item} reloadData={reloadData} /> */}
                         <DeleteCoupon
                           coupon_id={item.coupon_id}
                           reloadData={reloadData}

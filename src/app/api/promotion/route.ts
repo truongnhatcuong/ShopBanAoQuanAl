@@ -94,6 +94,7 @@ export async function POST(req: NextRequest) {
       where: {
         product_id: product_id,
       },
+      select: { price: true },
     });
     if (!product) {
       return NextResponse.json(

@@ -57,7 +57,7 @@ export default function HeaderPage() {
     } else if (user) {
       setIsLoggedIn(true);
     }
-  }, [pathname]);
+  }, []);
 
   useEffect(() => {
     ApiCategories();

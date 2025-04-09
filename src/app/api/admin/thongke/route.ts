@@ -98,7 +98,7 @@ export async function GET(req: NextRequest) {
       },
       where: {
         Order: {
-          order_state: "PROCESSING",
+          order_state: "PENDING",
           order_date: {
             gte: startDate,
             lte: endDate,

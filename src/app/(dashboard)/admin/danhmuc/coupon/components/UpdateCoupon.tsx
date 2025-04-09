@@ -205,7 +205,7 @@ const UpdateCoupon = ({ coupon, reloadData }: IPops) => {
                   <input
                     type="text"
                     name="usage_limit"
-                    value={formData.usage_limit}
+                    value={formData.usage_limit ?? ""}
                     onChange={handleChange}
                     required
                     min="1"

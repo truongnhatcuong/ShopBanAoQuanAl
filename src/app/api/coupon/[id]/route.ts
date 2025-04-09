@@ -1,7 +1,6 @@
 import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
 import { authCustomer } from "@/utils/Auth";
-import { Item } from "@radix-ui/react-dropdown-menu";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
@@ -51,10 +50,9 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const token = await req.cookies.get("token")?.value;
+  const token = req.cookies.get("token")?.value;
   const { id } = await params;
   const couponId = Number(id);
-  const customer = await authCustomer(req);
   const user = await authenticateToken(token);
   const {
     coupon_code,
@@ -75,11 +73,6 @@ export async function PUT(
       );
     }
 
-    const authCustomer = await prisma.customer.findFirst({
-      where: {
-        name: customer?.name,
-      },
-    });
     const hashAdmin = user?.some(
       (item) => item.permission.permission === "update"
     );
@@ -140,6 +133,7 @@ export async function PUT(
               customer_id: item.customer_id,
             },
           },
+          select: { notification_id: true },
         }
       );
 

@@ -109,6 +109,7 @@ export async function POST(req: NextRequest) {
     // Kiểm tra sản phẩm và kích thước tồn kho
     const productSize = await prisma.productSize.findUnique({
       where: { product_id_size_id: { product_id, size_id } },
+      select: { stock_quantity: true },
     });
     if (!productSize || productSize.stock_quantity < quantity) {
       return NextResponse.json(

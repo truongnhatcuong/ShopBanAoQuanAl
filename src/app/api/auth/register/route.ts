@@ -45,12 +45,14 @@ export async function POST(req: NextRequest) {
     where: {
       email,
     },
+    select: { email: true },
   });
 
   const exitUsername = await prisma.customer.findUnique({
     where: {
       username,
     },
+    select: { username: true },
   });
 
   // Kiểm tra nếu email đã tồn tại

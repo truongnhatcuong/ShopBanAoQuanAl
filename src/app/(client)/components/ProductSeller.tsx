@@ -37,7 +37,7 @@ const ProductSeller = () => {
       </p>
 
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 ml-14 "
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 "
         data-aos-duration="1600"
         data-aos-easing="ease-in-out"
         data-aos="zoom-in"

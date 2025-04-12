@@ -6,6 +6,12 @@ import OrderItem from "./components/OrderItem";
 import OrderCard from "./components/OrderCard";
 import { toast } from "react-toastify";
 import ReturnModal from "./components/ReturnModal";
+import {
+  OrderState,
+  translateOrderState,
+} from "@/app/(dashboard)/admin/danhmuc/order/components/TableOrder";
+import { div } from "@tensorflow/tfjs";
+import Link from "next/link";
 
 interface Brand {
   brand_name: string;
@@ -45,16 +51,8 @@ interface Order {
   OrderItems: OrderItem[];
 }
 
-enum OrderState {
-  PENDING = "PENDING",
-  PROCESSING = "PROCESSING",
-  SHIPPED = "SHIPPED",
-  DELIVERED = "DELIVERED",
-  CANCELLED = "CANCELLED",
-}
-
 const PageListOrder = () => {
-  const [orderList, setOrderList] = useState<Order[] | null>(null);
+  const [orderList, setOrderList] = useState<Order[] | []>([]);
   const [activeTab, setActiveTab] = useState<OrderState>(OrderState.PENDING);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -76,7 +74,8 @@ const PageListOrder = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/order`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/order`,
+        { cache: "no-cache" }
       );
       const data = await response.json();
       setOrderList(data.orders);
@@ -119,14 +118,27 @@ const PageListOrder = () => {
     }
   };
 
-  if (!orderList) {
-    return <div className="text-center">Đang tải dữ liệu...</div>;
+  if (!orderList || orderList.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center mt-20">
+        <div className="text-2xl font-semibold text-green-600">
+          Bạn chưa có đơn hàng nào
+        </div>
+        <Link href={"/product"}>
+          {" "}
+          <div className="mt-4 text-base text-blue-600 hover:underline hover:text-blue-800 cursor-pointer transition">
+            Mua ngay
+          </div>
+        </Link>
+      </div>
+    );
   }
 
-  const filteredOrders = orderList.filter(
+  const filteredOrders = (orderList || []).filter(
     (order) => order.order_state === activeTab
   );
-  const hasOrders = filteredOrders.length > 0;
+
+  const hasOrders = filteredOrders.length ? filteredOrders.length > 0 : null;
 
   return (
     <div className="flex flex-col h-screen  ">
@@ -142,7 +154,7 @@ const PageListOrder = () => {
         {!hasOrders ? (
           <div className="text-center py-8">
             Không có đơn hàng nào trong trạng thái{" "}
-            {activeTab.toLowerCase().replace("_", " ")}
+            {translateOrderState(activeTab).toLowerCase().replace("_", " ")}
           </div>
         ) : (
           <div className="px-4">

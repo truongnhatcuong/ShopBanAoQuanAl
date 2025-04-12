@@ -48,7 +48,7 @@ const Page = () => {
         timer: 3500,
         timerProgressBar: true,
       });
-      route.push("/");
+      window.location.href = "/";
       route.refresh();
     } else {
       const dataError = await res.json();

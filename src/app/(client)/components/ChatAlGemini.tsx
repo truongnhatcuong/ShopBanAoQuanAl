@@ -94,7 +94,7 @@ const ChatAlGemini = () => {
   }
 
   return (
-    <div className="fixed bottom-[95px] right-8 md:bottom-[75px] md:right-8 z-40">
+    <div className="fixed  right-8 md:bottom-[75px] bottom-5 md:right-8 z-40">
       <div
         className={`relative cursor-pointer ${
           isOpen ? "hidden" : "inline-block"

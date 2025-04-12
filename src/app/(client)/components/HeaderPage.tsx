@@ -64,7 +64,7 @@ export default function HeaderPage() {
   }, []);
 
   return (
-    <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-2 ">
+    <div className="flex justify-around text-black dark:text-white dark:bg-black items-center font-medium p-2">
       <div className="dark:bg-transparent hidden md:block ">
         <Link href={"/"} className="">
           <Image

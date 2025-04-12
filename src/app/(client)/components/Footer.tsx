@@ -58,11 +58,14 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-2 border-black  dark:border-white p-3 h-12">
-        <p className="text-center ">
+      <div className="border-t-2 border-black  dark:border-white p-3 h-12 cursor-pointer text-center">
+        <Link
+          className="text-center "
+          href={"https://www.facebook.com/tncuong2004/"}
+        >
           Thiết Kế WebSite Bởi{" "}
-          <span className="text-xl">©𝙏𝙧𝙪̛𝙤̛𝙣𝙜 𝙉𝙝𝙖̣̂𝙩 𝘾𝙪̛𝙤̛̀𝙣𝙜</span>
-        </p>
+          <span className="text-2xl mt-[1px]">©𝙏𝙧𝙪̛𝙤̛𝙣𝙜 𝙉𝙝𝙖̣̂𝙩 𝘾𝙪̛𝙤̛̀𝙣𝙜</span>
+        </Link>
       </div>
     </>
   );

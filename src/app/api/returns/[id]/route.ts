@@ -51,6 +51,7 @@ export async function PUT(
         return_status: status,
         updated_at: new Date(), // Cập nhật thời gian thay đổi
       },
+      select: { order_id: true },
     });
     if (status === "APPROVED") {
       const order = returnProduct.Order;
@@ -63,6 +64,7 @@ export async function PUT(
           updated_at: new Date(),
         },
       });
+
       return NextResponse.json(
         {
           message: `Yêu cầu hoàn trả đã được ${
@@ -73,6 +75,14 @@ export async function PUT(
         { status: 200 }
       );
     }
+    return NextResponse.json(
+      {
+        message: `Yêu cầu hoàn trả đã được ${
+          status === "APPROVED" ? "phê duyệt" : "từ chối"
+        } thành công`,
+      },
+      { status: 201 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { message: "Đã xảy ra lỗi khi xử lý yêu cầu hoàn trả" },

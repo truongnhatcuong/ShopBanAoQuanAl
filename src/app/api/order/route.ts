@@ -228,7 +228,7 @@ export async function POST(req: NextRequest) {
     // thanh toán paypal
     if (paymentMethod === "E_WALLET") {
       const client = getPaypalClient();
-
+      const exchangeRate = 25000;
       const request = new paypal.orders.OrdersCreateRequest();
       request.requestBody({
         intent: "CAPTURE",
@@ -236,7 +236,7 @@ export async function POST(req: NextRequest) {
           {
             amount: {
               currency_code: "USD",
-              value: (totalAmount / 25.0).toString(),
+              value: (totalAmount / exchangeRate).toFixed(2),
             },
           },
         ],

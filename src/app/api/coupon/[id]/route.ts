@@ -1,13 +1,14 @@
 import { authenticateToken } from "@/lib/auth";
 import prisma from "@/prisma/client";
-import { authCustomer } from "@/utils/Auth";
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const couponId = await Number(params.id);
+  const { id } = await params;
+  const couponId = Number(id);
   try {
     const promotionNotifications = await prisma.promotionNotification.findMany({
       where: {

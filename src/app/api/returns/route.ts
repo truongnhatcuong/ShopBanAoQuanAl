@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
       );
     }
     // Tính số tiền hoàn trả (dựa trên giá sản phẩm trong OrderItem)
-    const return_amount = Number(orderItem.price);
+    const return_amount = Number(order.total_amount);
     // Tạo bản ghi hoàn trả mới
     const returnProduct = await prisma.returnProduct.create({
       data: {

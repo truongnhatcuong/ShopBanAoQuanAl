@@ -52,7 +52,7 @@ const Page = () => {
     }
   };
   const FetchApi = async () => {
-    const res = await fetch("/api/coupon");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coupon`);
     const data = await res.json();
     setDataCoupon(data.coupon || []);
   };

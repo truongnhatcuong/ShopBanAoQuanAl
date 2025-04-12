@@ -40,15 +40,8 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
   const { totalPrice, finalTotal, setFinalTotal } = useContext(ShopConText)!;
 
   const [couponCode, setCouponCode] = useState("");
-  const [currentCustomerId, setCurrentCustomerId] = useState("");
-  const [discountAmount, setDiscountAmount] = useState(0);
 
-  useEffect(() => {
-    const storedUserId = window.localStorage.getItem("userId");
-    if (storedUserId) {
-      setCurrentCustomerId(storedUserId);
-    }
-  }, []);
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   useEffect(() => {
     if (!couponCode && discountAmount === 0) {
@@ -64,20 +57,6 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
       setCouponCode("");
       setFinalTotal(totalPrice + 25000);
       setDiscountAmount(0);
-      return;
-    }
-
-    const isValidForCustomer = coupon.PromotionNotifications.some(
-      (notification) =>
-        notification.Notifications.Customer.customer_id ===
-        Number(currentCustomerId)
-    );
-
-    if (!isValidForCustomer) {
-      alert("Mã giảm giá không áp dụng cho bạn.");
-      setDiscountAmount(0);
-      setCouponCode("");
-      setFinalTotal(totalPrice + 25000);
       return;
     }
 
@@ -110,9 +89,6 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
     setFinalTotal(totalPrice + 25000);
     setDiscountAmount(0);
   };
-  console.log("ma giam gia ", couponCode);
-
-  console.log("gia cuoi :", finalTotal);
 
   return (
     <div className=" bg-white shadow-lg w-full ml-2  h-full">
@@ -155,26 +131,37 @@ const FormCheckOut = ({ cart, data }: { cart: CartData; data: ICoupon[] }) => {
       {/* ma giam gia */}
       <div className="border-b  pb-1">
         <div className="flex items-center justify-center my-5 relative  ">
-          <input
-            type="text"
-            className="w-2/5 py-[10.4px] px-3  text-sm  border-[2px] border-black  outline-none   "
-            placeholder="Nhap ma giam gia ....."
-            value={couponCode}
-            onChange={(e) => setCouponCode(e.target.value.trim())}
-          />
-          <button
-            className="hover:bg-black bg-gray-800 text-white w-fit  py-2.5 px-1.5  font-semibold  "
-            onClick={handleApplyCoupon}
-          >
-            Xác Nhận
-          </button>
-          {discountAmount > 0 && (
-            <div
-              className="absolute right-[240px] top-1/2 -translate-y-1/2 text-red-500 hover:text-red-700 cursor-pointer font-bold text-lg"
-              onClick={handleCannelCoupon}
-            >
-              X
-            </div>
+          {discountAmount ? (
+            <>
+              <div className="text-sm font-light text-green-600 ">
+                Sử dụng mã giảm giá thành công
+              </div>
+              {discountAmount > 0 && (
+                <div
+                  className="absolute right-[180px] top-1/2 -translate-y-1/2 text-red-500 hover:text-red-700 cursor-pointer font-bold text-lg"
+                  onClick={handleCannelCoupon}
+                >
+                  X
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {" "}
+              <input
+                type="text"
+                className="w-2/5 py-[10.4px] px-3  text-sm  border-[2px] border-black  outline-none   "
+                placeholder="Nhap ma giam gia ....."
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.trim())}
+              />
+              <button
+                className="hover:bg-black bg-gray-800 text-white w-fit  py-2.5 px-1.5  font-semibold  "
+                onClick={handleApplyCoupon}
+              >
+                Xác Nhận
+              </button>
+            </>
           )}
         </div>
       </div>

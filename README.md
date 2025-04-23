@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🛍️ E-Commerce Fashion Platform
 
-## Getting Started
+Một nền tảng thương mại điện tử hiện đại chuyên về bán quần áo, được xây dựng với Next.js & công nghệ hiện đại — nơi trải nghiệm mua sắm trở nên thông minh, nhanh chóng và thú vị.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Tính năng nổi bật
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- ⚡️ Giao diện tốc độ cao với **Next.js 15**, hỗ trợ SSR & tối ưu SEO
+- 🧠 Chatbot AI hỗ trợ tư vấn sản phẩm (OpenAI API)
+- 💳 Tích hợp thanh toán qua **Stripe** và **PayPal**
+- 📦 Quản lý đơn hàng, tồn kho & giao vận dễ dàng
+- 📸 Upload ảnh sản phẩm với **UploadThing**
+- 🔐 Đăng nhập bảo mật (OAuth + JWT)
+- 🔔 Thông báo đơn hàng qua Email (NodeMailer)
+- 📊 Hệ thống dashboard quản lý đơn, doanh thu & thống kê real-time
+- 🧠 Gợi ý sản phẩm bằng AI (từ hành vi khách hàng)
+- 🧾 Ghi log, bắt lỗi & monitor qua middleware + hệ thống logger
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 🧱 Công nghệ sử dụng
 
-## Learn More
+| Stack        | Công cụ                |
+|--------------|------------------------|
+| Frontend     | Next.js 15, Tailwind CSS |
+| Backend      | Node.js, Express.js     |
+| Cơ sở dữ liệu| MySQL + Prisma ORM      |
+| AI           | OpenAI API              |
+| Thanh toán   | Stripe, PayPal          |
+| Ảnh          | UploadThing             |
+| Email        | NodeMailer              |
+| Auth         | NextAuth + JWT          |
+| Cache        | Redis                   |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

@@ -11,9 +11,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
+import DeletePromotion from "./DeletePromotion";
 interface IPromotion {
+  promotion_id: number;
   discount: number;
   start_date: string;
+
   end_date: string;
   products: {
     product_name: string;
@@ -23,6 +26,7 @@ interface IPromotion {
 
 interface IProp {
   promotion: IPromotion[] | [];
+  reloadData: () => void;
 }
 
 const TablePromotion = (props: IProp) => {
@@ -71,12 +75,10 @@ const TablePromotion = (props: IProp) => {
                 </TableCell>
                 <TableCell className="flex gap-3">
                   {" "}
-                  <button className="p-2 text-white bg-red-500 hover:bg-red-600 rounded text-xl ">
-                    <AiOutlineDelete />
-                  </button>
-                  <button className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded text-xl">
-                    <FaRegEdit />
-                  </button>
+                  <DeletePromotion
+                    id={item.promotion_id}
+                    reloadData={props.reloadData}
+                  />
                 </TableCell>
               </TableRow>
             ))

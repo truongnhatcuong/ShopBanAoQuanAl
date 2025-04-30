@@ -19,7 +19,7 @@ const Page = () => {
         <AddPrromotion reloadData={fetchApi} />
       </div>
       <div>
-        <TablePromotion promotion={promotion} />
+        <TablePromotion promotion={promotion} reloadData={fetchApi} />
       </div>
     </div>
   );

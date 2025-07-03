@@ -1,384 +1,364 @@
-  // This is your Prisma schema file,
-  // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-  // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-  // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-  datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
-    
-  }
-
-  generator client {
-    provider = "prisma-client-js"
-  }
-
-  model Brand {
-    brand_id    Int       @id @default(autoincrement())
-    brand_name  String    @db.VarChar(100)
-    description String?   @db.Text
-    Products    Product[]
-  }
-
-  model Category {
-    category_id   Int        @id @default(autoincrement())
-    category_name String     @db.VarChar(100)
-    description   String?    @db.Text
-    parent_id     Int?
-    parent        Category?  @relation("CategoryParent", fields: [parent_id], references: [category_id])
-    subCategories Category[] @relation("CategoryParent")
-    Products      Product[]
-  }
-
-  model Product {
-    product_id      Int               @id @default(autoincrement())
-    product_name    String            @db.VarChar(100)
-    description     String?           @db.Text
-    price           Decimal           @db.Decimal(10, 2)
-    stock_quantity  Int
-    category_id     Int
-    brand_id        Int
-    created_at      DateTime?         @db.DateTime
-    updated_at      DateTime?         @db.DateTime
-    season_id       Int?
-    rating_id       Int?
-    color           String?           @db.VarChar(50)
-    Category        Category          @relation(fields: [category_id], references: [category_id])
-    Brand           Brand             @relation(fields: [brand_id], references: [brand_id])
-    Season          Season?           @relation(fields: [season_id], references: [season_id])
-  
-    ProductSizes    ProductSize[]
-    OrderItems      OrderItem[]
-    Images          Image[]           
-    Wishlists       Wishlist[]        
-    Returns         ReturnProduct[]
-    ProductSupplier ProductSupplier[]
-    Review          Review[]
-    CartItem        CartItem[]
-
-    
-
-    ProductPromotion ProductPromotion[]
-  }
-
-  model Size {
-    size_id      Int           @id @default(autoincrement())
-    name_size    String        @db.VarChar(20)
-    ProductSizes ProductSize[]
-    OrderItems   OrderItem[]
-
-    CartItem CartItem[]
-  }
-
-  model ProductSize {
-    product_id     Int
-    size_id        Int
-    stock_quantity Int
-    Product        Product @relation(fields: [product_id], references: [product_id],onDelete: Cascade)
-    Size           Size    @relation(fields: [size_id], references: [size_id])
-
-    @@id([product_id, size_id])
-  }
-
-  model Supplier {
-    supplier_id      Int               @id @default(autoincrement())
-    supplier_name    String            @db.VarChar(255)
-    contact_info     String?           @db.VarChar(255)
-    ProductSuppliers ProductSupplier[]
-  }
-
-  model ProductSupplier {
-    product_id  Int
-    supplier_id Int
-    supply_date DateTime? @db.Date
-    quantity    Int?
-    Product     Product   @relation(fields: [product_id], references: [product_id])
-    Supplier    Supplier  @relation(fields: [supplier_id], references: [supplier_id])
-
-    @@id([product_id, supplier_id])
-  }
-
-  model Order {
-    order_id     Int             @id @default(autoincrement())
-    customer_id  Int
-    order_date   DateTime?       @db.DateTime
-    total_amount Decimal         @db.Decimal(10, 2)
-  order_state   OrderState      @default(PENDING)
-     created_at   DateTime? @db.DateTime
-    updated_at   DateTime? @db.DateTime
-    Customer     Customer        @relation(fields: [customer_id], references: [customer_id])
-    address_id     Int?
-  AddressShipper AddressShipper? @relation(fields: [address_id], references: [address_id])
-
-    OrderItems   OrderItem[]
-    Payments     Payment[]
-    Returns      ReturnProduct[]
-    @@index([customer_id])
-    @@map("orders")
-  }
-
-  enum OrderState {
-    PENDING
-    PROCESSING
-    SHIPPED
-    DELIVERED
-    CANCELLED
-    PARTIALLY_REFUNDED
-    REFUNDED
-  }
-
-
-  model OrderItem {
-    orderitem_id Int       @id @default(autoincrement())
-    order_id     Int
-    product_id   Int
-    quantity     Int
-    price        Decimal   @db.Decimal(10, 2)
-    size_id      Int
-    created_at   DateTime? @db.DateTime
-    updated_at   DateTime? @db.DateTime
-    Order        Order     @relation(fields: [order_id], references: [order_id])
-    Product      Product   @relation(fields: [product_id], references: [product_id])
-    Size         Size      @relation(fields: [size_id], references: [size_id])
-
-    @@index([order_id])
-    @@index([product_id])
-    @@index([size_id])
-    @@map("order_items")
-  }
-
-  model Payment {
-    payment_id     Int       @id @default(autoincrement())
-    order_id       Int
-    payment_method PaymentMethod   
-    payment_status PaymentStatus   
-     stripe_payment_intent  String? @unique
-     stripe_session_id String?
-     paypal_order_id    String?   @unique
-    payment_amount Decimal   @db.Decimal(10, 2)
-    created_at     DateTime? @db.DateTime
-    updated_at     DateTime? @db.DateTime
-    Order          Order     @relation(fields: [order_id], references: [order_id])
-
-    @@index([order_id])
-    @@map("payments")
-  }
-  enum PaymentMethod {
-    CASH
-    CREDIT_CARD
-    BANK_TRANSFER
-    E_WALLET
-  }
-
-  enum PaymentStatus {
-    PENDING
-    COMPLETED
-    FAILED
-    REFUNDED
-  }
-
-
-  model ReturnProduct {
-    return_id     Int       @id @default(autoincrement())
-    order_id      Int
-    product_id    Int
-    return_reason String?   @db.VarChar(255)
-    return_date   DateTime? @db.Date
-    return_status  ReturnStatus @default(PENDING)
-    return_amount Decimal   @db.Decimal(10, 2)
-      created_at   DateTime? @db.DateTime
-    updated_at   DateTime? @db.DateTime
-    Order         Order     @relation(fields: [order_id], references: [order_id])
-    Product       Product   @relation(fields: [product_id], references: [product_id])
-    @@index([order_id])
-    @@index([product_id])
-    @@map("return_products")
-  }
-
-  enum ReturnStatus {
-    PENDING
-    APPROVED
-    REJECTED
-    COMPLETED
-  }
-
-
-
-  model Review {
-    review_id       Int       @id @default(autoincrement())
-    product_id      Int
-    customer_id     Int
-    comment_review  String?   @db.Text
-    image_url       String?   @db.Text
-    review_date     DateTime? @db.DateTime
-    seller_response String?   @db.Text
-    hasReviewed     Boolean    @default(false)
-    rating          Int
-    Product         Product   @relation(fields: [product_id], references: [product_id])
-    Customer        Customer  @relation(fields: [customer_id], references: [customer_id])
-  }
-
-  model Image {
-    image_id   Int       @id @default(autoincrement())
-    product_id Int
-    image_url  String    @db.Text
-    created_at DateTime? @db.DateTime
-    updated_at DateTime? @db.DateTime
-    Product    Product   @relation(fields: [product_id], references: [product_id],onDelete: Cascade)
-  }
-
-  model Wishlist {
-    wishlist_id Int       @id @default(autoincrement())
-    customer_id Int
-    product_id  Int
-    added_at    DateTime? @db.DateTime
-    Customer    Customer  @relation(fields: [customer_id], references: [customer_id])
-    Product     Product   @relation(fields: [product_id], references: [product_id])
-  }
-
-  model Promotion {
-    promotion_id Int      @id @default(autoincrement())
-      discount Int
-      start_date DateTime
-      end_date   DateTime
-
-    ProductPromotions ProductPromotion[]
-  }
-
-
-  model ProductPromotion{
-      productPromotion_id Int @id @default(autoincrement())
-        product_id   Int
-        promotion_id Int 
-        Promotion  Promotion @relation(fields: [promotion_id],references: [promotion_id])
-      Product  Product  @relation(fields: [product_id],references: [product_id])
-
-  }
-
-
-  model Coupon {
-    coupon_id              Int                     @id @default(autoincrement())
-    coupon_code            String                  @db.VarChar(30)
-    coupon_percentage      Decimal?                @db.Decimal(5, 2)
-    coupon_amount          Decimal?                @db.Decimal(10, 2)
-    usage_limit            Int?
-    start_date             DateTime?               @db.Date
-    end_date               DateTime?               @db.Date
-    created_at             DateTime?               @db.DateTime
-    updated_at             DateTime?               @db.DateTime
-    PromotionNotifications PromotionNotification[]
-  }
-
-  model PromotionNotification {
-    promotion_notification_id Int          @id @default(autoincrement())
-    notification_id            Int
-    coupon_id                 Int?
-    Coupon                    Coupon?      @relation(fields: [coupon_id], references: [coupon_id])
-    Notifications             Notification @relation(fields: [notification_id], references: [notification_id])
-  }
-
-  model Notification {
-    notification_id        Int                     @id @default(autoincrement())
-    customer_id            Int
-    notification_type      String                  @db.VarChar(50)
-    message                String                  @db.Text
-    is_read                Boolean?
-    created_at             DateTime?               @db.DateTime
-    Customer               Customer                @relation(fields: [customer_id], references: [customer_id])
-    PromotionNotifications PromotionNotification[]
-  }
-
-  model Season {
-    season_id   Int       @id @default(autoincrement())
-    season_name String    @db.VarChar(50)
-    description String?   @db.Text
-    Products    Product[]
-  }
-
-  model Customer {
-    customer_id   Int            @id @default(autoincrement())
-    name          String         @db.VarChar(100)
-    email         String         @unique @db.VarChar(100)
-    phone         String?        @db.VarChar(20)
-    image         String?        @db.VarChar(255)
-    username      String?         @unique @db.VarChar(50)
-    password      String?         @db.VarChar(255)
-    created_at    DateTime       @default(now())
-    updated_at    DateTime       @updatedAt
-    token         String?         @db.VarChar(255)
-    roleId        Int
-    role          Role     @relation(fields: [roleId], references: [role_id])
-    Orders        Order[]
-    Wishlists     Wishlist[]
-    Notifications Notification[]
-    Reviews       Review[]
-    Carts         Cart[]
-    AddressShipper AddressShipper[]
-  }
-
-  model Role {
-    role_id       Int       @id @default(autoincrement())
-    role_name     String    @unique @db.VarChar(50) // Tên vai trò (admin, user)
-    customers     Customer[]
-    permissions   RolePermission[]
-  }
-
-  model Permission {
-    permission_id Int       @id @default(autoincrement())
-    permission    String    @unique @db.VarChar(50) // Tên quyền (create, read, etc.)
-    roles         RolePermission[]
-  }
-
-  model RolePermission {
-    roleId        Int
-    permissionId  Int
-    role          Role       @relation(fields: [roleId], references: [role_id])
-    permission    Permission @relation(fields: [permissionId], references: [permission_id])
-
-    @@id([roleId, permissionId]) // Tạo khóa chính cho mối quan hệ nhiều-nhiều
-  }
-  model Cart {
-    cart_id     Int        @id @default(autoincrement())
-    customer_id Int
-    created_at  DateTime?  @db.DateTime
-    updated_at  DateTime?  @db.DateTime
-    Customer    Customer   @relation(fields: [customer_id], references: [customer_id])
-    CartItems   CartItem[]
-  }
-
-  model CartItem {
-    cartitem_id Int     @id @default(autoincrement())
-    cart_id     Int
-    size_id     Int  
-    product_id  Int
-    quantity    Int
-      Size        Size    @relation(fields: [size_id], references: [size_id], onDelete: Cascade)
-    Product     Product @relation(fields: [product_id], references: [product_id])
-    Cart        Cart    @relation(fields: [cart_id], references: [cart_id])
-  }
-
-model AddressShipper {
-  address_id    Int       @id @default(autoincrement())
-  customer_id   Int
-  country      String     @db.VarChar(100)
-   is_default    Boolean   @default(false)
-    province        String    @db.VarChar(100)  // Tỉnh/Thành phố
-  district        String    @db.VarChar(100)  // Quận/Huyện
-  ward            String    @db.VarChar(100)  // Phường/Xã
-  street_address  String    @db.VarChar(255)  // Số nhà, tên đường
-  note            String?   @db.Text          // Ghi chú thêm về địa chỉ
-
-Customer     Customer  @relation(fields: [customer_id], references: [customer_id])
-Orders          Order[]
- @@index([customer_id])
-  @@map("address_shippers")
+generator client {
+  provider = "prisma-client-js"
 }
 
-enum UserAction {
-  view
-  add_to_cart
-  purchase
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Brand {
+  brand_id    Int       @id @default(autoincrement())
+  brand_name  String    @db.VarChar(100)
+  description String?   @db.Text
+  Products    Product[]
+}
+
+model Category {
+  category_id   Int        @id @default(autoincrement())
+  category_name String     @db.VarChar(100)
+  description   String?    @db.Text
+  parent_id     Int?
+  parent        Category?  @relation("CategoryParent", fields: [parent_id], references: [category_id])
+  subCategories Category[] @relation("CategoryParent")
+  Products      Product[]
+
+  @@index([parent_id], map: "Category_parent_id_fkey")
+}
+
+model Product {
+  product_id       Int                @id @default(autoincrement())
+  product_name     String             @db.VarChar(100)
+  description      String?            @db.Text
+  price            Decimal            @db.Decimal(10, 2)
+  stock_quantity   Int
+  category_id      Int
+  brand_id         Int
+  created_at       DateTime?          @db.DateTime(0)
+  updated_at       DateTime?          @db.DateTime(0)
+  season_id        Int?
+  rating_id        Int?
+  color            String?            @db.VarChar(50)
+  CartItem         CartItem[]
+  Images           Image[]
+  Brand            Brand              @relation(fields: [brand_id], references: [brand_id])
+  Category         Category           @relation(fields: [category_id], references: [category_id])
+  Season           Season?            @relation(fields: [season_id], references: [season_id])
+  ProductPromotion ProductPromotion[]
+  ProductSizes     ProductSize[]
+  ProductSupplier  ProductSupplier[]
+  Review           Review[]
+  Wishlists        Wishlist[]
+  OrderItems       OrderItem[]
+  Returns          ReturnProduct[]
+
+  @@index([brand_id], map: "Product_brand_id_fkey")
+  @@index([category_id], map: "Product_category_id_fkey")
+  @@index([season_id], map: "Product_season_id_fkey")
+}
+
+model Size {
+  size_id      Int           @id @default(autoincrement())
+  name_size    String        @db.VarChar(20)
+  CartItem     CartItem[]
+  ProductSizes ProductSize[]
+  OrderItems   OrderItem[]
+}
+
+model ProductSize {
+  product_id     Int
+  size_id        Int
+  stock_quantity Int
+  Product        Product @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+  Size           Size    @relation(fields: [size_id], references: [size_id])
+
+  @@id([product_id, size_id])
+  @@index([size_id], map: "ProductSize_size_id_fkey")
+}
+
+model Supplier {
+  supplier_id      Int               @id @default(autoincrement())
+  supplier_name    String            @db.VarChar(255)
+  contact_info     String?           @db.VarChar(255)
+  ProductSuppliers ProductSupplier[]
+}
+
+model ProductSupplier {
+  product_id  Int
+  supplier_id Int
+  supply_date DateTime? @db.Date
+  quantity    Int?
+  Product     Product   @relation(fields: [product_id], references: [product_id])
+  Supplier    Supplier  @relation(fields: [supplier_id], references: [supplier_id])
+
+  @@id([product_id, supplier_id])
+  @@index([supplier_id], map: "ProductSupplier_supplier_id_fkey")
+}
+
+model Order {
+  order_id       Int             @id @default(autoincrement())
+  customer_id    Int
+  order_date     DateTime?       @db.DateTime(0)
+  total_amount   Decimal         @db.Decimal(10, 2)
+  order_state    OrderState      @default(PENDING)
+  created_at     DateTime?       @db.DateTime(0)
+  updated_at     DateTime?       @db.DateTime(0)
+  address_id     Int?
+  OrderItems     OrderItem[]
+  AddressShipper AddressShipper? @relation(fields: [address_id], references: [address_id])
+  Customer       Customer        @relation(fields: [customer_id], references: [customer_id])
+  Payments       Payment[]
+  Returns        ReturnProduct[]
+
+  @@index([customer_id])
+  @@index([address_id], map: "orders_address_id_fkey")
+  @@map("orders")
+}
+
+model OrderItem {
+  orderitem_id Int       @id @default(autoincrement())
+  order_id     Int
+  product_id   Int
+  quantity     Int
+  price        Decimal   @db.Decimal(10, 2)
+  size_id      Int
+  created_at   DateTime? @db.DateTime(0)
+  updated_at   DateTime? @db.DateTime(0)
+  Order        Order     @relation(fields: [order_id], references: [order_id])
+  Product      Product   @relation(fields: [product_id], references: [product_id])
+  Size         Size      @relation(fields: [size_id], references: [size_id])
+
+  @@index([order_id])
+  @@index([product_id])
+  @@index([size_id])
+  @@map("order_items")
+}
+
+model Payment {
+  payment_id            Int           @id @default(autoincrement())
+  order_id              Int
+  payment_method        PaymentMethod
+  payment_status        PaymentStatus
+  payment_amount        Decimal       @db.Decimal(10, 2)
+  created_at            DateTime?     @db.DateTime(0)
+  updated_at            DateTime?     @db.DateTime(0)
+  stripe_payment_intent String?       @unique
+  stripe_session_id     String?
+  paypal_order_id       String?       @unique
+  Order                 Order         @relation(fields: [order_id], references: [order_id])
+
+  @@index([order_id])
+  @@map("payments")
+}
+
+model ReturnProduct {
+  return_id     Int          @id @default(autoincrement())
+  order_id      Int
+  product_id    Int
+  return_reason String?      @db.VarChar(255)
+  return_date   DateTime?    @db.Date
+  return_status ReturnStatus @default(PENDING)
+  return_amount Decimal      @db.Decimal(10, 2)
+  created_at    DateTime?    @db.DateTime(0)
+  updated_at    DateTime?    @db.DateTime(0)
+  Order         Order        @relation(fields: [order_id], references: [order_id])
+  Product       Product      @relation(fields: [product_id], references: [product_id])
+
+  @@index([order_id])
+  @@index([product_id])
+  @@map("return_products")
+}
+
+model Review {
+  review_id       Int       @id @default(autoincrement())
+  product_id      Int
+  customer_id     Int
+  comment_review  String?   @db.Text
+  image_url       String?   @db.Text
+  review_date     DateTime? @db.DateTime(0)
+  seller_response String?   @db.Text
+  rating          Int
+  hasReviewed     Boolean   @default(false)
+  Customer        Customer  @relation(fields: [customer_id], references: [customer_id])
+  Product         Product   @relation(fields: [product_id], references: [product_id])
+
+  @@index([customer_id], map: "Review_customer_id_fkey")
+  @@index([product_id], map: "Review_product_id_fkey")
+}
+
+model Image {
+  image_id   Int       @id @default(autoincrement())
+  product_id Int
+  image_url  String    @db.Text
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @db.DateTime(0)
+  Product    Product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+
+  @@index([product_id], map: "Image_product_id_fkey")
+}
+
+model Wishlist {
+  wishlist_id Int       @id @default(autoincrement())
+  customer_id Int
+  product_id  Int
+  added_at    DateTime? @db.DateTime(0)
+  Customer    Customer  @relation(fields: [customer_id], references: [customer_id])
+  Product     Product   @relation(fields: [product_id], references: [product_id])
+
+  @@index([customer_id], map: "Wishlist_customer_id_fkey")
+  @@index([product_id], map: "Wishlist_product_id_fkey")
+}
+
+model Promotion {
+  promotion_id      Int                @id @default(autoincrement())
+  discount          Int
+  start_date        DateTime
+  end_date          DateTime
+  ProductPromotions ProductPromotion[]
+}
+
+model ProductPromotion {
+  productPromotion_id Int       @id @default(autoincrement())
+  product_id          Int
+  promotion_id        Int
+  Product             Product   @relation(fields: [product_id], references: [product_id])
+  Promotion           Promotion @relation(fields: [promotion_id], references: [promotion_id])
+
+  @@index([product_id], map: "ProductPromotion_product_id_fkey")
+  @@index([promotion_id], map: "ProductPromotion_promotion_id_fkey")
+}
+
+model Coupon {
+  coupon_id              Int                     @id @default(autoincrement())
+  coupon_code            String                  @db.VarChar(30)
+  coupon_percentage      Decimal?                @db.Decimal(5, 2)
+  coupon_amount          Decimal?                @db.Decimal(10, 2)
+  usage_limit            Int?
+  start_date             DateTime?               @db.Date
+  end_date               DateTime?               @db.Date
+  created_at             DateTime?               @db.DateTime(0)
+  updated_at             DateTime?               @db.DateTime(0)
+  PromotionNotifications PromotionNotification[]
+}
+
+model PromotionNotification {
+  promotion_notification_id Int          @id @default(autoincrement())
+  notification_id           Int
+  coupon_id                 Int?
+  Coupon                    Coupon?      @relation(fields: [coupon_id], references: [coupon_id])
+  Notifications             Notification @relation(fields: [notification_id], references: [notification_id])
+
+  @@index([coupon_id], map: "PromotionNotification_coupon_id_fkey")
+  @@index([notification_id], map: "PromotionNotification_notification_id_fkey")
+}
+
+model Notification {
+  notification_id        Int                     @id @default(autoincrement())
+  customer_id            Int
+  notification_type      String                  @db.VarChar(50)
+  message                String                  @db.Text
+  is_read                Boolean?
+  created_at             DateTime?               @db.DateTime(0)
+  Customer               Customer                @relation(fields: [customer_id], references: [customer_id])
+  PromotionNotifications PromotionNotification[]
+
+  @@index([customer_id], map: "Notification_customer_id_fkey")
+}
+
+model Season {
+  season_id   Int       @id @default(autoincrement())
+  season_name String    @db.VarChar(50)
+  description String?   @db.Text
+  Products    Product[]
+}
+
+model Customer {
+  customer_id    Int              @id @default(autoincrement())
+  name           String           @db.VarChar(100)
+  email          String           @unique @db.VarChar(100)
+  phone          String?          @db.VarChar(20)
+  username       String?          @unique @db.VarChar(50)
+  password       String?          @db.VarChar(255)
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  token          String?          @db.VarChar(255)
+  roleId         Int
+  image          String?          @db.VarChar(255)
+  Carts          Cart[]
+  role           Role             @relation(fields: [roleId], references: [role_id])
+  Notifications  Notification[]
+  Reviews        Review[]
+  Wishlists      Wishlist[]
+  AddressShipper AddressShipper[]
+  Orders         Order[]
+
+  @@index([roleId], map: "Customer_roleId_fkey")
+}
+
+model Role {
+  role_id     Int              @id @default(autoincrement())
+  role_name   String           @unique @db.VarChar(50)
+  customers   Customer[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  permission_id Int              @id @default(autoincrement())
+  permission    String           @unique @db.VarChar(50)
+  roles         RolePermission[]
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  permission   Permission @relation(fields: [permissionId], references: [permission_id])
+  role         Role       @relation(fields: [roleId], references: [role_id])
+
+  @@id([roleId, permissionId])
+  @@index([permissionId], map: "RolePermission_permissionId_fkey")
+}
+
+model Cart {
+  cart_id     Int        @id @default(autoincrement())
+  customer_id Int
+  created_at  DateTime?  @db.DateTime(0)
+  updated_at  DateTime?  @db.DateTime(0)
+  Customer    Customer   @relation(fields: [customer_id], references: [customer_id])
+  CartItems   CartItem[]
+
+  @@index([customer_id], map: "Cart_customer_id_fkey")
+}
+
+model CartItem {
+  cartitem_id Int     @id @default(autoincrement())
+  cart_id     Int
+  product_id  Int
+  quantity    Int
+  size_id     Int
+  Cart        Cart    @relation(fields: [cart_id], references: [cart_id])
+  Product     Product @relation(fields: [product_id], references: [product_id])
+  Size        Size    @relation(fields: [size_id], references: [size_id], onDelete: Cascade)
+
+  @@index([cart_id], map: "CartItem_cart_id_fkey")
+  @@index([product_id], map: "CartItem_product_id_fkey")
+  @@index([size_id], map: "CartItem_size_id_fkey")
+}
+
+model AddressShipper {
+  address_id     Int      @id @default(autoincrement())
+  customer_id    Int
+  country        String   @db.VarChar(100)
+  is_default     Boolean  @default(false)
+  province       String   @db.VarChar(100)
+  district       String   @db.VarChar(100)
+  ward           String   @db.VarChar(100)
+  street_address String   @db.VarChar(255)
+  note           String?  @db.Text
+  Customer       Customer @relation(fields: [customer_id], references: [customer_id])
+  Orders         Order[]
+
+  @@index([customer_id])
+  @@map("address_shippers")
 }
 
 model UserBehavior {
@@ -387,4 +367,41 @@ model UserBehavior {
   productId Int
   action    UserAction
   timestamp DateTime   @default(now())
+}
+
+enum OrderState {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  PARTIALLY_REFUNDED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  BANK_TRANSFER
+  E_WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum ReturnStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+enum UserAction {
+  view
+  add_to_cart
+  purchase
 }

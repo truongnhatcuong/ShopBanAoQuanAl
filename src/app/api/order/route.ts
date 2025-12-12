@@ -1,4 +1,6 @@
 import { authenticateToken } from "@/lib/auth";
+import { PayOS } from "@payos/node";
+
 import { pusher } from "@/lib/Pusher";
 import prisma from "@/prisma/client";
 import { authCustomer } from "@/utils/Auth";
@@ -21,6 +23,11 @@ function getPaypalClient() {
       : new paypal.core.SandboxEnvironment(clientId, secret);
   return new paypal.core.PayPalHttpClient(environment);
 }
+const payos = new PayOS({
+  clientId: process.env.PAYOS_CLIENT_ID!,
+  apiKey: process.env.PAYOS_API_KEY!,
+  checksumKey: process.env.PAYOS_CHECKSUM_KEY!, // ✔ Không có { thừa
+});
 
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
@@ -272,6 +279,49 @@ export async function POST(req: NextRequest) {
         },
         { status: 200 }
       );
+    }
+
+    if (paymentMethod === "BANK_TRANSFER") {
+      const returnUrl = `${process.env.NEXT_PUBLIC_API_URL}/payment/success`;
+      const cancelUrl = `${process.env.NEXT_PUBLIC_API_URL}/payment/cancel`;
+
+      // Generate a safe orderCode (< 9007199254740991)
+      const orderCode = Math.floor(Math.random() * 1e12);
+
+      // Max 25 characters for description
+      const description = `Đặt đơn #${order.order_id}`.slice(0, 25);
+
+      const payment = await payos.paymentRequests.create({
+        orderCode,
+        amount: totalAmount,
+        description,
+        returnUrl,
+        cancelUrl,
+      });
+
+      await prisma.payment.create({
+        data: {
+          order_id: order.order_id,
+          payment_method: paymentMethod,
+          payment_amount: totalAmount,
+          payment_status: "PENDING",
+          paypal_order_id: String(orderCode),
+        },
+      });
+      await prisma.cartItem.deleteMany({ where: { cart_id: cart.cart_id } });
+      await prisma.cart.delete({
+        where: { cart_id: cart.cart_id },
+      });
+
+      await pusher.trigger("orders", "new-order", {
+        orderId: order.order_id,
+        customerName: customer?.name,
+        totalAmount,
+      });
+      return NextResponse.json({
+        status: "redirect",
+        url: payment.checkoutUrl,
+      });
     }
     // thanh toán momo
 

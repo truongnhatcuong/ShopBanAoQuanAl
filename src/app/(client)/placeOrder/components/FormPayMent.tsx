@@ -33,13 +33,6 @@ interface CartData {
   idOrderNext: number;
 }
 
-interface OrderResponse {
-  order: any;
-  paymentIntentClientSecret?: string;
-  links?: any; // Thêm paymentUrl cho VNPay
-  message: string;
-}
-
 const PaymentMethodForm = ({
   addressId,
   cart,
@@ -51,7 +44,7 @@ const PaymentMethodForm = ({
   console.log("endgame", finalTotal);
 
   const [paymentMethod, setPaymentMethod] = useState<
-    "CASH" | "CREDIT_CARD" | "E_WALLET"
+    "CASH" | "CREDIT_CARD" | "E_WALLET" | "BANK_TRANSFER"
   >("CASH");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -84,7 +77,7 @@ const PaymentMethodForm = ({
         }
       );
 
-      const data: OrderResponse = await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
         toast.error(data.message || "Đã xảy ra lỗi khi đặt hàng");
@@ -115,6 +108,13 @@ const PaymentMethodForm = ({
           cart.items.map((item) => trackUserAction(item.product_id, "purchase"))
         );
         router.push("/profile/listorder");
+      } else if (paymentMethod === "BANK_TRANSFER") {
+        if (data.status === "redirect" && data.url) {
+          window.location.href = data.url;
+          return;
+        } else {
+          toast.error("Không thể tạo liên kết thanh toán");
+        }
       }
     } catch (error) {
       console.error("Network error:", error);
@@ -165,7 +165,7 @@ const PaymentMethodForm = ({
             </label>
 
             {/* Thanh toán bằng thẻ tín dụng (Stripe) */}
-            <label className="flex items-center space-x-3 cursor-pointer">
+            {/* <label className="flex items-center space-x-3 cursor-pointer">
               <input
                 type="radio"
                 name="payment"
@@ -179,10 +179,10 @@ const PaymentMethodForm = ({
                 <CreditCard className="text-blue-600" size={24} />
                 <span className="text-gray-700">Thẻ tín dụng (Stripe)</span>
               </div>
-            </label>
+            </label> */}
 
             {/* Thanh toán bằng VNPay */}
-            <label className="flex items-center space-x-3 cursor-pointer">
+            {/* <label className="flex items-center space-x-3 cursor-pointer">
               <input
                 type="radio"
                 name="payment"
@@ -195,6 +195,33 @@ const PaymentMethodForm = ({
               <div className="flex items-center space-x-3">
                 <Wallet className="text-purple-600" size={24} />
                 <span className="text-gray-700">PayPal</span>
+              </div>
+            </label> */}
+
+            <label className="flex items-center space-x-3 cursor-pointer">
+              <input
+                type="radio"
+                name="payment"
+                value="BANK_TRANSFER"
+                checked={paymentMethod === "BANK_TRANSFER"}
+                onChange={() => setPaymentMethod("BANK_TRANSFER")}
+                className="form-radio text-blue-600"
+                disabled={isProcessing}
+              />
+              <div className="flex items-center space-x-3">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.02 17.25H4.125L6.06 2.625H15.615C18.33 2.625 20.085 4.2 19.56 7.02C19.215 9.015 17.79 10.17 15.915 10.485C17.34 11.055 17.97 12.27 17.73 13.8C17.31 16.245 15.36 17.25 12.915 17.25H9.39L8.85 21H5.91L7.02 17.25Z"
+                    fill="#003087"
+                  />
+                </svg>
+                <span className="text-gray-700">Thanh Toan Ngan Hang</span>
               </div>
             </label>
           </div>

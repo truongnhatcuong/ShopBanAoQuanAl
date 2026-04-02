@@ -75,7 +75,7 @@ const Page = () => {
           <div className="w-full md:w-1/2 p-12 bg-gradient-to-br from-gray-900 to-gray-800 text-white dark:from-indigo-900 dark:to-purple-900 flex flex-col justify-center items-center">
             <div className="max-w-md mx-auto text-center">
               <h2 className="text-5xl font-bold mb-6">ĐĂNG NHẬP</h2>
-              <p className="text-xl opacity-90 mb-8">
+              <p className="text-xl  opacity-90 mb-8">
                 Tham gia để nhận các ưu đãi đặc biệt và trải nghiệm tốt nhất cho
                 việc mua sắm của bạn.
               </p>

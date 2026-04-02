@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
       },
     },
   });
+
+
   const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
   const totalSkipRecords = (page - 1) * limit;
   const categories = await prisma.category.findMany({
@@ -49,15 +51,16 @@ export async function GET(request: NextRequest) {
       },
       message: "Success",
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
 const categoriesSchema = z.object({
   categoriesName: z
     .string()
     .min(5, "Độ Dài Tối Thiểu: 5")
-    .max(255, "Độ Dài Tối Đa : 255 "),
-  description: z.string(),
+    .max(255, "Độ Dài Tối Đa : 255 ")
+    .regex(/^[^\d]*$/, "Tên danh mục không được chứa số"), // This regex ensures no digits are allowed
+  description: z.string().regex(/^[^\d]*$/, "Mô tả không được chứa số"), // This regex ensures no digits are allowed
 });
 
 export async function POST(request: NextRequest) {
@@ -69,20 +72,20 @@ export async function POST(request: NextRequest) {
     if (!isValid.success) {
       return NextResponse.json(
         { message: isValid.error?.errors[0].message || [] },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const newCategory = await prisma.category.create({
-      data: {
+      data:{
         category_name: categoriesName,
-        description: description,
-      },
-    });
+        description: description,   
+      }
+    })
 
     return NextResponse.json(
-      { category: newCategory, message: "Added Category Success" },
-      { status: 201 }
+      { category: newCategory, message: "them thanh cong" },
+      { status: 201 },
     );
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });
